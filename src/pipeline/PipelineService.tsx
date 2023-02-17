@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { RequestHandler, MetadataService } from '@elyra/services';
 
-import { MetadataService, IDictionary, RequestHandler } from '@elyra/services';
+import { IDictionary } from '@elyra/services';
 import { RequestErrors } from '@elyra/ui-components';
 
 import { showDialog, Dialog } from '@jupyterlab/apputils';
@@ -72,7 +73,7 @@ export class PipelineService {
    * Returns a list of resources corresponding to each active runtime-type.
    */
   static async getRuntimeTypes(): Promise<IRuntimeType[]> {
-    const res = await RequestHandler.makeGetRequest(
+    const res = await RequestHandler.makeGetRequest<any>(
       'elyra/pipeline/runtimes/types'
     );
     return res.runtime_types.sort((a: any, b: any) => a.id.localeCompare(b.id));
@@ -178,7 +179,7 @@ export class PipelineService {
       'elyra/pipeline/schedule',
       JSON.stringify(pipeline),
       this.getWaitDialog('Packaging and submitting pipeline ...')
-    ).then(response => {
+    ).then((response: any) => {
       let dialogTitle;
       let dialogBody;
       if (response['run_url']) {
@@ -272,7 +273,7 @@ export class PipelineService {
       'elyra/pipeline/export',
       JSON.stringify(body),
       this.getWaitDialog('Generating pipeline artifacts ...')
-    ).then(response => {
+    ).then((response: any) => {
       return showDialog({
         title: 'Pipeline export succeeded',
         body: <p>Exported file: {response['export_path']} </p>,
@@ -337,21 +338,19 @@ export class PipelineService {
         nodeDef.app_data.properties.properties.component_parameters.properties;
       for (const param in parameters) {
         if (parameters[param].uihints?.['ui:widget'] === 'file') {
-          node.app_data.component_parameters[
-            param
-          ] = this.getWorkspaceRelativeNodePath(
-            pipelinePath,
-            node.app_data.component_parameters[param]
-          );
+          node.app_data.component_parameters[param] =
+            this.getWorkspaceRelativeNodePath(
+              pipelinePath,
+              node.app_data.component_parameters[param]
+            );
         } else if (
           node.app_data.component_parameters[param]?.widget === 'file'
         ) {
-          node.app_data.component_parameters[
-            param
-          ].value = this.getWorkspaceRelativeNodePath(
-            pipelinePath,
-            node.app_data.component_parameters[param].value
-          );
+          node.app_data.component_parameters[param].value =
+            this.getWorkspaceRelativeNodePath(
+              pipelinePath,
+              node.app_data.component_parameters[param].value
+            );
         }
       }
     }

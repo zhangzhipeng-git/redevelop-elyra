@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { MetadataService, RequestHandler } from '@elyra/services';
+import { RequestHandler, MetadataService } from '@elyra/services';
+
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 import produce from 'immer';
@@ -155,31 +156,30 @@ const NodeIcons: Map<string, string> = new Map([
 // TODO: We should decouple components and properties to support lazy loading.
 // TODO: type this
 export const componentFetcher = async (type: string): Promise<any> => {
-  const palettePromise = RequestHandler.makeGetRequest<
-    IRuntimeComponentsResponse
-  >(`elyra/pipeline/components/${type}`);
+  const palettePromise =
+    RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
+      `elyra/pipeline/components/${type}`
+    );
 
-  const pipelinePropertiesPromise = RequestHandler.makeGetRequest<
-    IComponentPropertiesResponse
-  >(`elyra/pipeline/${type}/properties`);
+  const pipelinePropertiesPromise =
+    RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
+      `elyra/pipeline/${type}/properties`
+    );
 
-  const pipelineParametersPromise = RequestHandler.makeGetRequest<
-    IComponentPropertiesResponse
-  >(`elyra/pipeline/${type}/parameters`);
+  const pipelineParametersPromise =
+    RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
+      `elyra/pipeline/${type}/parameters`
+    );
 
   const typesPromise = PipelineService.getRuntimeTypes();
 
-  const [
-    palette,
-    pipelineProperties,
-    pipelineParameters,
-    types
-  ] = await Promise.all([
-    palettePromise,
-    pipelinePropertiesPromise,
-    pipelineParametersPromise,
-    typesPromise
-  ]);
+  const [palette, pipelineProperties, pipelineParameters, types] =
+    await Promise.all([
+      palettePromise,
+      pipelinePropertiesPromise,
+      pipelineParametersPromise,
+      typesPromise
+    ]);
 
   palette.properties = pipelineProperties;
   palette.parameters = pipelineParameters;
@@ -193,9 +193,10 @@ export const componentFetcher = async (type: string): Promise<any> => {
   }
 
   const propertiesPromises = componentList.map(async componentID => {
-    const res = await RequestHandler.makeGetRequest<
-      IComponentPropertiesResponse
-    >(`elyra/pipeline/components/${type}/${componentID}/properties`);
+    const res =
+      await RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
+        `elyra/pipeline/components/${type}/${componentID}/properties`
+      );
     return {
       id: componentID,
       properties: res
@@ -215,8 +216,9 @@ export const componentFetcher = async (type: string): Promise<any> => {
 
     const type = types.find((t: any) => t.id === category_runtime_type);
     const baseUrl = ServerConnection.makeSettings().baseUrl;
-    const defaultIcon = URLExt.parse(URLExt.join(baseUrl, type?.icon || ''))
-      .pathname;
+    const defaultIcon = URLExt.parse(
+      URLExt.join(baseUrl, type?.icon || '')
+    ).pathname;
 
     category.image = defaultIcon;
 
@@ -269,10 +271,11 @@ const updateRuntimeImages = (
 export const usePalette = (type = 'local'): IReturn<any> => {
   const { data: runtimeImages, error: runtimeError } = useRuntimeImages();
 
-  const { data: palette, error: paletteError, mutate: mutate } = useSWR(
-    type,
-    componentFetcher
-  );
+  const {
+    data: palette,
+    error: paletteError,
+    mutate: mutate
+  } = useSWR(type, componentFetcher);
 
   let updatedPalette;
   if (palette !== undefined) {

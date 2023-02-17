@@ -14,15 +14,24 @@
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "outDir": "lib",
-    "rootDir": ".",
+    "rootDir": "src",
     "strict": true,
     "strictNullChecks": true,
     "target": "es2015",
-    "types": ["jest"],
-    "lib": ["dom", "esnext"],
+    "types": [
+      "jest"
+    ],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "skipLibCheck": true,
     "allowJs": true,
     "experimentalDecorators": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", ".eslintrc.js", "webpack.config.js"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js"
+  ]
 }

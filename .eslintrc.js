@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    commonjs: true
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',

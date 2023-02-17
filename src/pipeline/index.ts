@@ -41,8 +41,8 @@ import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 
 const PIPELINE_EDITOR = 'Pipeline Editor';
 const PIPELINE = 'pipeline';
-const PIPELINE_EDITOR_NAMESPACE = 'elyra-pipeline-editor-extension';
-const PLUGIN_ID = '@elyra/pipeline-editor-extension:plugin';
+const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
+const PLUGIN_ID = 'redevelop-elyra:plugin';
 
 const createRemoteIcon = async ({
   name,
