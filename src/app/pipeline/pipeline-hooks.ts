@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { RequestHandler, MetadataService } from '@elyra/services';
+import { RequestHandler, MetadataService } from '../services';
 
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';

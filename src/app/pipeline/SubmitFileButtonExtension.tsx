@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ContentParser } from '@elyra/services';
+import { ContentParser } from '../services';
 import { RequestErrors, showFormDialog } from '@elyra/ui-components';
 import { Dialog, showDialog, ToolbarButton } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';

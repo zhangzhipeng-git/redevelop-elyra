@@ -24,7 +24,7 @@ import {
   validate,
   ComponentNotFoundError
 } from '@elyra/pipeline-services';
-import { ContentParser } from '@elyra/services';
+import { ContentParser } from '../services';
 import {
   IconUtil,
   clearPipelineIcon,

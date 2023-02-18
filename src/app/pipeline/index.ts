@@ -3,7 +3,7 @@
  */
 
 import { PIPELINE_CURRENT_VERSION } from '@elyra/pipeline-editor';
-import { RequestHandler } from '@elyra/services';
+import { RequestHandler } from '../services';
 import {
   containerIcon,
   pipelineIcon,

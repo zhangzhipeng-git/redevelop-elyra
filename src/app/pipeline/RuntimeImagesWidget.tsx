@@ -21,8 +21,8 @@ import {
   MetadataDisplay,
   IMetadataDisplayProps,
   IMetadataDisplayState
-} from '@elyra/metadata-common';
-import { IDictionary } from '@elyra/services';
+} from '../metadata-common';
+import { IDictionary } from '../services';
 
 import React from 'react';
 

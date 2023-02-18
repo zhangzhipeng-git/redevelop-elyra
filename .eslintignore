@@ -7,6 +7,7 @@ tests
 **/__tests__
 ui-tests
 
+style/index.js
 .*.js
 webpack.config.js
 birdmock

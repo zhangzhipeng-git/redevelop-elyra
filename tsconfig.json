@@ -18,6 +18,10 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "es2015",
+    "baseUrl": "src",
+    "paths": {
+      "@app/*": ["app/*"]
+    },
     "types": [
       "jest"
     ],
@@ -32,6 +36,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.js"
+    "src/**/*.js",
+    "src/config.json"
   ]
 }

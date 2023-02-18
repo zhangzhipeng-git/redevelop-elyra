@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RequestHandler, MetadataService } from '@elyra/services';
+import { RequestHandler, MetadataService } from '../services';
 
 import { IDictionary } from '@elyra/services';
 import { RequestErrors } from '@elyra/ui-components';

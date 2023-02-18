@@ -22,8 +22,8 @@ import {
   IMetadataDisplayProps,
   IMetadataDisplayState,
   IMetadataActionButton
-} from '@elyra/metadata-common';
-import { IDictionary } from '@elyra/services';
+} from '../metadata-common';
+import { IDictionary } from '../services';
 import { RequestErrors } from '@elyra/ui-components';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import { LabIcon, refreshIcon } from '@jupyterlab/ui-components';

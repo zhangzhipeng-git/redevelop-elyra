@@ -10,7 +10,7 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import activatePipeline from './pipeline';
+import activatePipeline from '@app/pipeline';
 
 /**
  * Initialization data for the redevelop-elyra extension.
