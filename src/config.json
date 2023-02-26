@@ -1,4 +1,4 @@
 {
     "baseUrl": "http://localhost:4200",
-    "staticBaseUrl": "/"
+    "staticBaseUrl": "http://localhost:4200"
 }

@@ -23,6 +23,8 @@ import useSWR from 'swr';
 
 import { PipelineService } from './PipelineService';
 
+import CONFIG from '../../config.json';
+
 export const GENERIC_CATEGORY_ID = 'Elyra';
 
 interface IReturn<T> {
@@ -215,7 +217,7 @@ export const componentFetcher = async (type: string): Promise<any> => {
       category.node_types?.[0]?.runtime_type ?? 'LOCAL';
 
     const type = types.find((t: any) => t.id === category_runtime_type);
-    const baseUrl = ServerConnection.makeSettings().baseUrl;
+    const baseUrl = CONFIG.baseUrl || ServerConnection.makeSettings().baseUrl;
     const defaultIcon = URLExt.parse(
       URLExt.join(baseUrl, type?.icon || '')
     ).pathname;

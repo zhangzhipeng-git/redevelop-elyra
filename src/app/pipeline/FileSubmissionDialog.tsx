@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { IDictionary } from '@elyra/services';
+import { IDictionary } from '../services';
 import * as React from 'react';
 
 import { IRuntimeData } from './runtime-utils';
