@@ -20,6 +20,10 @@ elyra 开发工作流：https://elyra.readthedocs.io/en/latest/developer_guide/d
 
 elyra github: https://github.com/elyra-ai/elyra/releases/tag/v3.14.2
 
+api:
+https://jupyterlab.readthedocs.io/en/stable/api/modules.html
+https://lumino.readthedocs.io/en/latest/api/index.html
+
 
 ## 后端
 

@@ -44,6 +44,7 @@ const PIPELINE = 'pipeline';
 const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
 const PLUGIN_ID = 'redevelop-elyra:plugin';
 
+/** 获取插件在 launcher 面板的菜单图标 */
 const createRemoteIcon = async ({
   name,
   url
@@ -51,10 +52,15 @@ const createRemoteIcon = async ({
   name: string;
   url: string;
 }): Promise<LabIcon> => {
-  const svgstr = await RequestHandler.makeServerRequest<string>(url, {
+  let svgstr = await RequestHandler.makeServerRequest<string>(url, {
     method: 'GET',
     type: 'text'
   });
+  try {
+    svgstr = JSON.parse(svgstr);
+  } catch (e) {
+    // catch
+  }
   return new LabIcon({ name, svgstr });
 };
 
@@ -73,6 +79,10 @@ export default async function activatePipeline(
   const settings = await registry
     .load(PLUGIN_ID)
     .catch((error: any) => console.log(error));
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  console.log(settings.registry.plugins[PLUGIN_ID].schema, 'plugin schema');
 
   // Set up new widget Factory for .pipeline files
   const pipelineEditorFactory = new PipelineEditorFactory({
