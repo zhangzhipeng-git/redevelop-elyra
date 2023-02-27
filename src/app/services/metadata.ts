@@ -94,7 +94,7 @@ export class MetadataService {
   }
 
   private static schemaCache: IDictionary<any> = {};
-
+  private static _clone = (o: any) => JSON.parse(JSON.stringify(o));
   /**
    * Service function for making GET calls to the elyra schema API.
    *
@@ -106,7 +106,7 @@ export class MetadataService {
   static async getSchema(schemaspace: string): Promise<any> {
     if (this.schemaCache[schemaspace]) {
       // Deep copy cached schema to mimic request call
-      return JSON.parse(JSON.stringify(this.schemaCache[schemaspace]));
+      return this._clone(this.schemaCache[schemaspace]);
     }
 
     return RequestHandler.makeGetRequest(
@@ -116,7 +116,7 @@ export class MetadataService {
         this.schemaCache[schemaspace] = schemaResponse[schemaspace];
       }
 
-      return schemaResponse[schemaspace];
+      return this._clone(schemaResponse[schemaspace]);
     });
   }
 

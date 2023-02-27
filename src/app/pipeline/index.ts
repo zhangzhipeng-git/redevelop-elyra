@@ -80,13 +80,17 @@ export default async function activatePipeline(
     .load(PLUGIN_ID)
     .catch((error: any) => console.log(error));
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  console.log(settings.registry.plugins[PLUGIN_ID].schema, 'plugin schema');
+  console.log(
+    settings,
+    'settings',
+    (<any>settings).registry.plugins[PLUGIN_ID].schema,
+    'plugin schema'
+  );
 
   // Set up new widget Factory for .pipeline files
+  // 使用 pipeline 编辑器处理 .pipeline 文件
   const pipelineEditorFactory = new PipelineEditorFactory({
-    name: PIPELINE_EDITOR,
+    name: PIPELINE_EDITOR, // 组件工厂名称
     fileTypes: [PIPELINE],
     defaultFor: [PIPELINE],
     shell: app.shell,
@@ -97,6 +101,7 @@ export default async function activatePipeline(
   });
 
   // Add the default behavior of opening the widget for .pipeline files
+  // 添加 .pipeline 文件类型
   app.docRegistry.addFileType(
     {
       name: PIPELINE,
@@ -106,6 +111,8 @@ export default async function activatePipeline(
     },
     ['JSON']
   );
+
+  // 将 pipeline 编辑器注册到 Jupyter 编辑器
   app.docRegistry.addWidgetFactory(pipelineEditorFactory);
 
   const tracker = new WidgetTracker<DocumentWidget>({
@@ -272,7 +279,7 @@ export default async function activatePipeline(
       // Add the command to the launcher
       if (launcher) {
         const fileMenuItems: IRankedMenu.IItemOptions[] = [];
-
+        console.log(resolvedTypes, 'resolvedTypes');
         for (const t of resolvedTypes as any) {
           launcher.add({
             command: openPipelineEditorCommand,

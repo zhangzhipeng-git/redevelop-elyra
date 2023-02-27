@@ -9,7 +9,7 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "5e8da3ca-f265-46e5-947d-f979aab65ccd",
+          "id": "46af8f1f-ea6f-45d1-8301-cd4a6c2e8ff9",
           "type": "execution_node",
           "op": "execute-notebook-node",
           "app_data": {
@@ -21,7 +21,6 @@
               "kubernetes_pod_annotations": [],
               "kubernetes_pod_labels": [],
               "kubernetes_secrets": [],
-              "kubernetes_shared_mem_size": {},
               "kubernetes_tolerations": [],
               "mounted_volumes": []
             },
@@ -29,8 +28,8 @@
             "ui_data": {
               "label": "Notebook",
               "image": "/static/elyra/notebook.svg",
-              "x_pos": 19,
-              "y_pos": 89.5,
+              "x_pos": 97,
+              "y_pos": 58.5,
               "description": "Run notebook file",
               "decorations": [
                 {
@@ -81,16 +80,7 @@
         "version": 8,
         "properties": {
           "name": "untitled",
-          "runtime": "Generic",
-          "pipeline_defaults": {
-            "kubernetes_tolerations": [],
-            "mounted_volumes": [],
-            "kubernetes_pod_annotations": [],
-            "kubernetes_pod_labels": [],
-            "kubernetes_shared_mem_size": {},
-            "env_vars": [],
-            "kubernetes_secrets": []
-          }
+          "runtime": "Generic"
         }
       },
       "runtime_ref": ""

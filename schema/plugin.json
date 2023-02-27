@@ -5,10 +5,10 @@
   "description": "Redevelop Elyra Pipeline Editor Configuration.",
   "properties": {
     "doubleClickToOpenProperties": {
-      "title": "Double-click on pipeline node opens properties.",
-      "description": "If enabled, double-clicking a node opens the node's properties. If disabled (the default), the node's source file is opened.",
+      "title": "双击管道节点打开属性。",
+      "description": "如果启用(默认值)，双击一个节点将打开该节点的属性。如果禁用，则打开节点的源文件。",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   },
   "additionalProperties": false,

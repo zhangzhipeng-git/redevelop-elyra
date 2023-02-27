@@ -203,10 +203,8 @@ const PipelineWrapper: React.FC<IProps> = ({
   const type: string | undefined =
     pipeline?.pipelines?.[0]?.app_data?.runtime_type;
 
-  const {
-    data: runtimesSchema,
-    error: runtimesSchemaError
-  } = useRuntimesSchema();
+  const { data: runtimesSchema, error: runtimesSchemaError } =
+    useRuntimesSchema();
 
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
@@ -288,7 +286,8 @@ const PipelineWrapper: React.FC<IProps> = ({
           PathExt.extname(pipeline_path)
         );
         pipelineJson.pipelines[0].app_data.properties.name = pipeline_name;
-        pipelineJson.pipelines[0].app_data.properties.runtime = runtimeDisplayName;
+        pipelineJson.pipelines[0].app_data.properties.runtime =
+          runtimeDisplayName;
       }
       setPipeline(pipelineJson);
       setLoading(false);
@@ -382,10 +381,11 @@ const PipelineWrapper: React.FC<IProps> = ({
                 // function for updating to relative paths in v2
                 // uses location of filename as expected in v1
                 for (const node of pipeline.nodes) {
-                  node.app_data.filename = PipelineService.getPipelineRelativeNodePath(
-                    contextRef.current.path,
-                    node.app_data.filename
-                  );
+                  node.app_data.filename =
+                    PipelineService.getPipelineRelativeNodePath(
+                      contextRef.current.path,
+                      node.app_data.filename
+                    );
                 }
                 return pipeline;
               });
@@ -686,23 +686,24 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       let dialogOptions: Partial<Dialog.IOptions<any>>;
 
-      pipelineJson.pipelines[0].app_data.properties.pipeline_parameters = pipelineJson.pipelines[0].app_data.properties.pipeline_parameters?.filter(
-        (param: any) => {
-          return !!pipelineJson.pipelines[0].nodes.find((node: any) => {
-            return (
-              param.name !== '' &&
-              (node.app_data.component_parameters?.pipeline_parameters?.includes(
-                param.name
-              ) ||
-                Object.values(node.app_data.component_parameters ?? {}).find(
-                  (property: any) =>
-                    property.widget === 'parameter' &&
-                    property.value === param.name
-                ))
-            );
-          });
-        }
-      );
+      pipelineJson.pipelines[0].app_data.properties.pipeline_parameters =
+        pipelineJson.pipelines[0].app_data.properties.pipeline_parameters?.filter(
+          (param: any) => {
+            return !!pipelineJson.pipelines[0].nodes.find((node: any) => {
+              return (
+                param.name !== '' &&
+                (node.app_data.component_parameters?.pipeline_parameters?.includes(
+                  param.name
+                ) ||
+                  Object.values(node.app_data.component_parameters ?? {}).find(
+                    (property: any) =>
+                      property.widget === 'parameter' &&
+                      property.value === param.name
+                  ))
+              );
+            });
+          }
+        );
 
       const parameters =
         pipelineJson?.pipelines[0].app_data.properties.pipeline_parameters;
@@ -1072,8 +1073,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (failedAdd) {
         return showDialog({
           title: 'Unsupported File(s)',
-          body:
-            'Only supported files (Notebooks, Python scripts, and R scripts) can be added to a pipeline.',
+          body: 'Only supported files (Notebooks, Python scripts, and R scripts) can be added to a pipeline.',
           buttons: [Dialog.okButton()]
         });
       }
