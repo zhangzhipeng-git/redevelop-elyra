@@ -4,8 +4,10 @@ const resolve = dir => path.resolve(__dirname, dir);
 module.exports = {
   resolve: {
     alias: {
-      '@app': resolve('lib/app')
+      '@src': resolve('lib'),
+      '@app': resolve('lib/app'),
+      '@assets': resolve('lib/assets')
     }
   },
-  ignoreWarnings: [/Failed to parse source map/],
+  ignoreWarnings: [/Failed to parse source map/]
 };

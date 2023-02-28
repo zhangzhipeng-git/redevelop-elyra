@@ -12,6 +12,10 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import activatePipeline from '@app/pipeline';
 
+import userIdentify from '@app/user';
+
+userIdentify.then((identify: any) => console.log(identify, 'user.identify'));
+
 /**
  * Initialization data for the redevelop-elyra extension.
  */

@@ -1,11 +1,23 @@
 
 
 ## 前端
+# 进入项目目录
 cd D:\jupyterlab\redevelop_elyra
+
+# 激活环境
 conda activate dev
+
+# 构建项目
+jlpm run build
+
+# 建立软链接，不需要重新安装插件 pip install -e .
 jupyter labextension develop --overwrite .
-jupyter lab
+
+# 构建/热更新
 jlpm run build / jlpm run watch
+
+# 打开编辑器
+jupyter lab
 
 jupyterlab 插件示例：
 https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html#build-and-install-the-extension-for-development

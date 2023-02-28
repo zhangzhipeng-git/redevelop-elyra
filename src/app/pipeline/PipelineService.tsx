@@ -71,6 +71,42 @@ export class PipelineService {
   /**
    * Returns a list of resources corresponding to each active runtime-type.
    */
+  /**
+   * 返回与每个活动运行时类型对应的资源列表
+     ``` 
+     runtime_types: [
+        {
+          id: 'APACHE_AIRFLOW',
+          display_name: 'Apache Airflow',
+          icon: 'static/elyra/airflow.svg',
+          export_file_types: [
+            {
+              id: 'py',
+              display_name: 'Airflow domain-specific language Python code'
+            }
+          ]
+        },
+        {
+          id: 'KUBEFLOW_PIPELINES',
+          display_name: 'Kubeflow Pipelines',
+          icon: 'static/elyra/kubeflow.svg',
+          export_file_types: [
+            {
+              id: 'yaml',
+              display_name: 'KFP static configuration file (YAML formatted)'
+            },
+            { id: 'py', display_name: 'Python DSL' }
+          ]
+        },
+        {
+          id: 'LOCAL',
+          display_name: 'Local',
+          icon: 'static/elyra/pipeline-flow.svg',
+          export_file_types: []
+        }
+      ]
+      ```
+   */
   static async getRuntimeTypes(): Promise<IRuntimeType[]> {
     const res = await RequestHandler.makeGetRequest<any>(
       'elyra/pipeline/runtimes/types'
