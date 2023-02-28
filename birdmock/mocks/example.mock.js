@@ -1454,6 +1454,9 @@ module.exports = {
       required: ['component_parameters']
     };
   },
+  '/elyra/metadata/runtimes': () => {
+    return { runtimes: [] };
+  },
   '/elyra/pipeline/runtimes/types': () => {
     return {
       runtime_types: [
