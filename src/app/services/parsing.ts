@@ -16,6 +16,7 @@
 
 import { RequestHandler } from './requests';
 
+/** 文件解析接口前缀 */
 const ELYRA_FILE_PARSER_API_ENDPOINT = 'elyra/contents/properties/';
 
 /**
@@ -31,6 +32,7 @@ export interface IDictionary<T> {
 export class ContentParser {
   /**
    * Takes in a file_path and finds all env vars accessed in that file.
+   * 获取一个file_path并找到该文件中访问的所有env vars
    * @param file_path - relative path to file
    * @returns A string array of the env vars accessed in the given file
    */
