@@ -39,7 +39,8 @@ import {
 import { RuntimesWidget } from './RuntimesWidget';
 import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 
-const PIPELINE_EDITOR = 'Pipeline Editor';
+// const PIPELINE_EDITOR = 'Pipeline Editor';
+const PIPELINE_EDITOR = '管道编辑器';
 const PIPELINE = 'pipeline';
 const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
 const PLUGIN_ID = 'redevelop-elyra:plugin';
@@ -170,13 +171,14 @@ export default async function activatePipeline(
 
   // Add an application command
   const openPipelineEditorCommand: string = commandIDs.openPipelineEditor;
+  // 3种类型的管道编辑器
   app.commands.addCommand(openPipelineEditorCommand, {
     label: (args: any) => {
       if (args.isPalette) {
-        return `New ${PIPELINE_EDITOR}`;
+        return `新建${PIPELINE_EDITOR}`;
       }
       if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
+        return `通用${PIPELINE_EDITOR}`;
       }
       if (args.isMenu) {
         return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
@@ -185,7 +187,7 @@ export default async function activatePipeline(
     },
     caption: (args: any) => {
       if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
+        return `通用${PIPELINE_EDITOR}`;
       }
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
@@ -194,7 +196,7 @@ export default async function activatePipeline(
         return '';
       }
       if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
+        return `通用${PIPELINE_EDITOR}`;
       }
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
@@ -259,7 +261,7 @@ export default async function activatePipeline(
   palette.addItem({
     command: openPipelineEditorCommand,
     args: { isPalette: true },
-    category: 'Elyra'
+    category: '管道编辑器'
   });
 
   PipelineService.getRuntimeTypes()
@@ -283,7 +285,7 @@ export default async function activatePipeline(
         for (const t of resolvedTypes as any) {
           launcher.add({
             command: openPipelineEditorCommand,
-            category: 'Elyra',
+            category: '管道编辑器',
             args: { runtimeType: t },
             rank: t.id === 'LOCAL' ? 1 : 2
           });

@@ -39,12 +39,12 @@ export const EmptyGenericPipeline: React.FC<IEmptyGenericPipelineProps> = ({
         height="120px"
       />
       <h3 className={HEADER_CLASS}>
-        Start your new pipeline by dragging files from the file browser pane
+        通过从文件浏览器窗格中拖动文件来启动新管道
       </h3>
       <br />
       <br />
       <h3 className={HEADER_CLASS}>
-        Click{' '}
+        点击{' '}
         <button
           title="Settings"
           className={BUTTON_CLASS}
@@ -52,7 +52,7 @@ export const EmptyGenericPipeline: React.FC<IEmptyGenericPipelineProps> = ({
         >
           <settingsIcon.react className={ICON_CLASS} tag="div" height="24px" />
         </button>{' '}
-        to configure the pipeline editor.
+        配置管道编辑器.
       </h3>
     </div>
   );
@@ -63,10 +63,9 @@ export interface IEmptyPlatformSpecificPipelineProps {
   onOpenSettings: () => void;
 }
 
-export const EmptyPlatformSpecificPipeline: React.FC<IEmptyPlatformSpecificPipelineProps> = ({
-  onOpenCatalog,
-  onOpenSettings
-}) => {
+export const EmptyPlatformSpecificPipeline: React.FC<
+  IEmptyPlatformSpecificPipelineProps
+> = ({ onOpenCatalog, onOpenSettings }) => {
   // Note: the URL is rewritten by the release script by replacing `latest` with a
   // specific version number, e.g. https://.../en/v3.6.0/user_guide/pi...
   const customComponentsHelpTopicURL =

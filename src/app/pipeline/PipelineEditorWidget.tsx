@@ -932,73 +932,73 @@ const PipelineWrapper: React.FC<IProps> = ({
     leftBar: [
       {
         action: 'run',
-        label: 'Run Pipeline',
+        label: '运行',
         enable: true
       },
       {
         action: 'save',
-        label: 'Save Pipeline',
+        label: '保存',
         enable: true,
         iconEnabled: IconUtil.encode(savePipelineIcon),
         iconDisabled: IconUtil.encode(savePipelineIcon)
       },
       {
         action: 'export',
-        label: 'Export Pipeline',
+        label: '导出',
         enable: true,
         iconEnabled: IconUtil.encode(exportPipelineIcon),
         iconDisabled: IconUtil.encode(exportPipelineIcon)
       },
       {
         action: 'clear',
-        label: 'Clear Pipeline',
+        label: '清除',
         enable: true,
         iconEnabled: IconUtil.encode(clearPipelineIcon),
         iconDisabled: IconUtil.encode(clearPipelineIcon)
       },
       {
         action: 'openRuntimes',
-        label: 'Open Runtimes',
+        label: '打开运行环境',
         enable: true,
         iconEnabled: IconUtil.encode(runtimesIcon),
         iconDisabled: IconUtil.encode(runtimesIcon)
       },
       {
         action: 'openRuntimeImages',
-        label: 'Open Runtime Images',
+        label: '打开运行环境镜像',
         enable: true,
         iconEnabled: IconUtil.encode(containerIcon),
         iconDisabled: IconUtil.encode(containerIcon)
       },
       {
         action: 'openComponentCatalogs',
-        label: 'Open Component Catalogs',
+        label: '打开组件目录',
         enable: true,
         iconEnabled: IconUtil.encode(componentCatalogIcon),
         iconDisabled: IconUtil.encode(componentCatalogIcon)
       },
-      { action: 'undo', label: 'Undo' },
-      { action: 'redo', label: 'Redo' },
-      { action: 'cut', label: 'Cut' },
-      { action: 'copy', label: 'Copy' },
-      { action: 'paste', label: 'Paste' },
-      { action: 'createAutoComment', label: 'Add Comment', enable: true },
-      { action: 'deleteSelectedObjects', label: 'Delete' },
+      { action: 'undo', label: '撤销' },
+      { action: 'redo', label: '还原' },
+      { action: 'cut', label: '剪切' },
+      { action: 'copy', label: '复制' },
+      { action: 'paste', label: '粘贴' },
+      { action: 'createAutoComment', label: '添加注释', enable: true },
+      { action: 'deleteSelectedObjects', label: '删除' },
       {
         action: 'arrangeHorizontally',
-        label: 'Arrange Horizontally',
+        label: '垂直排列',
         enable: true
       },
       {
         action: 'arrangeVertically',
-        label: 'Arrange Vertically',
+        label: '水平排列',
         enable: true
       }
     ],
     rightBar: [
       {
         action: '',
-        label: `Runtime: ${runtimeDisplayName}`,
+        label: `运行环境: ${runtimeDisplayName}`,
         incLabelWithIcon: 'before',
         enable: false,
         kind: 'tertiary'
@@ -1007,7 +1007,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       },
       {
         action: 'toggleOpenPanel',
-        label: panelOpen ? 'Close Panel' : 'Open Panel',
+        label: panelOpen ? '关闭面板' : '打开面板',
         enable: true,
         iconTypeOverride: panelOpen ? 'paletteOpen' : 'paletteClose'
       }
@@ -1072,8 +1072,8 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       if (failedAdd) {
         return showDialog({
-          title: 'Unsupported File(s)',
-          body: 'Only supported files (Notebooks, Python scripts, and R scripts) can be added to a pipeline.',
+          title: '不支持的文件',
+          body: '只支持将 Notebooks, Python 脚本和 R 脚本文件添加导管道编辑器中.',
           buttons: [Dialog.okButton()]
         });
       }
