@@ -380,6 +380,7 @@ export class MetadataWidget extends ReactWidget {
       this.schemas = await MetadataService.getSchema(this.props.schemaspace);
       const sortedSchema =
         this.schemas?.sort((a, b) => a.title.localeCompare(b.title)) ?? [];
+      console.log(sortedSchema, 'sortedSchema');
       if (sortedSchema.length > 1) {
         for (const schema of sortedSchema) {
           this.props.app.contextMenu.addItem({

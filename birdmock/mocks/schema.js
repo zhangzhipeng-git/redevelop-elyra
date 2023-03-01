@@ -560,9 +560,14 @@ module.exports = {
                   description:
                     'Assign the operators in the catalog to one or more categories, to group them in the visual pipeline editor palette.',
                   type: 'array',
-                  items: { type: 'string', maxLength: 18 },
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
                   default: ['Core packages'],
-                  uihints: { category: 'Component Categories' }
+                  uihints: {
+                    category: 'Component Categories'
+                  }
                 },
                 airflow_package_download_url: {
                   title: 'Airflow package download URL',
@@ -581,7 +586,9 @@ module.exports = {
                   description:
                     'Include operators in package airflow.contrib.operators',
                   type: 'boolean',
-                  uihints: { category: 'Source' }
+                  uihints: {
+                    category: 'Source'
+                  }
                 },
                 auth_id: {
                   title: 'User Id',
@@ -589,7 +596,9 @@ module.exports = {
                     'User id that has read access for the specified URL resource',
                   type: 'string',
                   minLength: 1,
-                  uihints: { category: 'Source credentials' }
+                  uihints: {
+                    category: 'Source credentials'
+                  }
                 },
                 auth_password: {
                   title: 'Password',
@@ -658,9 +667,14 @@ module.exports = {
                   description:
                     'Assign the operators in the catalog to one or more categories, to group them in the visual pipeline editor palette.',
                   type: 'array',
-                  items: { type: 'string', maxLength: 18 },
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
                   default: ['provider packages'],
-                  uihints: { category: 'Component Categories' }
+                  uihints: {
+                    category: 'Component Categories'
+                  }
                 },
                 airflow_provider_package_download_url: {
                   title: 'Provider package download URL',
@@ -680,7 +694,9 @@ module.exports = {
                     'User id that has read access for the specified URL resource',
                   type: 'string',
                   minLength: 1,
-                  uihints: { category: 'Source credentials' }
+                  uihints: {
+                    category: 'Source credentials'
+                  }
                 },
                 auth_password: {
                   title: 'Password',
@@ -745,30 +761,43 @@ module.exports = {
                     'The type of runtime associated with this Component Catalog',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
-                  uihints: { category: 'Runtime' }
+                  uihints: {
+                    category: 'Runtime'
+                  }
                 },
                 categories: {
                   title: 'Category Names',
                   description:
                     'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
                   type: 'array',
-                  items: { type: 'string', maxLength: 18 },
-                  uihints: { category: 'Component Categories' }
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
+                  uihints: {
+                    category: 'Component Categories'
+                  }
                 },
                 paths: {
                   title: 'Directories',
                   description:
                     'A list of paths to directories in the local filesystem that each contain one or more component specification files',
                   type: 'array',
-                  items: { type: 'string' },
-                  uihints: { category: 'Configuration' }
+                  items: {
+                    type: 'string'
+                  },
+                  uihints: {
+                    category: 'Configuration'
+                  }
                 },
                 include_subdirs: {
                   title: 'Include Subdirectories',
                   description:
                     'Indicates whether a recursive search for component specification files should be performed on subdirectories',
                   type: 'boolean',
-                  uihints: { category: 'Configuration' }
+                  uihints: {
+                    category: 'Configuration'
+                  }
                 }
               },
               required: ['runtime_type', 'paths']
@@ -820,30 +849,43 @@ module.exports = {
                     'The type of runtime associated with this Component Catalog',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
-                  uihints: { category: 'Runtime' }
+                  uihints: {
+                    category: 'Runtime'
+                  }
                 },
                 categories: {
                   title: 'Category Names',
                   description:
                     'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
                   type: 'array',
-                  items: { type: 'string', maxLength: 18 },
-                  uihints: { category: 'Component Categories' }
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
+                  uihints: {
+                    category: 'Component Categories'
+                  }
                 },
                 base_path: {
                   title: 'Optional Base Directory',
                   description:
                     'An optional base directory from which the given values of Paths can be resolved',
                   type: 'string',
-                  uihints: { category: 'Configuration' }
+                  uihints: {
+                    category: 'Configuration'
+                  }
                 },
                 paths: {
                   title: 'Paths',
                   description:
                     'A list of paths to individual component specification files in the local filesystem',
                   type: 'array',
-                  items: { type: 'string' },
-                  uihints: { category: 'Configuration' }
+                  items: {
+                    type: 'string'
+                  },
+                  uihints: {
+                    category: 'Configuration'
+                  }
                 }
               },
               required: ['runtime_type', 'paths']
@@ -895,22 +937,32 @@ module.exports = {
                     'The type of runtime associated with this Component Catalog',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
-                  uihints: { category: 'Runtime' }
+                  uihints: {
+                    category: 'Runtime'
+                  }
                 },
                 categories: {
                   title: 'Category Names',
                   description:
                     'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
                   type: 'array',
-                  items: { type: 'string', maxLength: 18 },
-                  uihints: { category: 'Component Categories' }
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
+                  uihints: {
+                    category: 'Component Categories'
+                  }
                 },
                 paths: {
                   title: 'URLs',
                   description:
                     'A list of URLs to individual component specification files',
                   type: 'array',
-                  items: { type: 'string', format: 'uri' },
+                  items: {
+                    type: 'string',
+                    format: 'uri'
+                  },
                   uihints: {
                     category: 'Configuration',
                     items: {
@@ -924,7 +976,9 @@ module.exports = {
                     'User id that has read access for the specified URL resources',
                   type: 'string',
                   minLength: 1,
-                  uihints: { category: 'Source credentials' }
+                  uihints: {
+                    category: 'Source credentials'
+                  }
                 },
                 auth_password: {
                   title: 'Password',
@@ -938,6 +992,78 @@ module.exports = {
                 }
               },
               required: ['runtime_type', 'paths']
+            }
+          },
+          required: ['schema_name', 'display_name', 'metadata']
+        },
+        {
+          $schema:
+            'https://raw.githubusercontent.com/elyra-ai/elyra/master/elyra/metadata/schemas/meta-schema.json',
+          $id: 'https://raw.githubusercontent.com/elyra-ai/examples/master/component-catalog-connectors/kfp-example-components-connector/kfp_examples_connector/elyra-kfp-catalog.json',
+          title: 'Kubeflow Pipelines example components catalog',
+          name: 'elyra-kfp-examples-catalog',
+          schemaspace: 'component-catalogs',
+          schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
+          metadata_class_name:
+            'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
+          uihints: {
+            title: 'Kubeflow Pipelines example components catalog',
+            icon: '',
+            reference_url:
+              'https://github.com/elyra-ai/examples/tree/master/component-catalog-connectors/kfp-example-components-connector'
+          },
+          properties: {
+            schema_name: {
+              title: 'Schema Name',
+              description: 'The schema associated with this instance',
+              type: 'string',
+              const: 'elyra-kfp-examples-catalog'
+            },
+            display_name: {
+              title: 'Display Name',
+              description: 'Display name of this Component Catalog',
+              type: 'string',
+              minLength: 1
+            },
+            metadata: {
+              description: 'Additional data specific to this metadata',
+              type: 'object',
+              properties: {
+                description: {
+                  title: 'Description',
+                  description:
+                    'Curated collection of Kubeflow Pipeline components',
+                  type: 'string',
+                  default: 'Example pipeline components for Kubeflow Pipelines'
+                },
+                runtime_type: {
+                  title: 'Runtime type',
+                  description:
+                    'The runtime for which to load the example components.',
+                  type: 'string',
+                  enum: ['KUBEFLOW_PIPELINES'],
+                  default: 'KUBEFLOW_PIPELINES',
+                  uihints: {
+                    field_type: 'dropdown'
+                  }
+                },
+                categories: {
+                  title: 'Category Names',
+                  description:
+                    'The example components will be added to the specified categories in the pipeline editor palette.',
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                    maxLength: 18
+                  },
+                  default: ['examples'],
+                  uihints: {
+                    field_type: 'array',
+                    category: 'Component Categories'
+                  }
+                }
+              },
+              required: ['runtime_type']
             }
           },
           required: ['schema_name', 'display_name', 'metadata']

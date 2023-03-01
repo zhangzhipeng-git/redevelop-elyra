@@ -1,7 +1,8 @@
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  ILayoutRestorer
+  ILayoutRestorer,
+  ILabStatus
 } from '@jupyterlab/application';
 
 import { ICommandPalette } from '@jupyterlab/apputils';
@@ -10,6 +11,11 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
+import { IEditorServices } from '@jupyterlab/codeeditor';
+import { ITranslator } from '@jupyterlab/translation';
+import { IFormComponentRegistry } from '@jupyterlab/ui-components';
+
+import activateMetadataEditor from '@app/metadata-editor';
 import activatePipeline from '@app/pipeline';
 
 import userIdentify from '@app/user';
@@ -23,12 +29,18 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'redevelop-elyra:plugin',
   autoStart: true,
   requires: [
+    // pipeline-editor
     ICommandPalette,
     ILauncher,
     IFileBrowserFactory,
     ILayoutRestorer,
     IMainMenu,
-    ISettingRegistry
+    ISettingRegistry,
+    // metadata-editor
+    IEditorServices,
+    ILabStatus,
+    IFormComponentRegistry,
+    ITranslator
   ],
   activate: (
     app: JupyterFrontEnd,
@@ -37,9 +49,20 @@ const plugin: JupyterFrontEndPlugin<void> = {
     browserFactory: IFileBrowserFactory,
     restorer: ILayoutRestorer,
     menu: IMainMenu,
-    registry: ISettingRegistry
+    registry: ISettingRegistry,
+    editorServices: IEditorServices,
+    status: ILabStatus,
+    componentRegistry: IFormComponentRegistry,
+    translator: ITranslator
   ) => {
-    console.log('JupyterLab extension redevelop-elyra is activated!');
+    activateMetadataEditor(
+      app,
+      palette,
+      editorServices,
+      status,
+      componentRegistry,
+      translator
+    );
     activatePipeline(
       app,
       palette,

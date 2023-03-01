@@ -12,13 +12,13 @@ import {
   componentCatalogIcon
 } from '@elyra/ui-components';
 
-import { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
+import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
 import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
 import { DocumentWidget } from '@jupyterlab/docregistry';
-import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
-import { ILauncher } from '@jupyterlab/launcher';
-import { IMainMenu } from '@jupyterlab/mainmenu';
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
+import type { IFileBrowserFactory } from '@jupyterlab/filebrowser';
+import type { ILauncher } from '@jupyterlab/launcher';
+import type { IMainMenu } from '@jupyterlab/mainmenu';
+import type { ISettingRegistry } from '@jupyterlab/settingregistry';
 import {
   addIcon,
   IRankedMenu,
