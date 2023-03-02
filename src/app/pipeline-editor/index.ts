@@ -2,7 +2,7 @@
  * pipeline
  */
 
-import { PIPELINE_CURRENT_VERSION } from '@app/pipeline-editor-lib';
+import { PIPELINE_CURRENT_VERSION } from '@app/base-pipeline-editor';
 import { RequestHandler } from '../services';
 import {
   containerIcon,

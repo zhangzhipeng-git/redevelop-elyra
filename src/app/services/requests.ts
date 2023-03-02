@@ -196,8 +196,6 @@ export class RequestHandler {
             longRequestDialog.resolve();
           }
 
-          console.log(response, 'response');
-
           response[type]().then(
             // handle cases where the server returns a valid response
             (result: any) => {

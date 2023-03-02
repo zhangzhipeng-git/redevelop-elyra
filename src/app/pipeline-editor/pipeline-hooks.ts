@@ -292,7 +292,6 @@ export const usePalette = (type = 'local'): IReturn<any> => {
   } = useSWR(type, componentFetcher);
 
   let updatedPalette;
-  console.log(JSON.stringify(palette), 'palette');
   if (palette !== undefined) {
     updatedPalette = produce(palette, (draft: any) => {
       for (const category of draft.categories) {

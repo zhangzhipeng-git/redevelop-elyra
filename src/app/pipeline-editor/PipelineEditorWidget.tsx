@@ -18,7 +18,7 @@ import {
   PipelineEditor,
   PipelineOutOfDateError,
   ThemeProvider
-} from '@app/pipeline-editor-lib';
+} from '@app/base-pipeline-editor';
 import {
   migrate,
   validate,
@@ -212,7 +212,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   const runtimeDisplayName = getDisplayName(runtimesSchema, type) ?? 'Generic';
 
   const {
-    data: palette,
+    data: palette, // 编辑器面板参数，左侧是palette.catagories, 右侧是palette.pipelineProperties 和 palette.pipelineParameters
     error: paletteError,
     mutate: mutatePalette
   } = usePalette(type);
