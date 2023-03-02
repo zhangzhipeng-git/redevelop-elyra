@@ -14,40 +14,41 @@
  * limitations under the License.
  */
 
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { Widget } from "@rjsf/core";
+import { Widget } from '@rjsf/core';
 
 // TODO: Make the file clearable
-export const FileWidget: Widget = (props) => {
+export const FileWidget: Widget = props => {
   const handleChooseFile = useCallback(async () => {
     props.formContext.onFileRequested({
       canSelectMany: false,
       defaultUri: props.value,
       filters: { File: props.uiSchema.extensions },
-      propertyID: props.id.replace("root_component_parameters_", ""),
-      parentID: props.uiSchema?.parentID,
+      propertyID: props.id.replace('root_component_parameters_', ''),
+      parentID: props.uiSchema?.parentID
     });
   }, [props]);
 
   return (
-    <div id={props.id} style={{ display: "flex" }}>
+    <div id={props.id} style={{ display: 'flex' }}>
       <input
         type="text"
         className="form-control"
-        value={props.value ?? ""}
-        placeholder={props.uiSchema?.["ui:placeholder"]}
-        onChange={(e) => {
+        style={{ flex: 1 }}
+        value={props.value ?? ''}
+        placeholder={props.uiSchema?.['ui:placeholder']}
+        onChange={e => {
           console.log(e);
         }}
         disabled
       />
       <button
-        className="form-control"
-        style={{ width: "fit-content" }}
+        className="form-control choose-file-btn"
+        style={{ display: 'inline-block', width: '50px' }}
         onClick={handleChooseFile}
       >
-        Browse
+        浏览
       </button>
     </div>
   );
