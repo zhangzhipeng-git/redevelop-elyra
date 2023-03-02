@@ -430,7 +430,7 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/runtime-image.json',
-          title: 'Runtime Image',
+          title: '运行时镜像',
           name: 'runtime-image',
           schemaspace: 'runtime-images',
           schemaspace_id: '119c9740-d73f-48c6-a97a-599d3acaf41d',
@@ -791,7 +791,7 @@ module.exports = {
                   }
                 },
                 include_subdirs: {
-                  title: 'Include Subdirectories',
+                  title: '包含子目录',
                   description:
                     'Indicates whether a recursive search for component specification files should be performed on subdirectories',
                   type: 'boolean',

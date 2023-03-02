@@ -5,7 +5,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -35,7 +35,8 @@
     ],
     "lib": [
       "dom",
-      "esnext"
+      "esnext",
+      "dom.iterable"
     ],
     "skipLibCheck": true,
     "allowJs": true,

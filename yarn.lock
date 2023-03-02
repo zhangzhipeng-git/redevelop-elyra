@@ -1227,34 +1227,12 @@
     seedrandom "^3.0.5"
     uuid "^8.3.0"
 
-"@elyra/pipeline-editor@1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@elyra/pipeline-editor/-/pipeline-editor-1.12.1.tgz#b2989fb86b139aae2811e2d4bd2cfb6c132ba345"
-  integrity sha512-PeJFUHlKCtUusWilCUmIVkc+NzQMQFLNpVGohUicWFogSvo337ZyZNoDur/ls3g+CF+tB76NT8yJAA8GfSxwqQ==
-  dependencies:
-    "@elyra/canvas" "^12.23.2"
-    "@elyra/pipeline-services" "^1.12.1"
-    "@rjsf/core" "^4.2.3"
-    "@rjsf/utils" "^5.0.0-beta.2"
-    "@rjsf/validator-ajv6" "^5.0.0-beta.2"
-    carbon-components "^10.43.0"
-    carbon-components-react "^7.48.0"
-    carbon-icons "7.0.7"
-    downshift "^6.1.2"
-    immer "^9.0.7"
-    nanoid "^3.1.20"
-    react-dom "^17.0.1"
-    react-intl "^5.0.0"
-    react-redux "^7.0.0"
-    redux "^4.0.5"
-    styled-components "^5.2.1"
-
 "@elyra/pipeline-schemas@^3.0.63":
   version "3.0.66"
   resolved "https://registry.yarnpkg.com/@elyra/pipeline-schemas/-/pipeline-schemas-3.0.66.tgz#4a9518641a892026b640f3deaee566460e9f9587"
   integrity sha512-kdYuLN9cDstS4jNdvm6G4UYaKSRvnbhFOZLzv8WME8X+EU9yZ33ZJ2w+V85Zxd7tBY5XAg/1ySCS7mI6RC5QCQ==
 
-"@elyra/pipeline-services@1.12.1", "@elyra/pipeline-services@^1.12.1":
+"@elyra/pipeline-services@1.12.1":
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/@elyra/pipeline-services/-/pipeline-services-1.12.1.tgz#3999fe784eef35b7019fe5824b1223a2f5644090"
   integrity sha512-Dljf8t57Inzlnp2uyaVTTT9CnyDxEdnZrimXqcbOi6NXvDeHQ9NISEAb8oq2Y8Omn42RGusJb0IcnTowUSenmA==
@@ -2808,7 +2786,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
+"@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
   integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
@@ -2951,6 +2929,15 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
+
+"@types/styled-components@^5.1.7":
+  version "5.1.26"
+  resolved "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.26.tgz#5627e6812ee96d755028a98dae61d28e57c233af"
+  integrity sha512-KuKJ9Z6xb93uJiIyxo/+ksS7yLjS1KzG6iv5i78dhVg/X3u5t1H7juRWqVmodIdz6wGVaIApo1u01kmFRdJHVw==
+  dependencies:
+    "@types/hoist-non-react-statics" "*"
+    "@types/react" "*"
+    csstype "^3.0.2"
 
 "@types/tapable@^1", "@types/tapable@^1.0.5":
   version "1.0.8"
@@ -4562,16 +4549,6 @@ carbon-components-react@^7.48.0:
     use-resize-observer "^6.0.0"
     wicg-inert "^3.1.1"
     window-or-global "^1.0.1"
-
-carbon-components@^10.43.0:
-  version "10.58.3"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.58.3.tgz#425bb5ceb8755fda9c50769572a5845d3f852e00"
-  integrity sha512-RjTnrWCGStsIZ7nErw97AZI9sQWxQ8oIgo3QMdV0FWFcpTOECA4I9Dy4WPpRRdSMBcQpLetTxqjDGourM4u8Tw==
-  dependencies:
-    "@carbon/telemetry" "0.1.0"
-    flatpickr "4.6.1"
-    lodash.debounce "^4.0.8"
-    warning "^3.0.0"
 
 carbon-components@~10.8.1:
   version "10.8.1"
@@ -9248,7 +9225,7 @@ jsesc@~0.5.0:
 
 json-loader@^0.5.7:
   version "0.5.7"
-  resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
+  resolved "https://registry.npmjs.org/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
   integrity sha512-QLPs8Dj7lnf3e3QYS1zkCo+4ZwqOiF9d/nZnYozTISxXWCfNs9yuky5rJw4/W34s7POaNlbZmQGaB5NiXCbP4w==
 
 json-parse-better-errors@^1.0.1, json-parse-better-errors@^1.0.2:
@@ -12114,7 +12091,7 @@ react-intl@*:
     intl-messageformat "10.3.0"
     tslib "^2.4.0"
 
-react-intl@^5.0.0, react-intl@^5.10.15:
+react-intl@^5.10.15:
   version "5.25.1"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-5.25.1.tgz#68a73aefc485c9bf70062381ae7f6f4791680879"
   integrity sha512-pkjdQDvpJROoXLMltkP/5mZb0/XqrqLoPGKUCfbdkP8m6U9xbK40K51Wu+a4aQqTEvEK5lHBk0fWzUV72SJ3Hg==
@@ -12184,7 +12161,7 @@ react-portal@^4.2.1:
   dependencies:
     prop-types "^15.5.8"
 
-react-redux@^7.0.0, react-redux@^7.2.0:
+react-redux@^7.2.0:
   version "7.2.9"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.9.tgz#09488fbb9416a4efe3735b7235055442b042481d"
   integrity sha512-Gx4L3uM182jEEayZfRbI/G11ZpYdNAnBs70lFVMNdHJI76XYtR+7m0MN+eAs7UHBPhWXcnFPaS+9owSCJQHNpQ==
@@ -14609,10 +14586,8 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

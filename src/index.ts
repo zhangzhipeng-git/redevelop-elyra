@@ -15,8 +15,8 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 import { ITranslator } from '@jupyterlab/translation';
 import { IFormComponentRegistry } from '@jupyterlab/ui-components';
 
-import activateMetadataEditor from '@app/metadata-editor';
-import activatePipeline from '@app/pipeline';
+import activateMetadataEditor from '@app/metadata';
+import activatePipeline from '@app/pipeline-editor';
 
 import userIdentify from '@app/user';
 

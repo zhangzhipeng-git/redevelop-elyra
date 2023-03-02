@@ -402,5 +402,7 @@ module.exports = {
         }
       ]
     };
-  }
+  },
+  '/elyra/pipeline/components/cache': () => {},
+  '/elyra/pipeline/components/cache/*': () => {}
 };
