@@ -10,7 +10,7 @@ import {
   RequestErrors,
   runtimesIcon,
   componentCatalogIcon
-} from '@elyra/ui-components';
+} from '@app/ui-components';
 
 import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
 import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
@@ -39,8 +39,7 @@ import {
 import { RuntimesWidget } from './RuntimesWidget';
 import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 
-// const PIPELINE_EDITOR = 'Pipeline Editor';
-const PIPELINE_EDITOR = '管道编辑器';
+const PIPELINE_EDITOR = 'Pipeline Editor';
 const PIPELINE = 'pipeline';
 const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
 const PLUGIN_ID = 'redevelop-elyra:plugin';
@@ -175,10 +174,10 @@ export default async function activatePipeline(
   app.commands.addCommand(openPipelineEditorCommand, {
     label: (args: any) => {
       if (args.isPalette) {
-        return `新建${PIPELINE_EDITOR}`;
+        return `新建管道编辑器`;
       }
       if (args.runtimeType?.id === 'LOCAL') {
-        return `通用${PIPELINE_EDITOR}`;
+        return `Generic ${PIPELINE_EDITOR}`;
       }
       if (args.isMenu) {
         return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
@@ -187,7 +186,7 @@ export default async function activatePipeline(
     },
     caption: (args: any) => {
       if (args.runtimeType?.id === 'LOCAL') {
-        return `通用${PIPELINE_EDITOR}`;
+        return `Generic ${PIPELINE_EDITOR}`;
       }
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
@@ -196,7 +195,7 @@ export default async function activatePipeline(
         return '';
       }
       if (args.runtimeType?.id === 'LOCAL') {
-        return `通用${PIPELINE_EDITOR}`;
+        return `Generic ${PIPELINE_EDITOR}`;
       }
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
@@ -285,7 +284,7 @@ export default async function activatePipeline(
         for (const t of resolvedTypes as any) {
           launcher.add({
             command: openPipelineEditorCommand,
-            category: '管道编辑器',
+            category: PIPELINE_EDITOR,
             args: { runtimeType: t },
             rank: t.id === 'LOCAL' ? 1 : 2
           });
@@ -329,41 +328,41 @@ export default async function activatePipeline(
 
   const runtimesWidget = new RuntimesWidget({
     app,
-    display_name: 'Runtimes',
+    display_name: '运行环境',
     schemaspace: RUNTIMES_SCHEMASPACE,
     icon: runtimesIcon,
-    titleContext: 'runtime configuration',
+    titleContext: '运行环境配置',
     appendToTitle: true
   });
   const runtimesWidgetID = `elyra-metadata:${RUNTIMES_SCHEMASPACE}`;
   runtimesWidget.id = runtimesWidgetID;
   runtimesWidget.title.icon = runtimesIcon;
-  runtimesWidget.title.caption = 'Runtimes';
+  runtimesWidget.title.caption = '运行环境';
 
   restorer.add(runtimesWidget, runtimesWidgetID);
   app.shell.add(runtimesWidget, 'left', { rank: 950 });
 
   const runtimeImagesWidget = new RuntimeImagesWidget({
     app,
-    display_name: 'Runtime Images',
+    display_name: '运行镜像',
     schemaspace: RUNTIME_IMAGES_SCHEMASPACE,
     icon: containerIcon,
-    titleContext: 'runtime image'
+    titleContext: '运行镜像'
   });
   const runtimeImagesWidgetID = `elyra-metadata:${RUNTIME_IMAGES_SCHEMASPACE}`;
   runtimeImagesWidget.id = runtimeImagesWidgetID;
   runtimeImagesWidget.title.icon = containerIcon;
-  runtimeImagesWidget.title.caption = 'Runtime Images';
+  runtimeImagesWidget.title.caption = '运行镜像';
 
   restorer.add(runtimeImagesWidget, runtimeImagesWidgetID);
   app.shell.add(runtimeImagesWidget, 'left', { rank: 951 });
 
   const componentCatalogWidget = new ComponentCatalogsWidget({
     app,
-    display_name: 'Component Catalogs', // TODO: This info should come from the server for all schemaspaces
+    display_name: '组件目录', // TODO: This info should come from the server for all schemaspaces
     schemaspace: COMPONENT_CATALOGS_SCHEMASPACE,
     icon: componentCatalogIcon,
-    titleContext: 'component catalog',
+    titleContext: '组件目录',
     refreshCallback: (): void => {
       app.commands.execute(commandIDs.refreshPalette);
     }
@@ -371,7 +370,7 @@ export default async function activatePipeline(
   const componentCatalogWidgetID = `elyra-metadata:${COMPONENT_CATALOGS_SCHEMASPACE}`;
   componentCatalogWidget.id = componentCatalogWidgetID;
   componentCatalogWidget.title.icon = componentCatalogIcon;
-  componentCatalogWidget.title.caption = 'Component Catalogs';
+  componentCatalogWidget.title.caption = '组件目录';
 
   restorer.add(componentCatalogWidget, componentCatalogWidgetID);
   app.shell.add(componentCatalogWidget, 'left', { rank: 961 });

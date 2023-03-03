@@ -15,7 +15,7 @@
  */
 
 import { MetadataService } from '../services';
-import { RequestErrors, FormEditor } from '@elyra/ui-components';
+import { RequestErrors, FormEditor } from '@app/ui-components';
 
 import * as React from 'react';
 
@@ -122,9 +122,10 @@ export const MetadataEditor: React.FC<IMetadataEditorComponentProps> = ({
     }
   };
 
-  let headerText = `Edit "${displayName}"`;
+  let headerText = `编辑"${displayName}"`;
   if (!displayName) {
-    headerText = `Add new ${schemaTop.title} ${titleContext ?? ''}`;
+    console.log(schemaTop, 'schemaTop');
+    headerText = `新增${schemaTop.title}${titleContext ?? ''}`;
   }
 
   /**
@@ -158,11 +159,11 @@ export const MetadataEditor: React.FC<IMetadataEditorComponentProps> = ({
     <div onKeyPress={onKeyPress} className={ELYRA_METADATA_EDITOR_CLASS}>
       <h3> {headerText} </h3>
       <p style={{ width: '100%', marginBottom: '10px' }}>
-        {translator.__('All fields marked with an asterisk are required.')}
+        {translator.__('所有带星号的字段都是必需的.')}
         &nbsp;
         {referenceURL ? (
           <a href={referenceURL} target="_blank" rel="noreferrer noopener">
-            {translator.__('[Learn more ...]')}
+            {translator.__('[了解更多 ...]')}
           </a>
         ) : null}
       </p>
@@ -187,9 +188,7 @@ export const MetadataEditor: React.FC<IMetadataEditorComponentProps> = ({
         key={'SaveButton'}
       >
         {invalidForm ? (
-          <p className="formError">
-            {translator.__('Cannot save invalid form.')}
-          </p>
+          <p className="formError">{translator.__('无法保存无效表单')}</p>
         ) : (
           <div />
         )}
@@ -198,7 +197,7 @@ export const MetadataEditor: React.FC<IMetadataEditorComponentProps> = ({
             saveMetadata();
           }}
         >
-          {translator.__('Save & Close')}
+          {translator.__('保存 & 关闭')}
         </button>
       </div>
     </div>

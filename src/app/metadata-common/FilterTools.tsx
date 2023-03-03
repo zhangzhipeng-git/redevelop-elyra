@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { tagIcon } from '@elyra/ui-components';
+import { tagIcon } from '@app/ui-components';
 import { InputGroup, checkIcon } from '@jupyterlab/ui-components';
 
 import React from 'react';
@@ -198,7 +198,7 @@ export class FilterTools extends React.Component<
           <InputGroup
             className={FILTER_SEARCHWRAPPER}
             type="text"
-            placeholder="Search..."
+            placeholder="搜索..."
             onChange={this.handleSearch}
             rightIcon="ui-components:search"
             value={this.state.searchValue}
@@ -209,7 +209,7 @@ export class FilterTools extends React.Component<
         ) : (
           <div className={FILTER_CLASS} id={this.props.schemaspace}>
             <button
-              title="Filter by tag"
+              title="根据标签过滤"
               className={FILTER_BUTTON}
               onClick={this.createFilterBox}
             >

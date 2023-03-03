@@ -377,7 +377,7 @@ module.exports = {
             },
             disable_node_caching: {
               title: '禁用节点缓存',
-              description: '禁用缓存以强制在目标运行时环境中重新执行节点.',
+              description: '禁用缓存以强制在目标运行环境中重新执行节点.',
               type: 'string',
               enum: ['True', 'False'],
               uihints: { 'ui:placeholder': '使用运行时默认值' }

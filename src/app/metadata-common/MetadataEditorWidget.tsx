@@ -15,7 +15,7 @@
  */
 
 import { MetadataService } from '../services';
-import { RequestErrors } from '@elyra/ui-components';
+import { RequestErrors } from '@app/ui-components';
 
 import { ILabStatus } from '@jupyterlab/application';
 import { ReactWidget, showDialog, Dialog } from '@jupyterlab/apputils';
@@ -168,10 +168,9 @@ export class MetadataEditorWidget extends ReactWidget {
           title: ' ',
           properties: {
             display_name: {
-              title: this.props.translator.__('Display Name'),
-              description: this.props.translator.__(
-                'Name used to identify an instance of metadata.'
-              ),
+              title: this.props.translator.__('展示名称'),
+              description:
+                this.props.translator.__('用于标识元数据实例的名称.'),
               type: 'string'
             }
           },
@@ -208,9 +207,8 @@ export class MetadataEditorWidget extends ReactWidget {
             requiredCategories.push(category);
           }
         }
-        schemaPropertiesByCategory[category]['properties'][
-          schemaProperty
-        ] = properties;
+        schemaPropertiesByCategory[category]['properties'][schemaProperty] =
+          properties;
       }
       if (metadataWithCategories['_noCategory']) {
         metadataWithCategories['_noCategory']['display_name'] =
@@ -278,8 +276,8 @@ export class MetadataEditorWidget extends ReactWidget {
   onCloseRequest(msg: Message): void {
     if (this.dirty) {
       showDialog({
-        title: this.props.translator.__('Close without saving?'),
-        body: <p>Metadata has unsaved changes, close without saving?</p>,
+        title: this.props.translator.__('关闭而不保存?'),
+        body: <p>元数据有未保存的更改，关闭时不保存?</p>,
         buttons: [Dialog.cancelButton(), Dialog.okButton()]
       }).then((response: any): void => {
         if (response.button.accept) {

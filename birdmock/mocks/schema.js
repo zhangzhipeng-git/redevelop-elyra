@@ -26,37 +26,36 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'airflow'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Apache Airflow configuration',
+              title: '展示名称',
+              description: '显示此Apache Airflow配置的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 runtime_type: {
-                  title: 'Runtime Type',
-                  description: 'The runtime associated with this instance',
+                  title: '运行环境',
+                  description: '与此实例关联的运行时',
                   type: 'string',
                   const: 'APACHE_AIRFLOW',
                   uihints: { hidden: true }
                 },
                 description: {
-                  title: 'Description',
-                  description:
-                    'Description of this Apache Airflow configuration',
+                  title: '描述',
+                  description: 'Apache Airflow配置描述',
                   type: 'string'
                 },
                 api_endpoint: {
-                  title: 'Apache Airflow UI Endpoint',
-                  description: 'The Apache Airflow UI endpoint',
+                  title: 'Apache Airflow UI端点',
+                  description: 'The Apache Airflow UI端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -65,9 +64,9 @@ module.exports = {
                   }
                 },
                 user_namespace: {
-                  title: 'Apache Airflow User Namespace',
+                  title: 'Apache Airflow用户命名空间',
                   description:
-                    'The Apache Airflow user namespace used to run DAG workflows',
+                    'The Apache Airflow用于运行DAG工作流的用户命名空间',
                   type: 'string',
                   pattern: '^[a-z0-9][-a-z0-9]*[a-z0-9]$',
                   maxLength: 63,
@@ -75,17 +74,17 @@ module.exports = {
                   uihints: { category: 'Apache Airflow' }
                 },
                 git_type: {
-                  title: 'Git type',
-                  description: 'Git provider',
+                  title: 'Git类型',
+                  description: 'Git平台',
                   type: 'string',
                   enum: ['GITHUB'],
                   default: 'GITHUB',
                   uihints: { category: 'Apache Airflow' }
                 },
                 github_api_endpoint: {
-                  title: 'GitHub or GitLab server API Endpoint',
+                  title: 'GitHub或者GitLab服务器API端点',
                   description:
-                    'The GitHub or GitLab server URL / API endpoint - Public or Enterprise',
+                    'The GitHub或者GitLab服务器URL/API端点-  Public or Enterprise',
                   type: 'string',
                   format: 'uri',
                   default: 'https://api.github.com',
@@ -95,8 +94,8 @@ module.exports = {
                   }
                 },
                 github_repo: {
-                  title: 'GitHub or GitLab DAG Repository',
-                  description: 'Existing repository where DAGs are stored',
+                  title: 'GitHub或者GitLab DAG仓库',
+                  description: '存储DAG的现有存储库',
                   type: 'string',
                   uihints: {
                     category: 'Apache Airflow',
@@ -104,16 +103,14 @@ module.exports = {
                   }
                 },
                 github_branch: {
-                  title: 'GitHub or GitLab DAG Repository Branch',
-                  description:
-                    'Existing branch in the repository where DAGs are stored',
+                  title: 'GitHub或者GitLab DAG存储库分支',
+                  description: '存储DAG的存储库中的现有分支',
                   type: 'string',
                   uihints: { category: 'Apache Airflow' }
                 },
                 github_repo_token: {
-                  title: 'Personal Access Token',
-                  description:
-                    'Token that has permission to push to the DAG repository',
+                  title: '个人访问令牌',
+                  description: 'T有权限推送到DAG存储库的令牌',
                   type: 'string',
                   uihints: {
                     'ui:field': 'password',
@@ -121,8 +118,8 @@ module.exports = {
                   }
                 },
                 cos_endpoint: {
-                  title: 'Cloud Object Storage Endpoint',
-                  description: 'The Cloud Object Storage endpoint',
+                  title: '云对象存储端点',
+                  description: '云对象存储端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -131,8 +128,8 @@ module.exports = {
                   }
                 },
                 public_cos_endpoint: {
-                  title: 'Public Cloud Object Storage Endpoint',
-                  description: 'The public Cloud Object Storage endpoint',
+                  title: '公有云对象存储端点',
+                  description: '公有云对象存储端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -141,8 +138,8 @@ module.exports = {
                   }
                 },
                 cos_bucket: {
-                  title: 'Cloud Object Storage Bucket Name',
-                  description: 'The Cloud Object Storage bucket name',
+                  title: '云对象存储桶名称',
+                  description: '云对象存储桶名称',
                   type: 'string',
                   pattern: '^[a-z0-9][a-z0-9-.]*[a-z0-9]$',
                   minLength: 3,
@@ -150,9 +147,8 @@ module.exports = {
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_auth_type: {
-                  title: 'Cloud Object Storage Authentication Type',
-                  description:
-                    'Authentication type Elyra uses to authenticate with Cloud Object Storage',
+                  title: '云对象存储认证类型',
+                  description: '身份验证类型使用云对象存储进行身份验证',
                   type: 'string',
                   enum: [
                     'AWS_IAM_ROLES_FOR_SERVICE_ACCOUNTS',
@@ -163,9 +159,9 @@ module.exports = {
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_secret: {
-                  title: 'Cloud Object Storage Credentials Secret',
+                  title: '云对象存储证书秘钥',
                   description:
-                    "Kubernetes secret that's defined in the specified user namespace, containing the Cloud Object Storage username and password. This property is required for authentication type KUBERNETES_SECRET.",
+                    '在指定的用户名称空间中定义的Kubernetes秘钥，包含云对象存储用户名和密码。这个属性对于身份验证类型KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   uihints: {
                     'ui:field': 'password',
@@ -173,16 +169,16 @@ module.exports = {
                   }
                 },
                 cos_username: {
-                  title: 'Cloud Object Storage Username',
+                  title: '云对象存储用户名',
                   description:
-                    'The Cloud Object Storage username. This property is required for authentication type USER_CREDENTIALS and KUBERNETES_SECRET.',
+                    '云对象存储用户名，此属性对于身份验证类型USER_CREDENTIALS和KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_password: {
-                  title: 'Cloud Object Storage Password',
+                  title: '对象存储密码',
                   description:
-                    'The Cloud Object Storage password. This property is required for authentication type USER_CREDENTIALS and KUBERNETES_SECRET.',
+                    '云对象存储密码，此属性对于身份验证类型USER_CREDENTIALS和KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   minLength: 8,
                   uihints: {
@@ -191,11 +187,11 @@ module.exports = {
                   }
                 },
                 tags: {
-                  title: 'Tags',
-                  description: 'Tags for categorizing Apache Airflow',
+                  title: '标签',
+                  description: '标签用于分类Apache Airflow',
                   uniqueItems: true,
                   type: 'array',
-                  items: { minLength: 1, pattern: '^[^ \t]+([ \t]+[^ \t]+)*$' },
+                  items: { minLength: 1, pattern: '^[^\t]+([\t]+[^\t]+)*$' },
                   uihints: { 'ui:field': 'tags' }
                 }
               },
@@ -231,38 +227,36 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'kfp'
             },
             display_name: {
-              title: 'Display Name',
-              description:
-                'Display name of this Kubeflow Pipelines configuration',
+              title: '展示名称',
+              description: '显示此kfp配置的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 runtime_type: {
-                  title: 'Runtime Type',
-                  description: 'The runtime associated with this instance',
+                  title: '运行环境',
+                  description: '与此实例关联的运行时',
                   type: 'string',
                   const: 'KUBEFLOW_PIPELINES',
                   uihints: { hidden: true }
                 },
                 description: {
-                  title: 'Description',
-                  description:
-                    'Description of this Kubeflow Pipelines configuration',
+                  title: '描述',
+                  description: 'Kubeflow Pipelines配置描述',
                   type: 'string'
                 },
                 api_endpoint: {
-                  title: 'Kubeflow Pipelines API Endpoint',
-                  description: 'The Kubeflow Pipelines API endpoint',
+                  title: 'kfp API端点',
+                  description: 'kfp API端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -272,8 +266,8 @@ module.exports = {
                   }
                 },
                 public_api_endpoint: {
-                  title: 'Public Kubeflow Pipelines API Endpoint',
-                  description: 'The public Kubeflow Pipelines API endpoint',
+                  title: '公共kfp API端点',
+                  description: '公共kfp API端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -283,26 +277,24 @@ module.exports = {
                   }
                 },
                 user_namespace: {
-                  title: 'Kubeflow Pipelines User Namespace',
-                  description:
-                    'The Kubeflow Pipelines user namespace used to create experiments',
+                  title: 'kfp用户命名空间',
+                  description: '用于创建实验的kfp用户名称空间',
                   type: 'string',
                   pattern: '^[a-z0-9][-a-z0-9]*[a-z0-9]$',
                   maxLength: 63,
                   uihints: { category: 'Kubeflow Pipelines' }
                 },
                 engine: {
-                  title: 'Kubeflow Pipelines engine',
-                  description: 'The Kubeflow Pipelines engine in use',
+                  title: 'kfp引擎',
+                  description: '使用中的kfp引擎',
                   type: 'string',
                   enum: ['Argo'],
                   default: 'Argo',
                   uihints: { category: 'Kubeflow Pipelines' }
                 },
                 auth_type: {
-                  title: 'Authentication Type',
-                  description:
-                    'Authentication type Elyra uses to authenticate with Kubeflow',
+                  title: '认证类型',
+                  description: '认证类型使用Kubeflow进行身份验证',
                   type: 'string',
                   enum: [
                     'NO_AUTHENTICATION',
@@ -315,16 +307,16 @@ module.exports = {
                   uihints: { category: 'Kubeflow Pipelines' }
                 },
                 api_username: {
-                  title: 'Kubeflow Pipelines API Endpoint Username',
+                  title: 'kfp API端点用户名称',
                   description:
-                    'The Kubeflow Pipelines API endpoint username. This property is required for all authentication types, except NO_AUTHENTICATION and KUBERNETES_SERVICE_ACCOUNT_TOKEN.',
+                    '身份验证类型使用Kubeflow pipeline API端点用户名进行身份验证，除NO_AUTHENTICATION和KUBERNETES_SERVICE_ACCOUNT_TOKEN外，所有身份验证类型都需要此属性.',
                   type: 'string',
                   uihints: { category: 'Kubeflow Pipelines' }
                 },
                 api_password: {
-                  title: 'Kubeflow Pipelines API Endpoint Password',
+                  title: 'kfp API端点密码',
                   description:
-                    'Password for the specified username. This property is required for all authentication types, except NO_AUTHENTICATION and KUBERNETES_SERVICE_ACCOUNT_TOKEN.',
+                    '指定用户名的密码，除NO_AUTHENTICATION和KUBERNETES_SERVICE_ACCOUNT_TOKEN外，所有身份验证类型都需要此属性.',
                   type: 'string',
                   uihints: {
                     'ui:field': 'password',
@@ -332,8 +324,8 @@ module.exports = {
                   }
                 },
                 cos_endpoint: {
-                  title: 'Cloud Object Storage Endpoint',
-                  description: 'The Cloud Object Storage endpoint',
+                  title: '云对象存储端点',
+                  description: '云对象存储端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -342,8 +334,8 @@ module.exports = {
                   }
                 },
                 public_cos_endpoint: {
-                  title: 'Public Cloud Object Storage Endpoint',
-                  description: 'The public Cloud Object Storage endpoint',
+                  title: '公有云对象存储端点',
+                  description: '公有云对象存储端点',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -352,8 +344,8 @@ module.exports = {
                   }
                 },
                 cos_bucket: {
-                  title: 'Cloud Object Storage Bucket Name',
-                  description: 'The Cloud Object Storage bucket name',
+                  title: '云对象存储桶名称',
+                  description: '云对象存储桶名称',
                   type: 'string',
                   pattern: '^[a-z0-9][a-z0-9-.]*[a-z0-9]$',
                   minLength: 3,
@@ -361,9 +353,8 @@ module.exports = {
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_auth_type: {
-                  title: 'Cloud Object Storage Authentication Type',
-                  description:
-                    'Authentication type Elyra uses to authenticate with Cloud Object Storage',
+                  title: '云对象存储认证类型',
+                  description: '身份验证类型使用云对象存储进行身份验证',
                   type: 'string',
                   enum: [
                     'AWS_IAM_ROLES_FOR_SERVICE_ACCOUNTS',
@@ -374,9 +365,9 @@ module.exports = {
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_secret: {
-                  title: 'Cloud Object Storage Credentials Secret',
+                  title: '云对象存储证书秘钥',
                   description:
-                    "Kubernetes secret that's defined in the specified user namespace, containing the Cloud Object Storage username and password. This property is required for authentication type KUBERNETES_SECRET.",
+                    '在指定的用户名称空间中定义的Kubernetes秘钥，包含云对象存储用户名和密码。这个属性对于身份验证类型KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   uihints: {
                     'ui:field': 'password',
@@ -384,16 +375,16 @@ module.exports = {
                   }
                 },
                 cos_username: {
-                  title: 'Cloud Object Storage Username',
+                  title: '云对象存储用户名',
                   description:
-                    'The Cloud Object Storage username. This property is required for authentication type USER_CREDENTIALS and KUBERNETES_SECRET.',
+                    '云对象存储用户名。此属性对于身份验证类型USER_CREDENTIALS和KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   uihints: { category: 'Cloud Object Storage' }
                 },
                 cos_password: {
-                  title: 'Cloud Object Storage Password',
+                  title: '对象存储密码',
                   description:
-                    'The Cloud Object Storage password. This property is required for authentication type USER_CREDENTIALS and KUBERNETES_SECRET.',
+                    '云对象存储密码，此属性对于身份验证类型USER_CREDENTIALS和KUBERNETES_SECRET是必需的.',
                   type: 'string',
                   minLength: 8,
                   uihints: {
@@ -402,11 +393,11 @@ module.exports = {
                   }
                 },
                 tags: {
-                  title: 'Tags',
-                  description: 'Tags for categorizing Kubeflow pipelines',
+                  title: '标签',
+                  description: '标签用于分类kfp',
                   uniqueItems: true,
                   type: 'array',
-                  items: { minLength: 1, pattern: '^[^ \t]+([ \t]+[^ \t]+)*$' },
+                  items: { minLength: 1, pattern: '^[^\t]+([\t]+[^\t]+)*$' },
                   uihints: { 'ui:field': 'tags' }
                 }
               },
@@ -442,37 +433,37 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'runtime-image'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'The display name of the Runtime Image',
+              title: '展示名称',
+              description: '运行时映像的显示名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this Runtime Image',
+              description: '特定于此运行时映像的附加数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'The description of this Runtime Image instance',
+                  title: '描述',
+                  description: '此运行时映像实例的描述',
                   type: 'string'
                 },
                 tags: {
-                  title: 'Tags',
-                  description: 'Tags for categorizing runtime images',
+                  title: '标签',
+                  description: '标签用于分类运行镜像',
                   uniqueItems: true,
                   type: 'array',
-                  items: { minLength: 1, pattern: '^[^ \t]+([ \t]+[^ \t]+)*$' },
+                  items: { minLength: 1, pattern: '^[^\t]+([\t]+[^\t]+)*$' },
                   uihints: { 'ui:field': 'tags' }
                 },
                 image_name: {
-                  title: 'Image Name',
-                  description: 'The image name (including optional tag)',
+                  title: '镜像名称',
+                  description: '镜像名称(包括可选标签)',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -481,17 +472,16 @@ module.exports = {
                   }
                 },
                 pull_policy: {
-                  title: 'Image Pull Policy',
-                  description:
-                    'The pull policy to use when selecting this image',
+                  title: '镜像拉取策略',
+                  description: '选择此镜像时使用的拉取策略',
                   type: 'string',
                   enum: ['Always', 'IfNotPresent', 'Never'],
                   uihints: { category: 'Source' }
                 },
                 pull_secret: {
-                  title: 'Image Pull Secret',
+                  title: '镜像拉取秘钥',
                   description:
-                    'Kubernetes secret name containing the container registry credentials, if anonymous pull access is forbidden.',
+                    '包含容器注册表凭据的Kubernetes秘钥名称，如果匿名拉访问被禁止.',
                   type: 'string',
                   pattern: '^[a-z0-9][a-z0-9-.]*[a-z0-9]$',
                   maxLength: 253,
@@ -513,52 +503,52 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/pipeline/airflow/package_catalog_connector/airflow-package-catalog.json',
-          title: 'Apache Airflow package operator catalog',
+          title: 'Apache Airflow包的算子',
           name: 'airflow-package-catalog',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
             'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
           uihints: {
-            title: 'Apache Airflow core operator catalog',
+            title: 'Apache Airflow核心算子',
             icon: '',
             reference_url:
               'https://github.com/elyra-ai/elyra/tree/main/elyra/pipeline/airflow/package_catalog_connector'
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'airflow-package-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'Description of this Component Catalog',
+                  title: '描述',
+                  description: '此组件目录的描述',
                   type: 'string',
-                  default: 'Airflow package operator catalog'
+                  default: 'Airflow包的算子目录'
                 },
                 runtime_type: {
-                  title: 'Runtime',
-                  description: 'List of runtime types this catalog supports',
+                  title: '运行环境',
+                  description: '此目录支持的运行环境类型的列表',
                   type: 'string',
                   enum: ['APACHE_AIRFLOW'],
                   default: 'APACHE_AIRFLOW'
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'Assign the operators in the catalog to one or more categories, to group them in the visual pipeline editor palette.',
+                    '将分类中的算子分配给一个或多个目录，以便在可视管道编辑器面板中对它们进行分组.',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -570,9 +560,8 @@ module.exports = {
                   }
                 },
                 airflow_package_download_url: {
-                  title: 'Airflow package download URL',
-                  description:
-                    'URL where the Apache Airflow package wheel can be downloaded',
+                  title: 'Airflow包下载链接',
+                  description: 'Apache Airflow可以下载wheel包的链接',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -582,18 +571,16 @@ module.exports = {
                   }
                 },
                 search_contrib: {
-                  title: 'Include operators in contrib package',
-                  description:
-                    'Include operators in package airflow.contrib.operators',
+                  title: '在contrib包中包含算子',
+                  description: '在airflow.contrib.operators包中包含算子',
                   type: 'boolean',
                   uihints: {
                     category: 'Source'
                   }
                 },
                 auth_id: {
-                  title: 'User Id',
-                  description:
-                    'User id that has read access for the specified URL resource',
+                  title: '用户ID',
+                  description: '对指定URL资源具有读访问权限的用户ID',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -601,8 +588,8 @@ module.exports = {
                   }
                 },
                 auth_password: {
-                  title: 'Password',
-                  description: 'Password or API key for the specified user id',
+                  title: '密码',
+                  description: '指定用户ID的密码或API密钥',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -620,52 +607,52 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/pipeline/airflow/provider_package_catalog_connector/airflow-provider-package-catalog.json',
-          title: 'Apache Airflow provider package operator catalog',
+          title: 'Apache Airflow provider package算子',
           name: 'airflow-provider-package-catalog',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
             'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
           uihints: {
-            title: 'Apache Airflow provider package operator catalog',
+            title: 'Apache Airflow provider package算子',
             icon: '',
             reference_url:
               'https://github.com/elyra-ai/elyra/tree/main/elyra/pipeline/airflow/provider_package_catalog_connector'
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'airflow-provider-package-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'Description of this Component Catalog',
+                  title: '描述',
+                  description: '此组件目录的描述',
                   type: 'string',
                   default: 'Apache Airflow provider package operator catalog'
                 },
                 runtime_type: {
-                  title: 'Runtime',
-                  description: 'List of runtime types this catalog supports',
+                  title: '运行环境',
+                  description: '此分类支持的运行环境类型的列表',
                   type: 'string',
                   enum: ['APACHE_AIRFLOW'],
                   default: 'APACHE_AIRFLOW'
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'Assign the operators in the catalog to one or more categories, to group them in the visual pipeline editor palette.',
+                    '将分类中的算子分配给一个或多个分类，以便在可视管道编辑器面板中对它们进行分组.',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -677,9 +664,8 @@ module.exports = {
                   }
                 },
                 airflow_provider_package_download_url: {
-                  title: 'Provider package download URL',
-                  description:
-                    'URL where the Airflow provider package wheel can be downloaded.',
+                  title: 'provider package的下载链接',
+                  description: '可以下载Airflow provider package wheel的链接.',
                   type: 'string',
                   format: 'uri',
                   uihints: {
@@ -689,9 +675,8 @@ module.exports = {
                   }
                 },
                 auth_id: {
-                  title: 'User Id',
-                  description:
-                    'User id that has read access for the specified URL resource',
+                  title: '用户ID',
+                  description: '对指定URL资源具有读访问权限的用户ID',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -699,8 +684,8 @@ module.exports = {
                   }
                 },
                 auth_password: {
-                  title: 'Password',
-                  description: 'Password or API key for the specified user id',
+                  title: '密码',
+                  description: '指定用户ID的密码或API密钥',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -721,9 +706,9 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/local-directory-catalog.json',
-          title: 'Directory Component Catalog',
+          title: '文件目录',
           name: 'local-directory-catalog',
-          display_name: 'Directory Component Catalog',
+          display_name: '文件目录',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
@@ -735,30 +720,29 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'local-directory-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'Description of this Component Catalog',
+                  title: '描述',
+                  description: '此组件目录的描述',
                   type: 'string'
                 },
                 runtime_type: {
-                  title: 'Runtime Type',
-                  description:
-                    'The type of runtime associated with this Component Catalog',
+                  title: '运行环境',
+                  description: '与此组件目录关联的运行环境',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
                   uihints: {
@@ -766,9 +750,9 @@ module.exports = {
                   }
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
+                    '与此组件目录相关联的目录名称(在此注册中心中定义的组件将根据这些类别在组件面板中进行组织)',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -779,9 +763,9 @@ module.exports = {
                   }
                 },
                 paths: {
-                  title: 'Directories',
+                  title: '目录',
                   description:
-                    'A list of paths to directories in the local filesystem that each contain one or more component specification files',
+                    '本地文件系统中目录的路径列表，每个目录包含一个或多个组件规范文件',
                   type: 'array',
                   items: {
                     type: 'string'
@@ -793,7 +777,7 @@ module.exports = {
                 include_subdirs: {
                   title: '包含子目录',
                   description:
-                    'Indicates whether a recursive search for component specification files should be performed on subdirectories',
+                    '指示是否应在子目录上执行对组件规范文件的递归搜索',
                   type: 'boolean',
                   uihints: {
                     category: 'Configuration'
@@ -809,9 +793,9 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/local-file-catalog.json',
-          title: 'Filesystem Component Catalog',
+          title: '文件系统',
           name: 'local-file-catalog',
-          display_name: 'Filesystem Component Catalog',
+          display_name: '文件系统',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
@@ -823,30 +807,29 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'local-file-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'Description of this Component Catalog',
+                  title: '描述',
+                  description: '此组件目录的描述',
                   type: 'string'
                 },
                 runtime_type: {
-                  title: 'Runtime Type',
-                  description:
-                    'The type of runtime associated with this Component Catalog',
+                  title: '运行环境',
+                  description: '与此组件目录关联的运行环境',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
                   uihints: {
@@ -854,9 +837,9 @@ module.exports = {
                   }
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
+                    '与此组件目录相关联的目录名称(在此注册中心中定义的组件将根据这些类别在组件面板中进行组织)',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -867,18 +850,16 @@ module.exports = {
                   }
                 },
                 base_path: {
-                  title: 'Optional Base Directory',
-                  description:
-                    'An optional base directory from which the given values of Paths can be resolved',
+                  title: '可选基础目录',
+                  description: '一个可选的基目录，可以从中解析path的给定值',
                   type: 'string',
                   uihints: {
                     category: 'Configuration'
                   }
                 },
                 paths: {
-                  title: 'Paths',
-                  description:
-                    'A list of paths to individual component specification files in the local filesystem',
+                  title: '路径',
+                  description: '本地文件系统中各个组件规范文件的路径列表',
                   type: 'array',
                   items: {
                     type: 'string'
@@ -897,9 +878,9 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/url-catalog.json',
-          title: 'URL Component Catalog',
+          title: 'URL',
           name: 'url-catalog',
-          display_name: 'URL Component Catalog',
+          display_name: 'URL',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
@@ -911,30 +892,29 @@ module.exports = {
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'url-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description: 'Description of this Component Catalog',
+                  title: '描述',
+                  description: '此组件目录的描述',
                   type: 'string'
                 },
                 runtime_type: {
-                  title: 'Runtime Type',
-                  description:
-                    'The type of runtime associated with this Component Catalog',
+                  title: '运行环境',
+                  description: '与此组件目录关联的运行环境',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES', 'APACHE_AIRFLOW'],
                   uihints: {
@@ -942,9 +922,9 @@ module.exports = {
                   }
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'Category names associated with this Component Catalog (the components defined in this registry will be organized in the component palette according to these categories)',
+                    '与此组件目录相关联的目录名称(在此注册中心中定义的组件将根据这些类别在组件面板中进行组织)',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -956,8 +936,7 @@ module.exports = {
                 },
                 paths: {
                   title: 'URLs',
-                  description:
-                    'A list of URLs to individual component specification files',
+                  description: '指向各个组件规范文件的url列表',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -971,9 +950,8 @@ module.exports = {
                   }
                 },
                 auth_id: {
-                  title: 'User Id',
-                  description:
-                    'User id that has read access for the specified URL resources',
+                  title: '用户ID',
+                  description: '对指定URL资源具有读访问权限的用户ID',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -981,8 +959,8 @@ module.exports = {
                   }
                 },
                 auth_password: {
-                  title: 'Password',
-                  description: 'Password or API key for the specified user id',
+                  title: '密码',
+                  description: '指定用户ID的密码或API密钥',
                   type: 'string',
                   minLength: 1,
                   uihints: {
@@ -1000,46 +978,44 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/master/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/examples/master/component-catalog-connectors/kfp-example-components-connector/kfp_examples_connector/elyra-kfp-catalog.json',
-          title: 'Kubeflow Pipelines example components catalog',
+          title: 'kpf示例',
           name: 'elyra-kfp-examples-catalog',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
             'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
           uihints: {
-            title: 'Kubeflow Pipelines example components catalog',
+            title: 'kpf示例',
             icon: '',
             reference_url:
               'https://github.com/elyra-ai/examples/tree/master/component-catalog-connectors/kfp-example-components-connector'
           },
           properties: {
             schema_name: {
-              title: 'Schema Name',
-              description: 'The schema associated with this instance',
+              title: '模式名称',
+              description: '与此实例关联的模式',
               type: 'string',
               const: 'elyra-kfp-examples-catalog'
             },
             display_name: {
-              title: 'Display Name',
-              description: 'Display name of this Component Catalog',
+              title: '展示名称',
+              description: '显示此组件目录的名称',
               type: 'string',
               minLength: 1
             },
             metadata: {
-              description: 'Additional data specific to this metadata',
+              description: '特定于此元数据的其他数据',
               type: 'object',
               properties: {
                 description: {
-                  title: 'Description',
-                  description:
-                    'Curated collection of Kubeflow Pipeline components',
+                  title: '描述',
+                  description: 'kfp组件集合',
                   type: 'string',
-                  default: 'Example pipeline components for Kubeflow Pipelines'
+                  default: 'kfp示例管道组件'
                 },
                 runtime_type: {
-                  title: 'Runtime type',
-                  description:
-                    'The runtime for which to load the example components.',
+                  title: '运行环境',
+                  description: '要为其加载示例组件的运行环境.',
                   type: 'string',
                   enum: ['KUBEFLOW_PIPELINES'],
                   default: 'KUBEFLOW_PIPELINES',
@@ -1048,9 +1024,9 @@ module.exports = {
                   }
                 },
                 categories: {
-                  title: 'Category Names',
+                  title: '目录名称',
                   description:
-                    'The example components will be added to the specified categories in the pipeline editor palette.',
+                    '示例组件将被添加到管道编辑器面板中的指定类别中.',
                   type: 'array',
                   items: {
                     type: 'string',

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { componentCatalogIcon, dragDropIcon } from '@elyra/ui-components';
+import { componentCatalogIcon, dragDropIcon } from '@app/ui-components';
 import { settingsIcon } from '@jupyterlab/ui-components';
 
 import React from 'react';

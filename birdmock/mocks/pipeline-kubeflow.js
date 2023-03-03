@@ -528,7 +528,7 @@ module.exports = {
             default: ''
           },
           description: {
-            title: 'Description',
+            title: '描述',
             description: 'A description for this parameter.',
             type: 'string',
             default: ''

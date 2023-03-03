@@ -18,9 +18,11 @@ import { FieldTemplateProps } from '@rjsf/core';
 
 export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
   let children = props.children;
+  // 隐藏字段
   if (props.uiSchema['ui:field'] === 'hidden') {
     return <div />;
   }
+  // 只读
   if (props.uiSchema['ui:readonly']) {
     children = (
       <div style={{ paddingTop: '8px' }}>
@@ -32,11 +34,7 @@ export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
     props.schema.uniqueItems &&
     (props.schema.items as any)?.enum?.length === 0
   ) {
-    children = (
-      <div style={{ paddingTop: '8px' }}>
-        No pipeline parameters are defined.
-      </div>
-    );
+    children = <div style={{ paddingTop: '8px' }}>没有定义管道参数.</div>;
   } else if (props.schema.uniqueItems && props.formData) {
     const filteredItems = props.formData.filter((item: any) => {
       return (props.schema.items as any)?.enum?.includes(item);

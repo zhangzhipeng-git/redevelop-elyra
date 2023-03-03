@@ -20,7 +20,7 @@ import {
   JSONComponent,
   RequestErrors,
   trashIcon
-} from '@elyra/ui-components';
+} from '@app/ui-components';
 
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import {
@@ -135,7 +135,7 @@ export class MetadataDisplay<
   actionButtons(metadata: IMetadata): IMetadataActionButton[] {
     return [
       {
-        title: 'Edit',
+        title: '编辑',
         icon: editIcon,
         onClick: (): void => {
           this.props.openMetadataEditor({
@@ -147,7 +147,7 @@ export class MetadataDisplay<
         }
       },
       {
-        title: 'Duplicate',
+        title: '复制',
         icon: copyIcon,
         onClick: (): void => {
           MetadataCommonService.duplicateMetadataInstance(
@@ -162,7 +162,7 @@ export class MetadataDisplay<
         }
       },
       {
-        title: 'Delete',
+        title: '删除',
         icon: trashIcon,
         onClick: (): void => {
           this.deleteMetadata(metadata).then((response: any): void => {
@@ -380,7 +380,6 @@ export class MetadataWidget extends ReactWidget {
       this.schemas = await MetadataService.getSchema(this.props.schemaspace);
       const sortedSchema =
         this.schemas?.sort((a, b) => a.title.localeCompare(b.title)) ?? [];
-      console.log(sortedSchema, 'sortedSchema');
       if (sortedSchema.length > 1) {
         for (const schema of sortedSchema) {
           this.props.app.contextMenu.addItem({
@@ -467,7 +466,7 @@ export class MetadataWidget extends ReactWidget {
         <div>
           <br />
           <h6 className="elyra-no-metadata-msg">
-            Click the + button to add {this.props.display_name.toLowerCase()}
+            点击 + 按钮添加{this.props.display_name.toLowerCase()}
           </h6>
         </div>
       );
@@ -508,7 +507,7 @@ export class MetadataWidget extends ReactWidget {
               onClick={(): void => {
                 this.refreshMetadata();
               }}
-              title={this.refreshButtonTooltip ?? 'Refresh list'}
+              title={this.refreshButtonTooltip ?? '刷新列表'}
             >
               <refreshIcon.react
                 tag="span"
@@ -523,10 +522,11 @@ export class MetadataWidget extends ReactWidget {
                 singleSchema
                   ? (): void => this.addMetadata(this.schemas?.[0].name)
                   : (event: any): void => {
+                      console.log(this.props.app.contextMenu, event, '点击 +');
                       this.props.app.contextMenu.open(event);
                     }
               }
-              title={`Create new ${this.titleContext}`}
+              title={`新增${this.titleContext}`}
             >
               <addIcon.react tag="span" elementPosition="center" width="16px" />
             </button>

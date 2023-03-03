@@ -38,7 +38,7 @@ import {
   RequestErrors,
   showFormDialog,
   componentCatalogIcon
-} from '@elyra/ui-components';
+} from '@app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
 import { Dialog, ReactWidget, showDialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';

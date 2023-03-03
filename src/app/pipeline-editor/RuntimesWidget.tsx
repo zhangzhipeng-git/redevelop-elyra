@@ -22,7 +22,7 @@ import {
   IMetadataDisplayState
 } from '../metadata-common';
 import { IDictionary } from '../services';
-import { RequestErrors } from '@elyra/ui-components';
+import { RequestErrors } from '@app/ui-components';
 import React from 'react';
 
 import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
@@ -152,7 +152,7 @@ export class RuntimesWidget extends MetadataWidget {
       }
     }
 
-    return 'runtime configuration';
+    return '运行环境配置';
   };
 
   addMetadata(schema: string, titleContext?: string): void {
@@ -171,7 +171,7 @@ export class RuntimesWidget extends MetadataWidget {
         <div>
           <br />
           <h6 className="elyra-no-metadata-msg">
-            Click the + button to add {this.props.display_name.toLowerCase()}
+            点击 + 按钮添加{this.props.display_name.toLowerCase()}
           </h6>
         </div>
       );

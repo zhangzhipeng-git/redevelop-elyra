@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { ArrayFieldTemplateProps } from "@rjsf/core";
+import { ArrayFieldTemplateProps } from '@rjsf/core';
 
 const renderDefaults = (
   items: any[],
@@ -25,12 +25,12 @@ const renderDefaults = (
   const allRendered = [];
   if (items.length === 0) {
     return undefined;
-  } else if (props.schema.items?.type === "object") {
+  } else if (props.schema.items?.type === 'object') {
     for (const item of items) {
       const itemRendered = [];
       for (const key in props.schema.items.properties ?? {}) {
         const propertySchema = props.schema.items.properties[key];
-        if (propertySchema.type === "boolean") {
+        if (propertySchema.type === 'boolean') {
           itemRendered.push(
             <div className="checkbox">
               <label>
@@ -43,7 +43,7 @@ const renderDefaults = (
           );
         } else {
           itemRendered.push(
-            <div key={`${key}-defaultValue`} style={{ margin: "5px" }}>
+            <div key={`${key}-defaultValue`} style={{ margin: '5px' }}>
               <label className="control-label">{`${props.schema.items.properties[key].title}: `}</label>
               <input readOnly value={item[key]} className="form-control" />
             </div>
@@ -54,7 +54,7 @@ const renderDefaults = (
         <div key={`${props.id}-defaultValues`} className="array-item">
           <label
             className="control-label"
-            style={{ color: "var(--jp-content-font-color2)" }}
+            style={{ color: 'var(--jp-content-font-color2)' }}
           >
             (pipeline default)
           </label>
@@ -64,7 +64,7 @@ const renderDefaults = (
     }
   } else {
     for (const item of items) {
-      if (item === null || item === undefined || item === "") {
+      if (item === null || item === undefined || item === '') {
         return undefined;
       } else {
         return (
@@ -83,7 +83,7 @@ const renderDefaults = (
  * React component that allows for custom add / remove buttons in the array
  * field component.
  */
-export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = (props) => {
+export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
   const renderedDefaults = renderDefaults(
     props.uiSchema.pipeline_defaults ?? [],
     props
@@ -92,12 +92,12 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = (props) => {
     props.formContext.onFileRequested({
       canSelectMany: true,
       filters: { File: props.uiSchema.extensions },
-      propertyID: props.idSchema.$id.replace("root_component_parameters_", ""),
+      propertyID: props.idSchema.$id.replace('root_component_parameters_', '')
     });
   }, [props]);
   return (
     <div className={props.className}>
-      {props.items.map((item) => {
+      {props.items.map(item => {
         return (
           <div key={item.key} className={item.className}>
             {item.children}
@@ -106,7 +106,7 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = (props) => {
               onClick={item.onDropIndexClick(item.index)}
               disabled={!item.hasRemove}
             >
-              {"Remove"}
+              {'移除'}
             </button>
           </div>
         );
@@ -117,29 +117,29 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = (props) => {
           className="jp-mod-styled jp-mod-reject"
           onClick={props.onAddClick}
         >
-          {"Add"}
+          {'添加'}
         </button>
       )}
       {props.uiSchema.canRefresh && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ marginLeft: "5px" }}
+          style={{ marginLeft: '5px' }}
           onClick={() =>
             props.formContext?.onPropertiesUpdateRequested(
               props.formContext.formData
             )
           }
         >
-          {"Refresh"}
+          {'刷新'}
         </button>
       )}
       {props.uiSchema?.files && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ marginLeft: "5px" }}
+          style={{ marginLeft: '5px' }}
           onClick={handleChooseFile}
         >
-          {"Browse"}
+          {'浏览'}
         </button>
       )}
     </div>

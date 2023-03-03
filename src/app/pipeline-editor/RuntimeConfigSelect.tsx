@@ -35,7 +35,7 @@ const RuntimeConfigSelect: React.FC<IProps> = ({
   if (allowLocal) {
     filteredPlatforms.unshift({
       id: RUN_LOCALLY_ID,
-      displayName: 'Run in-place locally',
+      displayName: '本地运行',
       configs: []
     });
   }

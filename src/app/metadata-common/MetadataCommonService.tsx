@@ -29,6 +29,9 @@ export class MetadataCommonService {
    *
    * @returns A promise
    */
+  /**
+   * 复制元数据实例，运行环境|运行镜像|组件目录
+   */
   static duplicateMetadataInstance(
     schemaSpace: string,
     metadataInstance: IMetadata,

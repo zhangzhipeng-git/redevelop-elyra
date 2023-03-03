@@ -23,7 +23,7 @@ import {
   CodeBlock,
   TagsField,
   PasswordField
-} from '@elyra/ui-components';
+} from '@app/ui-components';
 import { JupyterFrontEnd, ILabStatus } from '@jupyterlab/application';
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
 import { IEditorServices } from '@jupyterlab/codeeditor';
@@ -73,7 +73,7 @@ export default async function activateMetadataEditor(
     if (args.name) {
       widgetLabel = args.name;
     } else {
-      widgetLabel = `New ${args.schema}`;
+      widgetLabel = `新增${args.schema}`;
     }
     const widgetId = `${METADATA_EDITOR_ID}:${args.schemaspace}:${
       args.schema
@@ -108,10 +108,9 @@ export default async function activateMetadataEditor(
 
   app.commands.addCommand(`${METADATA_EDITOR_ID}:open`, {
     label: (args: any) => {
-      return `New ${args.title} ${args.appendToTitle ? args.titleContext : ''}`;
+      return `新增${args.title} ${args.appendToTitle ? args.titleContext : ''}`;
     },
     execute: (args: any) => {
-      console.log(args, 'execute...');
       openMetadataEditor(args);
     }
   });
@@ -155,7 +154,7 @@ export default async function activateMetadataEditor(
   // Add command to close metadata tab
   const closeTabCommand: string = commandIDs.closeTabCommand;
   app.commands.addCommand(closeTabCommand, {
-    label: 'Close Tab',
+    label: '关闭标签页',
     execute: args => {
       const contextNode: HTMLElement | undefined = app.contextMenuHitTest(
         node => !!node.dataset.id

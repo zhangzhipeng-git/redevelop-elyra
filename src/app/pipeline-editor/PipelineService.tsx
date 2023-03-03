@@ -15,7 +15,7 @@
  */
 import { RequestHandler, MetadataService, IDictionary } from '../services';
 
-import { RequestErrors } from '@elyra/ui-components';
+import { RequestErrors } from '@app/ui-components';
 
 import { showDialog, Dialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
@@ -70,7 +70,7 @@ export class PipelineService {
    * Returns a list of resources corresponding to each active runtime-type.
    */
   /**
-   * 返回与每个活动运行时类型对应的资源列表
+   * 返回与每个活动运行环境对应的资源列表
      ``` 
      runtime_types: [
         {

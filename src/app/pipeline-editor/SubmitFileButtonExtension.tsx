@@ -15,7 +15,7 @@
  */
 
 import { ContentParser } from '../services';
-import { RequestErrors, showFormDialog } from '@elyra/ui-components';
+import { RequestErrors, showFormDialog } from '@app/ui-components';
 import { Dialog, showDialog, ToolbarButton } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
 import { DocumentRegistry, DocumentWidget } from '@jupyterlab/docregistry';
@@ -39,7 +39,8 @@ import Utils from './utils';
 export class SubmitFileButtonExtension<
   T extends DocumentWidget,
   U extends DocumentRegistry.IModel
-> implements DocumentRegistry.IWidgetExtension<T, U> {
+> implements DocumentRegistry.IWidgetExtension<T, U>
+{
   showWidget = async (document: T): Promise<void> => {
     const { context } = document;
     if (context.model.dirty) {

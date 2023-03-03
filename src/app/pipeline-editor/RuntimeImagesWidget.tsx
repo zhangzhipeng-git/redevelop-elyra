@@ -90,7 +90,7 @@ export class RuntimeImagesWidget extends MetadataWidget {
         <div>
           <br />
           <h6 className="elyra-no-metadata-msg">
-            Click the + button to add {this.props.display_name.toLowerCase()}
+            点击 + 按钮添加{this.props.display_name.toLowerCase()}
           </h6>
         </div>
       );
@@ -104,7 +104,7 @@ export class RuntimeImagesWidget extends MetadataWidget {
         sortMetadata={true}
         className={RUNTIME_IMAGES_CLASS}
         labelName={(): string => {
-          return 'runtime image';
+          return '运行镜像';
         }}
       />
     );

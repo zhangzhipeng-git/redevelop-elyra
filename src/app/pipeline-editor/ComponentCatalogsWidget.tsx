@@ -24,7 +24,7 @@ import {
   IMetadataActionButton
 } from '../metadata-common';
 import { IDictionary } from '../services';
-import { RequestErrors } from '@elyra/ui-components';
+import { RequestErrors } from '@app/ui-components';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import { LabIcon, refreshIcon } from '@jupyterlab/ui-components';
 
@@ -128,8 +128,7 @@ export class ComponentCatalogsWidget extends MetadataWidget {
   constructor(props: IComponentCatalogsWidgetProps) {
     super(props);
     this.refreshCallback = props.refreshCallback;
-    this.refreshButtonTooltip =
-      'Refresh list and reload components from all catalogs';
+    this.refreshButtonTooltip = '刷新列表并从所有目录中重新加载组件';
   }
 
   // wrapper function that refreshes the palette after calling updateMetadata
@@ -155,7 +154,7 @@ export class ComponentCatalogsWidget extends MetadataWidget {
         <div>
           <br />
           <h6 className="elyra-no-metadata-msg">
-            Click the + button to add {this.props.display_name.toLowerCase()}
+            点击 + 按钮新增 {this.props.display_name.toLowerCase()}
           </h6>
         </div>
       );
