@@ -86,6 +86,7 @@ export function PropertiesPanel({
     ...uiSchema,
     ...schema.uihints
   };
+  console.log(uiSchema, 'uiSchema');
 
   return (
     <Form
@@ -146,6 +147,7 @@ export function PropertiesPanel({
       FieldTemplate={CustomFieldTemplate}
       className={'elyra-formEditor'}
       transformErrors={(errors: AjvError[]) => {
+        console.log(errors, 'errors');
         // Suppress the "oneof" validation because we're using oneOf in a custom way.
         const transformed = [];
         for (const error of errors) {
@@ -156,6 +158,7 @@ export function PropertiesPanel({
             error.message !== 'should be string'
           ) {
             transformed.push(error);
+            console.log(error.message, 'message');
           }
         }
         return transformed;
