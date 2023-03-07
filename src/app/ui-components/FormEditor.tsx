@@ -103,6 +103,7 @@ const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
 };
 
 const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
+  const requiredError = props.required && props.formData === undefined;
   return (
     <div className={props.classNames}>
       {props.schema.title !== undefined && props.schema.title !== ' ' ? (
@@ -125,7 +126,8 @@ const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
         </div>
       ) : undefined}
       {props.children}
-      {props.errors}
+      {/* {props.errors} */}
+      {requiredError && <li style={{listStyle: 'none'}} className="text-danger">是必填属性</li>}
     </div>
   );
 };
