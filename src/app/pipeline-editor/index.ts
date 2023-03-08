@@ -4,13 +4,7 @@
 
 import { PIPELINE_CURRENT_VERSION } from '@app/base-pipeline-editor';
 import { RequestHandler } from '../services';
-import {
-  containerIcon,
-  pipelineIcon,
-  RequestErrors,
-  runtimesIcon,
-  componentCatalogIcon
-} from '@app/ui-components';
+import { pipelineIcon, RequestErrors } from '@app/ui-components';
 
 import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
 import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
@@ -26,17 +20,9 @@ import {
   refreshIcon
 } from '@jupyterlab/ui-components';
 
-import {
-  COMPONENT_CATALOGS_SCHEMASPACE,
-  ComponentCatalogsWidget
-} from './ComponentCatalogsWidget';
 import { PipelineEditorFactory, commandIDs } from './PipelineEditorWidget';
-import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
-import {
-  RUNTIME_IMAGES_SCHEMASPACE,
-  RuntimeImagesWidget
-} from './RuntimeImagesWidget';
-import { RuntimesWidget } from './RuntimesWidget';
+import { PipelineService } from './PipelineService';
+
 import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 
 const PIPELINE_EDITOR = 'Pipeline Editor';
@@ -325,53 +311,4 @@ export default async function activatePipeline(
     command: commandIDs.submitScript,
     rank: -0.5
   });
-
-  const runtimesWidget = new RuntimesWidget({
-    app,
-    display_name: '运行环境',
-    schemaspace: RUNTIMES_SCHEMASPACE,
-    icon: runtimesIcon,
-    titleContext: '运行环境配置',
-    appendToTitle: true
-  });
-  const runtimesWidgetID = `elyra-metadata:${RUNTIMES_SCHEMASPACE}`;
-  runtimesWidget.id = runtimesWidgetID;
-  runtimesWidget.title.icon = runtimesIcon;
-  runtimesWidget.title.caption = '运行环境';
-
-  restorer.add(runtimesWidget, runtimesWidgetID);
-  app.shell.add(runtimesWidget, 'left', { rank: 950 });
-
-  const runtimeImagesWidget = new RuntimeImagesWidget({
-    app,
-    display_name: '运行镜像',
-    schemaspace: RUNTIME_IMAGES_SCHEMASPACE,
-    icon: containerIcon,
-    titleContext: '运行镜像'
-  });
-  const runtimeImagesWidgetID = `elyra-metadata:${RUNTIME_IMAGES_SCHEMASPACE}`;
-  runtimeImagesWidget.id = runtimeImagesWidgetID;
-  runtimeImagesWidget.title.icon = containerIcon;
-  runtimeImagesWidget.title.caption = '运行镜像';
-
-  restorer.add(runtimeImagesWidget, runtimeImagesWidgetID);
-  app.shell.add(runtimeImagesWidget, 'left', { rank: 951 });
-
-  const componentCatalogWidget = new ComponentCatalogsWidget({
-    app,
-    display_name: '组件目录', // TODO: This info should come from the server for all schemaspaces
-    schemaspace: COMPONENT_CATALOGS_SCHEMASPACE,
-    icon: componentCatalogIcon,
-    titleContext: '组件目录',
-    refreshCallback: (): void => {
-      app.commands.execute(commandIDs.refreshPalette);
-    }
-  });
-  const componentCatalogWidgetID = `elyra-metadata:${COMPONENT_CATALOGS_SCHEMASPACE}`;
-  componentCatalogWidget.id = componentCatalogWidgetID;
-  componentCatalogWidget.title.icon = componentCatalogIcon;
-  componentCatalogWidget.title.caption = '组件目录';
-
-  restorer.add(componentCatalogWidget, componentCatalogWidgetID);
-  app.shell.add(componentCatalogWidget, 'left', { rank: 961 });
 }

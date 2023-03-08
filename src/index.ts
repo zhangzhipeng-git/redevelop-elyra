@@ -15,7 +15,6 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 import { ITranslator } from '@jupyterlab/translation';
 import { IFormComponentRegistry } from '@jupyterlab/ui-components';
 
-import activateMetadataEditor from '@app/metadata';
 import activatePipeline from '@app/pipeline-editor';
 
 import userIdentify from '@app/user';
@@ -55,14 +54,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
     componentRegistry: IFormComponentRegistry,
     translator: ITranslator
   ) => {
-    activateMetadataEditor(
-      app,
-      palette,
-      editorServices,
-      status,
-      componentRegistry,
-      translator
-    );
+    // activateMetadataEditor(
+    //   app,
+    //   palette,
+    //   editorServices,
+    //   status,
+    //   componentRegistry,
+    //   translator
+    // );
     activatePipeline(
       app,
       palette,
