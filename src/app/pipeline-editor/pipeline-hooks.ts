@@ -16,14 +16,13 @@
 
 import { RequestHandler, MetadataService } from '../services';
 
-// import { URLExt } from '@jupyterlab/coreutils';
-// import { ServerConnection } from '@jupyterlab/services';
+import { URLExt } from '@jupyterlab/coreutils';
 import produce from 'immer';
 import useSWR from 'swr';
 
 import { PipelineService } from './PipelineService';
 
-// import CONFIG from '@src/config.json';
+import CONFIG from '@src/config.json';
 
 import * as SVG from '@assets/svgs';
 
@@ -154,9 +153,9 @@ export const sortPalette = (palette: {
 
 // TODO: This should be enabled through `extensions`
 const NodeIcons: Map<string, string> = new Map([
-  ['execute-notebook-node', Utils.svgToBase64(SVG.notebookSvg)],
-  ['execute-python-node', Utils.svgToBase64(SVG.pythonSvg)],
-  ['execute-r-node', Utils.svgToBase64(SVG.rLogoSvg)]
+  ['execute-notebook-node', '/static/elyra/notebook.svg'],
+  ['execute-python-node', '/static/elyra/python.svg'],
+  ['execute-r-node', '/static/elyra/r-logo.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
@@ -179,7 +178,7 @@ export const componentFetcher = async (type: string): Promise<any> => {
 
   const typesPromise = PipelineService.getRuntimeTypes();
 
-  const [palette, pipelineProperties, pipelineParameters /* , types */] =
+  const [palette, pipelineProperties, pipelineParameters, types] =
     await Promise.all([
       palettePromise,
       pipelinePropertiesPromise,
@@ -219,29 +218,25 @@ export const componentFetcher = async (type: string): Promise<any> => {
     // icon.
     // TODO: Ideally, this would be included in the category.
     // 根节点类型默认为它的第一个子节点的类型
-    // const category_runtime_type =
-    //   category.node_types?.[0]?.runtime_type ?? 'LOCAL';
-    // const type = types.find((t: any) => t.id === category_runtime_type);
+    const category_runtime_type =
+      category.node_types?.[0]?.runtime_type ?? 'LOCAL';
+    const type = types.find((t: any) => t.id === category_runtime_type);
 
-    // const baseUrl =
-    //   CONFIG.staticBaseUrl || ServerConnection.makeSettings().baseUrl;
+    const baseUrl = CONFIG.staticBaseUrl;
 
     // 默认图标为根节点的第一个子节点的图标
     // 如果默认类型节点的图标
-    // const defaultIcon = type?.icon
-    //   ? URLExt.join(baseUrl, type.icon)
-    //   : Utils.svgToBase64(SVG.pipelineflowSvg);
-    const defaultIcon = Utils.svgToBase64(SVG.pipelineflowSvg);
+    const defaultIcon = type?.icon
+      ? URLExt.join(baseUrl, type.icon)
+      : Utils.svgToBase64(SVG.pipelineflowSvg);
 
     category.image = defaultIcon;
 
     for (const node of category.node_types) {
       // update icon
       const genericNodeIcon = NodeIcons.get(node.op) as string;
-      // const nodeIcon = genericNodeIcon
-      //   ? URLExt.join(baseUrl, genericNodeIcon)
-      //   : defaultIcon;
-      const nodeIcon = genericNodeIcon;
+
+      const nodeIcon = URLExt.join(baseUrl, genericNodeIcon);
 
       // Not sure which is needed...
       node.image = nodeIcon;

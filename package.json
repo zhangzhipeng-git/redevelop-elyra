@@ -108,7 +108,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@bigbigbird/mock": "^2.0.5",
+    "@bigbigbird/mock": "^2.0.8",
     "@jupyterlab/builder": "^3.6.1",
     "@jupyterlab/testutils": "^3.0.0",
     "@types/jest": "^26.0.0",

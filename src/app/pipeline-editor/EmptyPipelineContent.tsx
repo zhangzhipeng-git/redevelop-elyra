@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { componentCatalogIcon, dragDropIcon } from '@app/ui-components';
+import { dragDropIcon } from '@app/ui-components';
 import { settingsIcon } from '@jupyterlab/ui-components';
 
 import React from 'react';
@@ -39,7 +39,7 @@ export const EmptyGenericPipeline: React.FC<IEmptyGenericPipelineProps> = ({
         height="120px"
       />
       <h3 className={HEADER_CLASS}>
-        通过从文件浏览器窗格中拖动文件来启动新管道
+        通过从左侧节点列表拖动节点或拖动文件来启动新管道
       </h3>
       <br />
       <br />
@@ -65,12 +65,7 @@ export interface IEmptyPlatformSpecificPipelineProps {
 
 export const EmptyPlatformSpecificPipeline: React.FC<
   IEmptyPlatformSpecificPipelineProps
-> = ({ onOpenCatalog, onOpenSettings }) => {
-  // Note: the URL is rewritten by the release script by replacing `latest` with a
-  // specific version number, e.g. https://.../en/v3.6.0/user_guide/pi...
-  const customComponentsHelpTopicURL =
-    'https://elyra.readthedocs.io/en/v3.14.2/user_guide/pipeline-components.html';
-
+> = ({ onOpenSettings }) => {
   return (
     <div>
       <dragDropIcon.react
@@ -80,27 +75,8 @@ export const EmptyPlatformSpecificPipeline: React.FC<
         height="120px"
       />
       <h3 className={HEADER_CLASS}>
-        通过从文件浏览器窗格或中拖动文件来启动新管道，通过单击{' '}
-        <button className={BUTTON_CLASS} onClick={onOpenCatalog}>
-          <componentCatalogIcon.react
-            className={ICON_CLASS}
-            tag="div"
-            height="24px"
-          />
-        </button>{' '}
-        添加自定义组件.
+        通过从左侧节点列表拖动节点或拖动文件来启动新管道
       </h3>
-      <h4 className={HEADER_CLASS}>
-        有关详细信息，请参阅
-        <a
-          href={customComponentsHelpTopicURL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {' '}
-          &apos;管道组件&apos; 帮助主题{' '}
-        </a>
-      </h4>
       <br />
       <br />
       <h3 className={HEADER_CLASS}>

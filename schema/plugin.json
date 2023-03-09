@@ -1,12 +1,12 @@
 {
   "jupyter.lab.setting-icon": "redevelop-elyra:pipeline",
-  "jupyter.lab.setting-icon-label": "Redevelop Elyra Pipeline Editor",
-  "title": "Redevelop Elyra Pipeline Editor",
-  "description": "Redevelop Elyra Pipeline Editor Configuration.",
+  "jupyter.lab.setting-icon-label": "Pipeline Editor",
+  "title": "Pipeline Editor",
+  "description": "Pipeline Editor 配置",
   "properties": {
     "doubleClickToOpenProperties": {
       "title": "双击管道节点打开属性。",
-      "description": "如果启用(默认值)，双击一个节点将打开该节点的属性。如果禁用，则打开节点的源文件。",
+      "description": "如果启用（默认值为 true），双击一个节点将打开该节点的属性。如果禁用，则打开节点的源文件。",
       "type": "boolean",
       "default": true
     }

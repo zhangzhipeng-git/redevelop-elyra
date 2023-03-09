@@ -19,6 +19,13 @@ jlpm run build / jlpm run watch
 # 打开编辑器
 jupyter lab
 
+
+## 整个编辑器汉化
+# 安装简体中文语言包
+pip install jupyterlab-language-pack-zh-CN
+# 去编辑器的settings里设置language
+
+
 jupyterlab 插件示例：
 https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html#build-and-install-the-extension-for-development
 https://kgithub.com/jupyterlab/extension-examples

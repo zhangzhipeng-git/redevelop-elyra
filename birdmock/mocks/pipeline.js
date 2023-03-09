@@ -5,7 +5,7 @@ module.exports = {
         {
           id: 'APACHE_AIRFLOW',
           display_name: 'Apache Airflow',
-          icon: 'static/elyra/airflow.svg',
+          icon: '/static/elyra/airflow.svg',
           export_file_types: [
             {
               id: 'py',
@@ -16,7 +16,7 @@ module.exports = {
         {
           id: 'KUBEFLOW_PIPELINES',
           display_name: 'Kubeflow Pipelines',
-          icon: 'static/elyra/kubeflow.svg',
+          icon: '/static/elyra/kubeflow.svg',
           export_file_types: [
             {
               id: 'yaml',
@@ -28,7 +28,7 @@ module.exports = {
         {
           id: 'LOCAL',
           display_name: 'Local',
-          icon: 'static/elyra/pipeline-flow.svg',
+          icon: '/static/elyra/pipeline-flow.svg',
           export_file_types: []
         }
       ]

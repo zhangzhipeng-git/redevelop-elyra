@@ -80,7 +80,6 @@ export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
       ) : undefined}
       {children}
       {props.errors}
-      {requiredError && <li className="text-danger">是必填属性</li>}
     </div>
   );
 };

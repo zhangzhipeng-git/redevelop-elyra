@@ -21,8 +21,6 @@ import { PathExt } from '@jupyterlab/coreutils';
 import { DocumentRegistry, DocumentWidget } from '@jupyterlab/docregistry';
 import { IDisposable } from '@lumino/disposable';
 
-import * as React from 'react';
-
 import { FileSubmissionDialog } from './FileSubmissionDialog';
 import { formDialogWidget } from './formDialogWidget';
 import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';

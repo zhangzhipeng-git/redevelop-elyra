@@ -2,14 +2,14 @@
   "doc_type": "pipeline",
   "version": "3.0",
   "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
-  "id": "elyra-auto-generated-pipeline",
+  "id": "auto-generated-pipeline",
   "primary_pipeline": "primary",
   "pipelines": [
     {
       "id": "primary",
       "nodes": [
         {
-          "id": "b4299709-cad3-4d71-99a4-e8a5eaf650a8",
+          "id": "d6c79cc3-809c-43a6-90f3-d2c3174a6633",
           "type": "execution_node",
           "op": "execute-notebook-node",
           "app_data": {
@@ -28,9 +28,9 @@
             "label": "",
             "ui_data": {
               "label": "Notebook",
-              "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgdmlld0JveD0iMCAwIDIyIDIyIj4NCiAgPGcgY2xhc3M9ImpwLWljb24td2FybjAganAtaWNvbi1zZWxlY3RhYmxlIiBmaWxsPSIjRUY2QzAwIj4NCiAgICA8cGF0aCBkPSJNMTguNyAzLjN2MTUuNEgzLjNWMy4zaDE1LjRtMS41LTEuNUgxLjh2MTguM2gxOC4zbC4xLTE4LjN6Ii8+DQogICAgPHBhdGggZD0iTTE2LjUgMTYuNWwtNS40LTQuMy01LjYgNC4zdi0xMWgxMXoiLz4NCiAgPC9nPg0KPC9zdmc+DQo=",
-              "x_pos": 202,
-              "y_pos": 63.5,
+              "image": "http://localhost:4200/static/elyra/notebook.svg",
+              "x_pos": 156,
+              "y_pos": 108.5,
               "description": "Run notebook file",
               "decorations": [
                 {
@@ -79,17 +79,18 @@
           "comments": []
         },
         "version": 8,
+        "runtime_type": "APACHE_AIRFLOW",
         "properties": {
           "name": "untitled",
-          "runtime": "Generic",
+          "runtime": "APACHE_AIRFLOW",
           "pipeline_defaults": {
-            "kubernetes_tolerations": [],
-            "mounted_volumes": [],
             "kubernetes_pod_annotations": [],
             "kubernetes_pod_labels": [],
             "kubernetes_shared_mem_size": {},
-            "env_vars": [],
-            "kubernetes_secrets": []
+            "kubernetes_tolerations": [],
+            "mounted_volumes": [],
+            "kubernetes_secrets": [],
+            "env_vars": []
           }
         }
       },

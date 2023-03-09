@@ -503,14 +503,14 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/pipeline/airflow/package_catalog_connector/airflow-package-catalog.json',
-          title: 'Apache Airflow包的算子',
+          title: 'Apache Airflow包的operator',
           name: 'airflow-package-catalog',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
             'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
           uihints: {
-            title: 'Apache Airflow核心算子',
+            title: 'Apache Airflow核心operator',
             icon: '',
             reference_url:
               'https://github.com/elyra-ai/elyra/tree/main/elyra/pipeline/airflow/package_catalog_connector'
@@ -536,7 +536,7 @@ module.exports = {
                   title: '描述',
                   description: '此组件目录的描述',
                   type: 'string',
-                  default: 'Airflow包的算子目录'
+                  default: 'Airflow包的operator目录'
                 },
                 runtime_type: {
                   title: '运行环境',
@@ -548,7 +548,7 @@ module.exports = {
                 categories: {
                   title: '目录名称',
                   description:
-                    '将分类中的算子分配给一个或多个目录，以便在可视管道编辑器面板中对它们进行分组.',
+                    '将分类中的operator分配给一个或多个目录，以便在可视管道编辑器面板中对它们进行分组.',
                   type: 'array',
                   items: {
                     type: 'string',
@@ -571,8 +571,8 @@ module.exports = {
                   }
                 },
                 search_contrib: {
-                  title: '在contrib包中包含算子',
-                  description: '在airflow.contrib.operators包中包含算子',
+                  title: '在contrib包中包含operator',
+                  description: '在airflow.contrib.operators包中包含operator',
                   type: 'boolean',
                   uihints: {
                     category: 'Source'
@@ -607,14 +607,14 @@ module.exports = {
           $schema:
             'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/metadata/schemas/meta-schema.json',
           $id: 'https://raw.githubusercontent.com/elyra-ai/elyra/main/elyra/pipeline/airflow/provider_package_catalog_connector/airflow-provider-package-catalog.json',
-          title: 'Apache Airflow provider package算子',
+          title: 'Apache Airflow provider packageoperator',
           name: 'airflow-provider-package-catalog',
           schemaspace: 'component-catalogs',
           schemaspace_id: '8dc89ca3-4b90-41fd-adb9-9510ad346620',
           metadata_class_name:
             'elyra.pipeline.component_metadata.ComponentCatalogMetadata',
           uihints: {
-            title: 'Apache Airflow provider package算子',
+            title: 'Apache Airflow provider packageoperator',
             icon: '',
             reference_url:
               'https://github.com/elyra-ai/elyra/tree/main/elyra/pipeline/airflow/provider_package_catalog_connector'
@@ -652,7 +652,7 @@ module.exports = {
                 categories: {
                   title: '目录名称',
                   description:
-                    '将分类中的算子分配给一个或多个分类，以便在可视管道编辑器面板中对它们进行分组.',
+                    '将分类中的operator分配给一个或多个分类，以便在可视管道编辑器面板中对它们进行分组.',
                   type: 'array',
                   items: {
                     type: 'string',

@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-import {
-  PipelineEditor,
-  PipelineOutOfDateError,
-  ThemeProvider
-} from '@app/base-pipeline-editor';
-import {
-  migrate,
-  validate,
-  ComponentNotFoundError
-} from '@elyra/pipeline-services';
+import { PipelineEditor, ThemeProvider } from '@app/base-pipeline-editor';
+import { validate } from '@elyra/pipeline-services';
 import { ContentParser } from '../services';
 import {
   IconUtil,
@@ -66,11 +58,7 @@ import {
   EmptyPlatformSpecificPipeline
 } from './EmptyPipelineContent';
 import { formDialogWidget } from './formDialogWidget';
-import {
-  usePalette,
-  useRuntimeImages,
-  useRuntimesSchema
-} from './pipeline-hooks';
+import { usePalette } from './pipeline-hooks';
 import { PipelineExportDialog } from './PipelineExportDialog';
 import {
   PipelineService,
@@ -127,17 +115,6 @@ const isRuntimeTypeAvailable = (data: IRuntimeData, type?: string): boolean => {
   return false;
 };
 
-const getDisplayName = (
-  runtimesSchema: any,
-  type?: string
-): string | undefined => {
-  if (!type) {
-    return undefined;
-  }
-  const schema = runtimesSchema?.find((s: any) => s.runtime_type === type);
-  return schema?.title;
-};
-
 class PipelineEditorWidget extends ReactWidget {
   browserFactory: IFileBrowserFactory;
   shell: ILabShell;
@@ -159,6 +136,8 @@ class PipelineEditorWidget extends ReactWidget {
   }
 
   render(): any {
+    // 聚焦 Pipeline Editor 标签页会重新渲染编辑器
+    console.log('render', '重新渲染编辑器!');
     return (
       <PipelineWrapper
         context={this.context}
@@ -203,13 +182,10 @@ const PipelineWrapper: React.FC<IProps> = ({
   const type: string | undefined =
     pipeline?.pipelines?.[0]?.app_data?.runtime_type;
 
-  const { data: runtimesSchema, error: runtimesSchemaError } =
-    useRuntimesSchema();
-
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
 
-  const runtimeDisplayName = getDisplayName(runtimesSchema, type) ?? 'Generic';
+  const runtimeDisplayName = type ?? 'Generic';
 
   const {
     data: palette, // 编辑器面板参数，左侧是palette.catagories, 右侧是palette.pipelineProperties 和 palette.pipelineParameters
@@ -227,31 +203,11 @@ const PipelineWrapper: React.FC<IProps> = ({
     };
   }, [refreshPaletteSignal, mutatePalette]);
 
-  const { data: runtimeImages, error: runtimeImagesError } = useRuntimeImages();
-
-  useEffect(() => {
-    if (runtimeImages?.length === 0) {
-      RequestErrors.noMetadataError('runtime image');
-    }
-  }, [runtimeImages?.length]);
-
   useEffect(() => {
     if (paletteError) {
       RequestErrors.serverError(paletteError);
     }
   }, [paletteError]);
-
-  useEffect(() => {
-    if (runtimeImagesError) {
-      RequestErrors.serverError(runtimeImagesError);
-    }
-  }, [runtimeImagesError]);
-
-  useEffect(() => {
-    if (runtimesSchemaError) {
-      RequestErrors.serverError(runtimesSchemaError);
-    }
-  }, [runtimesSchemaError]);
 
   const contextRef = useRef(context);
   useEffect(() => {
@@ -351,96 +307,14 @@ const PipelineWrapper: React.FC<IProps> = ({
         return; // bail, we are already showing a dialog.
       }
       isDialogAlreadyShowing.current = true;
-      if (error instanceof PipelineOutOfDateError) {
-        showDialog({
-          title: 'Migrate pipeline?',
-          body: (
-            <p>
-              This pipeline corresponds to an older version of Elyra and needs
-              to be migrated.
-              <br />
-              Although the pipeline can be further edited and/or submitted after
-              its update,
-              <br />
-              the migration will not be completed until the pipeline has been
-              saved within the editor.
-              <br />
-              <br />
-              Proceed with migration?
-            </p>
-          ),
-          buttons: [Dialog.cancelButton(), Dialog.okButton()]
-        }).then(async result => {
-          isDialogAlreadyShowing.current = false;
-          if (result.button.accept) {
-            // proceed with migration
-            console.log('migrating pipeline');
-            const pipelineJSON: any = contextRef.current.model.toJSON();
-            try {
-              const migratedPipeline = migrate(pipelineJSON, pipeline => {
-                // function for updating to relative paths in v2
-                // uses location of filename as expected in v1
-                for (const node of pipeline.nodes) {
-                  node.app_data.filename =
-                    PipelineService.getPipelineRelativeNodePath(
-                      contextRef.current.path,
-                      node.app_data.filename
-                    );
-                }
-                return pipeline;
-              });
-              contextRef.current.model.fromString(
-                JSON.stringify(migratedPipeline, null, 2)
-              );
-            } catch (migrationError) {
-              if (migrationError instanceof ComponentNotFoundError) {
-                showDialog({
-                  title: 'Pipeline migration aborted!',
-                  body: (
-                    <p>
-                      {' '}
-                      The pipeline you are trying to migrate uses example
-                      components, which are not <br />
-                      enabled in your environment. Complete the setup
-                      instructions in{' '}
-                      <a
-                        href="https://elyra.readthedocs.io/en/v3.14.2/user_guide/pipeline-components.html#example-custom-components"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Example Custom Components
-                      </a>{' '}
-                      and try again.
-                    </p>
-                  ),
-                  buttons: [Dialog.okButton({ label: 'Close' })]
-                }).then(() => {
-                  shell.currentWidget?.close();
-                });
-              } else {
-                showDialog({
-                  title: 'Pipeline migration failed!',
-                  body: <p> {migrationError?.message || ''} </p>,
-                  buttons: [Dialog.okButton()]
-                }).then(() => {
-                  shell.currentWidget?.close();
-                });
-              }
-            }
-          } else {
-            shell.currentWidget?.close();
-          }
-        });
-      } else {
-        showDialog({
-          title: 'Load pipeline failed!',
-          body: <p> {error?.message || ''} </p>,
-          buttons: [Dialog.okButton()]
-        }).then(() => {
-          isDialogAlreadyShowing.current = false;
-          shell.currentWidget?.close();
-        });
-      }
+      showDialog({
+        title: '加载 pipeline 文件失败!',
+        body: <p> {error?.message || ''} </p>,
+        buttons: [Dialog.okButton()]
+      }).then(() => {
+        isDialogAlreadyShowing.current = false;
+        shell.currentWidget?.close();
+      });
     },
     [shell.currentWidget]
   );
@@ -986,12 +860,12 @@ const PipelineWrapper: React.FC<IProps> = ({
       { action: 'deleteSelectedObjects', label: '删除' },
       {
         action: 'arrangeHorizontally',
-        label: '垂直排列',
+        label: '水平排列',
         enable: true
       },
       {
         action: 'arrangeVertically',
-        label: '水平排列',
+        label: '垂直排列',
         enable: true
       }
     ],
@@ -1108,7 +982,9 @@ const PipelineWrapper: React.FC<IProps> = ({
   const handleOpenSettings = (): void => {
     commands.execute('settingeditor:open', { query: 'Pipeline Editor' });
   };
-
+  // useEffect(() => {
+  //   console.log(pipeline, '监听 pipeline 变化！')
+  // }, [pipeline]);
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer
@@ -1181,6 +1057,9 @@ export class PipelineEditorFactory extends ABCWidgetFactory<DocumentWidget> {
       refreshPaletteSignal: this.refreshPaletteSignal,
       settings: this.settings
     };
+
+    // 打开 Pipeline Editor 标签页会新建编辑器
+    console.log('createNewWidget', '创建新的编辑器!');
     const content = new PipelineEditorWidget(props);
 
     const widget = new DocumentWidget({ content, context });

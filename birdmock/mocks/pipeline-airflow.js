@@ -4,14 +4,14 @@ module.exports = {
       version: '3.0',
       categories: [
         {
-          id: 'Elyra',
-          label: 'Elyra',
+          id: 'AIRFLOW',
+          label: 'AIRFLOW',
           node_types: [
             {
               op: 'execute-notebook-node',
               description: 'Run notebook file',
               id: 'notebook',
-              image: '',
+              image: '/static/elyra/notebook.svg',
               label: 'Notebook',
               type: 'execution_node',
               inputs: [
@@ -62,7 +62,7 @@ module.exports = {
               op: 'execute-python-node',
               description: 'Run Python script',
               id: 'python-script',
-              image: '',
+              image: '/static/python.svg',
               label: 'Python Script',
               type: 'execution_node',
               inputs: [
@@ -113,7 +113,166 @@ module.exports = {
               op: 'execute-r-node',
               description: 'Run R script',
               id: 'r-script',
-              image: '',
+              image: '/static/r-logo.svg',
+              label: 'R Script',
+              type: 'execution_node',
+              inputs: [
+                {
+                  id: 'inPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Input Port'
+                    }
+                  }
+                }
+              ],
+              outputs: [
+                {
+                  id: 'outPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Output Port'
+                    }
+                  }
+                }
+              ],
+              parameters: {},
+              app_data: {
+                extensions: ['.r'],
+                parameter_refs: {
+                  filehandler: 'filename'
+                },
+                image: '',
+                ui_data: {
+                  description: 'Run R script',
+                  label: 'R Script',
+                  image: '',
+                  x_pos: 0,
+                  y_pos: 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          id: 'AIRFLOW2',
+          label: 'AIRFLOW2',
+          node_types: [
+            {
+              op: 'execute-notebook-node',
+              description: 'Run notebook file',
+              id: 'notebook',
+              image: '/static/elyra/notebook.svg',
+              label: 'Notebook',
+              type: 'execution_node',
+              inputs: [
+                {
+                  id: 'inPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Input Port'
+                    }
+                  }
+                }
+              ],
+              outputs: [
+                {
+                  id: 'outPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Output Port'
+                    }
+                  }
+                }
+              ],
+              parameters: {},
+              app_data: {
+                extensions: ['.ipynb'],
+                parameter_refs: {
+                  filehandler: 'filename'
+                },
+                image: '',
+                ui_data: {
+                  description: 'Run notebook file',
+                  label: 'Notebook',
+                  image: '',
+                  x_pos: 0,
+                  y_pos: 0
+                }
+              }
+            },
+            {
+              op: 'execute-python-node',
+              description: 'Run Python script',
+              id: 'python-script',
+              image: '/static/python.svg',
+              label: 'Python Script',
+              type: 'execution_node',
+              inputs: [
+                {
+                  id: 'inPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Input Port'
+                    }
+                  }
+                }
+              ],
+              outputs: [
+                {
+                  id: 'outPort',
+                  app_data: {
+                    ui_data: {
+                      cardinality: {
+                        min: 0,
+                        max: -1
+                      },
+                      label: 'Output Port'
+                    }
+                  }
+                }
+              ],
+              parameters: {},
+              app_data: {
+                extensions: ['.py'],
+                parameter_refs: {
+                  filehandler: 'filename'
+                },
+                image: '',
+                ui_data: {
+                  description: 'Run Python script',
+                  label: 'Python Script',
+                  image: '',
+                  x_pos: 0,
+                  y_pos: 0
+                }
+              }
+            },
+            {
+              op: 'execute-r-node',
+              description: 'Run R script',
+              id: 'r-script',
+              image: '/static/r-logo.svg',
               label: 'R Script',
               type: 'execution_node',
               inputs: [
@@ -526,7 +685,6 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
               description: '容器镜像用作执行环境.',
               uihints: {
                 items: []
@@ -913,7 +1071,6 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
               description: '容器镜像用作执行环境.',
               uihints: {
                 items: []
@@ -1300,7 +1457,6 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
               description: '容器镜像用作执行环境.',
               uihints: {
                 items: []

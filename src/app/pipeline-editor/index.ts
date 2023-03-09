@@ -24,6 +24,7 @@ import { PipelineEditorFactory, commandIDs } from './PipelineEditorWidget';
 import { PipelineService } from './PipelineService';
 
 import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
+import getPipelineJSON from './pipeline-json';
 
 const PIPELINE_EDITOR = 'Pipeline Editor';
 const PIPELINE = 'pipeline';
@@ -42,11 +43,12 @@ const createRemoteIcon = async ({
     method: 'GET',
     type: 'text'
   });
-  try {
-    svgstr = JSON.parse(svgstr);
-  } catch (e) {
-    // catch
-  }
+  if (svgstr.indexOf('"') === 0)
+    try {
+      svgstr = JSON.parse(svgstr);
+    } catch (e) {
+      console.warn(e);
+    }
   return new LabIcon({ name, svgstr });
 };
 
@@ -67,14 +69,12 @@ export default async function activatePipeline(
     .catch((error: any) => console.log(error));
 
   console.log(
-    settings,
-    'settings',
     (<any>settings).registry.plugins[PLUGIN_ID].schema,
-    'plugin schema'
+    'Pipeline Editor Plugin Schema'
   );
 
   // Set up new widget Factory for .pipeline files
-  // 使用 pipeline 编辑器处理 .pipeline 文件
+  // 使用 pipeline 编辑器工厂处理 .pipeline 文件
   const pipelineEditorFactory = new PipelineEditorFactory({
     name: PIPELINE_EDITOR, // 组件工厂名称
     fileTypes: [PIPELINE],
@@ -98,14 +98,14 @@ export default async function activatePipeline(
     ['JSON']
   );
 
-  // 将 pipeline 编辑器注册到 Jupyter 编辑器
+  // 将 pipeline 编辑器工厂注册到 Jupyterlab
   app.docRegistry.addWidgetFactory(pipelineEditorFactory);
 
   const tracker = new WidgetTracker<DocumentWidget>({
     namespace: PIPELINE_EDITOR_NAMESPACE
   });
 
-  pipelineEditorFactory.widgetCreated.connect((sender, widget) => {
+  pipelineEditorFactory.widgetCreated.connect((sender: any, widget: any) => {
     void tracker.add(widget);
 
     // Notify the widget tracker if restore data needs to update
@@ -127,7 +127,7 @@ export default async function activatePipeline(
   // Add command to add file to pipeline
   const addFileToPipelineCommand: string = commandIDs.addFileToPipeline;
   app.commands.addCommand(addFileToPipelineCommand, {
-    label: 'Add File to Pipeline',
+    label: '添加文件到 Pipeline',
     icon: addIcon,
     execute: args => {
       pipelineEditorFactory.addFileToPipelineSignal.emit(args);
@@ -135,7 +135,7 @@ export default async function activatePipeline(
   });
   const refreshPaletteCommand: string = commandIDs.refreshPalette;
   app.commands.addCommand(refreshPaletteCommand, {
-    label: 'Refresh Pipeline Palette',
+    label: '刷新 Pipeline 面板',
     icon: refreshIcon,
     execute: args => {
       pipelineEditorFactory.refreshPaletteSignal.emit(args);
@@ -156,11 +156,10 @@ export default async function activatePipeline(
 
   // Add an application command
   const openPipelineEditorCommand: string = commandIDs.openPipelineEditor;
-  // 3种类型的管道编辑器
   app.commands.addCommand(openPipelineEditorCommand, {
     label: (args: any) => {
       if (args.isPalette) {
-        return `新建管道编辑器`;
+        return `New ${PIPELINE_EDITOR}`;
       }
       if (args.runtimeType?.id === 'LOCAL') {
         return `Generic ${PIPELINE_EDITOR}`;
@@ -202,30 +201,10 @@ export default async function activatePipeline(
         .then(async model => {
           const platformId = args.runtimeType?.id;
           const runtime_type = platformId === 'LOCAL' ? undefined : platformId;
-
-          const pipelineJson = {
-            doc_type: 'pipeline',
-            version: '3.0',
-            json_schema:
-              'http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json',
-            id: 'elyra-auto-generated-pipeline',
-            primary_pipeline: 'primary',
-            pipelines: [
-              {
-                id: 'primary',
-                nodes: [],
-                app_data: {
-                  ui_data: {
-                    comments: []
-                  },
-                  version: PIPELINE_CURRENT_VERSION,
-                  runtime_type
-                },
-                runtime_ref: ''
-              }
-            ],
-            schemas: []
-          };
+          const pipelineJson = getPipelineJSON({
+            version: PIPELINE_CURRENT_VERSION,
+            runtime_type
+          });
           const newWidget = await app.commands.execute(
             commandIDs.openDocManager,
             {
@@ -246,46 +225,45 @@ export default async function activatePipeline(
   palette.addItem({
     command: openPipelineEditorCommand,
     args: { isPalette: true },
-    category: '管道编辑器'
+    category: 'Pipeline Editor'
   });
 
-  PipelineService.getRuntimeTypes()
-    .then(async types => {
-      const promises = types.map(async t => {
-        return {
-          ...t,
-          icon: await createRemoteIcon({
-            name: `elyra:platform:${t.id}`,
-            url: t.icon
-          })
-        };
+  const types = await PipelineService.getRuntimeTypes();
+
+  const promises = types.map(async t => {
+    return {
+      ...t,
+      icon: await createRemoteIcon({
+        name: `elyra:platform:${t.id}`,
+        url: t.icon
+      })
+    };
+  });
+
+  const resolvedTypes = await Promise.all(promises).catch(error =>
+    RequestErrors.serverError(error)
+  );
+
+  // Add the command to the launcher
+  if (launcher) {
+    const fileMenuItems: IRankedMenu.IItemOptions[] = [];
+    for (const t of resolvedTypes as any) {
+      launcher.add({
+        command: openPipelineEditorCommand,
+        category: PIPELINE_EDITOR,
+        args: { runtimeType: t },
+        rank: t.id === 'LOCAL' ? 1 : 2
       });
 
-      const resolvedTypes = await Promise.all(promises);
+      fileMenuItems.push({
+        command: openPipelineEditorCommand,
+        args: { runtimeType: t, isMenu: true },
+        rank: t.id === 'LOCAL' ? 90 : 91
+      });
+    }
 
-      // Add the command to the launcher
-      if (launcher) {
-        const fileMenuItems: IRankedMenu.IItemOptions[] = [];
-        console.log(resolvedTypes, 'resolvedTypes');
-        for (const t of resolvedTypes as any) {
-          launcher.add({
-            command: openPipelineEditorCommand,
-            category: PIPELINE_EDITOR,
-            args: { runtimeType: t },
-            rank: t.id === 'LOCAL' ? 1 : 2
-          });
-
-          fileMenuItems.push({
-            command: openPipelineEditorCommand,
-            args: { runtimeType: t, isMenu: true },
-            rank: t.id === 'LOCAL' ? 90 : 91
-          });
-        }
-
-        menu.fileMenu.newMenu.addGroup(fileMenuItems);
-      }
-    })
-    .catch(error => RequestErrors.serverError(error));
+    menu.fileMenu.newMenu.addGroup(fileMenuItems);
+  }
 
   // SubmitNotebookButtonExtension initialization code
   const notebookButtonExtension = new SubmitFileButtonExtension();

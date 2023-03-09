@@ -417,7 +417,7 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
+
               description: '容器镜像用作执行环境.',
               uihints: { items: [] }
             },
@@ -692,7 +692,7 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
+
               description: '容器镜像用作执行环境.',
               uihints: { items: [] }
             },
@@ -967,7 +967,7 @@ module.exports = {
             runtime_image: {
               type: 'string',
               title: '运行时镜像',
-              required: true,
+
               description: '容器镜像用作执行环境.',
               uihints: { items: [] }
             },

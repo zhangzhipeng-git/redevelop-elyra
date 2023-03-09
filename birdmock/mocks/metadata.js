@@ -143,11 +143,11 @@ module.exports = {
       'component-catalogs': [
         {
           name: 'apache_airflow_package_operator_catalog_component_catalog',
-          display_name: 'Apache Airflow 包的算子目录 component catalog',
+          display_name: 'Apache Airflow 包的operator目录 component catalog',
           metadata: {
-            description: 'Airflow 包的算子目录',
+            description: 'Airflow 包的operator目录',
             runtime_type: 'APACHE_AIRFLOW',
-            display_name: 'Apache Airflow 包的算子目录 component catalog',
+            display_name: 'Apache Airflow 包的operator目录 component catalog',
             categories: ['Core packages'],
             airflow_package_download_url:
               'https://hostport/path/apache_airflow.whl',
