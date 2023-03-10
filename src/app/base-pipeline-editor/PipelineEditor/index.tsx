@@ -760,7 +760,7 @@ const PipelineEditor = forwardRef(
     if (!leftPalette) {
       panelTabs.push({
         id: 'palette',
-        label: '左侧面板',
+        label: '节点面板',
         title: '添加节点到管道中',
         icon: theme.overrides?.paletteIcon,
         content: (

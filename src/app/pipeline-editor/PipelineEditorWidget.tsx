@@ -193,6 +193,17 @@ const PipelineWrapper: React.FC<IProps> = ({
     mutate: mutatePalette
   } = usePalette(type);
 
+  // 自动展开左侧面板节点目录
+  useEffect(() => {
+    if (!palette) return;
+    setTimeout(() => {
+      const btns = document.querySelectorAll(
+        '.bx--accordion__item > button[aria-expanded=false]'
+      );
+      btns.forEach((btn: any) => btn.click());
+    }, 500);
+  }, [palette]);
+
   useEffect(() => {
     const handleMutateSignal = (): void => {
       mutatePalette();

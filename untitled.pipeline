@@ -9,7 +9,7 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "d6c79cc3-809c-43a6-90f3-d2c3174a6633",
+          "id": "eff5d2f8-6be9-4baa-83ce-456a51f8984e",
           "type": "execution_node",
           "op": "execute-notebook-node",
           "app_data": {
@@ -29,8 +29,8 @@
             "ui_data": {
               "label": "Notebook",
               "image": "http://localhost:4200/static/elyra/notebook.svg",
-              "x_pos": 156,
-              "y_pos": 108.5,
+              "x_pos": 219,
+              "y_pos": 111.5,
               "description": "Run notebook file",
               "decorations": [
                 {
