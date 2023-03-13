@@ -538,13 +538,17 @@ const PipelineEditor = forwardRef(
         onAction?.({ type: type, payload });
 
         if (e.editType === 'newFileNode') {
+          console.log('从文件中新建节点.');
           const nodes = controller.current.getAllPaletteNodes();
           const extensions = nodes.map(n => n.app_data.extensions).flat();
 
-          const [file] = await onFileRequested?.({
+          const arr = await onFileRequested?.({
             canSelectMany: false,
             filters: { File: extensions }
           });
+
+          console.log(arr, 'arr');
+          const [file] = arr;
 
           const node = nodes.find(n =>
             n.app_data.extensions?.includes(path.extname(file))

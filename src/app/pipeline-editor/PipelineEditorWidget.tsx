@@ -335,7 +335,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       contextRef.current.path,
       args.filename ?? ''
     );
-    if (args.propertyID.includes('dependencies')) {
+    if (args.propertyID?.includes('dependencies')) {
       const res = await showBrowseFileDialog(
         browserFactory.defaultBrowser.model.manager,
         {
@@ -352,26 +352,30 @@ const PipelineWrapper: React.FC<IProps> = ({
         return res.value.map((v: any) => v.path);
       }
     } else {
-      const res = await showBrowseFileDialog(
-        browserFactory.defaultBrowser.model.manager,
-        {
-          startPath: PathExt.dirname(filename),
-          filter: (model: any): boolean => {
-            if (args.filters?.File === undefined) {
-              return true;
-            }
-
-            const ext = PathExt.extname(model.path);
-            return args.filters.File.includes(ext);
+      const manager = browserFactory.defaultBrowser.model.manager;
+      const res = await showBrowseFileDialog(manager, {
+        startPath: PathExt.dirname(filename),
+        filter: (model: any): boolean => {
+          if (args.filters?.File === undefined) {
+            return true;
           }
+
+          const ext = PathExt.extname(model.path);
+          return args.filters.File.concat(['.jar']).includes(ext);
         }
-      );
+      });
+
+      // manager.services.contents.get(res.value[0].path).then(res => {
+      //   console.log(res, 'res');
+      // });
+      // text -> blob, base64 -> blob
 
       if (res.button.accept && res.value.length) {
         const file = PipelineService.getPipelineRelativeNodePath(
           contextRef.current.path,
           res.value[0].path
         );
+
         return [file];
       }
     }

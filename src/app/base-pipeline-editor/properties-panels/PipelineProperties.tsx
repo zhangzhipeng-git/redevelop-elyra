@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Message } from "./PropertiesPanel";
+import { Message } from './PropertiesPanel';
 
 interface Props {
   pipelineFlow: any;
@@ -24,7 +24,7 @@ interface Props {
 
 function PipelineProperties(props: Props) {
   if (props.propertiesSchema === undefined) {
-    return <Message>No pipeline properties defined.</Message>;
+    return <Message>没有定义 pipeline 属性.</Message>;
   }
 
   return <div />;

@@ -1,10 +1,19 @@
 export default {
+  /**
+   * 获取文件后缀，例如：.py , .r
+   * @param {string} filename 文件名
+   */
   extname: (filename: string) => {
     if (!filename || filename.indexOf('.') < 0) return '';
 
     const lastDotIndex = filename.lastIndexOf('.');
     return filename.slice(-(filename.length - lastDotIndex));
   },
+  /**
+   * 当不传入extension时，获取文件名带后缀
+   *
+   * 当传入extension时，获取文件名不带后缀
+   */
   basename: (filepath: string, extension?: string) => {
     if (!filepath) return '';
 

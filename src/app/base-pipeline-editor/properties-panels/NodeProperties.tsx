@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { NodeType } from "@elyra/canvas";
-import produce from "immer";
-import styled from "styled-components";
+import { NodeType } from '@elyra/canvas';
+import produce from 'immer';
+import styled from 'styled-components';
 
-import { PropertiesPanel, Message } from "./PropertiesPanel";
+import { PropertiesPanel, Message } from './PropertiesPanel';
 
 interface Props {
   selectedNodes?: any[];
@@ -30,7 +30,7 @@ interface Props {
   parameters?: {
     name: string;
     default_value?: {
-      type: "str" | "int" | "float" | "bool" | "list" | "dict";
+      type: 'str' | 'int' | 'float' | 'bool' | 'list' | 'dict';
       value: any;
     };
     type?: string;
@@ -51,26 +51,26 @@ const Heading = styled.div`
 function getOneOfValue(value: string, option: string, label: string) {
   return {
     title: label,
-    type: "object",
+    type: 'object',
     properties: {
       value: {
-        type: "string",
-        default: value,
+        type: 'string',
+        default: value
       },
       option: {
-        type: "string",
-        default: option,
-      },
+        type: 'string',
+        default: option
+      }
     },
     uihints: {
       value: {
-        "ui:field": "hidden",
+        'ui:field': 'hidden'
       },
       option: {
-        "ui:field": "hidden",
+        'ui:field': 'hidden'
       },
-      label: "false",
-    },
+      label: 'false'
+    }
   };
 }
 
@@ -81,10 +81,10 @@ function NodeProperties({
   onFileRequested,
   onPropertiesUpdateRequested,
   onChange,
-  parameters,
+  parameters
 }: Props) {
   if (selectedNodes === undefined || selectedNodes.length === 0) {
-    return <Message>Select a node to edit its properties.</Message>;
+    return <Message>请选择节点编辑它的属性。.</Message>;
   }
 
   if (selectedNodes.length > 1) {
@@ -99,16 +99,14 @@ function NodeProperties({
   const selectedNode = selectedNodes[0];
 
   if (!selectedNode) {
-    return <Message>Select a node to edit its properties.</Message>;
+    return <Message>请选择节点编辑它的属性。.</Message>;
   }
 
-  if (selectedNode.type !== "execution_node") {
-    return (
-      <Message>This node type doesn't have any editable properties.</Message>
-    );
+  if (selectedNode.type !== 'execution_node') {
+    return <Message>该类型的节点没有可编辑的属性。.</Message>;
   }
 
-  const nodePropertiesSchema = nodes.find((n) => n.op === selectedNode.op);
+  const nodePropertiesSchema = nodes.find(n => n.op === selectedNode.op);
 
   const parseComponent = (): any => {
     const messageBody: Array<any> = [];
@@ -142,7 +140,7 @@ function NodeProperties({
                 {line}
               </span>
             ))
-          : ""}
+          : ''}
         <br />
         <a
           href="https://elyra.readthedocs.io/en/latest/user_guide/best-practices-custom-pipeline-components.html#troubleshooting-missing-pipeline-components"
@@ -156,9 +154,7 @@ function NodeProperties({
   }
 
   if (nodePropertiesSchema?.app_data.properties === undefined) {
-    return (
-      <Message>This node type doesn't have any editable properties.</Message>
-    );
+    return <Message>该类型的节点没有可编辑的属性。.</Message>;
   }
 
   // returns the node properties for selectedNode with the most recent content
@@ -168,7 +164,7 @@ function NodeProperties({
 
     // add each upstream node to the data list
     for (const upstreamNode of upstreamNodes ?? []) {
-      const nodeDef = nodes.find((n) => n.op === upstreamNode.op);
+      const nodeDef = nodes.find(n => n.op === upstreamNode.op);
       const prevLen = oneOfValuesNoOpt.length;
 
       const nodeProperties =
@@ -192,7 +188,7 @@ function NodeProperties({
         oneOfValuesNoOpt.push(
           getOneOfValue(
             upstreamNode.id,
-            "",
+            '',
             upstreamNode.app_data?.ui_data?.label
           )
         );
@@ -205,23 +201,23 @@ function NodeProperties({
       (draft: any) => {
         draft.properties = {
           label: {
-            title: "Label",
-            description: "A custom label for the node.",
-            type: "string",
+            title: 'Label',
+            description: 'A custom label for the node.',
+            type: 'string'
           },
-          ...draft.properties,
+          ...draft.properties
         };
         const component_properties =
           draft.properties.component_parameters?.properties ?? {};
         if (component_properties.pipeline_parameters?.items?.enum) {
           component_properties.pipeline_parameters.items.enum =
             parameters
-              ?.map((param) => {
+              ?.map(param => {
                 return param.name;
               })
-              ?.filter((param) => param !== "") ?? [];
+              ?.filter(param => param !== '') ?? [];
           component_properties.pipeline_parameters.uihints = {
-            "ui:widget": "checkboxes",
+            'ui:widget': 'checkboxes'
           };
         }
         for (let prop in component_properties) {
@@ -233,9 +229,9 @@ function NodeProperties({
             const oneOf = properties.value?.uihints?.allownooptions
               ? oneOfValuesNoOpt
               : oneOfValues;
-            component_properties[prop].required = ["value"];
+            component_properties[prop].required = ['value'];
             if (
-              properties?.widget?.default === "inputpath" &&
+              properties?.widget?.default === 'inputpath' &&
               properties.value
             ) {
               if (oneOf.length > 0) {
@@ -250,56 +246,54 @@ function NodeProperties({
                 ?.allownooptions
                 ? oneOfValuesNoOpt
                 : oneOfValues;
-              component_properties[prop].oneOf[i].required = ["value"];
+              component_properties[prop].oneOf[i].required = ['value'];
               if (
                 component_properties[prop].oneOf[i].properties?.value
                   ?.default === undefined &&
                 component_properties[prop].oneOf[i].properties?.value?.type ===
-                  "string"
+                  'string'
               ) {
                 component_properties[prop].oneOf[i].properties.value.default =
-                  "";
+                  '';
               }
               const widget =
                 component_properties[prop].oneOf[i].properties.widget.default;
-              if (widget === "inputpath") {
+              if (widget === 'inputpath') {
                 if (nestedOneOf.length > 0) {
-                  component_properties[prop].oneOf[
-                    i
-                  ].properties.value.oneOf = nestedOneOf;
+                  component_properties[prop].oneOf[i].properties.value.oneOf =
+                    nestedOneOf;
                   delete component_properties[prop].oneOf[i].properties.value
                     .type;
                   delete component_properties[prop].oneOf[i].properties.value
                     .enum;
                 }
               } else if (
-                widget === "parameter" &&
+                widget === 'parameter' &&
                 parameters &&
                 parameters.length > 0
               ) {
                 const type =
                   component_properties[prop].oneOf[i].uihints.value[
-                    "ui:typefilter"
+                    'ui:typefilter'
                   ];
+                component_properties[prop].oneOf[i].properties.value.enum =
+                  parameters
+                    ?.filter(
+                      param =>
+                        param.name !== '' && param.default_value?.type === type
+                    )
+                    ?.map(param => param.name);
                 component_properties[prop].oneOf[
                   i
-                ].properties.value.enum = parameters
-                  ?.filter(
-                    (param) =>
-                      param.name !== "" && param.default_value?.type === type
-                  )
-                  ?.map((param) => param.name);
-                component_properties[prop].oneOf[
-                  i
-                ].properties.value.enum.unshift("");
+                ].properties.value.enum.unshift('');
                 component_properties[prop].oneOf[i].properties.value.default =
-                  "";
-              } else if (widget === "parameter") {
+                  '';
+              } else if (widget === 'parameter') {
                 component_properties[prop].oneOf[i].properties.value.enum = [
-                  "",
+                  ''
                 ];
                 component_properties[prop].oneOf[i].properties.value.default =
-                  "";
+                  '';
               }
             }
           }

@@ -83,8 +83,10 @@ class BrowseFileDialogBreadcrumbs extends BreadCrumbs {
 /**
  * Browse file widget for dialog body
  */
-class BrowseFileDialog extends Widget
-  implements Dialog.IBodyWidget<IBrowseFileDialogOptions> {
+class BrowseFileDialog
+  extends Widget
+  implements Dialog.IBodyWidget<IBrowseFileDialogOptions>
+{
   directoryListing: DirListing;
   breadCrumbs: BreadCrumbs;
   dirListingHandleEvent: (event: Event) => void;
@@ -178,6 +180,7 @@ class BrowseFileDialog extends Widget
         const clickedItem = this.directoryListing.modelForClick(
           event as MouseEvent
         );
+
         if (clickedItem?.type === 'directory') {
           this.dirListingHandleEvent.call(this.directoryListing, event);
         } else {

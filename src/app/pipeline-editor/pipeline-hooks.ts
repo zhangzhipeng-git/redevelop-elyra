@@ -28,6 +28,8 @@ import * as SVG from '@assets/svgs';
 
 import Utils from '@app/util';
 
+import componentCatalogs from './component-catalogs.json';
+
 export const GENERIC_CATEGORY_ID = 'Elyra';
 
 interface IReturn<T> {
@@ -161,10 +163,22 @@ const NodeIcons: Map<string, string> = new Map([
 // TODO: We should decouple components and properties to support lazy loading.
 // TODO: type this
 export const componentFetcher = async (type: string): Promise<any> => {
-  const palettePromise =
-    RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
-      `elyra/pipeline/components/${type}`
-    );
+  console.log(componentCatalogs, 'componentCatalogs');
+  const fnMap: { [k: string]: () => Promise<any> } = {
+    local: () =>
+      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
+        `elyra/pipeline/components/local`
+      ),
+    APACHE_AIRFLOW: () =>
+      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
+        `elyra/pipeline/components/APACHE_AIRFLOW`
+      ),
+    KUBEFLOW_PIPELINES: () =>
+      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
+        `elyra/pipeline/components/KUBEFLOW_PIPELINES`
+      )
+  };
+  const palettePromise = fnMap[type]();
 
   const pipelinePropertiesPromise =
     RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
