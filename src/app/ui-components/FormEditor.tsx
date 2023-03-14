@@ -127,7 +127,11 @@ const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
       ) : undefined}
       {props.children}
       {/* {props.errors} */}
-      {requiredError && <li style={{listStyle: 'none'}} className="text-danger">是必填属性</li>}
+      {requiredError && (
+        <li style={{ listStyle: 'none' }} className="text-danger">
+          是必填属性
+        </li>
+      )}
     </div>
   );
 };

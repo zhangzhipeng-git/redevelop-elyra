@@ -50,6 +50,7 @@ export class RequestErrors {
       return this.server404(response.requestPath);
     }
 
+    console.log(response, 'response');
     const reason = response.reason ? response.reason : '';
     const message = response.message ? response.message : '';
     const timestamp = response.timestamp ? response.timestamp : '';

@@ -28,8 +28,6 @@ import * as SVG from '@assets/svgs';
 
 import Utils from '@app/util';
 
-import componentCatalogs from './component-catalogs.json';
-
 export const GENERIC_CATEGORY_ID = 'Elyra';
 
 interface IReturn<T> {
@@ -157,39 +155,31 @@ export const sortPalette = (palette: {
 const NodeIcons: Map<string, string> = new Map([
   ['execute-notebook-node', '/static/elyra/notebook.svg'],
   ['execute-python-node', '/static/elyra/python.svg'],
-  ['execute-r-node', '/static/elyra/r-logo.svg']
+  ['execute-r-node', '/static/elyra/r-logo.svg'],
+  ['execute-KubernetesPodOperator-node', '/static/elyra/airflow.svg'],
+  ['execute-SparkKubernetesOperator-node', '/static/elyra/airflow.svg'],
+  ['execute-SparkSubmitOperator-node', '/static/elyra/airflow.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
 // TODO: type this
 export const componentFetcher = async (type: string): Promise<any> => {
-  console.log(componentCatalogs, 'componentCatalogs');
-  const fnMap: { [k: string]: () => Promise<any> } = {
-    local: () =>
-      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
-        `elyra/pipeline/components/local`
-      ),
-    APACHE_AIRFLOW: () =>
-      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
-        `elyra/pipeline/components/APACHE_AIRFLOW`
-      ),
-    KUBEFLOW_PIPELINES: () =>
-      RequestHandler.makeGetRequest<IRuntimeComponentsResponse>(
-        `elyra/pipeline/components/KUBEFLOW_PIPELINES`
-      )
-  };
-  const palettePromise = fnMap[type]();
+  const palettePromise =
+    PipelineService.getComponentCatalogs<IRuntimeComponentsResponse>(type);
 
+  /** 查管道属性 */
   const pipelinePropertiesPromise =
     RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
       `elyra/pipeline/${type}/properties`
     );
 
+  /** 查管道参数 */
   const pipelineParametersPromise =
     RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
       `elyra/pipeline/${type}/parameters`
     );
 
+  /** 查 pipeline 运行环境类型 */
   const typesPromise = PipelineService.getRuntimeTypes();
 
   const [palette, pipelineProperties, pipelineParameters, types] =
@@ -211,10 +201,12 @@ export const componentFetcher = async (type: string): Promise<any> => {
     }
   }
 
+  /** 查节点属性 */
   const propertiesPromises = componentList.map(async componentID => {
     const res =
-      await RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
-        `elyra/pipeline/components/${type}/${componentID}/properties`
+      await PipelineService.getNodeProperties<IComponentPropertiesResponse>(
+        type,
+        componentID
       );
     return {
       id: componentID,

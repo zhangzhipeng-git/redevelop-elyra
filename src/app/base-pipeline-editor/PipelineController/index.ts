@@ -108,6 +108,7 @@ class PipelineController extends CanvasController {
     this.lastOpened = pipelineJson;
 
     if (!isPipelineFlowV3(pipelineJson)) {
+      console.log('无效的管道流文件');
       throw new InvalidPipelineError();
     }
 
@@ -155,7 +156,7 @@ class PipelineController extends CanvasController {
     const defaults =
       getDefaultFormState(validator, nodeTemplate.app_data.properties ?? {}) ??
       {};
-    defaults.label = '';
+
     nodeTemplate.app_data = defaults;
 
     const data = {

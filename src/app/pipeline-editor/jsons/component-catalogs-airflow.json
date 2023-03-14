@@ -1,0 +1,176 @@
+{
+    "version": "3.0",
+    "categories": [
+        {
+            "id": "AIRFLOW",
+            "label": "AIRFLOW",
+            "node_types": [
+                {
+                    "op": "execute-KubernetesPodOperator-node",
+                    "description": "Run KubernetesPodOperator Node",
+                    "id": "KubernetesPodOperator",
+                    "image": "/static/elyra/airflow.svg",
+                    "label": "KubernetesPodOperator",
+                    "type": "execution_node",
+                    "inputs": [
+                        {
+                            "id": "inPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Input Port"
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "id": "outPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Output Port"
+                                }
+                            }
+                        }
+                    ],
+                    "parameters": {},
+                    "app_data": {
+                        "extensions": [
+                            ".py",
+                            ".jar",
+                            ".scala"
+                        ],
+                        "parameter_refs": {
+                            "filehandler": "filename"
+                        },
+                        "image": "",
+                        "ui_data": {
+                            "description": "Run KubernetesPodOperator Node",
+                            "label": "KubernetesPodOperator",
+                            "image": "",
+                            "x_pos": 0,
+                            "y_pos": 0
+                        }
+                    }
+                },
+                {
+                    "op": "execute-SparkKubernetesOperator-node",
+                    "description": "Run SparkKubernetesOperator Node",
+                    "id": "SparkKubernetesOperator",
+                    "image": "/static/elyra/airflow.svg",
+                    "label": "SparkKubernetesOperator",
+                    "type": "execution_node",
+                    "inputs": [
+                        {
+                            "id": "inPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Input Port"
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "id": "outPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Output Port"
+                                }
+                            }
+                        }
+                    ],
+                    "parameters": {},
+                    "app_data": {
+                        "extensions": [
+                            ".py",
+                            ".jar",
+                            ".scala"
+                        ],
+                        "parameter_refs": {
+                            "filehandler": "filename"
+                        },
+                        "image": "",
+                        "ui_data": {
+                            "description": "Run SparkKubernetesOperator Node",
+                            "label": "SparkKubernetesOperator",
+                            "image": "",
+                            "x_pos": 0,
+                            "y_pos": 0
+                        }
+                    }
+                },
+                {
+                    "op": "execute-SparkSubmitOperator-node",
+                    "description": "Run SparkSubmitOperator Node",
+                    "id": "SparkSubmitOperator",
+                    "image": "/static/elyra/airflow.svg",
+                    "label": "SparkSubmitOperator",
+                    "type": "execution_node",
+                    "inputs": [
+                        {
+                            "id": "inPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Input Port"
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "id": "outPort",
+                            "app_data": {
+                                "ui_data": {
+                                    "cardinality": {
+                                        "min": 0,
+                                        "max": -1
+                                    },
+                                    "label": "Output Port"
+                                }
+                            }
+                        }
+                    ],
+                    "parameters": {},
+                    "app_data": {
+                        "extensions": [
+                            ".py",
+                            ".jar",
+                            ".scala"
+                        ],
+                        "parameter_refs": {
+                            "filehandler": "filename"
+                        },
+                        "image": "",
+                        "ui_data": {
+                            "description": "Run SparkSubmitOperator Node",
+                            "label": "SparkSubmitOperator",
+                            "image": "",
+                            "x_pos": 0,
+                            "y_pos": 0
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -20,6 +20,12 @@ import { RequestErrors } from '@app/ui-components';
 import { showDialog, Dialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
 
+import Utils from '@app/util';
+import componentCatalogsAirflow from './jsons/component-catalogs-airflow.json';
+import propertiesAirflowKubernetesPodOperator from './jsons/properties-airflow-KubernetesPodOperator.json';
+import propertiesAirflowSparkKubernetesOperator from './jsons/properties-airflow-SparkKubernetesOperator.json';
+import propertiesAirflowSparkSubmitOperator from './jsons/properties-airflow-SparkSubmitOperator.json';
+
 export const KFP_SCHEMA = 'kfp';
 export const RUNTIMES_SCHEMASPACE = 'runtimes';
 export const RUNTIME_IMAGES_SCHEMASPACE = 'runtime-images';
@@ -67,43 +73,7 @@ export interface IRuntimeType {
 
 export class PipelineService {
   /**
-   * Returns a list of resources corresponding to each active runtime-type.
-   */
-  /**
    * 返回与每个活动运行环境对应的资源列表
-     ``` 
-     runtime_types: [
-        {
-          id: 'APACHE_AIRFLOW',
-          display_name: 'Apache Airflow',
-          icon: 'static/elyra/airflow.svg',
-          export_file_types: [
-            {
-              id: 'py',
-              display_name: 'Airflow domain-specific language Python code'
-            }
-          ]
-        },
-        {
-          id: 'KUBEFLOW_PIPELINES',
-          display_name: 'Kubeflow Pipelines',
-          icon: 'static/elyra/kubeflow.svg',
-          export_file_types: [
-            {
-              id: 'yaml',
-              display_name: 'KFP static configuration file (YAML formatted)'
-            },
-            { id: 'py', display_name: 'Python DSL' }
-          ]
-        },
-        {
-          id: 'LOCAL',
-          display_name: 'Local',
-          icon: 'static/elyra/pipeline-flow.svg',
-          export_file_types: []
-        }
-      ]
-      ```
    */
   static async getRuntimeTypes(): Promise<IRuntimeType[]> {
     const res = await RequestHandler.makeGetRequest<any>(
@@ -162,6 +132,50 @@ export class PipelineService {
     }
   }
 
+  /**
+   * 获取 pipeline 的节点目录
+   * @param {string} type pipeline 的类型
+   */
+  static async getComponentCatalogs<T>(type = 'local') {
+    const fnMap: { [k: string]: () => Promise<any> } = {
+      local: () =>
+        RequestHandler.makeGetRequest<T>(`elyra/pipeline/components/local`),
+      APACHE_AIRFLOW: () =>
+        Promise.resolve(Utils.clone(componentCatalogsAirflow)),
+      KUBEFLOW_PIPELINES: () =>
+        RequestHandler.makeGetRequest<T>(
+          `elyra/pipeline/components/KUBEFLOW_PIPELINES`
+        )
+    };
+    return fnMap[type]();
+  }
+
+  /**
+   * 获取节点属性
+   * @param {string} type pipeline 运行环境类型
+   * @param {string} componentID 组件节点ID
+   */
+  static async getNodeProperties<T>(type = 'local', componentID: string) {
+    const fnMap: { [k: string]: () => Promise<any> } = {
+      'APACHE_AIRFLOW-KubernetesPodOperator': () =>
+        Promise.resolve(Utils.clone(propertiesAirflowKubernetesPodOperator)),
+      'APACHE_AIRFLOW-SparkKubernetesOperator': () =>
+        Promise.resolve(Utils.clone(propertiesAirflowSparkKubernetesOperator)),
+      'APACHE_AIRFLOW-SparkSubmitOperator': () =>
+        Promise.resolve(Utils.clone(propertiesAirflowSparkSubmitOperator))
+    };
+    const fn = fnMap[`${type}-${componentID}`];
+    if (typeof fn == 'function') return fn();
+
+    /// to-do
+    return RequestHandler.makeGetRequest<T>(
+      `elyra/pipeline/components/${type}/${componentID}/properties`
+    );
+  }
+
+  /**
+   * 获取组件定义
+   */
   static async getComponentDef(
     type = 'local',
     componentID: string

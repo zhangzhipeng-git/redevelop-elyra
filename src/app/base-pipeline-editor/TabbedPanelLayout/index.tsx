@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React from 'react';
 
-import styled, { useTheme } from "styled-components";
+import styled, { useTheme } from 'styled-components';
 
-import IconButton from "../IconButton";
+import IconButton from '../IconButton';
 
 interface Props {
   tabs: {
@@ -102,7 +102,7 @@ const Label = styled.div<LabelProps>`
     active ? theme.palette.text.bold : theme.palette.text.inactive};
 
   border-bottom: 1px solid
-    ${({ active, theme }) => (active ? theme.palette.tabBorder : "transparent")};
+    ${({ active, theme }) => (active ? theme.palette.tabBorder : 'transparent')};
 
   &:hover {
     color: ${({ theme }) => theme.palette.text.bold};
@@ -128,14 +128,14 @@ function TabbedPanelLayout({
   tabs,
   showCloseButton,
   collapsed,
-  onClose,
+  onClose
 }: Props) {
   const theme = useTheme();
 
   if (collapsed === true) {
     return (
       <VerticalTabGroup>
-        {tabs.map((t) => (
+        {tabs.map(t => (
           <Tab key={t.id}>
             <TabIcon
               title={t.label}
@@ -158,7 +158,7 @@ function TabbedPanelLayout({
     <React.Fragment>
       <ActionBar>
         <HorizontalTabGroup>
-          {tabs.map((t) => (
+          {tabs.map(t => (
             <Tab key={t.id}>
               <Label
                 title={t.title}
@@ -185,8 +185,9 @@ function TabbedPanelLayout({
         )}
       </ActionBar>
       <Content>
-        {tabs.find((t) => t.id === resolvedCurrentTab)?.content ??
-          "Invalid tab id."}
+        {tabs.find(t => t.id === resolvedCurrentTab)?.content ?? (
+          <span style={{ padding: '0 20px' }}>暂无数据</span>
+        )}
       </Content>
     </React.Fragment>
   );

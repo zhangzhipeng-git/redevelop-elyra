@@ -5,4 +5,7 @@ export default class Utils {
    */
   static svgToBase64 = (svgString: string): string =>
     `data:image/svg+xml;base64,${window.btoa(svgString)}`;
+
+  /** 克隆对象 */
+  static clone = (o: any) => JSON.parse(JSON.stringify(o));
 }

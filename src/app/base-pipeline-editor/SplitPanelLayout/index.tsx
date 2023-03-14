@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import styled, { useTheme } from "styled-components";
+import styled, { useTheme } from 'styled-components';
 
-const DEFAULT_PANEL_WIDTH = 500;
+const DEFAULT_PANEL_WIDTH = 420;
 const MIN_PANEL_WIDTH = 300;
 
 interface Props {
   left: React.ReactNode;
   right: React.ReactNode;
-  mode: "open" | "collapsed" | "closed";
+  mode: 'open' | 'collapsed' | 'closed';
 }
 
 interface RightPanelProps {
-  mode: "open" | "collapsed" | "closed";
+  mode: 'open' | 'collapsed' | 'closed';
   width: number;
   isActive: boolean;
   children: React.ReactNode;
@@ -50,7 +50,7 @@ const Sash = styled.div<{ isActive: boolean }>`
   width: 4px;
   transition: background-color 0.1s ease-out;
   background: ${({ theme, isActive }) =>
-    isActive ? theme.palette.sash : "transparent"};
+    isActive ? theme.palette.sash : 'transparent'};
 `;
 
 const hoverDelay = 300;
@@ -60,7 +60,7 @@ function RightPanel({
   width,
   isActive,
   children,
-  onMouseDown,
+  onMouseDown
 }: RightPanelProps) {
   const theme = useTheme();
 
@@ -89,14 +89,14 @@ function RightPanel({
   }, [isActive]);
 
   switch (mode) {
-    case "open":
+    case 'open':
       return (
         <div>
           <Panel
             style={{
               borderLeft: `1px solid ${theme.palette.divider}`,
               width: `${width}px`,
-              right: 0,
+              right: 0
             }}
           >
             {children}
@@ -104,7 +104,7 @@ function RightPanel({
           <Sash
             data-testid="drag-handle"
             style={{
-              right: `${width - 1}px`,
+              right: `${width - 1}px`
             }}
             isActive={isHover || isActive}
             onMouseDown={onMouseDown}
@@ -113,19 +113,19 @@ function RightPanel({
           />
         </div>
       );
-    case "collapsed":
+    case 'collapsed':
       return (
         <Panel
           style={{
             background: theme.palette.background.secondary,
-            width: "32px",
-            right: 0,
+            width: '32px',
+            right: 0
           }}
         >
           {children}
         </Panel>
       );
-    case "closed":
+    case 'closed':
       return null;
   }
 }
@@ -157,12 +157,12 @@ function SplitPanelLayout({ left, right, mode }: Props) {
       setIsActive(false);
     }
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
 
@@ -171,14 +171,14 @@ function SplitPanelLayout({ left, right, mode }: Props) {
     setIsActive(true);
   }, []);
 
-  const width = mode === "open" ? dragPosition ?? DEFAULT_PANEL_WIDTH : 0;
+  const width = mode === 'open' ? dragPosition ?? DEFAULT_PANEL_WIDTH : 0;
 
   return (
     <React.Fragment>
       <Panel
         style={{
           left: 0,
-          right: `${width}px`,
+          right: `${width}px`
         }}
       >
         {left}

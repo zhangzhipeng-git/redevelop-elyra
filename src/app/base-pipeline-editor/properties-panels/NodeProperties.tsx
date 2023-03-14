@@ -40,7 +40,7 @@ interface Props {
 
 const Heading = styled.div`
   margin-top: 14px;
-  padding: 0 47px;
+  padding: 0 20px;
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-weight: ${({ theme }) => theme.typography.fontWeight};
   font-size: 16px;
@@ -84,16 +84,11 @@ function NodeProperties({
   parameters
 }: Props) {
   if (selectedNodes === undefined || selectedNodes.length === 0) {
-    return <Message>请选择节点编辑它的属性。.</Message>;
+    return <Message>请选择节点编辑它的属性。</Message>;
   }
 
   if (selectedNodes.length > 1) {
-    return (
-      <Message>
-        Multiple nodes are selected. Select a single node to edit its
-        properties.
-      </Message>
-    );
+    return <Message>选择了多个节点，选择单个节点以编辑它的属性。</Message>;
   }
 
   const selectedNode = selectedNodes[0];
@@ -103,7 +98,7 @@ function NodeProperties({
   }
 
   if (selectedNode.type !== 'execution_node') {
-    return <Message>该类型的节点没有可编辑的属性。.</Message>;
+    return <Message>该类型的节点没有可编辑的属性。</Message>;
   }
 
   const nodePropertiesSchema = nodes.find(n => n.op === selectedNode.op);
@@ -200,11 +195,6 @@ function NodeProperties({
       nodePropertiesSchema?.app_data?.properties ?? {},
       (draft: any) => {
         draft.properties = {
-          label: {
-            title: 'Label',
-            description: 'A custom label for the node.',
-            type: 'string'
-          },
           ...draft.properties
         };
         const component_properties =

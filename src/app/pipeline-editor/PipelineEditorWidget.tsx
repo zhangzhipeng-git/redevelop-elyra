@@ -24,12 +24,9 @@ import {
   pipelineIcon,
   savePipelineIcon,
   showBrowseFileDialog,
-  runtimesIcon,
-  containerIcon,
   Dropzone,
   RequestErrors,
-  showFormDialog,
-  componentCatalogIcon
+  showFormDialog
 } from '@app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
 import { Dialog, ReactWidget, showDialog } from '@jupyterlab/apputils';
@@ -60,12 +57,7 @@ import {
 import { formDialogWidget } from './formDialogWidget';
 import { usePalette } from './pipeline-hooks';
 import { PipelineExportDialog } from './PipelineExportDialog';
-import {
-  PipelineService,
-  RUNTIMES_SCHEMASPACE,
-  RUNTIME_IMAGES_SCHEMASPACE,
-  COMPONENT_CATALOGS_SCHEMASPACE
-} from './PipelineService';
+import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
 import { PipelineSubmissionDialog } from './PipelineSubmissionDialog';
 import {
   createRuntimeData,
@@ -418,47 +410,13 @@ const PipelineWrapper: React.FC<IProps> = ({
     };
   };
 
+  /** 节点定义 */
   const handleOpenComponentDef = useCallback(
-    (componentId: string, componentSource: string) => {
-      // Show error dialog if the component does not exist
+    (componentId: string) => {
+      // 组件不存在
       if (!componentId) {
-        const dialogBody = [];
-        try {
-          const componentSourceJson = JSON.parse(componentSource);
-          dialogBody.push(`catalog_type: ${componentSourceJson.catalog_type}`);
-          for (const [key, value] of Object.entries(
-            componentSourceJson.component_ref
-          )) {
-            dialogBody.push(`${key}: ${value}`);
-          }
-        } catch {
-          dialogBody.push(componentSource);
-        }
-        return showDialog({
-          title: 'Component not found',
-          body: (
-            <p>
-              This node uses a component that is not stored in your component
-              registry.
-              {dialogBody.map((line, i) => (
-                <span key={i}>
-                  <br />
-                  {line}
-                </span>
-              ))}
-              <br />
-              <br />
-              <a
-                href="https://elyra.readthedocs.io/en/v3.14.2/user_guide/best-practices-custom-pipeline-components.html#troubleshooting-missing-pipeline-components"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Learn more...
-              </a>
-            </p>
-          ),
-          buttons: [Dialog.okButton()]
-        });
+        console.warn('没有传入组件ID');
+        return;
       }
       return PipelineService.getComponentDef(type, componentId)
         .then(res => {
@@ -490,7 +448,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           )
         });
       } else if (!nodeDef?.app_data?.parameter_refs?.['filehandler']) {
-        handleOpenComponentDef(nodeDef?.id, node?.app_data?.component_source);
+        handleOpenComponentDef(nodeDef?.id);
       }
     }
   };
@@ -515,11 +473,10 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       if (contextRef.current.model.dirty) {
         const dialogResult = await showDialog({
-          title:
-            'This pipeline contains unsaved changes. To submit the pipeline the changes need to be saved.',
+          title: '此管道包含未保存的更改。要提交管道，需要保存更改？',
           buttons: [
             Dialog.cancelButton(),
-            Dialog.okButton({ label: 'Save and Submit' })
+            Dialog.okButton({ label: '保存 & 提交' })
           ]
         });
         if (dialogResult.button && dialogResult.button.accept === true) {
@@ -727,12 +684,12 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const handleClearPipeline = useCallback(async (data: any): Promise<any> => {
     return showDialog({
-      title: 'Clear Pipeline',
-      body: 'Are you sure you want to clear the pipeline?',
+      title: '清除 Pipeline',
+      body: '是否确实要清除 pipeline ?',
       buttons: [
         Dialog.cancelButton(),
-        Dialog.okButton({ label: 'Clear All' }),
-        Dialog.okButton({ label: 'Clear Canvas' })
+        Dialog.okButton({ label: '全部清除' }),
+        Dialog.okButton({ label: '清除画布' })
       ]
     }).then(result => {
       if (result.button.accept) {
@@ -778,17 +735,6 @@ const PipelineWrapper: React.FC<IProps> = ({
         case 'properties':
           setPanelOpen(true);
           break;
-        case 'openRuntimes':
-          shell.activateById(`elyra-metadata:${RUNTIMES_SCHEMASPACE}`);
-          break;
-        case 'openRuntimeImages':
-          shell.activateById(`elyra-metadata:${RUNTIME_IMAGES_SCHEMASPACE}`);
-          break;
-        case 'openComponentCatalogs':
-          shell.activateById(
-            `elyra-metadata:${COMPONENT_CATALOGS_SCHEMASPACE}`
-          );
-          break;
         case 'openFile':
           commands.execute(commandIDs.openDocManager, {
             path: PipelineService.getWorkspaceRelativeNodePath(
@@ -798,10 +744,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           });
           break;
         case 'openComponentDef':
-          handleOpenComponentDef(
-            args.payload.componentId,
-            args.payload.componentSource
-          );
+          handleOpenComponentDef(args.payload.componentId);
           break;
         default:
           break;
@@ -844,27 +787,6 @@ const PipelineWrapper: React.FC<IProps> = ({
         enable: true,
         iconEnabled: IconUtil.encode(clearPipelineIcon),
         iconDisabled: IconUtil.encode(clearPipelineIcon)
-      },
-      {
-        action: 'openRuntimes',
-        label: '打开运行环境',
-        enable: true,
-        iconEnabled: IconUtil.encode(runtimesIcon),
-        iconDisabled: IconUtil.encode(runtimesIcon)
-      },
-      {
-        action: 'openRuntimeImages',
-        label: '打开运行环境镜像',
-        enable: true,
-        iconEnabled: IconUtil.encode(containerIcon),
-        iconDisabled: IconUtil.encode(containerIcon)
-      },
-      {
-        action: 'openComponentCatalogs',
-        label: '打开组件目录',
-        enable: true,
-        iconEnabled: IconUtil.encode(componentCatalogIcon),
-        iconDisabled: IconUtil.encode(componentCatalogIcon)
       },
       { action: 'undo', label: '撤销' },
       { action: 'redo', label: '还原' },
@@ -990,16 +912,10 @@ const PipelineWrapper: React.FC<IProps> = ({
     return <div className="elyra-loader"></div>;
   }
 
-  const handleOpenCatalog = (): void => {
-    shell.activateById(`elyra-metadata:${COMPONENT_CATALOGS_SCHEMASPACE}`);
-  };
-
   const handleOpenSettings = (): void => {
     commands.execute('settingeditor:open', { query: 'Pipeline Editor' });
   };
-  // useEffect(() => {
-  //   console.log(pipeline, '监听 pipeline 变化！')
-  // }, [pipeline]);
+
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer
@@ -1033,7 +949,6 @@ const PipelineWrapper: React.FC<IProps> = ({
             <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />
           ) : (
             <EmptyPlatformSpecificPipeline
-              onOpenCatalog={handleOpenCatalog}
               onOpenSettings={handleOpenSettings}
             />
           )}

@@ -233,6 +233,7 @@ const PipelineEditor = forwardRef(
         }
         // don't call to persist change because it will cause an infinate loop
       } catch (e) {
+        console.error(e, 'error');
         onError?.(e);
       }
     }, [palette, onError, pipeline, readOnly, theme.palette.error.main]);
@@ -482,7 +483,8 @@ const PipelineEditor = forwardRef(
         if (e.selectedNodes.length > 0) {
           setCurrentTab('properties');
         } else if (controller.current.getNodes().length > 0 || leftPalette) {
-          setCurrentTab('pipeline-properties');
+          // setCurrentTab('pipeline-properties');
+          setPanelOpen(false);
         } else {
           setCurrentTab('palette');
         }
@@ -611,20 +613,20 @@ const PipelineEditor = forwardRef(
       [onChange]
     );
 
-    const handlePipelinePropertiesChange = useCallback(
-      data => {
-        const pipeline = controller.current.getPipelineFlow();
-        if (pipeline?.pipelines?.[0]?.app_data) {
-          pipeline.pipelines[0].app_data.properties = {
-            ...pipeline.pipelines[0].app_data.properties,
-            ...data
-          };
-          controller.current.setPipelineFlow(pipeline);
-          onChange?.(controller.current.getPipelineFlow());
-        }
-      },
-      [onChange]
-    );
+    // const handlePipelinePropertiesChange = useCallback(
+    //   data => {
+    //     const pipeline = controller.current.getPipelineFlow();
+    //     if (pipeline?.pipelines?.[0]?.app_data) {
+    //       pipeline.pipelines[0].app_data.properties = {
+    //         ...pipeline.pipelines[0].app_data.properties,
+    //         ...data
+    //       };
+    //       controller.current.setPipelineFlow(pipeline);
+    //       onChange?.(controller.current.getPipelineFlow());
+    //     }
+    //   },
+    //   [onChange]
+    // );
 
     const handlePipelineParametersChange = useCallback(
       data => {
@@ -702,21 +704,21 @@ const PipelineEditor = forwardRef(
       : [];
 
     const panelTabs = [
-      {
-        id: 'pipeline-properties',
-        label: '管道属性',
-        title: '编辑管道属性',
-        icon: theme.overrides?.pipelineIcon,
-        content: (
-          <PropertiesPanel
-            data={pipeline?.pipelines?.[0]?.app_data?.properties}
-            schema={pipelineProperties}
-            onFileRequested={onFileRequested}
-            onPropertiesUpdateRequested={onPropertiesUpdateRequested}
-            onChange={handlePipelinePropertiesChange}
-          />
-        )
-      },
+      // {
+      //   id: 'pipeline-properties',
+      //   label: '管道属性',
+      //   title: '编辑管道属性',
+      //   icon: theme.overrides?.pipelineIcon,
+      //   content: (
+      //     <PropertiesPanel
+      //       data={pipeline?.pipelines?.[0]?.app_data?.properties}
+      //       schema={pipelineProperties}
+      //       onFileRequested={onFileRequested}
+      //       onPropertiesUpdateRequested={onPropertiesUpdateRequested}
+      //       onChange={handlePipelinePropertiesChange}
+      //     />
+      //   )
+      // },
       {
         id: 'properties',
         label: '节点属性',

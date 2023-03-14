@@ -1,0 +1,108 @@
+{
+    "type": "object",
+    "properties": {
+        "component_parameters": {
+            "type": "object",
+            "properties": {
+                "application_type": {
+                    "type": "string",
+                    "title": "应用程序类型",
+                    "description": "应用程序类型"
+                },
+                "spark_conn_id": {
+                    "type": "string",
+                    "title": "资源信息",
+                    "description": "资源信息"
+                },
+                "java_class": {
+                    "type": "string",
+                    "title": "Java应用程序主类",
+                    "description": "Java应用程序主类"
+                },
+                "total_executor_cores": {
+                    "type": "integer",
+                    "title": "executor总核数",
+                    "description": "executor总核数",
+                    "minimum": 0
+                },
+                "executor_cores": {
+                    "type": "integer",
+                    "title": "CPU",
+                    "description": "对于CPU密集型工作负载，您可以选择多个CPU",
+                    "minimum": 0
+                },
+                "driver_memory": {
+                    "type": "integer",
+                    "title": "内存(GB)",
+                    "description": "指定的RAM大小",
+                    "minimum": 0
+                },
+                "executor_memory": {
+                    "type": "integer",
+                    "title": "驱动程序内存(GB)",
+                    "description": "指定驱动程序的RAM大小",
+                    "minimum": 0
+                },
+                "name": {
+                    "type": "string",
+                    "title": "任务名称",
+                    "description": "任务名称"
+                },
+                "num_executors": {
+                    "type": "integer",
+                    "title": "executor数量",
+                    "description": "executor数量",
+                    "minimum": 0
+                },
+                "status_poll_interval": {
+                    "type": "integer",
+                    "title": "驱动状态轮询间隔时间",
+                    "description": "驱动状态轮询间隔时间",
+                    "minimum": 0
+                },
+                "application_args": {
+                    "title": "应用程序参数列表",
+                    "description": "应用程序参数列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "default": ""
+                    },
+                    "default": []
+                },
+                "mainApplicationFile": {
+                    "type": "string",
+                    "title": "文件路径",
+                    "description": "文件路径",
+                    "uihints": {
+                        "ui:widget": "file",
+                        "extensions": [
+                            ".py",
+                            ".jar",
+                            ".scala"
+                        ]
+                    }
+                },
+                "cmds": {
+                    "title": "bash命令",
+                    "description": "bash命令",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "default": ""
+                    },
+                    "default": []
+                }
+            },
+            "required": [
+                "application_type",
+                "spark_conn_id",
+                "name",
+                "mainApplicationFile"
+            ]
+        }
+    },
+    "required": [
+        "component_parameters"
+    ]
+}

@@ -59,7 +59,6 @@ export const EmptyGenericPipeline: React.FC<IEmptyGenericPipelineProps> = ({
 };
 
 export interface IEmptyPlatformSpecificPipelineProps {
-  onOpenCatalog: () => void;
   onOpenSettings: () => void;
 }
 
