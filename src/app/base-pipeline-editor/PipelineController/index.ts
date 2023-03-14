@@ -140,7 +140,7 @@ class PipelineController extends CanvasController {
     offsetY?: number;
     pipelineId?: string;
     path?: string;
-    onPropertiesUpdateRequested?(options: { filename: string }): Promise<any>;
+    onPropertiesUpdateRequested?(options: { [k:string]: any }, filenameRef: string): Promise<any>;
     [key: string]: any;
   }) {
     const {
@@ -179,7 +179,8 @@ class PipelineController extends CanvasController {
       data.nodeTemplate.app_data.component_parameters[filenameRef] = path;
       if (typeof onPropertiesUpdateRequested === 'function') {
         const properties = await onPropertiesUpdateRequested(
-          data.nodeTemplate.app_data
+          data.nodeTemplate.app_data,
+          filenameRef
         );
 
         const { component_parameters: oldComponentParameters, ...oldAppData } =

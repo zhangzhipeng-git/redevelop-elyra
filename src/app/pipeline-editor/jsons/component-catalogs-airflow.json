@@ -48,7 +48,7 @@
                             ".scala"
                         ],
                         "parameter_refs": {
-                            "filehandler": "filename"
+                            "filehandler": "mainApplicationFile"
                         },
                         "image": "",
                         "ui_data": {
@@ -103,7 +103,7 @@
                             ".scala"
                         ],
                         "parameter_refs": {
-                            "filehandler": "filename"
+                            "filehandler": "mainApplicationFile"
                         },
                         "image": "",
                         "ui_data": {
@@ -158,7 +158,7 @@
                             ".scala"
                         ],
                         "parameter_refs": {
-                            "filehandler": "filename"
+                            "filehandler": "mainApplicationFile"
                         },
                         "image": "",
                         "ui_data": {

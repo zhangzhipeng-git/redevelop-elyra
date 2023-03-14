@@ -17,13 +17,14 @@
 import * as React from 'react';
 
 interface IOperatorSelectProps {
+  label?:string;
   operators: { label: string; value: string }[];
 }
 
-const OperatorSelect: React.FC<IOperatorSelectProps> = ({ operators }) => {
+const OperatorSelect: React.FC<IOperatorSelectProps> = ({ label, operators }) => {
   return (
     <form className="elyra-dialog-form">
-      <label htmlFor="file_select_operator">文件关联 Operator 类型:</label>
+      {!!label && <label htmlFor="file_select_operator">{label}:</label>}
       <br />
       <select
         id="file_select_operator"

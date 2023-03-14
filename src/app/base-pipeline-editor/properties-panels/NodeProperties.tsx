@@ -25,7 +25,7 @@ interface Props {
   nodes: NodeType[];
   upstreamNodes?: any[];
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any) => any;
+  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   onChange?: (nodeID: string, data: any) => any;
   parameters?: {
     name: string;

@@ -61,7 +61,7 @@ interface Props {
   onDoubleClickNode?: (e: CanvasClickEvent) => any;
   onError?: (error: Error) => any;
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any) => any;
+  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   readOnly?: boolean;
   children?: React.ReactNode;
   nativeKeyboardActions?: boolean;

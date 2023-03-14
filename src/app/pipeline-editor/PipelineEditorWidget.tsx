@@ -376,13 +376,13 @@ const PipelineWrapper: React.FC<IProps> = ({
     return undefined;
   };
 
-  const onPropertiesUpdateRequested = async (args: any): Promise<any> => {
+  const onPropertiesUpdateRequested = async (args: any, filenameRef: string): Promise<any> => {
     if (!contextRef.current.path) {
       return args;
     }
     const path = PipelineService.getWorkspaceRelativeNodePath(
       contextRef.current.path,
-      args.component_parameters.filename
+      args.component_parameters[filenameRef]
     );
     const new_env_vars = await ContentParser.getEnvVars(path).then(
       (response: any) =>
@@ -390,6 +390,8 @@ const PipelineWrapper: React.FC<IProps> = ({
           return { env_var: str };
         })
     );
+
+    console.log(JSON.stringify(new_env_vars), 'new_env_vars');
 
     const env_vars = args.component_parameters?.env_vars ?? [];
     const merged_env_vars = [
@@ -608,19 +610,6 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (dialogResult.value === null) {
         // When Cancel is clicked on the dialog, just return
         return;
-      }
-
-      // Clean null properties
-      for (const node of pipelineJson.pipelines[0].nodes) {
-        if (node.app_data.component_parameters.cpu === null) {
-          delete node.app_data.component_parameters.cpu;
-        }
-        if (node.app_data.component_parameters.memory === null) {
-          delete node.app_data.component_parameters.memory;
-        }
-        if (node.app_data.component_parameters.gpu === null) {
-          delete node.app_data.component_parameters.gpu;
-        }
       }
 
       const configDetails = getConfigDetails(
@@ -848,7 +837,6 @@ const PipelineWrapper: React.FC<IProps> = ({
         return;
       }
 
-      let failedAdd = 0;
       let position = 0;
       const missingXY = !location;
 
@@ -865,15 +853,48 @@ const PipelineWrapper: React.FC<IProps> = ({
         PipelineService.isSupportedNode(item, type)
       );
 
+      console.log(type, 'type');
+      const fileTipMap: { [k: string]: string } = {
+        undefined: 'Notebook、Python 和 R',
+        KUBEFLOW_PIPELINES: 'Notebook、Python 和 R',
+        APACHE_AIRFLOW: 'Java、Python 和 Scala'
+      };
       if (!selectedItems[0]) {
         return showDialog({
           title: '不支持的文件',
-          body: '只支持将 Java、Python 和 Scala 文件添加导管道编辑器中。',
+          body: `只支持将 ${fileTipMap[type as any]} 文件添加导管道编辑器中。`,
           buttons: [Dialog.okButton()]
         });
       }
-
       console.log(selectedItems, 'selectedItems');
+
+      function addFile(item: any, op?: string) {
+        item.op = op;
+        item.path = PipelineService.getPipelineRelativeNodePath(
+          contextRef.current.path,
+          item.path
+        );
+        item.x = (location?.x ?? 0) + position;
+        item.y = (location?.y ?? 0) + position;
+
+        const success = ref.current?.addFile({
+          nodeTemplate: {
+            op: item.op
+          },
+          offsetX: item.x,
+          offsetY: item.y,
+          path: item.path
+        });
+
+        if (success) {
+          position += 20;
+        } else {
+          console.warn('添加文件失败！');
+          // handle error
+        }
+      }
+
+      let airflowNodeOp = '';
       if (type === 'APACHE_AIRFLOW') {
         const dialogResult = await showFormDialog({
           title: '请选择文件要关联的 Operator',
@@ -887,55 +908,18 @@ const PipelineWrapper: React.FC<IProps> = ({
           focusNodeSelector: '#file_select_operator'
         });
         // 这里的 op 是 Airflow Pipeline Operator 节点 op 值集合中的一个值！
-        const op = dialogResult.value.file_select_operator;
-        return;
-      }
-
-      toArray(fileBrowser.selectedItems()).map((item: any): void => {
-        if (PipelineService.isSupportedNode(item, type)) {
-          // 当 type = APACHE_AIRFLOW 时，要从前端写死的三类operators 里选择一个去赋值op
-
-          item.op = PipelineService.getNodeType(item.path);
-          item.path = PipelineService.getPipelineRelativeNodePath(
-            contextRef.current.path,
-            item.path
-          );
-          item.x = (location?.x ?? 0) + position;
-          item.y = (location?.y ?? 0) + position;
-
-          const success = ref.current?.addFile({
-            nodeTemplate: {
-              op: item.op
-            },
-            offsetX: item.x,
-            offsetY: item.y,
-            path: item.path
-          });
-
-          if (success) {
-            position += 20;
-          } else {
-            // handle error
-          }
-        } else {
-          failedAdd++;
-        }
-      });
-
-      // update position if the default coordinates were used
-      if (missingXY) {
-        setDefaultPosition(position);
-      }
-
-      if (failedAdd) {
-        return showDialog({
-          title: '不支持的文件',
-          body: '只支持将 Java、Python 和 Scala 文件添加导管道编辑器中。',
-          buttons: [Dialog.okButton()]
+        airflowNodeOp = dialogResult.value.file_select_operator;
+        selectedItems.map((item: any): void => {
+          addFile(item, airflowNodeOp);
+        });
+      } else {
+        selectedItems.map((item: any): void => {
+          addFile(item, PipelineService.getNodeType(item.path));
         });
       }
 
-      return;
+      // update position if the default coordinates were used
+      if (missingXY) setDefaultPosition(position);
     },
     [browserFactory.defaultBrowser, defaultPosition, shell, widgetId, type]
   );

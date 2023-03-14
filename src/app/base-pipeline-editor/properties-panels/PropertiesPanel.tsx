@@ -44,7 +44,7 @@ interface Props {
   schema?: any;
   onChange?: (data: any) => any;
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any) => any;
+  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   noValidate?: boolean;
   id?: string;
 }
@@ -95,6 +95,7 @@ export function PropertiesPanel({
 
   const formContext = {
     onFileRequested: async (args: any, fieldName: string) => {
+      console.log(args, data, 'onFileRequested');
       const values = await onFileRequested?.({
         ...args,
         filename: data.component_parameters.filename
@@ -116,7 +117,8 @@ export function PropertiesPanel({
       onChange?.(newFormData ?? data);
     },
     onPropertiesUpdateRequested: async (args: any) => {
-      const newData = await onPropertiesUpdateRequested?.(args);
+      console.log(args, arguments, 'onPropertiesUpdateRequested');
+      const newData = await onPropertiesUpdateRequested?.(args, 'mainApplicationFile');
       onChange?.(newData);
     },
     formData: data
