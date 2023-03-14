@@ -57,7 +57,7 @@
                         "ui:widget": "file",
                         "extensions": [
                             ".py",
-                            ".jar",
+                            ".java",
                             ".scala"
                         ]
                     }

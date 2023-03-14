@@ -153,6 +153,9 @@ class PipelineController extends CanvasController {
     } = item;
 
     const nodeTemplate: any = this.getPaletteNode(op);
+
+    console.log(op, 'nodeTemplate.op');
+
     const defaults =
       getDefaultFormState(validator, nodeTemplate.app_data.properties ?? {}) ??
       {};

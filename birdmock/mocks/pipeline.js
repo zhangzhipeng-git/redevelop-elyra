@@ -1,3 +1,7 @@
+var fs = require('fs');
+var path = require('path');
+var resolve = p => path.resolve(__dirname, p);
+
 module.exports = {
   '/elyra/pipeline/runtimes/types': () => {
     return {
@@ -41,5 +45,19 @@ module.exports = {
       outputs: []
     };
   },
-  '/elyra/pipeline/schedule': () => {}
+  '/elyra/pipeline/schedule': () => {
+    return {
+      git_url: 'http://www.baidu.com',
+      run_url: 'http://www.baidu.com',
+      platform: 'APACHE_AIRFLOW',
+      object_storage_path: '/outputs',
+      object_storage_url: 'http://www.baidu.com'
+    };
+  },
+  '/elyra/pipeline/export': () => {
+    return {
+      filename: 'python.svg',
+      buffer: fs.readFileSync(resolve('./assets/python.svg'))
+    };
+  }
 };

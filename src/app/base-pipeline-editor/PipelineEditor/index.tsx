@@ -226,6 +226,7 @@ const PipelineEditor = forwardRef(
       try {
         controller.current.open(pipeline);
         if (!readOnly) {
+          console.log(palette, '设置管道参数！');
           controller.current.setPalette(palette);
           controller.current.validate({ redColor: theme.palette.error.main });
         } else {
@@ -264,16 +265,16 @@ const PipelineEditor = forwardRef(
 
         if (e.selectedObjectIds.length > 1) {
           return [
-            {
-              action: 'createSuperNode',
-              label: '创建父节点',
-              // NOTE: There is a bug if you try to create a supernode with only
-              // a comment selected. This will disable creating supernodes when
-              // the comment is right clicked on even if other nodes are
-              // selected, which is allowed. Just too lazy to loop through all
-              // selected items to determine if non comments are also selected.
-              enable: e.type !== 'comment'
-            },
+            // {
+            //   action: 'createSuperNode',
+            //   label: '创建父节点',
+            //   // NOTE: There is a bug if you try to create a supernode with only
+            //   // a comment selected. This will disable creating supernodes when
+            //   // the comment is right clicked on even if other nodes are
+            //   // selected, which is allowed. Just too lazy to loop through all
+            //   // selected items to determine if non comments are also selected.
+            //   enable: e.type !== 'comment'
+            // },
             {
               divider: true
             },
@@ -346,10 +347,10 @@ const PipelineEditor = forwardRef(
                 {
                   divider: true
                 },
-                {
-                  action: 'createSuperNode',
-                  label: '创建父节点'
-                },
+                // {
+                //   action: 'createSuperNode',
+                //   label: '创建父节点'
+                // },
                 {
                   divider: true
                 },
@@ -484,7 +485,7 @@ const PipelineEditor = forwardRef(
           setCurrentTab('properties');
         } else if (controller.current.getNodes().length > 0 || leftPalette) {
           // setCurrentTab('pipeline-properties');
-          setPanelOpen(false);
+          if (panelOpen) setPanelOpen(false);
         } else {
           setCurrentTab('palette');
         }
@@ -501,6 +502,7 @@ const PipelineEditor = forwardRef(
 
         if (isCreateNodeEvent(e)) {
           // the edit was created by canvas, reconstruct and pass to addNode
+          console.log(e, '创建新节点');
           controller.current.addNode({
             ...e,
             onPropertiesUpdateRequested
@@ -542,16 +544,15 @@ const PipelineEditor = forwardRef(
         if (e.editType === 'newFileNode') {
           console.log('从文件中新建节点.');
           const nodes = controller.current.getAllPaletteNodes();
-          const extensions = nodes.map(n => n.app_data.extensions).flat();
+          let extensions = nodes.map(n => n.app_data.extensions).flat();
+          extensions = Array.from(new Set(extensions));
+          console.log(extensions, '支持的文件类型');
 
           const arr = await onFileRequested?.({
             canSelectMany: false,
             filters: { File: extensions }
           });
-
-          console.log(arr, 'arr');
           const [file] = arr;
-
           const node = nodes.find(n =>
             n.app_data.extensions?.includes(path.extname(file))
           );

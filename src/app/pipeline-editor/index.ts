@@ -142,7 +142,7 @@ export default async function activatePipeline(
     }
   });
   app.contextMenu.addItem({
-    selector: '[data-file-type="notebook"]',
+    selector: '[data-file-type="java"]',
     command: addFileToPipelineCommand
   });
   app.contextMenu.addItem({
@@ -150,7 +150,7 @@ export default async function activatePipeline(
     command: addFileToPipelineCommand
   });
   app.contextMenu.addItem({
-    selector: '[data-file-type="r"]',
+    selector: '[data-file-type="scala"]',
     command: addFileToPipelineCommand
   });
 

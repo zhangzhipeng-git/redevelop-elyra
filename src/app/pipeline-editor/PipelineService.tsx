@@ -58,10 +58,31 @@ enum ContentType {
   other = 'other'
 }
 
+enum AirflowContentType {
+  kpo = 'execute-KubernetesPodOperator-node',
+  sko = 'execute-SparkKubernetesOperator-node',
+  sso = 'execute-SparkSubmitOperator-node'
+}
+
 const CONTENT_TYPE_MAPPER: Map<string, ContentType> = new Map([
   ['.py', ContentType.python],
   ['.ipynb', ContentType.notebook],
   ['.r', ContentType.r]
+]);
+
+const AIRFLOW_CONTENT_TYPE_MAPPER: Map<string, AirflowContentType[]> = new Map([
+  [
+    '.java',
+    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
+  ],
+  [
+    '.py',
+    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
+  ],
+  [
+    '.scala',
+    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
+  ]
 ]);
 
 export interface IRuntimeType {
@@ -69,6 +90,16 @@ export interface IRuntimeType {
   display_name: string;
   icon: string;
   export_file_types: { id: string; display_name: string }[];
+}
+
+/** 操作符 Operator 对象 */
+export interface Operator {
+  /** 所在目录 */
+  catalog: string;
+  /** operator 名称 */
+  label: string;
+  /** operator id */
+  value: string;
 }
 
 export class PipelineService {
@@ -202,8 +233,8 @@ export class PipelineService {
    * Creates a Dialog for passing to makeServerRequest
    */
   static getWaitDialog(
-    title = 'Making server request...',
-    body = 'This may take some time'
+    title = '请求服务...',
+    body = '这可能需要一些时间'
   ): Dialog<any> {
     return new Dialog({
       title: title,
@@ -236,37 +267,39 @@ export class PipelineService {
           <p>
             {response['platform'] === 'APACHE_AIRFLOW' ? (
               <p>
-                Apache Airflow DAG has been pushed to the{' '}
+                Apache Airflow DAG 已经被推送到{' '}
                 <a
                   href={response['git_url']}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Git repository.
+                  Git 仓库.
                 </a>
                 <br />
               </p>
             ) : null}
-            Check the status of your job at{' '}
+            在{' '}
             <a
               href={response['run_url']}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Run Details.
+              {' '}
+              运行详情页面{' '}
             </a>
+            查看任务状态。
             {response['object_storage_path'] !== null ? (
               <p>
-                The results and outputs are in the{' '}
-                {response['object_storage_path']} working directory in{' '}
+                输出结果在 {response['object_storage_path']}{' '}
+                工作目录下，该目录位于{' '}
                 <a
                   href={response['object_storage_url']}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  object storage
+                  对象存储URL
                 </a>
-                .
+                。
               </p>
             ) : null}
             <br />
@@ -274,10 +307,8 @@ export class PipelineService {
         );
       } else {
         // pipeline executed in-place locally
-        dialogTitle = 'Job execution succeeded';
-        dialogBody = (
-          <p>Your job has been executed in-place in your local environment.</p>
-        );
+        dialogTitle = '任务执行成功';
+        dialogBody = <p>任务已在本地执行。</p>;
       }
 
       return showDialog({
@@ -319,11 +350,20 @@ export class PipelineService {
     return RequestHandler.makePostRequest(
       'elyra/pipeline/export',
       JSON.stringify(body),
-      this.getWaitDialog('Generating pipeline artifacts ...')
-    ).then((response: any) => {
+      this.getWaitDialog('正在生成产出文件...'),
+      'blob'
+    ).then(({ headers, data }: any) => {
+      const filename = headers.get('Content-Disposition')?.split('=')[1];
       return showDialog({
-        title: 'Pipeline export succeeded',
-        body: <p>Exported file: {response['export_path']} </p>,
+        title: 'Pipeline 导出成功',
+        body: (
+          <p>
+            导出文件:{' '}
+            <a href={window.URL.createObjectURL(data)} download={filename}>
+              {filename}{' '}
+            </a>
+          </p>
+        ),
         buttons: [Dialog.okButton()]
       });
     });
@@ -337,16 +377,39 @@ export class PipelineService {
     return type;
   }
 
+  /** 获取 Airflow Pipeline 的所有 Operator */
+  static getAirflowAllOperators(): Operator[] {
+    let operators = [] as Operator[];
+    const categories = componentCatalogsAirflow.categories;
+    categories.forEach(c => {
+      const nodes = c.node_types.map(({ op, id }) => ({
+        catalog: c.id,
+        label: id,
+        value: op
+      }));
+      operators.push(...nodes);
+    });
+    return operators;
+  }
+
+  static getAirflowNodeTypes(filepath: string): string[] {
+    const extension: string = PathExt.extname(filepath);
+    const types: string[] = AIRFLOW_CONTENT_TYPE_MAPPER.get(extension)!;
+    return types;
+  }
+
   /**
    * Check if a given file is allowed to be added to the pipeline
    * @param item
    */
-  static isSupportedNode(file: any): boolean {
-    if (PipelineService.getNodeType(file.path)) {
-      return true;
-    } else {
-      return false;
+  static isSupportedNode(file: any, type = 'local'): boolean {
+    // APACHE_AIRFLOW | KUBEFLOW_PIPELINES | local
+
+    if (type === 'APACHE_AIRFLOW') {
+      return !!PipelineService.getAirflowNodeTypes(file.path);
     }
+
+    return !!PipelineService.getNodeType(file.path);
   }
 
   static getPipelineRelativeNodePath(

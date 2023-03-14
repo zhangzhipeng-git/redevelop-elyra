@@ -74,11 +74,12 @@ export class RequestHandler {
   static async makePostRequest<T = any>(
     requestPath: string,
     requestBody: any,
-    longRequestDialog?: Dialog<any>
+    longRequestDialog?: Dialog<any>,
+    type?: 'blob' | 'json' | 'text' | undefined
   ): Promise<T> {
     return this.makeServerRequest(
       requestPath,
-      { method: 'POST', body: requestBody },
+      { method: 'POST', body: requestBody, type },
       longRequestDialog
     );
   }
@@ -201,9 +202,14 @@ export class RequestHandler {
             (result: any) => {
               if (response.status === 405) {
                 resolve(null);
+                return;
               }
               if (response.status < 200 || response.status >= 300) {
                 return reject(result);
+              }
+              if (type === 'blob') {
+                resolve({ headers: response.headers, data: result });
+                return;
               }
 
               resolve(result);

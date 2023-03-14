@@ -44,7 +44,7 @@
                     "app_data": {
                         "extensions": [
                             ".py",
-                            ".jar",
+                            ".java",
                             ".scala"
                         ],
                         "parameter_refs": {
@@ -99,7 +99,7 @@
                     "app_data": {
                         "extensions": [
                             ".py",
-                            ".jar",
+                            ".java",
                             ".scala"
                         ],
                         "parameter_refs": {
@@ -154,7 +154,7 @@
                     "app_data": {
                         "extensions": [
                             ".py",
-                            ".jar",
+                            ".java",
                             ".scala"
                         ],
                         "parameter_refs": {

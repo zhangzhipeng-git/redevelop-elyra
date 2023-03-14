@@ -65,6 +65,7 @@ import {
   IRuntimeData
 } from './runtime-utils';
 import { theme } from './theme';
+import { OperatorSelect } from './PipelineAddFileDialog';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -353,7 +354,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           }
 
           const ext = PathExt.extname(model.path);
-          return args.filters.File.concat(['.jar']).includes(ext);
+          return args.filters.File.includes(ext);
         }
       });
 
@@ -463,11 +464,23 @@ const PipelineWrapper: React.FC<IProps> = ({
         palette.properties
       );
       if (errorMessages && errorMessages.length > 0) {
-        let errorMessage = '';
+        const chMsgType = {
+          run: '运行',
+          export: '导出'
+        };
+        let msgs = [];
         for (const error of errorMessages) {
-          errorMessage += (errorMessage ? '\n' : '') + error.message;
+          let msg = error.message;
+          if (msg.indexOf('circular reference') > -1) msg = 'DAG 图存在环路.';
+          msgs.push(msg);
         }
-        toast.error(`Failed ${actionType}: ${errorMessage}`);
+        toast.error(
+          `${chMsgType[actionType]}失败:\n\n ${Array.from(new Set(msgs))
+            .join('\n')
+            .replace(/The property/g, '属性')
+            .replace(/on node/g, '在节点')
+            .replace(/is required/g, '上是必填的')}`
+        );
         return;
       }
 
@@ -828,7 +841,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [defaultPosition, setDefaultPosition] = useState(10);
 
   const handleAddFileToPipeline = useCallback(
-    (location?: { x: number; y: number }) => {
+    async (location?: { x: number; y: number }) => {
       const fileBrowser = browserFactory.defaultBrowser;
       // Only add file to pipeline if it is currently in focus
       if (shell.currentWidget?.id !== widgetId) {
@@ -848,8 +861,40 @@ const PipelineWrapper: React.FC<IProps> = ({
         };
       }
 
+      const selectedItems = toArray(fileBrowser.selectedItems()).filter(item =>
+        PipelineService.isSupportedNode(item, type)
+      );
+
+      if (!selectedItems[0]) {
+        return showDialog({
+          title: '不支持的文件',
+          body: '只支持将 Java、Python 和 Scala 文件添加导管道编辑器中。',
+          buttons: [Dialog.okButton()]
+        });
+      }
+
+      console.log(selectedItems, 'selectedItems');
+      if (type === 'APACHE_AIRFLOW') {
+        const dialogResult = await showFormDialog({
+          title: '请选择文件要关联的 Operator',
+          body: formDialogWidget(
+            <OperatorSelect
+              operators={PipelineService.getAirflowAllOperators()}
+            />
+          ),
+          buttons: [Dialog.cancelButton(), Dialog.okButton()],
+          defaultButton: 1,
+          focusNodeSelector: '#file_select_operator'
+        });
+        // 这里的 op 是 Airflow Pipeline Operator 节点 op 值集合中的一个值！
+        const op = dialogResult.value.file_select_operator;
+        return;
+      }
+
       toArray(fileBrowser.selectedItems()).map((item: any): void => {
-        if (PipelineService.isSupportedNode(item)) {
+        if (PipelineService.isSupportedNode(item, type)) {
+          // 当 type = APACHE_AIRFLOW 时，要从前端写死的三类operators 里选择一个去赋值op
+
           item.op = PipelineService.getNodeType(item.path);
           item.path = PipelineService.getPipelineRelativeNodePath(
             contextRef.current.path,
@@ -876,6 +921,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           failedAdd++;
         }
       });
+
       // update position if the default coordinates were used
       if (missingXY) {
         setDefaultPosition(position);
@@ -884,14 +930,14 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (failedAdd) {
         return showDialog({
           title: '不支持的文件',
-          body: '只支持将 Notebooks, Python 脚本和 R 脚本文件添加导管道编辑器中.',
+          body: '只支持将 Java、Python 和 Scala 文件添加导管道编辑器中。',
           buttons: [Dialog.okButton()]
         });
       }
 
       return;
     },
-    [browserFactory.defaultBrowser, defaultPosition, shell, widgetId]
+    [browserFactory.defaultBrowser, defaultPosition, shell, widgetId, type]
   );
 
   const handleDrop = async (e: IDragEvent): Promise<void> => {
