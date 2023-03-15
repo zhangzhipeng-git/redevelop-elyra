@@ -41,7 +41,6 @@ import { IntlProvider } from 'react-intl';
 import styled, { useTheme } from 'styled-components';
 
 import NodeTooltip from '../NodeTooltip';
-import PalettePanel from '../PalettePanel';
 import PipelineController from '../PipelineController';
 import { NodeProperties } from '../properties-panels';
 import { PropertiesPanel } from '../properties-panels/PropertiesPanel';
@@ -144,29 +143,6 @@ function useCloseContextMenu(controller: React.MutableRefObject<any>) {
   }, [controller]);
 }
 
-// const Button = styled.div<{ hasToolbar: boolean }>`
-//   cursor: pointer;
-//   position: absolute;
-//   top: ${({ hasToolbar }) => (hasToolbar ? 64 : 24)}px;
-//   right: 28px;
-//   z-index: 1;
-//   padding: 10px;
-//   background-color: ${({ theme }) => theme.palette.primary.main};
-//   border: none;
-//   font-size: ${({ theme }) => theme.typography.fontSize};
-//   font-weight: ${({ theme }) => theme.typography.fontWeight};
-//   font-family: ${({ theme }) => theme.typography.fontFamily};
-//   color: ${({ theme }) => theme.palette.primary.contrastText};
-
-//   &:hover {
-//     background-color: ${({ theme }) => theme.palette.primary.hover};
-//   }
-
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
 const PipelineEditor = forwardRef(
   (
     {
@@ -181,35 +157,15 @@ const PipelineEditor = forwardRef(
       onError,
       onFileRequested,
       onPropertiesUpdateRequested,
-      readOnly,
+      readOnly = false,
       children,
       nativeKeyboardActions,
-      leftPalette
+      leftPalette = true
     }: Props,
     ref
   ) => {
     const theme = useTheme();
     const controller = useRef(new PipelineController());
-
-    // const [supernodeOpen, setSupernodeOpen] = useState(false);
-
-    useEffect(() => {
-      const store = controller.current.objectModel.store.store;
-
-      // let currentlyOpen: boolean;
-      function handleChange() {
-        // let previouslyOpen = currentlyOpen;
-        // currentlyOpen = store.getState().breadcrumbs.length > 1;
-        // if (previouslyOpen !== currentlyOpen) {
-        //   setSupernodeOpen(currentlyOpen);
-        // }
-      }
-
-      const unsubscribe = store.subscribe(handleChange);
-      return () => {
-        unsubscribe();
-      };
-    }, []);
 
     const [currentTab, setCurrentTab] = useState<string | undefined>();
     const [panelOpen, setPanelOpen] = useState(false);
@@ -256,26 +212,8 @@ const PipelineEditor = forwardRef(
 
         const canDisconnect = isMenuItemEnabled(defaultMenu, 'disconnectNode');
 
-        const canExpand = isMenuItemEnabled(
-          defaultMenu,
-          'expandSuperNodeInPlace'
-        );
-
         if (e.selectedObjectIds.length > 1) {
           return [
-            // {
-            //   action: 'createSuperNode',
-            //   label: '创建父节点',
-            //   // NOTE: There is a bug if you try to create a supernode with only
-            //   // a comment selected. This will disable creating supernodes when
-            //   // the comment is right clicked on even if other nodes are
-            //   // selected, which is allowed. Just too lazy to loop through all
-            //   // selected items to determine if non comments are also selected.
-            //   enable: e.type !== 'comment'
-            // },
-            {
-              divider: true
-            },
             {
               action: 'cut',
               label: '剪切'
@@ -302,6 +240,13 @@ const PipelineEditor = forwardRef(
         switch (e.type) {
           case 'canvas':
             return [
+              {
+                action: 'openPipelineProperties',
+                label: '查看 Pipeline 属性'
+              },
+              {
+                divider: true
+              },
               {
                 action: 'newFileNode',
                 label: '从文件中新建节点'
@@ -330,7 +275,7 @@ const PipelineEditor = forwardRef(
               return [
                 {
                   action: 'openFile',
-                  label: filenameRef ? '查看文件' : 'Open Component Definition',
+                  label: '查看文件',
                   // NOTE: This only checks if the string is empty, but we
                   // should verify the file exists.
                   enable:
@@ -342,13 +287,6 @@ const PipelineEditor = forwardRef(
                   action: 'properties',
                   label: '查看属性'
                 },
-                {
-                  divider: true
-                },
-                // {
-                //   action: 'createSuperNode',
-                //   label: '创建父节点'
-                // },
                 {
                   divider: true
                 },
@@ -376,22 +314,6 @@ const PipelineEditor = forwardRef(
             }
             if (e.targetObject.type === 'super_node') {
               return [
-                {
-                  action: canExpand
-                    ? 'expandSuperNodeInPlace'
-                    : 'collapseSuperNodeInPlace',
-                  label: canExpand ? '展开父节点' : '折叠父节点'
-                },
-                {
-                  divider: true
-                },
-                {
-                  action: 'createSuperNode',
-                  label: '创建父节点'
-                },
-                {
-                  divider: true
-                },
                 {
                   action: 'cut',
                   label: '剪切'
@@ -424,16 +346,6 @@ const PipelineEditor = forwardRef(
             ];
           case 'comment':
             return [
-              {
-                action: 'createSuperNode',
-                label: '创建父节点',
-                // NOTE: There is a bug if you try to create a supernode with only
-                // a comment selected.
-                enable: false
-              },
-              {
-                divider: true
-              },
               {
                 action: 'cut',
                 label: '剪切'
@@ -482,8 +394,7 @@ const PipelineEditor = forwardRef(
         if (e.selectedNodes.length > 0) {
           setCurrentTab('properties');
         } else if (controller.current.getNodes().length > 0 || leftPalette) {
-          // setCurrentTab('pipeline-properties');
-          if (panelOpen) setPanelOpen(false);
+          setCurrentTab('pipeline-properties');
         } else {
           setCurrentTab('palette');
         }
@@ -566,6 +477,11 @@ const PipelineEditor = forwardRef(
           }
         }
 
+        if (e.editType === 'openPipelineProperties') {
+          setCurrentTab('pipeline-properties');
+          setPanelOpen(true);
+        }
+
         if (e.editType === 'properties') {
           setCurrentTab('properties');
           setPanelOpen(true);
@@ -609,28 +525,13 @@ const PipelineEditor = forwardRef(
       [onChange]
     );
 
-    // const handlePipelinePropertiesChange = useCallback(
-    //   data => {
-    //     const pipeline = controller.current.getPipelineFlow();
-    //     if (pipeline?.pipelines?.[0]?.app_data) {
-    //       pipeline.pipelines[0].app_data.properties = {
-    //         ...pipeline.pipelines[0].app_data.properties,
-    //         ...data
-    //       };
-    //       controller.current.setPipelineFlow(pipeline);
-    //       onChange?.(controller.current.getPipelineFlow());
-    //     }
-    //   },
-    //   [onChange]
-    // );
-
-    const handlePipelineParametersChange = useCallback(
+    const handlePipelinePropertiesChange = useCallback(
       data => {
         const pipeline = controller.current.getPipelineFlow();
         if (pipeline?.pipelines?.[0]?.app_data) {
           pipeline.pipelines[0].app_data.properties = {
             ...pipeline.pipelines[0].app_data.properties,
-            pipeline_parameters: data?.pipeline_parameters ?? data
+            ...data
           };
           controller.current.setPipelineFlow(pipeline);
           onChange?.(controller.current.getPipelineFlow());
@@ -700,21 +601,21 @@ const PipelineEditor = forwardRef(
       : [];
 
     const panelTabs = [
-      // {
-      //   id: 'pipeline-properties',
-      //   label: '管道属性',
-      //   title: '编辑管道属性',
-      //   icon: theme.overrides?.pipelineIcon,
-      //   content: (
-      //     <PropertiesPanel
-      //       data={pipeline?.pipelines?.[0]?.app_data?.properties}
-      //       schema={pipelineProperties}
-      //       onFileRequested={onFileRequested}
-      //       onPropertiesUpdateRequested={onPropertiesUpdateRequested}
-      //       onChange={handlePipelinePropertiesChange}
-      //     />
-      //   )
-      // },
+      {
+        id: 'pipeline-properties',
+        label: '管道属性',
+        title: '编辑管道属性',
+        icon: theme.overrides?.pipelineIcon,
+        content: (
+          <PropertiesPanel
+            data={pipeline?.pipelines?.[0]?.app_data?.properties}
+            schema={pipelineProperties}
+            onFileRequested={onFileRequested}
+            onPropertiesUpdateRequested={onPropertiesUpdateRequested}
+            onChange={handlePipelinePropertiesChange}
+          />
+        )
+      },
       {
         id: 'properties',
         label: '节点属性',
@@ -737,55 +638,9 @@ const PipelineEditor = forwardRef(
       }
     ];
 
-    if (pipelineParameters) {
-      panelTabs.splice(1, 0, {
-        id: 'pipeline-parameters',
-        label: '管道参数',
-        title: '编辑管道参数',
-        icon: theme.overrides?.pipelineIcon,
-        content: (
-          <PropertiesPanel
-            data={
-              pipeline?.pipelines?.[0]?.app_data?.properties
-                ?.pipeline_parameters
-            }
-            schema={pipelineParameters}
-            onFileRequested={onFileRequested}
-            onPropertiesUpdateRequested={onPropertiesUpdateRequested}
-            onChange={handlePipelineParametersChange}
-            id="pipeline-parameters"
-          />
-        )
-      });
-    }
-
-    if (!leftPalette) {
-      panelTabs.push({
-        id: 'palette',
-        label: '节点面板',
-        title: '添加节点到管道中',
-        icon: theme.overrides?.paletteIcon,
-        content: (
-          <PalettePanel nodes={controller.current.getAllPaletteNodes()} />
-        )
-      });
-    }
-
     return (
       <Container ref={blockingRef}>
         <IntlProvider locale="en">
-          {/* {supernodeOpen === true && (
-            <Button
-              hasToolbar={toolbar !== undefined}
-              onClick={() => {
-                controller.current.editActionHandler({
-                  editType: 'displayPreviousPipeline'
-                });
-              }}
-            >
-              Return to previous flow
-            </Button>
-          )} */}
           <SplitPanelLayout
             left={
               <CommonCanvas

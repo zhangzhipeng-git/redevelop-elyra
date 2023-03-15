@@ -1,0 +1,72 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "title": "名称",
+            "description":"工作流名称",
+            "type": "string",
+            "uihints": {
+                "ui:placeholder": "请输入工作流名称"
+            }
+        },
+        "email": {
+            "title": "告警邮箱",
+            "description":"告警邮箱",
+            "type": "string",
+            "default": "airflow@example.com",
+            "uihints": {
+                "ui:placeholder": "请输入警告邮箱"
+            }
+        },
+        "isFlow": {
+            "title": "是否流式任务",
+            "description":"是否流式任务",
+            "type": "boolean",
+            "default": false
+        },
+        "isDependency": {
+            "title": "是否跨任务依赖",
+            "description":"是跨任务依赖（暂不可编辑）",
+            "type": "boolean",
+            "default": false,
+            "uihints": {
+                "ui:disabled": true
+            }
+        },
+        "retryCount": {
+            "title": "重试次数",
+            "description": "重试次数",
+            "type": "integer",
+            "default": 0
+        },
+        "description": {
+            "title": "任务描述",
+            "description": "任务描述",
+            "type": "string",
+            "uihints": {
+                "ui:placeholder":"请填写任务描述",
+                "ui:widget":"textarea"
+            }
+        },
+        "scheduleCycle": {
+            "title": "调度周期",
+            "description": "调度周期",
+            "type": "string",
+            "uihints": {
+                "ui:placeholder": "请填写 cron 表达式"
+            }
+        },
+        "date": {
+            "title": "回填时间",
+            "description": "回填时间",
+            "type": "string",
+            "format": "date"
+        }
+    },
+    "required": [
+        "name",
+        "email",
+        "description",
+        "scheduleCycle"
+    ]
+}

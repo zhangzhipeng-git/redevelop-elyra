@@ -1,0 +1,109 @@
+{
+  "type": "object",
+  "properties": {
+    "component_parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "任务名称",
+          "description": "任务名称"
+        },
+        "type": {
+          "type": "string",
+          "title": "Spark应用的类型",
+          "description": "Spark应用的类型（java/python/scala)",
+          "default": "java",
+          "enum": [
+            "java",
+            "python",
+            "scala"
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "title": "Spark应用的部署模式",
+          "description": "Spark应用的部署模式",
+          "uihints": {
+            "ui:placeholder": "请填写Spark应用的部署模式"
+          }
+        },
+        "mainClass": {
+          "type": "string",
+          "title": "Spark应用程序主类",
+          "description": "Spark应用程序主类(限定：Java/Scala)",
+          "uihints": {
+            "ui:placeholder": "请填写Spark应用程序主类"
+          }
+        },
+        "mainApplicationFile": {
+          "type": "string",
+          "title": "文件路径",
+          "description": "文件路径",
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": [
+              ".py",
+              ".jvar"
+            ]
+          }
+        },
+        "kubernetes_conn_id": {
+          "title": "k8s集群连接信息",
+          "description": "k8s集群连接信息",
+          "type": "string",
+          "uihints": {
+            "ui:disabeld": true
+          }
+        },
+        "namespace": {
+          "type": "string",
+          "title": "k8s命名空间",
+          "description": "k8s命名空间",
+          "uihints": {
+            "ui:disabeld": true
+          }
+        },
+        "executor_cores": {
+          "type": "integer",
+          "title": "CPU(个)",
+          "default": 1,
+          "description": "对于CPU密集型工作负载，您可以选择多个CPU",
+          "minimum": 1
+        },
+        "executor_memory": {
+          "type": "integer",
+          "title": "内存(GB)",
+          "description": "指定的RAM大小",
+          "minimum": 0
+        },
+        "num_executors": {
+          "type": "integer",
+          "title": "executor数量(个)",
+          "description": "executor数量",
+          "minimum": 0
+        },
+        "cmds": {
+          "title": "bash命令",
+          "description": "bash命令",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": ""
+          },
+          "default": []
+        }
+      },
+      "required": [
+        "name",
+        "mode",
+        "type",
+        "mainApplicationFile",
+        "kubernetes_conn_id"
+      ]
+    }
+  },
+  "required": [
+    "component_parameters"
+  ]
+}

@@ -124,10 +124,9 @@ function NodeProperties({
   if (nodePropertiesSchema === undefined) {
     return (
       <Message>
-        Component not found
+        该节点未定义或者被删除
         <br />
-        This node uses a component that is not stored in your component
-        registry.
+        该节点不在您的节点配置目录中。
         {selectedNode.app_data.component_source !== undefined
           ? parseComponent().map((line: any, i: any) => (
               <span key={i}>
@@ -136,14 +135,6 @@ function NodeProperties({
               </span>
             ))
           : ''}
-        <br />
-        <a
-          href="https://elyra.readthedocs.io/en/latest/user_guide/best-practices-custom-pipeline-components.html#troubleshooting-missing-pipeline-components"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Learn more...
-        </a>
       </Message>
     );
   }
