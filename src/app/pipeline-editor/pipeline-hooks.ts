@@ -47,6 +47,7 @@ const metadataFetcher = async <T>(key: string): Promise<T> => {
 };
 
 export const useRuntimeImages = (): IReturn<IRuntimeImagesResponse> => {
+  console.log('==获取节点运行时镜像==');
   const { data, error } = useSWR<IRuntimeImagesResponse>(
     'runtime-images',
     metadataFetcher
@@ -262,6 +263,9 @@ const updateRuntimeImages = (
 };
 
 export const usePalette = (type = 'local'): IReturn<any> => {
+  console.log(
+    '==获取 palette 参数：节点目录、管道属性表单配置和节点属性表单配置=='
+  );
   const { data: runtimeImages, error: runtimeError } = useRuntimeImages();
 
   const {
@@ -270,6 +274,7 @@ export const usePalette = (type = 'local'): IReturn<any> => {
     mutate: mutate
   } = useSWR(type, componentFetcher);
 
+  console.log('==设置节点表单配置的运行时镜像选项==');
   let updatedPalette;
   if (palette !== undefined) {
     updatedPalette = produce(palette, (draft: any) => {

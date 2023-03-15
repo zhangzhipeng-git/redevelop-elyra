@@ -128,6 +128,10 @@ class PipelineEditorWidget extends ReactWidget {
     this.settings = options.settings;
   }
 
+  // onUpdateRequest(prevProps: any) {
+  //   console.log(this, prevProps, 'componentDidUpdate');
+  // }
+
   render(): any {
     console.log(
       '==渲染编辑器（聚焦 Pipeline Editor 标签页会重新渲染编辑器）=='
@@ -168,6 +172,8 @@ const PipelineWrapper: React.FC<IProps> = ({
   settings,
   widgetId
 }) => {
+  console.log('==编辑器初始化==');
+
   const ref = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [pipeline, setPipeline] = useState<any>(null);
@@ -199,7 +205,9 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [palette]);
 
   useEffect(() => {
+    console.log('==订阅刷新信息，来重新获取 palette 参数 ==');
     const handleMutateSignal = (): void => {
+      console.log('==重新获取 palette 参数');
       mutatePalette();
     };
     refreshPaletteSignal.connect(handleMutateSignal);
@@ -210,6 +218,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   useEffect(() => {
     if (paletteError) {
+      console.log('获取 palette 参数失败发生错误！');
       RequestErrors.serverError(paletteError);
     }
   }, [paletteError]);
@@ -349,12 +358,15 @@ const PipelineWrapper: React.FC<IProps> = ({
     } else {
       const manager = browserFactory.defaultBrowser.model.manager;
       const res = await showBrowseFileDialog(manager, {
+        includeDir: true,
         startPath: PathExt.dirname(filename),
+        // rootPath: PathExt.dirname(filename),
         filter: (model: any): boolean => {
           if (args.filters?.File === undefined) {
             return true;
           }
 
+          // return true;
           const ext = PathExt.extname(model.path);
           return args.filters.File.includes(ext);
         }
