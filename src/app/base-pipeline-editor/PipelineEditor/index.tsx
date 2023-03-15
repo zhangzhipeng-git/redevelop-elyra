@@ -144,28 +144,28 @@ function useCloseContextMenu(controller: React.MutableRefObject<any>) {
   }, [controller]);
 }
 
-const Button = styled.div<{ hasToolbar: boolean }>`
-  cursor: pointer;
-  position: absolute;
-  top: ${({ hasToolbar }) => (hasToolbar ? 64 : 24)}px;
-  left: 28px;
-  z-index: 1;
-  padding: 10px;
-  background-color: ${({ theme }) => theme.palette.primary.main};
-  border: none;
-  font-size: ${({ theme }) => theme.typography.fontSize};
-  font-weight: ${({ theme }) => theme.typography.fontWeight};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  color: ${({ theme }) => theme.palette.primary.contrastText};
+// const Button = styled.div<{ hasToolbar: boolean }>`
+//   cursor: pointer;
+//   position: absolute;
+//   top: ${({ hasToolbar }) => (hasToolbar ? 64 : 24)}px;
+//   right: 28px;
+//   z-index: 1;
+//   padding: 10px;
+//   background-color: ${({ theme }) => theme.palette.primary.main};
+//   border: none;
+//   font-size: ${({ theme }) => theme.typography.fontSize};
+//   font-weight: ${({ theme }) => theme.typography.fontWeight};
+//   font-family: ${({ theme }) => theme.typography.fontFamily};
+//   color: ${({ theme }) => theme.palette.primary.contrastText};
 
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.primary.hover};
-  }
+//   &:hover {
+//     background-color: ${({ theme }) => theme.palette.primary.hover};
+//   }
 
-  &:focus {
-    outline: none;
-  }
-`;
+//   &:focus {
+//     outline: none;
+//   }
+// `;
 
 const PipelineEditor = forwardRef(
   (
@@ -191,19 +191,18 @@ const PipelineEditor = forwardRef(
     const theme = useTheme();
     const controller = useRef(new PipelineController());
 
-    const [supernodeOpen, setSupernodeOpen] = useState(false);
+    // const [supernodeOpen, setSupernodeOpen] = useState(false);
 
     useEffect(() => {
       const store = controller.current.objectModel.store.store;
 
-      let currentlyOpen: boolean;
+      // let currentlyOpen: boolean;
       function handleChange() {
-        let previouslyOpen = currentlyOpen;
-        currentlyOpen = store.getState().breadcrumbs.length > 1;
-
-        if (previouslyOpen !== currentlyOpen) {
-          setSupernodeOpen(currentlyOpen);
-        }
+        // let previouslyOpen = currentlyOpen;
+        // currentlyOpen = store.getState().breadcrumbs.length > 1;
+        // if (previouslyOpen !== currentlyOpen) {
+        //   setSupernodeOpen(currentlyOpen);
+        // }
       }
 
       const unsubscribe = store.subscribe(handleChange);
@@ -226,7 +225,6 @@ const PipelineEditor = forwardRef(
       try {
         controller.current.open(pipeline);
         if (!readOnly) {
-          console.log(palette, '设置管道参数！');
           controller.current.setPalette(palette);
           controller.current.validate({ redColor: theme.palette.error.main });
         } else {
@@ -235,7 +233,7 @@ const PipelineEditor = forwardRef(
         // don't call to persist change because it will cause an infinate loop
       } catch (e) {
         console.error(e, 'error');
-        onError?.(e);
+        onError?.(e as any);
       }
     }, [palette, onError, pipeline, readOnly, theme.palette.error.main]);
 
@@ -502,7 +500,6 @@ const PipelineEditor = forwardRef(
 
         if (isCreateNodeEvent(e)) {
           // the edit was created by canvas, reconstruct and pass to addNode
-          console.log(e, '创建新节点');
           controller.current.addNode({
             ...e,
             onPropertiesUpdateRequested
@@ -542,11 +539,9 @@ const PipelineEditor = forwardRef(
         onAction?.({ type: type, payload });
 
         if (e.editType === 'newFileNode') {
-          console.log('从文件中新建节点.');
           const nodes = controller.current.getAllPaletteNodes();
           let extensions = nodes.map(n => n.app_data.extensions).flat();
           extensions = Array.from(new Set(extensions));
-          console.log(extensions, '支持的文件类型');
 
           const arr = await onFileRequested?.({
             canSelectMany: false,
@@ -779,7 +774,7 @@ const PipelineEditor = forwardRef(
     return (
       <Container ref={blockingRef}>
         <IntlProvider locale="en">
-          {supernodeOpen === true && (
+          {/* {supernodeOpen === true && (
             <Button
               hasToolbar={toolbar !== undefined}
               onClick={() => {
@@ -790,7 +785,7 @@ const PipelineEditor = forwardRef(
             >
               Return to previous flow
             </Button>
-          )}
+          )} */}
           <SplitPanelLayout
             left={
               <CommonCanvas

@@ -55,7 +55,7 @@ export default async function activateMetadataEditor(
   componentRegistry: IFormComponentRegistry,
   translator: ITranslator
 ): Promise<void> {
-  console.log('Elyra - metadata extension is activated!');
+  console.log('==元数据配置插件已激活==');
 
   componentRegistry.addRenderer('code', CodeBlock);
   componentRegistry.addRenderer('tags', TagsField);

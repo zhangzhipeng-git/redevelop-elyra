@@ -16,7 +16,7 @@
 
 import { PipelineEditor, ThemeProvider } from '@app/base-pipeline-editor';
 import { validate } from '@elyra/pipeline-services';
-import { ContentParser } from '../services';
+// import { ContentParser } from '../services';
 import {
   IconUtil,
   clearPipelineIcon,
@@ -129,8 +129,9 @@ class PipelineEditorWidget extends ReactWidget {
   }
 
   render(): any {
-    // 聚焦 Pipeline Editor 标签页会重新渲染编辑器
-    console.log('render', '重新渲染编辑器!');
+    console.log(
+      '==渲染编辑器（聚焦 Pipeline Editor 标签页会重新渲染编辑器）=='
+    );
     return (
       <PipelineWrapper
         context={this.context}
@@ -172,8 +173,8 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = React.useState(false);
 
-  const type: string | undefined =
-    pipeline?.pipelines?.[0]?.app_data?.runtime_type;
+  const type: string =
+    pipeline?.pipelines?.[0]?.app_data?.runtime_type ?? 'APACHE_AIRFLOW';
 
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
@@ -262,6 +263,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [runtimeDisplayName]);
 
   const onChange = useCallback((pipelineJson: any): void => {
+    console.log('==编辑器重新加载 Pipeline 数据==');
     const removeNullValues = (data: any, removeEmptyString?: boolean): void => {
       for (const key in data) {
         if (
@@ -358,10 +360,11 @@ const PipelineWrapper: React.FC<IProps> = ({
         }
       });
 
+      ///to-do: 文件上传?
       // manager.services.contents.get(res.value[0].path).then(res => {
       //   console.log(res, 'res');
+      //   // text -> blob, base64 -> blob
       // });
-      // text -> blob, base64 -> blob
 
       if (res.button.accept && res.value.length) {
         const file = PipelineService.getPipelineRelativeNodePath(
@@ -376,39 +379,18 @@ const PipelineWrapper: React.FC<IProps> = ({
     return undefined;
   };
 
-  const onPropertiesUpdateRequested = async (args: any, filenameRef: string): Promise<any> => {
+  /** 点击表单数组项刷新按钮，请求文件的环境变量，并合并到它的表单数据上，这里修改为不请求文件的环境变量，因为用不到。 */
+  const onPropertiesUpdateRequested = async (args: any): Promise<any> => {
     if (!contextRef.current.path) {
       return args;
     }
-    const path = PipelineService.getWorkspaceRelativeNodePath(
-      contextRef.current.path,
-      args.component_parameters[filenameRef]
-    );
-    const new_env_vars = await ContentParser.getEnvVars(path).then(
-      (response: any) =>
-        response.map((str: string) => {
-          return { env_var: str };
-        })
-    );
 
-    console.log(JSON.stringify(new_env_vars), 'new_env_vars');
-
-    const env_vars = args.component_parameters?.env_vars ?? [];
-    const merged_env_vars = [
-      ...env_vars,
-      ...new_env_vars.filter(
-        (new_var: any) =>
-          !env_vars.some((old_var: any) => {
-            return old_var.env_var === new_var.env_var;
-          })
-      )
-    ];
+    /// 移除了一些代码
 
     return {
       ...args,
       component_parameters: {
-        ...args.component_parameters,
-        env_vars: merged_env_vars.filter(Boolean)
+        ...args.component_parameters
       }
     };
   };
@@ -437,22 +419,34 @@ const PipelineWrapper: React.FC<IProps> = ({
     [commands, palette, type]
   );
 
+  /**
+   * 未设置双击打开节点属性时，双击打开文件。
+   */
   const onDoubleClick = (data: any): void => {
+    console.log('==双击节点打开文件==');
     for (let i = 0; i < data.selectedObjectIds.length; i++) {
       const node = pipeline.pipelines[0].nodes.find(
         (node: any) => node.id === data.selectedObjectIds[i]
       );
       const nodeDef = getAllPaletteNodes(palette).find(n => n.op === node?.op);
-      if (node?.app_data?.component_parameters?.filename) {
-        commands.execute(commandIDs.openDocManager, {
-          path: PipelineService.getWorkspaceRelativeNodePath(
-            contextRef.current.path,
-            node.app_data.component_parameters.filename
-          )
-        });
-      } else if (!nodeDef?.app_data?.parameter_refs?.['filehandler']) {
-        handleOpenComponentDef(nodeDef?.id);
+      const filenameRef = nodeDef?.app_data?.parameter_refs?.['filehandler'];
+      if (!filenameRef) {
+        console.warn(
+          '该节点没有文件引用字段: parameter_refs.filehandler ，节点属性表单需要使用该字段！'
+        );
+        return;
       }
+      if (!node?.app_data?.component_parameters?.[filenameRef]) {
+        console.warn('未设置文件路径，无法打开文件！');
+        return;
+      }
+      // 打开文件
+      commands.execute(commandIDs.openDocManager, {
+        path: PipelineService.getWorkspaceRelativeNodePath(
+          contextRef.current.path,
+          node.app_data.component_parameters[filenameRef]
+        )
+      });
     }
   };
 
@@ -490,7 +484,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         const dialogResult = await showDialog({
           title: '此管道包含未保存的更改。要提交管道，需要保存更改？',
           buttons: [
-            Dialog.cancelButton(),
+            Dialog.cancelButton({ label: '取消' }),
             Dialog.okButton({ label: '保存 & 提交' })
           ]
         });
@@ -581,7 +575,10 @@ const PipelineWrapper: React.FC<IProps> = ({
                 parameters={parameters}
               />
             ),
-            buttons: [Dialog.cancelButton(), Dialog.okButton()],
+            buttons: [
+              Dialog.cancelButton({ label: '取消' }),
+              Dialog.okButton({ label: '确定' })
+            ],
             defaultButton: 1,
             focusNodeSelector: '#pipeline_name'
           };
@@ -598,7 +595,10 @@ const PipelineWrapper: React.FC<IProps> = ({
                 parameters={parameters}
               />
             ),
-            buttons: [Dialog.cancelButton(), Dialog.okButton()],
+            buttons: [
+              Dialog.cancelButton({ label: '取消' }),
+              Dialog.okButton({ label: '确定' })
+            ],
             defaultButton: 1,
             focusNodeSelector: '#runtime_config'
           };
@@ -689,7 +689,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       title: '清除 Pipeline',
       body: '是否确实要清除 pipeline ?',
       buttons: [
-        Dialog.cancelButton(),
+        Dialog.cancelButton({ label: '取消' }),
         Dialog.okButton({ label: '全部清除' }),
         Dialog.okButton({ label: '清除画布' })
       ]
@@ -853,7 +853,6 @@ const PipelineWrapper: React.FC<IProps> = ({
         PipelineService.isSupportedNode(item, type)
       );
 
-      console.log(type, 'type');
       const fileTipMap: { [k: string]: string } = {
         undefined: 'Notebook、Python 和 R',
         KUBEFLOW_PIPELINES: 'Notebook、Python 和 R',
@@ -862,11 +861,12 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (!selectedItems[0]) {
         return showDialog({
           title: '不支持的文件',
-          body: `只支持将 ${fileTipMap[type as any]} 文件添加导管道编辑器中。`,
+          body: `只支持将 ${fileTipMap[type as any]} 文件添加${
+            type ? '通用' : type
+          }导管道编辑器中。`,
           buttons: [Dialog.okButton()]
         });
       }
-      console.log(selectedItems, 'selectedItems');
 
       function addFile(item: any, op?: string) {
         item.op = op;
@@ -903,7 +903,10 @@ const PipelineWrapper: React.FC<IProps> = ({
               operators={PipelineService.getAirflowAllOperators()}
             />
           ),
-          buttons: [Dialog.cancelButton(), Dialog.okButton()],
+          buttons: [
+            Dialog.cancelButton({ label: '取消' }),
+            Dialog.okButton({ label: '确定' })
+          ],
           defaultButton: 1,
           focusNodeSelector: '#file_select_operator'
         });
@@ -1018,8 +1021,9 @@ export class PipelineEditorFactory extends ABCWidgetFactory<DocumentWidget> {
       settings: this.settings
     };
 
-    // 打开 Pipeline Editor 标签页会新建编辑器
-    console.log('createNewWidget', '创建新的编辑器!');
+    console.log(
+      '==创建新的编辑器（打开 Pipeline Editor 标签页会新建编辑器）=='
+    );
     const content = new PipelineEditorWidget(props);
 
     const widget = new DocumentWidget({ content, context });

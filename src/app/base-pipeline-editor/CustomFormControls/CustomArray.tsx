@@ -124,11 +124,11 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
         <button
           className="jp-mod-styled jp-mod-reject"
           style={{ marginLeft: '5px' }}
-          onClick={() =>
-            props.formContext?.onPropertiesUpdateRequested(
+          onClick={() => {
+            return props.formContext?.onPropertiesUpdateRequested(
               props.formContext.formData
-            )
-          }
+            );
+          }}
         >
           {'刷新'}
         </button>

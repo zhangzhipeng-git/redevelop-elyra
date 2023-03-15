@@ -50,7 +50,7 @@ export class RequestErrors {
       return this.server404(response.requestPath);
     }
 
-    console.log(response, 'response');
+    console.log(response, '请求错误响应！');
     const reason = response.reason ? response.reason : '';
     const message = response.message ? response.message : '';
     const timestamp = response.timestamp ? response.timestamp : '';
@@ -126,8 +126,11 @@ export class RequestErrors {
       ),
       buttons:
         schemaspace === 'runtime'
-          ? [Dialog.cancelButton(), Dialog.okButton({ label: `Open runtimes` })]
-          : [Dialog.okButton()]
+          ? [
+              Dialog.cancelButton({ label: '取消' }),
+              Dialog.okButton({ label: `打开运行环境` })
+            ]
+          : [Dialog.okButton({ label: '确定' })]
     });
   }
 }

@@ -43,11 +43,10 @@ export class SubmitFileButtonExtension<
     const { context } = document;
     if (context.model.dirty) {
       const dialogResult = await showDialog({
-        title:
-          'This file contains unsaved changes. To run the file as pipeline the changes need to be saved.',
+        title: '该文件包含未保存的更改。要将文件作为管道运行，需要保存更改',
         buttons: [
-          Dialog.cancelButton(),
-          Dialog.okButton({ label: 'Save and Submit' })
+          Dialog.cancelButton({ label: '取消' }),
+          Dialog.okButton({ label: '保存 & 提交' })
         ]
       });
       if (dialogResult.button.accept === false) {
@@ -101,7 +100,10 @@ export class SubmitFileButtonExtension<
           runtimeData={runtimeData}
         />
       ),
-      buttons: [Dialog.cancelButton(), Dialog.okButton()]
+      buttons: [
+        Dialog.cancelButton({ label: '取消' }),
+        Dialog.okButton({ label: '确定' })
+      ]
     };
 
     const dialogResult = await showFormDialog(dialogOptions);

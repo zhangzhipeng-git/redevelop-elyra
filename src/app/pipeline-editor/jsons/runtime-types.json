@@ -1,0 +1,15 @@
+{
+  "runtime_types": [
+    {
+      "id": "APACHE_AIRFLOW",
+      "display_name": "Apache Airflow",
+      "icon": "/static/elyra/airflow.svg",
+      "export_file_types": [
+        {
+          "id": "py",
+          "display_name": "Airflow Pipeline 导出文件"
+        }
+      ]
+    }
+  ]
+}

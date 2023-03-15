@@ -224,9 +224,12 @@ export const showBrowseFileDialog = async (
   });
 
   const dialog = new Dialog({
-    title: 'Select a file',
+    title: '选择文件',
     body: browseFileDialogBody,
-    buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'Select' })]
+    buttons: [
+      Dialog.cancelButton({ label: '取消' }),
+      Dialog.okButton({ label: '选择' })
+    ]
   });
 
   dialog.addClass(BROWSE_FILE_CLASS);

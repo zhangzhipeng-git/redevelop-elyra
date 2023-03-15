@@ -21,10 +21,15 @@ import { showDialog, Dialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
 
 import Utils from '@app/util';
+
+// 配置项：json数据
 import componentCatalogsAirflow from './jsons/component-catalogs-airflow.json';
 import propertiesAirflowKubernetesPodOperator from './jsons/properties-airflow-KubernetesPodOperator.json';
 import propertiesAirflowSparkKubernetesOperator from './jsons/properties-airflow-SparkKubernetesOperator.json';
 import propertiesAirflowSparkSubmitOperator from './jsons/properties-airflow-SparkSubmitOperator.json';
+import runtimeJSON from './jsons/runtime-types.json';
+
+import { svgMap } from '@assets/svgs';
 
 export const KFP_SCHEMA = 'kfp';
 export const RUNTIMES_SCHEMASPACE = 'runtimes';
@@ -104,13 +109,19 @@ export interface Operator {
 
 export class PipelineService {
   /**
+   * 根据 url 获取图标svg内容（非base64，如果需要base64 内联展示，需要调用 Utils.svgToBase64）
+   */
+  static getIcon(key: string) {
+    return Promise.resolve(svgMap.get(key));
+  }
+
+  /**
    * 返回与每个活动运行环境对应的资源列表
    */
-  static async getRuntimeTypes(): Promise<IRuntimeType[]> {
-    const res = await RequestHandler.makeGetRequest<any>(
-      'elyra/pipeline/runtimes/types'
-    );
-    return res.runtime_types.sort((a: any, b: any) => a.id.localeCompare(b.id));
+  static getRuntimeTypes(): Promise<IRuntimeType[]> {
+    const res = Utils.clone(runtimeJSON);
+    res.runtime_types.sort((a: any, b: any) => a.id.localeCompare(b.id));
+    return Promise.resolve(res.runtime_types);
   }
 
   /**
@@ -334,6 +345,7 @@ export class PipelineService {
     pipeline_export_path: string,
     overwrite: boolean
   ): Promise<any> {
+    /// to-do
     console.log(
       'Exporting pipeline to [' + pipeline_export_format + '] format'
     );

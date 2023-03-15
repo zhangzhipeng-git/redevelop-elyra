@@ -95,7 +95,6 @@ export function PropertiesPanel({
 
   const formContext = {
     onFileRequested: async (args: any, fieldName: string) => {
-      console.log(args, data, 'onFileRequested');
       const values = await onFileRequested?.({
         ...args,
         filename: data.component_parameters.filename
@@ -116,9 +115,12 @@ export function PropertiesPanel({
       });
       onChange?.(newFormData ?? data);
     },
+    // 点击刷新按钮时调用
     onPropertiesUpdateRequested: async (args: any) => {
-      console.log(args, arguments, 'onPropertiesUpdateRequested');
-      const newData = await onPropertiesUpdateRequested?.(args, 'mainApplicationFile');
+      const newData = await onPropertiesUpdateRequested?.(
+        args,
+        'mainApplicationFile'
+      );
       onChange?.(newData);
     },
     formData: data

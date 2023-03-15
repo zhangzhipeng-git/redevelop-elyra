@@ -124,7 +124,6 @@ export const MetadataEditor: React.FC<IMetadataEditorComponentProps> = ({
 
   let headerText = `编辑"${displayName}"`;
   if (!displayName) {
-    console.log(schemaTop, 'schemaTop');
     headerText = `新增${schemaTop.title}${titleContext ?? ''}`;
   }
 

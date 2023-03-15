@@ -17,51 +17,54 @@
 import { Dialog } from '@jupyterlab/apputils';
 
 export const unknownError = (message: string): any => ({
-  title: 'Load pipeline failed!',
+  title: '加载 Pipeline 失败!',
   body: message,
-  buttons: [Dialog.okButton()]
+  buttons: [Dialog.okButton({ label: '确定' })]
 });
 
 export const elyraOutOfDate = {
-  title: 'Load pipeline failed!',
-  body: `This pipeline corresponds to a more recent version of Elyra and cannot be used until Elyra has been upgraded.`,
-  buttons: [Dialog.okButton()]
+  title: '加载 Pipeline 失败!',
+  body: `该管道对应于插件的最新版本，在插件升级之前无法使用。`,
+  buttons: [Dialog.okButton({ label: '确定' })]
 };
 
 export const unsupportedVersion = {
-  title: 'Load pipeline failed!',
-  body: 'This pipeline has an unrecognizable version.',
-  buttons: [Dialog.okButton()]
+  title: '加载 Pipeline 失败!',
+  body: 'pipeline 版本无法识别。',
+  buttons: [Dialog.okButton({ label: '确定' })]
 };
 
 export const pipelineOutOfDate = {
-  title: 'Migrate pipeline?',
+  title: '迁移 Pipeline?',
   body: (
     <p>
-      This pipeline corresponds to an older version of Elyra and needs to be
-      migrated.
+      该管道对应于插件的旧版本，需要做迁移，
       <br />
-      Although the pipeline can be further edited and/or submitted after its
-      update,
+      虽然管道可以进一步编辑和/或提交后更新，
       <br />
-      the migration will not be completed until the pipeline has been saved
-      within the editor.
+      但是直到在编辑器中保存了管道，迁移才会完成。
       <br />
       <br />
-      Proceed with migration?
+      继续迁移？
     </p>
   ),
-  buttons: [Dialog.cancelButton(), Dialog.okButton()]
+  buttons: [
+    Dialog.cancelButton({ label: '取消' }),
+    Dialog.okButton({ label: '确定' })
+  ]
 };
 
 export const unsupportedFile = {
-  title: 'Unsupported File(s)',
-  body: 'Only supported files have been added to the pipeline.',
-  buttons: [Dialog.okButton()]
+  title: '不支持的文件',
+  body: 'Pipeline 中只能添加受支持的文件。',
+  buttons: [Dialog.okButton({ label: '确定' })]
 };
 
 export const clearPipeline = {
-  title: 'Clear Pipeline',
-  body: 'Are you sure you want to clear the pipeline?',
-  buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'Clear' })]
+  title: '清除 Pipeline',
+  body: '你确定要清除 Pipeline 吗？',
+  buttons: [
+    Dialog.cancelButton({ label: '取消' }),
+    Dialog.okButton({ label: '确定' })
+  ]
 };

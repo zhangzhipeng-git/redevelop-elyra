@@ -1,106 +1,106 @@
 {
-    "type": "object",
-    "properties": {
-        "component_parameters": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "title": "Spark应用的类型",
-                    "description": "Spark应用的类型"
-                },
-                "mode": {
-                    "type": "string",
-                    "title": "Spark应用的部署模式",
-                    "description": "Spark应用的部署模式"
-                },
-                "mainClass": {
-                    "type": "string",
-                    "title": "Spark应用程序主类",
-                    "description": "Spark应用程序主类(限定：Java/Scala)",
-                },
-                "mainApplicationFile": {
-                    "type": "string",
-                    "title": "文件路径",
-                    "description": "文件路径",
-                    "uihints": {
-                        "ui:widget": "file",
-                        "extensions": [
-                            ".py",
-                            ".java",
-                            ".scala"
-                        ]
-                    }
-                },
-                "application_args": {
-                    "title": "应用程序参数列表",
-                    "description": "应用程序参数列表",
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "default": ""
-                    },
-                    "default": []
-                },
-                "SparkConf": {
-                    "type": "string",
-                    "title": "Spark配置属性",
-                    "description": "Spark配置属性"
-                },
-                "namespace": {
-                    "type": "string",
-                    "title": "k8s命名空间",
-                    "description": "k8s命名空间"
-                },
-                "kubernetes_conn_id": {
-                    "title": "k8s集群连接信息",
-                    "description": "k8s集群连接信息",
-                    "type": "string"
-                },
-                "executor_cores": {
-                    "type": "integer",
-                    "title": "CPU",
-                    "description": "对于CPU密集型工作负载，您可以选择多个CPU",
-                    "minimum": 0
-                },
-                "executor_memory": {
-                    "type": "integer",
-                    "title": "内存(GB)",
-                    "description": "指定的RAM大小",
-                    "minimum": 0
-                },
-                "name": {
-                    "type": "string",
-                    "title": "任务名称",
-                    "description": "任务名称"
-                },
-                "num_executors": {
-                    "type": "integer",
-                    "title": "executor数量",
-                    "description": "executor数量",
-                    "minimum": 0
-                },
-                "cmds": {
-                    "title": "bash命令",
-                    "description": "bash命令",
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "default": ""
-                    },
-                    "default": []
-                }
-            },
-            "required": [
-                "type",
-                "mode",
-                "mainApplicationFile",
-                "kubernetes_conn_id",
-                "name"
+  "type": "object",
+  "properties": {
+    "component_parameters": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Spark应用的类型",
+          "description": "Spark应用的类型"
+        },
+        "mode": {
+          "type": "string",
+          "title": "Spark应用的部署模式",
+          "description": "Spark应用的部署模式"
+        },
+        "mainClass": {
+          "type": "string",
+          "title": "Spark应用程序主类",
+          "description": "Spark应用程序主类(限定：Java/Scala)"
+        },
+        "mainApplicationFile": {
+          "type": "string",
+          "title": "文件路径",
+          "description": "文件路径",
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": [
+              ".py",
+              ".java",
+              ".scala"
             ]
+          }
+        },
+        "application_args": {
+          "title": "应用程序参数列表",
+          "description": "应用程序参数列表",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": ""
+          },
+          "default": []
+        },
+        "SparkConf": {
+          "type": "string",
+          "title": "Spark配置属性",
+          "description": "Spark配置属性"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "k8s命名空间",
+          "description": "k8s命名空间"
+        },
+        "kubernetes_conn_id": {
+          "title": "k8s集群连接信息",
+          "description": "k8s集群连接信息",
+          "type": "string"
+        },
+        "executor_cores": {
+          "type": "integer",
+          "title": "CPU",
+          "description": "对于CPU密集型工作负载，您可以选择多个CPU",
+          "minimum": 0
+        },
+        "executor_memory": {
+          "type": "integer",
+          "title": "内存(GB)",
+          "description": "指定的RAM大小",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string",
+          "title": "任务名称",
+          "description": "任务名称"
+        },
+        "num_executors": {
+          "type": "integer",
+          "title": "executor数量",
+          "description": "executor数量",
+          "minimum": 0
+        },
+        "cmds": {
+          "title": "bash命令",
+          "description": "bash命令",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": ""
+          },
+          "default": []
         }
-    },
-    "required": [
-        "component_parameters"
-    ]
+      },
+      "required": [
+        "type",
+        "mode",
+        "mainApplicationFile",
+        "kubernetes_conn_id",
+        "name"
+      ]
+    }
+  },
+  "required": [
+    "component_parameters"
+  ]
 }

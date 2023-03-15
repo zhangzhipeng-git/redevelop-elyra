@@ -278,7 +278,10 @@ export class MetadataEditorWidget extends ReactWidget {
       showDialog({
         title: this.props.translator.__('关闭而不保存?'),
         body: <p>元数据有未保存的更改，关闭时不保存?</p>,
-        buttons: [Dialog.cancelButton(), Dialog.okButton()]
+        buttons: [
+          Dialog.cancelButton({ label: '取消' }),
+          Dialog.okButton({ label: '确定' })
+        ]
       }).then((response: any): void => {
         if (response.button.accept) {
           this.dispose();

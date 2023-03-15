@@ -120,7 +120,10 @@ export class MetadataDisplay<
       title: `Delete ${
         this.props.labelName ? this.props.labelName(metadata) : ''
       } ${this.props.titleContext || ''} '${metadata.display_name}'?`,
-      buttons: [Dialog.cancelButton(), Dialog.okButton()]
+      buttons: [
+        Dialog.cancelButton({ label: '取消' }),
+        Dialog.okButton({ label: '确定' })
+      ]
     }).then((result: any) => {
       // Do nothing if the cancel button is pressed
       if (result.button.accept) {
@@ -522,7 +525,6 @@ export class MetadataWidget extends ReactWidget {
                 singleSchema
                   ? (): void => this.addMetadata(this.schemas?.[0].name)
                   : (event: any): void => {
-                      console.log(this.props.app.contextMenu, event, '点击 +');
                       this.props.app.contextMenu.open(event);
                     }
               }

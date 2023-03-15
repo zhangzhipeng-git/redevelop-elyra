@@ -3,7 +3,6 @@
  */
 
 import { PIPELINE_CURRENT_VERSION } from '@app/base-pipeline-editor';
-import { RequestHandler } from '../services';
 import { pipelineIcon, RequestErrors } from '@app/ui-components';
 
 import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
@@ -23,7 +22,7 @@ import {
 import { PipelineEditorFactory, commandIDs } from './PipelineEditorWidget';
 import { PipelineService } from './PipelineService';
 
-import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
+// import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 import getPipelineJSON from './pipeline-json';
 
 const PIPELINE_EDITOR = 'Pipeline Editor';
@@ -39,16 +38,7 @@ const createRemoteIcon = async ({
   name: string;
   url: string;
 }): Promise<LabIcon> => {
-  let svgstr = await RequestHandler.makeServerRequest<string>(url, {
-    method: 'GET',
-    type: 'text'
-  });
-  if (svgstr.indexOf('"') === 0)
-    try {
-      svgstr = JSON.parse(svgstr);
-    } catch (e) {
-      console.warn(e);
-    }
+  let svgstr = await PipelineService.getIcon(url);
   return new LabIcon({ name, svgstr });
 };
 
@@ -61,17 +51,12 @@ export default async function activatePipeline(
   menu: IMainMenu,
   registry: ISettingRegistry
 ): Promise<void> {
-  console.log('Elyra - pipeline-editor extension is activated!');
+  console.log('==Pipeline 插件已激活==');
 
   // Fetch the initial state of the settings.
   const settings = await registry
     .load(PLUGIN_ID)
     .catch((error: any) => console.log(error));
-
-  console.log(
-    (<any>settings).registry.plugins[PLUGIN_ID].schema,
-    'Pipeline Editor Plugin Schema'
-  );
 
   // Set up new widget Factory for .pipeline files
   // 使用 pipeline 编辑器工厂处理 .pipeline 文件
@@ -140,18 +125,6 @@ export default async function activatePipeline(
     execute: args => {
       pipelineEditorFactory.refreshPaletteSignal.emit(args);
     }
-  });
-  app.contextMenu.addItem({
-    selector: '[data-file-type="java"]',
-    command: addFileToPipelineCommand
-  });
-  app.contextMenu.addItem({
-    selector: '[data-file-type="python"]',
-    command: addFileToPipelineCommand
-  });
-  app.contextMenu.addItem({
-    selector: '[data-file-type="scala"]',
-    command: addFileToPipelineCommand
   });
 
   // Add an application command
@@ -265,28 +238,44 @@ export default async function activatePipeline(
     menu.fileMenu.newMenu.addGroup(fileMenuItems);
   }
 
+  const supportFileSelectors = [
+    '[data-file-type="notebook"]',
+    // '[data-file-type="python"]',
+    '[data-file-type="r"]',
+    '[title*=".java"]',
+    '[title*=".py"]',
+    '[title*=".scala"]'
+  ];
+
+  supportFileSelectors.forEach(selector => {
+    app.contextMenu.addItem({
+      selector,
+      command: addFileToPipelineCommand
+    });
+  });
+
   // SubmitNotebookButtonExtension initialization code
-  const notebookButtonExtension = new SubmitFileButtonExtension();
-  app.docRegistry.addWidgetExtension('Notebook', notebookButtonExtension);
-  app.contextMenu.addItem({
-    selector: '.jp-Notebook',
-    command: commandIDs.submitNotebook,
-    rank: -0.5
-  });
+  // const notebookButtonExtension = new SubmitFileButtonExtension();
+  // app.docRegistry.addWidgetExtension('Notebook', notebookButtonExtension);
+  // app.contextMenu.addItem({
+  //   selector: '.jp-Notebook',
+  //   command: commandIDs.submitNotebook,
+  //   rank: -0.5
+  // });
 
-  // SubmitScriptButtonExtension initialization code
-  const scriptButtonExtension = new SubmitFileButtonExtension();
-  app.docRegistry.addWidgetExtension('Python Editor', scriptButtonExtension);
-  app.contextMenu.addItem({
-    selector: '.elyra-ScriptEditor',
-    command: commandIDs.submitScript,
-    rank: -0.5
-  });
+  // // SubmitScriptButtonExtension initialization code
+  // const scriptButtonExtension = new SubmitFileButtonExtension();
+  // app.docRegistry.addWidgetExtension('Python Editor', scriptButtonExtension);
+  // app.contextMenu.addItem({
+  //   selector: '.elyra-ScriptEditor',
+  //   command: commandIDs.submitScript,
+  //   rank: -0.5
+  // });
 
-  app.docRegistry.addWidgetExtension('R Editor', scriptButtonExtension);
-  app.contextMenu.addItem({
-    selector: '.elyra-ScriptEditor',
-    command: commandIDs.submitScript,
-    rank: -0.5
-  });
+  // app.docRegistry.addWidgetExtension('R Editor', scriptButtonExtension);
+  // app.contextMenu.addItem({
+  //   selector: '.elyra-ScriptEditor',
+  //   command: commandIDs.submitScript,
+  //   rank: -0.5
+  // });
 }

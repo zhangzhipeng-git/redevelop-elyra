@@ -16,16 +16,12 @@
 
 import { RequestHandler, MetadataService } from '../services';
 
-import { URLExt } from '@jupyterlab/coreutils';
 import produce from 'immer';
 import useSWR from 'swr';
 
 import { PipelineService } from './PipelineService';
 
-import CONFIG from '@src/config.json';
-
-import * as SVG from '@assets/svgs';
-
+import { svgKey, svgMap } from '@assets/svgs';
 import Utils from '@app/util';
 
 export const GENERIC_CATEGORY_ID = 'Elyra';
@@ -173,25 +169,16 @@ export const componentFetcher = async (type: string): Promise<any> => {
       `elyra/pipeline/${type}/properties`
     );
 
-  /** 查管道参数 */
-  const pipelineParametersPromise =
-    RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
-      `elyra/pipeline/${type}/parameters`
-    );
-
   /** 查 pipeline 运行环境类型 */
   const typesPromise = PipelineService.getRuntimeTypes();
 
-  const [palette, pipelineProperties, pipelineParameters, types] =
-    await Promise.all([
-      palettePromise,
-      pipelinePropertiesPromise,
-      pipelineParametersPromise,
-      typesPromise
-    ]);
+  const [palette, types, pipelineProperties] = await Promise.all([
+    palettePromise,
+    typesPromise,
+    pipelinePropertiesPromise
+  ]);
 
   palette.properties = pipelineProperties;
-  palette.parameters = pipelineParameters;
 
   // Gather list of component IDs to fetch properties for.
   const componentList: string[] = [];
@@ -220,31 +207,22 @@ export const componentFetcher = async (type: string): Promise<any> => {
   // inject properties
   // 管线编辑器左侧展开面板节点树目录
   for (const category of palette.categories) {
-    // Use the runtime_type from the first node of the category to determine category
-    // icon.
-    // TODO: Ideally, this would be included in the category.
     // 根节点类型默认为它的第一个子节点的类型
     const category_runtime_type =
       category.node_types?.[0]?.runtime_type ?? 'LOCAL';
     const type = types.find((t: any) => t.id === category_runtime_type);
-
-    const baseUrl = CONFIG.staticBaseUrl;
-
     // 默认图标为根节点的第一个子节点的图标
     // 如果默认类型节点的图标
-    const defaultIcon = type?.icon
-      ? URLExt.join(baseUrl, type.icon)
-      : Utils.svgToBase64(SVG.pipelineflowSvg);
-
+    const defaultIcon = Utils.svgToBase64(
+      svgMap.get(type?.icon || svgKey.PIPELINE)
+    );
     category.image = defaultIcon;
 
     for (const node of category.node_types) {
       // update icon
       const genericNodeIcon = NodeIcons.get(node.op) as string;
+      const nodeIcon = Utils.svgToBase64(svgMap.get(genericNodeIcon));
 
-      const nodeIcon = URLExt.join(baseUrl, genericNodeIcon);
-
-      // Not sure which is needed...
       node.image = nodeIcon;
       node.app_data.image = nodeIcon;
       node.app_data.ui_data.image = nodeIcon;
