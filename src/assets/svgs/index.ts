@@ -7,14 +7,14 @@ import pythonSvg from './python.svg';
 import rLogoSvg from './r-logo.svg';
 
 const svgMap = new Map();
-svgMap.set(svgKey.KUBEFLOW, kubeflowSvg);
-svgMap.set(svgKey.AIRFLOW, airflowSvg);
-svgMap.set(svgKey.PIPELINE, pipelineflowSvg);
-svgMap.set(svgKey.NOTEBOOK, notebookSvg);
-svgMap.set(svgKey.PYTHON, pythonSvg);
-svgMap.set(svgKey.R, rLogoSvg);
+svgMap.set(SvgKey.KUBEFLOW, kubeflowSvg);
+svgMap.set(SvgKey.AIRFLOW, airflowSvg);
+svgMap.set(SvgKey.PIPELINE, pipelineflowSvg);
+svgMap.set(SvgKey.NOTEBOOK, notebookSvg);
+svgMap.set(SvgKey.PYTHON, pythonSvg);
+svgMap.set(SvgKey.R, rLogoSvg);
 
-const enum svgKey {
+const enum SvgKey {
   KUBEFLOW = '/static/elyra/kubeflow.svg',
   AIRFLOW = '/static/elyra/airflow.svg',
   PIPELINE = '/static/elyra/pipeline-flow.svg',
@@ -23,4 +23,4 @@ const enum svgKey {
   R = '/static/elyra/r-logo.svg'
 }
 
-export { svgKey, svgMap };
+export { SvgKey, svgMap };

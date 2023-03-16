@@ -66,6 +66,10 @@ import {
 } from './runtime-utils';
 import { theme } from './theme';
 import { OperatorSelect } from './PipelineAddFileDialog';
+import {
+  deleteNodeImage,
+  attachNodeImage
+} from './node-image-transform';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -224,11 +228,12 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [paletteError]);
 
   const contextRef = useRef(context);
+
   useEffect(() => {
     const currentContext = contextRef.current;
 
     const changeHandler = (): void => {
-      console.log('==pipeline 数据被改变==');
+      console.log('==监听到 pipeline 数据被改变==');
       const pipelineJson: any = currentContext.model.toJSON();
 
       // map IDs to display names
@@ -256,6 +261,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           runtimeDisplayName;
       }
       setPipeline(pipelineJson);
+      attachNodeImage(pipelineJson);
       setLoading(false);
     };
 
@@ -268,7 +274,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [runtimeDisplayName]);
 
   const onChange = useCallback((pipelineJson: any): void => {
-    console.log('==编辑器重新加载 Pipeline 数据==');
+    console.log('==改变 Pipeline 数据==');
     const removeNullValues = (data: any, removeEmptyString?: boolean): void => {
       for (const key in data) {
         if (
@@ -304,7 +310,9 @@ const PipelineWrapper: React.FC<IProps> = ({
       pipelineJson?.pipelines?.[0]?.app_data?.properties?.pipeline_defaults ??
         {}
     );
+
     if (contextRef.current.isReady) {
+      deleteNodeImage(pipelineJson);
       contextRef.current.model.fromString(
         JSON.stringify(pipelineJson, null, 2)
       );

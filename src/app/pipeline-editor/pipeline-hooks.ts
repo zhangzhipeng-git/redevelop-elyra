@@ -21,7 +21,7 @@ import useSWR from 'swr';
 
 import { PipelineService } from './PipelineService';
 
-import { svgKey, svgMap } from '@assets/svgs';
+import { SvgKey, svgMap } from '@assets/svgs';
 import Utils from '@app/util';
 
 export const GENERIC_CATEGORY_ID = 'Elyra';
@@ -212,7 +212,7 @@ export const componentFetcher = async (type: string): Promise<any> => {
     // 默认图标为根节点的第一个子节点的图标
     // 如果默认类型节点的图标
     const defaultIcon = Utils.svgToBase64(
-      svgMap.get(type?.icon || svgKey.PIPELINE)
+      svgMap.get(type?.icon || SvgKey.PIPELINE)
     );
     category.image = defaultIcon;
 
