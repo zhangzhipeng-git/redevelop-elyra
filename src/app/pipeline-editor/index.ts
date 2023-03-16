@@ -242,9 +242,8 @@ export default async function activatePipeline(
     '[data-file-type="notebook"]',
     // '[data-file-type="python"]',
     '[data-file-type="r"]',
-    '[title*=".java"]',
+    '[title*=".jar"]',
     '[title*=".py"]',
-    '[title*=".scala"]'
   ];
 
   supportFileSelectors.forEach(selector => {

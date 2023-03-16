@@ -23,10 +23,10 @@ import { PathExt } from '@jupyterlab/coreutils';
 import Utils from '@app/util';
 
 // 配置项：json数据
-import componentCatalogsAirflow from './jsons/component-catalogs-airflow.json';
-import propertiesAirflowKubernetesPodOperator from './jsons/properties-airflow-KubernetesPodOperator.json';
-import propertiesAirflowSparkKubernetesOperator from './jsons/properties-airflow-SparkKubernetesOperator.json';
-import propertiesAirflowSparkSubmitOperator from './jsons/properties-airflow-SparkSubmitOperator.json';
+import componentCatalogsAirflow from './jsons/airflow-component-catalogs.json';
+import airflowPipelineProperties from './jsons/airflow-pipeline-properties.json';
+import propertiesAirflowKubernetesPodOperator from './jsons/airflow-KubernetesPodOperator-properties.json';
+import propertiesAirflowSparkKubernetesOperator from './jsons/airflow-SparkKubernetesOperator-properties.json';
 import runtimeJSON from './jsons/runtime-types.json';
 
 import { svgMap } from '@assets/svgs';
@@ -65,8 +65,7 @@ enum ContentType {
 
 enum AirflowContentType {
   kpo = 'execute-KubernetesPodOperator-node',
-  sko = 'execute-SparkKubernetesOperator-node',
-  sso = 'execute-SparkSubmitOperator-node'
+  sko = 'execute-SparkKubernetesOperator-node'
 }
 
 const CONTENT_TYPE_MAPPER: Map<string, ContentType> = new Map([
@@ -76,18 +75,9 @@ const CONTENT_TYPE_MAPPER: Map<string, ContentType> = new Map([
 ]);
 
 const AIRFLOW_CONTENT_TYPE_MAPPER: Map<string, AirflowContentType[]> = new Map([
-  [
-    '.java',
-    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
-  ],
-  [
-    '.py',
-    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
-  ],
-  [
-    '.scala',
-    [AirflowContentType.kpo, AirflowContentType.sko, AirflowContentType.sso]
-  ]
+  ['.jar', [AirflowContentType.kpo, AirflowContentType.sko]],
+  ['.py', [AirflowContentType.kpo, AirflowContentType.sko]],
+  ['.scala', [AirflowContentType.kpo, AirflowContentType.sko]]
 ]);
 
 export interface IRuntimeType {
@@ -192,6 +182,25 @@ export class PipelineService {
     return fnMap[type]();
   }
 
+    /**
+   * 获取 pipeline 的属性配置
+   * @param {string} type pipeline 的类型
+   */
+    static async getPipelineProperties<T>(type = 'local') {
+      const fnMap: { [k: string]: () => Promise<any> } = {
+        local: () =>
+          RequestHandler.makeGetRequest<T>(`elyra/pipeline/local/properties`),
+        APACHE_AIRFLOW: () =>
+          Promise.resolve(Utils.clone(airflowPipelineProperties)),
+        KUBEFLOW_PIPELINES: () =>
+          RequestHandler.makeGetRequest<T>(
+            `elyra/pipeline/components/KUBEFLOW_PIPELINES`
+          )
+      };
+      return fnMap[type]();
+    }
+  
+
   /**
    * 获取节点属性
    * @param {string} type pipeline 运行环境类型
@@ -202,9 +211,7 @@ export class PipelineService {
       'APACHE_AIRFLOW-KubernetesPodOperator': () =>
         Promise.resolve(Utils.clone(propertiesAirflowKubernetesPodOperator)),
       'APACHE_AIRFLOW-SparkKubernetesOperator': () =>
-        Promise.resolve(Utils.clone(propertiesAirflowSparkKubernetesOperator)),
-      'APACHE_AIRFLOW-SparkSubmitOperator': () =>
-        Promise.resolve(Utils.clone(propertiesAirflowSparkSubmitOperator))
+        Promise.resolve(Utils.clone(propertiesAirflowSparkKubernetesOperator))
     };
     const fn = fnMap[`${type}-${componentID}`];
     if (typeof fn == 'function') return fn();

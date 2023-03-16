@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { RequestHandler, MetadataService } from '../services';
+import { MetadataService } from '../services';
 
 import produce from 'immer';
 import useSWR from 'swr';
@@ -154,8 +154,7 @@ const NodeIcons: Map<string, string> = new Map([
   ['execute-python-node', '/static/elyra/python.svg'],
   ['execute-r-node', '/static/elyra/r-logo.svg'],
   ['execute-KubernetesPodOperator-node', '/static/elyra/airflow.svg'],
-  ['execute-SparkKubernetesOperator-node', '/static/elyra/airflow.svg'],
-  ['execute-SparkSubmitOperator-node', '/static/elyra/airflow.svg']
+  ['execute-SparkKubernetesOperator-node', '/static/elyra/airflow.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
@@ -166,9 +165,7 @@ export const componentFetcher = async (type: string): Promise<any> => {
 
   /** 查管道属性 */
   const pipelinePropertiesPromise =
-    RequestHandler.makeGetRequest<IComponentPropertiesResponse>(
-      `elyra/pipeline/${type}/properties`
-    );
+    PipelineService.getPipelineProperties<IComponentPropertiesResponse>(type);
 
   /** 查 pipeline 运行环境类型 */
   const typesPromise = PipelineService.getRuntimeTypes();

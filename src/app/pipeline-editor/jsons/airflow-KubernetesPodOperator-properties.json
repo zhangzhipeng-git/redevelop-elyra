@@ -4,20 +4,24 @@
     "component_parameters": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string",
+          "title": "任务名称",
+          "description": "任务名称",
+          "uihints": {
+            "ui:placeholder": "请填写任务名称"
+          }
+        },
         "type": {
           "type": "string",
-          "title": "Spark应用的类型",
-          "description": "Spark应用的类型"
-        },
-        "mode": {
-          "type": "string",
-          "title": "Spark应用的部署模式",
-          "description": "Spark应用的部署模式"
-        },
-        "mainClass": {
-          "type": "string",
-          "title": "Spark应用程序主类",
-          "description": "Spark应用程序主类(限定：Java/Scala)"
+          "title": "任务类型",
+          "description": "任务类型",
+          "default": "java",
+          "enum": [
+            "java",
+            "python",
+            "scala"
+          ]
         },
         "mainApplicationFile": {
           "type": "string",
@@ -27,41 +31,40 @@
             "ui:widget": "file",
             "extensions": [
               ".py",
-              ".java",
-              ".scala"
+              ".jar"
             ]
           }
         },
-        "application_args": {
-          "title": "应用程序参数列表",
-          "description": "应用程序参数列表",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "default": ""
-          },
-          "default": []
-        },
-        "SparkConf": {
+        "priority_class_name": {
           "type": "string",
-          "title": "Spark配置属性",
-          "description": "Spark配置属性"
+          "title": "启动Pod的类名",
+          "description": "启动Pod的类名（只有Java、scala类型任务需要此项）",
+          "uihints": {
+            "ui:placeholder": "请填写启动Pod的类名"
+          }
+        },
+        "kubernetes_conn_id": {
+          "type": "string",
+          "title": "k8s集群连接信息",
+          "description": "k8s集群连接信息",
+          "uihints": {
+            "ui:disabeld": true
+          }
         },
         "namespace": {
           "type": "string",
-          "title": "k8s命名空间",
-          "description": "k8s命名空间"
-        },
-        "kubernetes_conn_id": {
-          "title": "k8s集群连接信息",
-          "description": "k8s集群连接信息",
-          "type": "string"
+          "title": "命名空间",
+          "description": "命名空间",
+          "uihints": {
+            "ui:disabeld": true
+          }
         },
         "executor_cores": {
           "type": "integer",
-          "title": "CPU",
+          "title": "CPU(个)",
+          "default": 1,
           "description": "对于CPU密集型工作负载，您可以选择多个CPU",
-          "minimum": 0
+          "minimum": 1
         },
         "executor_memory": {
           "type": "integer",
@@ -69,14 +72,9 @@
           "description": "指定的RAM大小",
           "minimum": 0
         },
-        "name": {
-          "type": "string",
-          "title": "任务名称",
-          "description": "任务名称"
-        },
         "num_executors": {
           "type": "integer",
-          "title": "executor数量",
+          "title": "executor数量(个)",
           "description": "executor数量",
           "minimum": 0
         },
@@ -92,11 +90,10 @@
         }
       },
       "required": [
+        "name",
         "type",
-        "mode",
         "mainApplicationFile",
-        "kubernetes_conn_id",
-        "name"
+        "kubernetes_conn_id"
       ]
     }
   },
