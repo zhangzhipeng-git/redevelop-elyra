@@ -155,6 +155,8 @@ class PipelineController extends CanvasController {
       ...rest
     } = item;
 
+    console.log('==添加节点==', item);
+
     const nodeTemplate: any = this.getPaletteNode(op);
 
     const defaults =

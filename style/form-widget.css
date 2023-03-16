@@ -1,0 +1,15 @@
+.my-widget-wrapper {
+  margin-top: 10px;
+}
+
+.my-widget-wrapper .ant-select-selector,
+.my-widget-wrapper .ant-picker,
+.my-widget-wrapper .ant-input,
+.my-widget-wrapper .ant-input:hover {
+  border: 1px solid #bdbdbd !important;
+  box-shadow: none !important;
+}
+
+.my-widget-wrapper input {
+  background-color: white !important;
+}

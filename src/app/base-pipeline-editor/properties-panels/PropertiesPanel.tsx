@@ -24,6 +24,8 @@ import {
   ArrayTemplate,
   CustomOneOf
 } from '../CustomFormControls';
+import { MyReactCron } from '../CustomFormControls/ReactCron';
+import { MyDateTime } from '../CustomFormControls/DateTime';
 
 export const Message = styled.div`
   margin-top: 14px;
@@ -36,7 +38,9 @@ export const Message = styled.div`
 `;
 
 const widgets: { [id: string]: Widget } = {
-  file: FileWidget
+  file: FileWidget,
+  myReactCron: MyReactCron,
+  myDateTime: MyDateTime
 };
 
 interface Props {
@@ -94,6 +98,27 @@ export function PropertiesPanel({
   }
 
   const formContext = {
+    /**
+     * 自定义组件更改pipeline属性，重新加载 pipeline 数据
+     * @param param0 属性字段名称拼接字符串，如 root_a_b_c
+     */
+    onPipelinePropertyChange: ({ propertyID, v }: any) => {
+      if (!propertyID) return;
+      const keys = propertyID.split('_');
+      if (!keys[1] && keys[0] === 'root') return;
+      const newFormData = produce(data, (draft: any) => {
+        let o = draft;
+        let i = 1;
+        for (; i < keys.length - 1; i++) {
+          o = o?.[keys[i]];
+        }
+        const lk = keys[i];
+        if (!o) return;
+        o[lk] = v;
+      });
+      onChange?.(newFormData ?? data);
+    },
+
     onFileRequested: async (args: any, fieldName: string) => {
       const values = await onFileRequested?.({
         ...args,

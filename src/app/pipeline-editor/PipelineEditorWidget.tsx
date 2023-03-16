@@ -228,6 +228,7 @@ const PipelineWrapper: React.FC<IProps> = ({
     const currentContext = contextRef.current;
 
     const changeHandler = (): void => {
+      console.log('==pipeline 数据被改变==');
       const pipelineJson: any = currentContext.model.toJSON();
 
       // map IDs to display names
@@ -250,12 +251,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         if (!pipelineJson.pipelines[0].app_data.properties) {
           pipelineJson.pipelines[0].app_data.properties = {};
         }
-        const pipeline_path = contextRef.current.path;
-        const pipeline_name = PathExt.basename(
-          pipeline_path,
-          PathExt.extname(pipeline_path)
-        );
-        pipelineJson.pipelines[0].app_data.properties.name = pipeline_name;
+
         pipelineJson.pipelines[0].app_data.properties.runtime =
           runtimeDisplayName;
       }

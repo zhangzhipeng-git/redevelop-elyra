@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { DeepPartial } from "redux";
+import { DeepPartial } from 'redux';
 
 function isPlainObject(item: any) {
-  return item && typeof item === "object" && item.constructor === Object;
+  return item && typeof item === 'object' && item.constructor === Object;
 }
 
 export function deepmerge<T>(target: T, source: DeepPartial<T>) {
@@ -28,7 +28,7 @@ export function deepmerge<T>(target: T, source: DeepPartial<T>) {
       const key = _key as keyof DeepPartial<T>;
 
       const tVal = target[key];
-      const sVal = source[key] as DeepPartial<typeof tVal>;
+      const sVal = source[key] as DeepPartial<typeof tVal> as any;
 
       if (sVal !== undefined) {
         if (isPlainObject(sVal) && tVal !== undefined) {

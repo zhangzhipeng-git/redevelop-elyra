@@ -3,30 +3,39 @@
     "properties": {
         "name": {
             "title": "名称",
-            "description":"工作流名称",
+            "description": "工作流名称",
             "type": "string",
             "uihints": {
-                "ui:placeholder": "请输入工作流名称"
+                "ui:placeholder": "请填写工作流名称"
+            }
+        },
+        "app": {
+            "title": "归属应用",
+            "description": "归属应用",
+            "type": "string",
+            "enum": [],
+            "uihints": {
+                "ui:placeholder": "请选择归属应用"
             }
         },
         "email": {
             "title": "告警邮箱",
-            "description":"告警邮箱",
+            "description": "告警邮箱",
             "type": "string",
             "default": "airflow@example.com",
             "uihints": {
-                "ui:placeholder": "请输入警告邮箱"
+                "ui:placeholder": "请填写警告邮箱"
             }
         },
         "isFlow": {
             "title": "是否流式任务",
-            "description":"是否流式任务",
+            "description": "是否流式任务",
             "type": "boolean",
             "default": false
         },
         "isDependency": {
             "title": "是否跨任务依赖",
-            "description":"是跨任务依赖（暂不可编辑）",
+            "description": "是跨任务依赖（暂不可编辑）",
             "type": "boolean",
             "default": false,
             "uihints": {
@@ -44,8 +53,8 @@
             "description": "任务描述",
             "type": "string",
             "uihints": {
-                "ui:placeholder":"请填写任务描述",
-                "ui:widget":"textarea"
+                "ui:placeholder": "请填写任务描述",
+                "ui:widget": "textarea"
             }
         },
         "scheduleCycle": {
@@ -53,18 +62,21 @@
             "description": "调度周期",
             "type": "string",
             "uihints": {
-                "ui:placeholder": "请填写 cron 表达式"
+                "ui:widget": "myReactCron"
             }
         },
         "date": {
             "title": "回填时间",
             "description": "回填时间",
             "type": "string",
-            "format": "date"
+            "uihints": {
+                "ui:widget": "myDateTime"
+            }
         }
     },
     "required": [
         "name",
+        "app",
         "email",
         "description",
         "scheduleCycle"
