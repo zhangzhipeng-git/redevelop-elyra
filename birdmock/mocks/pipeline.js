@@ -59,5 +59,26 @@ module.exports = {
       filename: 'python.svg',
       buffer: fs.readFileSync(resolve('./assets/python.svg'))
     };
+  },
+  '/upload/file': files => {
+    console.log(files, '参数');
+    const fileArr = files.file; // file 为formData的字段名
+    let paths = [];
+    fileArr.forEach(f => {
+      const tempPath = f.path;
+      const filename = f.originalFilename;
+      const path = resolve(`../upload/${filename}`);
+      var readStream = fs.createReadStream(tempPath);
+      var writeStream = fs.createWriteStream(path);
+      readStream.pipe(writeStream);
+      readStream.on('end', () => {
+        fs.unlinkSync(tempPath);
+      });
+      paths.push(path);
+    });
+
+    return {
+      paths
+    };
   }
 };

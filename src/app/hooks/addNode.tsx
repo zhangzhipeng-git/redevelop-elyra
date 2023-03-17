@@ -1,0 +1,50 @@
+import { Dialog } from '@jupyterlab/apputils';
+
+import { PipelineEnum, Types } from '@app/enums';
+import { showFormDialog } from '@app/ui-components';
+
+import { formDialogWidget } from '@app/pipeline-editor/formDialogWidget';
+import { OperatorSelect } from '@app/pipeline-editor/PipelineAddFileDialog';
+import { PipelineService } from '@app/pipeline-editor/PipelineService';
+
+/**
+ * 在添加节点前，获取节点的 op ，如：
+ * ```
+ * execute-KubernetesPodOperator-node
+ * execute-SparkKubernetesOperator-node
+ * execute-python-node
+ * execute-notebook-node
+ * execute-r-node
+ * ```
+ * 用于查询对应的节点模板配置
+ * @param type pipeline 类型
+ * @param defaultOp 默认的 op
+ */
+export async function onBeforeAddNode_GetOp(
+  type = PipelineEnum.APACHE_AIRFLOW as Types,
+  op: string = ''
+) {
+  switch (type) {
+    case PipelineEnum.APACHE_AIRFLOW:
+      const ret = await showFormDialog({
+        title: '请选择文件要关联的 Operator',
+        body: formDialogWidget(
+          <OperatorSelect
+            operators={PipelineService.getAirflowAllOperators()}
+          />
+        ),
+        buttons: [
+          Dialog.cancelButton({ label: '取消' }),
+          Dialog.okButton({ label: '确定' })
+        ],
+        defaultButton: 1,
+        focusNodeSelector: '#file_select_operator'
+      });
+      return ret.value.file_select_operator;
+
+    case PipelineEnum.KUBEFLOW_PIPELINES:
+    case PipelineEnum.Local:
+    default:
+      return op;
+  }
+}

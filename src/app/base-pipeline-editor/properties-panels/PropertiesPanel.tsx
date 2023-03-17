@@ -48,7 +48,6 @@ interface Props {
   schema?: any;
   onChange?: (data: any) => any;
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   noValidate?: boolean;
   id?: string;
 }
@@ -62,7 +61,6 @@ export function PropertiesPanel({
   schema,
   onChange,
   onFileRequested,
-  onPropertiesUpdateRequested,
   noValidate,
   id
 }: Props) {
@@ -142,11 +140,7 @@ export function PropertiesPanel({
     },
     // 点击刷新按钮时调用
     onPropertiesUpdateRequested: async (args: any) => {
-      const newData = await onPropertiesUpdateRequested?.(
-        args,
-        'mainApplicationFile'
-      );
-      onChange?.(newData);
+      onChange?.(args);
     },
     formData: data
   };

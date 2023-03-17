@@ -60,11 +60,12 @@ interface Props {
   onDoubleClickNode?: (e: CanvasClickEvent) => any;
   onError?: (error: Error) => any;
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   readOnly?: boolean;
   children?: React.ReactNode;
   nativeKeyboardActions?: boolean;
   leftPalette?: boolean;
+  handleBeforeAddNodeGetOp?: (op?: string) => Promise<string>;
+  handleAfterSelectFileUploadFile?: (paths: string[]) => void;
 }
 
 const READ_ONLY_NODE_SVG_PATH =
@@ -156,11 +157,12 @@ const PipelineEditor = forwardRef(
       onDoubleClickNode,
       onError,
       onFileRequested,
-      onPropertiesUpdateRequested,
       readOnly = false,
       children,
       nativeKeyboardActions,
-      leftPalette = true
+      leftPalette = true,
+      handleBeforeAddNodeGetOp,
+      handleAfterSelectFileUploadFile
     }: Props,
     ref
   ) => {
@@ -402,29 +404,26 @@ const PipelineEditor = forwardRef(
       [leftPalette]
     );
 
-    const handleBeforeEditAction = useCallback(
-      (e: CanvasEditEvent) => {
-        if (isCreateNodeEvent(e) && e.finalized === true) {
-          delete e.finalized;
-          return e;
-        }
-
-        if (isCreateNodeEvent(e)) {
-          // the edit was created by canvas, reconstruct and pass to addNode
-          console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
-          controller.current.addNode({
-            ...e,
-            onPropertiesUpdateRequested
-          });
-
-          // cancel the edit until we finalize properties.
-          return null;
-        }
-
+    const handleBeforeEditAction = useCallback((e: CanvasEditEvent) => {
+      if (isCreateNodeEvent(e) && e.finalized === true) {
+        delete e.finalized;
         return e;
-      },
-      [onPropertiesUpdateRequested]
-    );
+      }
+
+      if (isCreateNodeEvent(e)) {
+        // the edit was created by canvas, reconstruct and pass to addNode
+        console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
+        handleAfterSelectFileUploadFile?.([(e as any).path]);
+        controller.current.addNode({
+          ...e
+        });
+
+        // cancel the edit until we finalize properties.
+        return null;
+      }
+
+      return e;
+    }, []);
 
     const handleEditAction = useCallback(
       async (e: CanvasEditEvent) => {
@@ -457,25 +456,23 @@ const PipelineEditor = forwardRef(
           let extensions = nodes.map(n => n.app_data.extensions).flat();
           extensions = Array.from(new Set(extensions));
 
-          const arr = await onFileRequested?.({
+          const [filepath] = await onFileRequested?.({
             canSelectMany: false,
             filters: { File: extensions }
           });
-          const [file] = arr;
           const node = nodes.find(n =>
-            n.app_data.extensions?.includes(path.extname(file))
+            n.app_data.extensions?.includes(path.extname(filepath))
           );
 
           if (node !== undefined) {
+            const op = await handleBeforeAddNodeGetOp?.(node.op);
             controller.current.editActionHandler({
               editType: 'createNode',
-              nodeTemplate: {
-                op: node.op
-              },
+              nodeTemplate: { op },
               pipelineId: e.pipelineId,
               offsetX: e.mousePos.x,
               offsetY: e.mousePos.y,
-              path: file
+              path: filepath
             });
           }
         }
@@ -614,7 +611,6 @@ const PipelineEditor = forwardRef(
             data={pipeline?.pipelines?.[0]?.app_data?.properties}
             schema={pipelineProperties}
             onFileRequested={onFileRequested}
-            onPropertiesUpdateRequested={onPropertiesUpdateRequested}
             onChange={handlePipelinePropertiesChange}
           />
         )
@@ -630,7 +626,6 @@ const PipelineEditor = forwardRef(
             nodes={controller.current.getAllPaletteNodes()}
             upstreamNodes={upstreamNodes}
             onFileRequested={onFileRequested}
-            onPropertiesUpdateRequested={onPropertiesUpdateRequested}
             onChange={handlePropertiesChange}
             parameters={
               pipeline?.pipelines?.[0]?.app_data?.properties

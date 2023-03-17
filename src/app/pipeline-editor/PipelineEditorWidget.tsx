@@ -65,8 +65,12 @@ import {
   IRuntimeData
 } from './runtime-utils';
 import { theme } from './theme';
-import { OperatorSelect } from './PipelineAddFileDialog';
+
 import { deleteNodeImage, attachNodeImage } from './node-image-transform';
+
+import { onBeforeAddNode_GetOp } from '@app/hooks/addNode';
+import { PipelineEnum } from '../enums';
+import { onAfterSelectFile_UploadFile } from '../hooks/selectFile';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -356,9 +360,12 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (res.button.accept && res.value.length) {
         return res.value.map((v: any) => v.path);
       }
-    } else {
-      const manager = browserFactory.defaultBrowser.model.manager;
-      const res = await showBrowseFileDialog(manager, {
+      return;
+    }
+
+    const res = await showBrowseFileDialog(
+      browserFactory.defaultBrowser.model.manager,
+      {
         startPath: PathExt.dirname(filename),
         filter: (model: any): boolean => {
           if (!model) return false;
@@ -370,41 +377,17 @@ const PipelineWrapper: React.FC<IProps> = ({
           const ext = PathExt.extname(path);
           return args.filters.File.includes(ext);
         }
-      });
-
-      ///to-do: 文件上传?
-      // manager.services.contents.get(res.value[0].path).then(res => {
-      //   console.log(res, 'res');
-      //   // text -> blob, base64 -> blob
-      // });
-
-      if (res.button.accept && res.value.length) {
-        const file = PipelineService.getPipelineRelativeNodePath(
-          contextRef.current.path,
-          res.value[0].path
-        );
-
-        return [file];
       }
+    );
+
+    if (res.button.accept && res.value.length) {
+      const file = PipelineService.getPipelineRelativeNodePath(
+        contextRef.current.path,
+        res.value[0].path
+      );
+
+      return [file];
     }
-
-    return undefined;
-  };
-
-  /** 点击表单数组项刷新按钮，请求文件的环境变量，并合并到它的表单数据上，这里修改为不请求文件的环境变量，因为用不到。 */
-  const onPropertiesUpdateRequested = async (args: any): Promise<any> => {
-    if (!contextRef.current.path) {
-      return args;
-    }
-
-    /// 移除了一些代码
-
-    return {
-      ...args,
-      component_parameters: {
-        ...args.component_parameters
-      }
-    };
   };
 
   /** 节点定义 */
@@ -841,6 +824,21 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const [defaultPosition, setDefaultPosition] = useState(10);
 
+  const handleBeforeAddNodeGetOp = useCallback(
+    (op?: string) => onBeforeAddNode_GetOp(type as any, op),
+    [type]
+  );
+
+  const handleAfterSelectFileUploadFile = useCallback(
+    (paths: string[]) =>
+      onAfterSelectFile_UploadFile(
+        type as any,
+        browserFactory.defaultBrowser,
+        paths
+      ),
+    [type]
+  );
+
   const handleAddFileToPipeline = useCallback(
     async (location?: { x: number; y: number }) => {
       const fileBrowser = browserFactory.defaultBrowser;
@@ -868,7 +866,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       const fileTipMap: { [k: string]: string } = {
         undefined: 'Notebook、Python 和 R',
         KUBEFLOW_PIPELINES: 'Notebook、Python 和 R',
-        APACHE_AIRFLOW: 'Java、Python 和 Scala'
+        APACHE_AIRFLOW: '.py 和 .jar'
       };
       if (!selectedItems[0]) {
         return showDialog({
@@ -876,7 +874,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           body: `只支持将 ${fileTipMap[type as any]} 文件添加${
             type ? '通用' : type
           }导管道编辑器中。`,
-          buttons: [Dialog.okButton()]
+          buttons: [Dialog.okButton({ label: '确认' })]
         });
       }
 
@@ -906,26 +904,10 @@ const PipelineWrapper: React.FC<IProps> = ({
         }
       }
 
-      let airflowNodeOp = '';
-      if (type === 'APACHE_AIRFLOW') {
-        const dialogResult = await showFormDialog({
-          title: '请选择文件要关联的 Operator',
-          body: formDialogWidget(
-            <OperatorSelect
-              operators={PipelineService.getAirflowAllOperators()}
-            />
-          ),
-          buttons: [
-            Dialog.cancelButton({ label: '取消' }),
-            Dialog.okButton({ label: '确定' })
-          ],
-          defaultButton: 1,
-          focusNodeSelector: '#file_select_operator'
-        });
-        // 这里的 op 是 Airflow Pipeline Operator 节点 op 值集合中的一个值！
-        airflowNodeOp = dialogResult.value.file_select_operator;
+      if (type === PipelineEnum.APACHE_AIRFLOW) {
+        const op = await handleBeforeAddNodeGetOp();
         selectedItems.map((item: any): void => {
-          addFile(item, airflowNodeOp);
+          addFile(item, op);
         });
       } else {
         selectedItems.map((item: any): void => {
@@ -987,8 +969,9 @@ const PipelineWrapper: React.FC<IProps> = ({
           }
           onError={onError}
           onFileRequested={onFileRequested}
-          onPropertiesUpdateRequested={onPropertiesUpdateRequested}
           leftPalette={true}
+          handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
+          handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
         >
           {type === undefined ? (
             <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />

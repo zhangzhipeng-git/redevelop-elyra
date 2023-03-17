@@ -25,7 +25,6 @@ interface Props {
   nodes: NodeType[];
   upstreamNodes?: any[];
   onFileRequested?: (options: any) => any;
-  onPropertiesUpdateRequested?: (options: any, filenameRef: string) => any;
   onChange?: (nodeID: string, data: any) => any;
   parameters?: {
     name: string;
@@ -79,7 +78,6 @@ function NodeProperties({
   nodes,
   upstreamNodes,
   onFileRequested,
-  onPropertiesUpdateRequested,
   onChange,
   parameters
 }: Props) {
@@ -297,7 +295,6 @@ function NodeProperties({
           onChange?.(selectedNode.id, data);
         }}
         onFileRequested={onFileRequested}
-        onPropertiesUpdateRequested={onPropertiesUpdateRequested}
       />
     </div>
   );
