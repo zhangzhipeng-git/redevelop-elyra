@@ -9,22 +9,27 @@
  * 节点图标的时候，再通过映射关系找到base64编码去渲染图标。
  */
 
-import { SvgKey, svgMap } from '@assets/svgs';
+import { SvgRequestUrl, svgMap } from '@assets/svgs';
 import Utils from '@app/util';
 
-enum Operators {
+enum NodeSvgKey {
   SparkKubernetesOperator = 'execute-SparkKubernetesOperator-node',
-  KubernetesPodOperator = 'execute-KubernetesPodOperator-node'
+  KubernetesPodOperator = 'execute-KubernetesPodOperator-node',
+  Error = 'error'
 }
 
 const base64Map = new Map();
 base64Map.set(
-  Operators.KubernetesPodOperator,
-  Utils.svgToBase64(svgMap.get(SvgKey.AIRFLOW))
+  NodeSvgKey.KubernetesPodOperator,
+  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Airflow))
 );
 base64Map.set(
-  Operators.KubernetesPodOperator,
-  Utils.svgToBase64(svgMap.get(SvgKey.AIRFLOW))
+  NodeSvgKey.KubernetesPodOperator,
+  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Airflow))
+);
+base64Map.set(
+  NodeSvgKey.Error,
+  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Error))
 );
 
 /**
@@ -34,19 +39,31 @@ base64Map.set(
 export function attachNodeImage(pipeline: any) {
   pipeline?.pipelines?.forEach((p: any) => {
     p?.nodes?.forEach((n: any) => {
-      if (n?.app_data?.ui_data) n.app_data.ui_data.image = base64Map.get(n.op);
+      const ui_data = n?.app_data?.ui_data;
+      if (typeof ui_data !== 'object') return;
+      ui_data.image = base64Map.get(n.op);
+      ui_data.decorations?.forEach((d: any) => {
+        if (!d || d.id !== 'error') return;
+        d.image = base64Map.get(NodeSvgKey.Error);
+      });
     });
   });
 }
 
 /**
- * 在编辑器解析pipeline数据时，删除节点的 image
+ * 在编辑器保存pipeline数据时，删除节点的 image
  * @param {any} pipeline
  */
 export function deleteNodeImage(pipeline: any) {
   pipeline?.pipelines?.forEach((p: any) => {
     p?.nodes?.forEach((n: any) => {
-      if (n?.app_data?.ui_data) delete n.app_data.ui_data.image;
+      const ui_data = n?.app_data?.ui_data;
+      if (typeof ui_data !== 'object') return;
+      delete n.app_data.ui_data.image;
+      ui_data.decorations?.forEach((d: any) => {
+        if (!d || d.id !== 'error') return;
+        delete d.image;
+      });
     });
   });
 }

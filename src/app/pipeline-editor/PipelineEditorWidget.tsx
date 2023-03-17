@@ -66,10 +66,7 @@ import {
 } from './runtime-utils';
 import { theme } from './theme';
 import { OperatorSelect } from './PipelineAddFileDialog';
-import {
-  deleteNodeImage,
-  attachNodeImage
-} from './node-image-transform';
+import { deleteNodeImage, attachNodeImage } from './node-image-transform';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -362,16 +359,15 @@ const PipelineWrapper: React.FC<IProps> = ({
     } else {
       const manager = browserFactory.defaultBrowser.model.manager;
       const res = await showBrowseFileDialog(manager, {
-        includeDir: true,
         startPath: PathExt.dirname(filename),
-        // rootPath: PathExt.dirname(filename),
         filter: (model: any): boolean => {
-          if (args.filters?.File === undefined) {
-            return true;
-          }
+          if (!model) return false;
+          if (args.filters?.File === undefined) return true;
 
-          // return true;
-          const ext = PathExt.extname(model.path);
+          const { path, type } = model;
+          if (type === 'directory') return true;
+
+          const ext = PathExt.extname(path);
           return args.filters.File.includes(ext);
         }
       });

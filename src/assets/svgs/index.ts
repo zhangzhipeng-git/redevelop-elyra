@@ -6,21 +6,25 @@ import notebookSvg from './notebook.svg';
 import pythonSvg from './python.svg';
 import rLogoSvg from './r-logo.svg';
 
-const svgMap = new Map();
-svgMap.set(SvgKey.KUBEFLOW, kubeflowSvg);
-svgMap.set(SvgKey.AIRFLOW, airflowSvg);
-svgMap.set(SvgKey.PIPELINE, pipelineflowSvg);
-svgMap.set(SvgKey.NOTEBOOK, notebookSvg);
-svgMap.set(SvgKey.PYTHON, pythonSvg);
-svgMap.set(SvgKey.R, rLogoSvg);
+import errorSvg from './error.svg';
 
-const enum SvgKey {
-  KUBEFLOW = '/static/elyra/kubeflow.svg',
-  AIRFLOW = '/static/elyra/airflow.svg',
-  PIPELINE = '/static/elyra/pipeline-flow.svg',
-  NOTEBOOK = '/static/elyra/notebook.svg',
-  PYTHON = '/static/elyra/python.svg',
-  R = '/static/elyra/r-logo.svg'
+const enum SvgRequestUrl {
+  Kubeflow = '/static/elyra/kubeflow.svg',
+  Airflow = '/static/elyra/airflow.svg',
+  Pipeline = '/static/elyra/pipeline-flow.svg',
+  Notebook = '/static/elyra/notebook.svg',
+  Python = '/static/elyra/python.svg',
+  R = '/static/elyra/r-logo.svg',
+  Error = '/static/elyra/error.svg'
 }
 
-export { SvgKey, svgMap };
+const svgMap = new Map();
+svgMap.set(SvgRequestUrl.Kubeflow, kubeflowSvg);
+svgMap.set(SvgRequestUrl.Airflow, airflowSvg);
+svgMap.set(SvgRequestUrl.Pipeline, pipelineflowSvg);
+svgMap.set(SvgRequestUrl.Notebook, notebookSvg);
+svgMap.set(SvgRequestUrl.Python, pythonSvg);
+svgMap.set(SvgRequestUrl.R, rLogoSvg);
+svgMap.set(SvgRequestUrl.Error, errorSvg);
+
+export { SvgRequestUrl, svgMap };

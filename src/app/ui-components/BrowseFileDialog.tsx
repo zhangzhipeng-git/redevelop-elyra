@@ -204,6 +204,27 @@ class BrowseFileDialog
   }
 }
 
+// @ts-ignore
+class MyDialog extends Dialog<any> {
+  _resolve(button: any) {
+    // @ts-ignore
+    const body = this._body;
+    let value = null;
+    if (
+      button.accept &&
+      body instanceof Widget &&
+      // @ts-ignore
+      typeof body.getValue === 'function'
+    ) {
+      // @ts-ignore
+      value = body.getValue();
+    }
+    if (button.className === 'select' && (!value || !value[0])) return;
+    // @ts-ignore
+    super._resolve(button);
+  }
+}
+
 export const showBrowseFileDialog = async (
   manager: IDocumentManager,
   options: IBrowseFileDialogOptions
@@ -223,12 +244,12 @@ export const showBrowseFileDialog = async (
       : true
   });
 
-  const dialog = new Dialog({
+  const dialog = new MyDialog({
     title: '选择文件',
     body: browseFileDialogBody,
     buttons: [
       Dialog.cancelButton({ label: '取消' }),
-      Dialog.okButton({ label: '选择' })
+      Dialog.okButton({ label: '选择', className: 'select' })
     ]
   });
 
