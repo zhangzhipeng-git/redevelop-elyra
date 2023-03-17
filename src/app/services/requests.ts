@@ -190,7 +190,7 @@ export class RequestHandler {
       longRequestDialog.launch();
     }
 
-    const getServerResponse: Promise<any> = new Promise((resolve, reject) => {
+    const getServerResponse: Promise<T> = new Promise((resolve, reject) => {
       ServerConnection.makeRequest(requestUrl, requestInit, settings).then(
         (response: any) => {
           if (longRequestDialog) {
@@ -201,15 +201,11 @@ export class RequestHandler {
             // handle cases where the server returns a valid response
             (result: any) => {
               if (response.status === 405) {
-                resolve(null);
+                resolve(null as T);
                 return;
               }
               if (response.status < 200 || response.status >= 300) {
                 return reject(result);
-              }
-              if (type === 'blob') {
-                resolve({ headers: response.headers, data: result });
-                return;
               }
 
               resolve(result);
@@ -220,7 +216,7 @@ export class RequestHandler {
                 response['requestPath'] = requestPath;
                 return reject(response);
               } else if (response.status === 204) {
-                resolve({});
+                resolve({} as T);
               } else {
                 return reject(reason);
               }

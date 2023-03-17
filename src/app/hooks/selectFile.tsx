@@ -3,6 +3,7 @@ import { FileBrowser } from '@jupyterlab/filebrowser';
 import { RequestHandler } from '@app/services';
 import Utils from '@app/util';
 import { Dialog } from '@jupyterlab/apputils';
+import { RequestErrors } from '@app/ui-components';
 
 /**
  * 获取文件并上传
@@ -18,28 +19,33 @@ export async function onAfterSelectFile_UploadFile(
   switch (type) {
     case PipelineEnum.APACHE_AIRFLOW:
   }
-  fileBrowser.model.manager.services.contents
-    .get(paths[0], { type: 'file', format: 'base64', content: true })
-    .then(res => {
-      const { content, mimetype, name } = res;
-      const blob = Utils.base64toBlob(content, mimetype);
-      const file = new File([blob], name, { type: mimetype });
-      const formData = new FormData();
-      formData.append('file', file);
-
-      RequestHandler.makeServerRequest(
-        '/upload/file',
-        {
-          body: formData,
-          method: 'POST'
-        },
-        new Dialog({
-          title: '正在上传文件',
-          body: '请稍等...'
-        })
-      );
+  const filePromises = paths.map((p: string) =>
+    fileBrowser.model.manager.services.contents.get(p, {
+      type: 'file',
+      content: true,
+      format: 'base64'
     })
-    .catch(() => {
-      throw new Error('上传文件失败');
-    });
+  );
+  const files = await Promise.all(filePromises);
+  const formData = new FormData();
+  files.forEach(f => {
+    const { content, mimetype, name } = f;
+    const blob = Utils.base64toBlob(content, mimetype);
+    const file = new File([blob], name, { type: mimetype });
+    formData.append('file', file);
+  });
+  return RequestHandler.makeServerRequest<{ paths: string[] }>(
+    '/upload/file',
+    {
+      body: formData,
+      method: 'POST'
+    },
+    new Dialog({
+      title: '正在上传文件',
+      body: '请稍等...'
+    })
+  ).catch(e => {
+    RequestErrors.serverError(e);
+    throw new Error('文件上次失败！');
+  });
 }

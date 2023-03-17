@@ -906,7 +906,17 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       if (type === PipelineEnum.APACHE_AIRFLOW) {
         const op = await handleBeforeAddNodeGetOp();
-        selectedItems.map((item: any): void => {
+        const paths = selectedItems.map((item: any) =>
+          PipelineService.getPipelineRelativeNodePath(
+            contextRef.current.path,
+            item.path
+          )
+        );
+        const { paths: uploadPahts } = await handleAfterSelectFileUploadFile(
+          paths
+        );
+        selectedItems.map((item: any, index): void => {
+          item.path = uploadPahts[index];
           addFile(item, op);
         });
       } else {

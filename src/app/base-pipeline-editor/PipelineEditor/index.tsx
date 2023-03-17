@@ -413,7 +413,7 @@ const PipelineEditor = forwardRef(
       if (isCreateNodeEvent(e)) {
         // the edit was created by canvas, reconstruct and pass to addNode
         console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
-        handleAfterSelectFileUploadFile?.([(e as any).path]);
+        // handleAfterSelectFileUploadFile?.([(e as any).path]);
         controller.current.addNode({
           ...e
         });

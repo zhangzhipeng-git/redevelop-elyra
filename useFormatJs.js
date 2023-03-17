@@ -22,6 +22,12 @@ require('colors'); // 彩色字体
 
 var multiparty = require('multiparty'); // 文件上传解析模块
 
+var path = require('path');
+var resolve = dir => path.relative(process.cwd(), dir);
+var mockPath = process.env.mockPath
+  ? resolve(process.env.mockPath)
+  : resolve('./birdmock');
+
 var paths = process.argv.slice(2);
 var configPath = paths[0];
 var mocksPath = paths[1];
@@ -86,7 +92,7 @@ var server;
         case 'PUT':
           if (isFormDataBody(req)) {
             var form = new multiparty.Form({
-              uploadDir: process.env.uploadDir
+              uploadDir: resolve(mockPath, './upload')
             });
             form.parse(req, (err, fields, files) => {
               /// request error log
