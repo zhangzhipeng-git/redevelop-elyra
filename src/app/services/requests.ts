@@ -17,7 +17,9 @@
 import { Dialog } from '@jupyterlab/apputils';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
-import CONFIG from '../../config.json';
+
+import CONFIG from '@src/config.json';
+import { Loading } from '@app/ui-components/loading';
 
 /**
  * A service class for making requests to the jupyter lab server.
@@ -172,7 +174,7 @@ export class RequestHandler {
   static async makeServerRequest<T = any>(
     requestPath: string,
     options: RequestInit & { type?: 'blob' | 'json' | 'text' },
-    longRequestDialog?: Dialog<any>,
+    longRequestDialog?: Dialog<any> | Loading,
     config?: { baseUrl: string }
   ): Promise<T> {
     // use ServerConnection utility to make calls to Jupyter Based services
@@ -193,9 +195,7 @@ export class RequestHandler {
     const getServerResponse: Promise<T> = new Promise((resolve, reject) => {
       ServerConnection.makeRequest(requestUrl, requestInit, settings).then(
         (response: any) => {
-          if (longRequestDialog) {
-            longRequestDialog.resolve();
-          }
+          if (longRequestDialog) longRequestDialog.resolve();
 
           response[type]().then(
             // handle cases where the server returns a valid response

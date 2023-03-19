@@ -65,9 +65,12 @@ interface Props {
   nativeKeyboardActions?: boolean;
   leftPalette?: boolean;
   handleBeforeAddNodeGetOp?: (op?: string) => Promise<string>;
-  handleAfterSelectFileUploadFile?: (paths: string[]) => void;
+  handleAfterSelectFileUploadFile: (
+    paths: string[]
+  ) => Promise<{ paths: string[] }>;
 }
 
+/** pipeline 只读时的节点路径 */
 const READ_ONLY_NODE_SVG_PATH =
   'M 0 0 h 160 a 6 6 0 0 1 6 6 v 28 a 6 6 0 0 1 -6 6 h -160 a 6 6 0 0 1 -6 -6 v -28 a 6 6 0 0 1 6 -6 z';
 
@@ -413,7 +416,6 @@ const PipelineEditor = forwardRef(
       if (isCreateNodeEvent(e)) {
         // the edit was created by canvas, reconstruct and pass to addNode
         console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
-        // handleAfterSelectFileUploadFile?.([(e as any).path]);
         controller.current.addNode({
           ...e
         });
@@ -437,16 +439,9 @@ const PipelineEditor = forwardRef(
           if (filenameRef) {
             payload =
               e.targetObject?.app_data?.component_parameters?.[filenameRef];
-          } else {
-            type = 'openComponentDef';
-            payload = {
-              componentId: controller.current
-                .getAllPaletteNodes()
-                .find(n => n.op === e.targetObject.op)?.id,
-              componentSource: e.targetObject.app_data.component_source
-            };
           }
         }
+        // save ，run，submit clean，toggleOpenPanel，properties，openFile
         onAction?.({ type: type, payload });
 
         if (e.editType === 'newFileNode') {
@@ -466,13 +461,15 @@ const PipelineEditor = forwardRef(
 
           if (node !== undefined) {
             const op = await handleBeforeAddNodeGetOp?.(node.op);
+            const { paths } = await handleAfterSelectFileUploadFile([filepath]);
             controller.current.editActionHandler({
               editType: 'createNode',
               nodeTemplate: { op },
               pipelineId: e.pipelineId,
               offsetX: e.mousePos.x,
               offsetY: e.mousePos.y,
-              path: filepath
+              path: filepath,
+              mainApplicationFile: paths[0]
             });
           }
         }
@@ -491,16 +488,6 @@ const PipelineEditor = forwardRef(
           setPanelOpen(prev => !prev);
         }
 
-        if (e.editType === 'createExternalNode') {
-          controller.current.editActionHandler({
-            editType: 'createNode',
-            nodeTemplate: e.nodeTemplate,
-            offsetX: e.offsetX,
-            offsetY: e.offsetY,
-            pipelineId: e.pipelineId
-          });
-        }
-
         // Catch any events where a save isn't necessary.
         switch (e.editType) {
           case 'properties':
@@ -512,7 +499,10 @@ const PipelineEditor = forwardRef(
             return;
         }
 
-        onChange?.(controller.current.getPipelineFlow());
+        // 设置异步任务，等待前序所有变化（比如批量插入节点）在画布中完成后，再重新设置 pipeline 数据
+        Promise.resolve().then(() => {
+          onChange?.(controller.current.getPipelineFlow());
+        });
       },
       [onAction, onChange, onFileRequested]
     );
@@ -627,6 +617,7 @@ const PipelineEditor = forwardRef(
             upstreamNodes={upstreamNodes}
             onFileRequested={onFileRequested}
             onChange={handlePropertiesChange}
+            handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
             parameters={
               pipeline?.pipelines?.[0]?.app_data?.properties
                 ?.pipeline_parameters
@@ -664,7 +655,9 @@ const PipelineEditor = forwardRef(
                     imageHeight: 35,
                     labelPosX: 32 + 2.5,
                     labelMaxWidth: 118 - 5,
-                    defaultNodeHeight: 35,
+                    labelHeight: 25,
+                    defaultNodeHeight: 40,
+                    defaultNodeWidth: 200,
                     inputPortLeftPosY: 17.5,
                     outputPortRightPosY: 17.5,
                     dropShadow: false,

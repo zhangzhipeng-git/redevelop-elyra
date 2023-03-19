@@ -9,7 +9,7 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "bbb2c203-fe8d-4e7c-a1ca-3ddbf1a3005e",
+          "id": "5de70c37-9302-49fa-a58f-6a67ec9c4b9d",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
@@ -17,12 +17,13 @@
               "type": "java",
               "executor_cores": 1,
               "cmds": [],
-              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\B5ojhBJG8DvWVjtMZxVlPmSa.py"
+              "localFile": "setup.py",
+              "mainApplicationFile": "setup.py"
             },
             "ui_data": {
-              "label": "B5ojhBJG8DvWVjtMZxVlPmSa.py",
-              "x_pos": 287,
-              "y_pos": 541,
+              "label": "setup.py",
+              "x_pos": 166,
+              "y_pos": 82,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {
@@ -65,7 +66,7 @@
           ]
         },
         {
-          "id": "4e3ea57b-92d8-494c-95bc-97137045a54e",
+          "id": "77a105a2-62df-4241-8c3d-bff75ae8954f",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
@@ -73,12 +74,13 @@
               "type": "java",
               "executor_cores": 1,
               "cmds": [],
-              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\HqJn5XCsDKQQUaIkOKJimZPd.py"
+              "localFile": "setup.py",
+              "mainApplicationFile": "setup.py"
             },
             "ui_data": {
-              "label": "HqJn5XCsDKQQUaIkOKJimZPd.py",
-              "x_pos": 307,
-              "y_pos": 561,
+              "label": "setup.py",
+              "x_pos": 172,
+              "y_pos": 140,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {
@@ -121,7 +123,7 @@
           ]
         },
         {
-          "id": "a529014e-1033-48f8-b97f-20762b18a878",
+          "id": "bfcd2d5e-511c-4e1e-af44-080899e0fcdd",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
@@ -129,68 +131,13 @@
               "type": "java",
               "executor_cores": 1,
               "cmds": [],
-              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\_y1mleJWfPLFAUSXk2rrVAjX.py"
+              "localFile": "node3.py",
+              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\PKMP9vOPX7I1NaI9kAhe_gFV.py"
             },
             "ui_data": {
-              "label": "_y1mleJWfPLFAUSXk2rrVAjX.py",
-              "x_pos": 327,
-              "y_pos": 581,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
-            }
-          },
-          "inputs": [
-            {
-              "id": "inPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Input Port"
-                }
-              }
-            }
-          ],
-          "outputs": [
-            {
-              "id": "outPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Output Port"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "id": "d1c113a7-5aab-4a2b-bc19-5b94e9d9188e",
-          "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
-          "app_data": {
-            "component_parameters": {
-              "type": "java",
-              "executor_cores": 1,
-              "cmds": [],
-              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\-khLOYmmkJizb-_t7bU5CmUt.py"
-            },
-            "ui_data": {
-              "label": "-khLOYmmkJizb-_t7bU5CmUt.py",
-              "x_pos": 312,
-              "y_pos": 375,
+              "label": "node3.py",
+              "x_pos": 180,
+              "y_pos": 220,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {
@@ -242,10 +189,11 @@
         "properties": {
           "runtime": "APACHE_AIRFLOW",
           "email": "airflow@example.com",
-          "isFlow": false,
+          "isFlow": true,
           "isDependency": false,
           "retryCount": 0,
-          "scheduleCycle": "0 0 0 * * ? *"
+          "scheduleCycle": "0 0 0 * * ? *",
+          "name": "哈哈哈哈"
         }
       },
       "runtime_ref": ""

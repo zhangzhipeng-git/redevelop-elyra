@@ -50,6 +50,9 @@ interface Props {
   onFileRequested?: (options: any) => any;
   noValidate?: boolean;
   id?: string;
+  handleAfterSelectFileUploadFile?: (
+    paths: string[]
+  ) => Promise<{ paths: string[] }>;
 }
 
 /**
@@ -62,7 +65,8 @@ export function PropertiesPanel({
   onChange,
   onFileRequested,
   noValidate,
-  id
+  id,
+  handleAfterSelectFileUploadFile
 }: Props) {
   if (schema === undefined) {
     return <Message>未定义属性.</Message>;
@@ -122,18 +126,27 @@ export function PropertiesPanel({
         ...args,
         filename: data.component_parameters.filename
       });
+
+      console.log(args, fieldName, 'onFileRequested');
+
+      let s3Paths: string[] = [];
+      if (handleAfterSelectFileUploadFile)
+        s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
+
       const newFormData = produce(data, (draft: any) => {
         if (args.canSelectMany) {
           draft.component_parameters[args.propertyID] = [
             ...draft.component_parameters[args.propertyID],
             ...values
           ];
+          draft.component_parameters.mainApplicationFile = s3Paths;
         } else {
           if (args.parentID) {
             draft.component_parameters[args.parentID].value = values?.[0];
           } else {
             draft.component_parameters[args.propertyID] = values?.[0];
           }
+          draft.component_parameters.mainApplicationFile = values?.[0];
         }
       });
       onChange?.(newFormData ?? data);

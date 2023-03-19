@@ -19,7 +19,7 @@ import { useCallback } from 'react';
 import { Widget } from '@rjsf/core';
 
 import zhCH from 'antd/lib/date-picker/locale/zh_CN';
-import DatePicker from 'antd/lib/date-picker/index.js';
+import DatePicker from 'antd/lib/date-picker';
 import dayjs from 'dayjs';
 
 /**

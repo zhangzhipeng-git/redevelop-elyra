@@ -206,7 +206,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         '.bx--accordion__item > button[aria-expanded=false]'
       );
       btns.forEach((btn: any) => btn.click());
-    }, 500);
+    }, 1500);
   }, [palette]);
 
   useEffect(() => {
@@ -261,8 +261,8 @@ const PipelineWrapper: React.FC<IProps> = ({
         pipelineJson.pipelines[0].app_data.properties.runtime =
           runtimeDisplayName;
       }
-      setPipeline(pipelineJson);
       attachNodeImage(pipelineJson);
+      setPipeline(pipelineJson);
       setLoading(false);
     };
 
@@ -275,7 +275,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [runtimeDisplayName]);
 
   const onChange = useCallback((pipelineJson: any): void => {
-    console.log('==改变 Pipeline 数据==');
+    console.log('==改变 Pipeline 数据，会重新设置画布的 pipeline 数据==');
     const removeNullValues = (data: any, removeEmptyString?: boolean): void => {
       for (const key in data) {
         if (
@@ -390,30 +390,6 @@ const PipelineWrapper: React.FC<IProps> = ({
     }
   };
 
-  /** 节点定义 */
-  const handleOpenComponentDef = useCallback(
-    (componentId: string) => {
-      // 组件不存在
-      if (!componentId) {
-        console.warn('没有传入组件ID');
-        return;
-      }
-      return PipelineService.getComponentDef(type, componentId)
-        .then(res => {
-          const nodeDef = getAllPaletteNodes(palette).find(
-            n => n.id === componentId
-          );
-          commands.execute(commandIDs.openViewer, {
-            content: res.content,
-            mimeType: res.mimeType,
-            label: nodeDef?.label ?? componentId
-          });
-        })
-        .catch(e => RequestErrors.serverError(e));
-    },
-    [commands, palette, type]
-  );
-
   /**
    * 未设置双击打开节点属性时，双击打开文件。
    */
@@ -446,7 +422,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   };
 
   const handleSubmission = useCallback(
-    async (actionType: 'run' | 'export'): Promise<void> => {
+    async (actionType: 'run' | 'submit'): Promise<void> => {
       const pipelineJson: any = context.model.toJSON();
       // Check that all nodes are valid
       const errorMessages = validate(
@@ -457,7 +433,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (errorMessages && errorMessages.length > 0) {
         const chMsgType = {
           run: '运行',
-          export: '导出'
+          submit: '提交'
         };
         let msgs = [];
         for (const error of errorMessages) {
@@ -516,7 +492,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           ? `${actionType} pipeline for ${runtimeDisplayName}`
           : `${actionType} pipeline`;
 
-      if (actionType === 'export' || type !== undefined) {
+      if (actionType === 'submit' || type !== undefined) {
         if (!isRuntimeTypeAvailable(runtimeData, type)) {
           const res = await RequestErrors.noMetadataError(
             'runtime',
@@ -578,7 +554,7 @@ const PipelineWrapper: React.FC<IProps> = ({
             focusNodeSelector: '#pipeline_name'
           };
           break;
-        case 'export':
+        case 'submit':
           dialogOptions = {
             title,
             body: formDialogWidget(
@@ -666,7 +642,7 @@ const PipelineWrapper: React.FC<IProps> = ({
             configDetails?.platform.displayName ?? ''
           ).catch(error => RequestErrors.serverError(error));
           break;
-        case 'export':
+        case 'submit':
           PipelineService.exportPipeline(
             pipelineJson,
             exportType,
@@ -720,7 +696,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           contextRef.current.save();
           break;
         case 'run':
-        case 'export':
+        case 'submit':
           handleSubmission(args.type);
           break;
         case 'clear':
@@ -737,11 +713,9 @@ const PipelineWrapper: React.FC<IProps> = ({
             path: PipelineService.getWorkspaceRelativeNodePath(
               contextRef.current.path,
               args.payload
-            )
+            ),
+            readOnly: true
           });
-          break;
-        case 'openComponentDef':
-          handleOpenComponentDef(args.payload.componentId);
           break;
         default:
           break;
@@ -752,8 +726,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       handleClearPipeline,
       panelOpen,
       shell,
-      commands,
-      handleOpenComponentDef
+      commands
     ]
   );
 
@@ -765,18 +738,18 @@ const PipelineWrapper: React.FC<IProps> = ({
         enable: true
       },
       {
+        action: 'submit',
+        label: '提交',
+        enable: true,
+        iconEnabled: IconUtil.encode(exportPipelineIcon),
+        iconDisabled: IconUtil.encode(exportPipelineIcon)
+      },
+      {
         action: 'save',
         label: '保存',
         enable: true,
         iconEnabled: IconUtil.encode(savePipelineIcon),
         iconDisabled: IconUtil.encode(savePipelineIcon)
-      },
-      {
-        action: 'export',
-        label: '导出',
-        enable: true,
-        iconEnabled: IconUtil.encode(exportPipelineIcon),
-        iconDisabled: IconUtil.encode(exportPipelineIcon)
       },
       {
         action: 'clear',
@@ -893,7 +866,8 @@ const PipelineWrapper: React.FC<IProps> = ({
           },
           offsetX: item.x,
           offsetY: item.y,
-          path: item.path
+          path: item.path,
+          mainApplicationFile: item.mainApplicationFile
         });
 
         if (success) {
@@ -912,11 +886,9 @@ const PipelineWrapper: React.FC<IProps> = ({
             item.path
           )
         );
-        const { paths: uploadPahts } = await handleAfterSelectFileUploadFile(
-          paths
-        );
+        const { paths: s3Paths } = await handleAfterSelectFileUploadFile(paths);
         selectedItems.map((item: any, index): void => {
-          item.path = uploadPahts[index];
+          item.mainApplicationFile = s3Paths[index];
           addFile(item, op);
         });
       } else {
@@ -932,6 +904,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   );
 
   const handleDrop = async (e: IDragEvent): Promise<void> => {
+    console.log('handleDrop', e);
     handleAddFileToPipeline({ x: e.offsetX, y: e.offsetY });
   };
 
@@ -954,45 +927,50 @@ const PipelineWrapper: React.FC<IProps> = ({
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={30000}
-        hideProgressBar
-        closeOnClick={false}
-        className="elyra-PipelineEditor-toast"
-        draggable={false}
-        theme="colored"
-      />
-      <Dropzone onDrop={handleDrop}>
-        <PipelineEditor
-          ref={ref}
-          palette={palette}
-          pipelineProperties={palette.properties}
-          pipelineParameters={palette.parameters}
-          toolbar={toolbar}
-          pipeline={pipeline}
-          onAction={onAction}
-          onChange={onChange}
-          onDoubleClickNode={
-            doubleClickToOpenProperties ? undefined : onDoubleClick
-          }
-          onError={onError}
-          onFileRequested={onFileRequested}
-          leftPalette={true}
-          handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
-          handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
-        >
-          {type === undefined ? (
-            <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />
-          ) : (
-            <EmptyPlatformSpecificPipeline
-              onOpenSettings={handleOpenSettings}
-            />
-          )}
-        </PipelineEditor>
-      </Dropzone>
-    </ThemeProvider>
+    <div
+      id="pipeline-eidtor-wrapper"
+      style={{ position: 'relative', height: '100%' }}
+    >
+      <ThemeProvider theme={theme}>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={30000}
+          hideProgressBar
+          closeOnClick={false}
+          className="elyra-PipelineEditor-toast"
+          draggable={false}
+          theme="colored"
+        />
+        <Dropzone onDrop={handleDrop}>
+          <PipelineEditor
+            ref={ref}
+            palette={palette}
+            pipelineProperties={palette.properties}
+            pipelineParameters={palette.parameters}
+            toolbar={toolbar}
+            pipeline={pipeline}
+            onAction={onAction}
+            onChange={onChange}
+            onDoubleClickNode={
+              doubleClickToOpenProperties ? undefined : onDoubleClick
+            }
+            onError={onError}
+            onFileRequested={onFileRequested}
+            leftPalette={true}
+            handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
+            handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+          >
+            {type === undefined ? (
+              <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />
+            ) : (
+              <EmptyPlatformSpecificPipeline
+                onOpenSettings={handleOpenSettings}
+              />
+            )}
+          </PipelineEditor>
+        </Dropzone>
+      </ThemeProvider>
+    </div>
   );
 };
 

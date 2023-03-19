@@ -140,10 +140,12 @@ class PipelineController extends CanvasController {
     offsetY?: number;
     pipelineId?: string;
     path?: string;
+    mainApplicationFile?: string;
     [key: string]: any;
   }) {
     const {
       path,
+      mainApplicationFile,
       offsetX,
       offsetY,
       nodeTemplate: { op },
@@ -176,6 +178,10 @@ class PipelineController extends CanvasController {
       }
       data.nodeTemplate.app_data.component_parameters[filenameRef] = path;
     }
+
+    if (mainApplicationFile)
+      data.nodeTemplate.app_data.component_parameters.mainApplicationFile =
+        mainApplicationFile;
 
     this.editActionHandler(data);
   }
@@ -234,8 +240,8 @@ class PipelineController extends CanvasController {
     );
   }
 
-  getLabelForNode(node: ExecutionNodeDef, nodeDef: NodeType): string {
-    let newLabel = nodeDef.app_data.ui_data?.label;
+  getLabelForNode(node: ExecutionNodeDef, nodeDef: NodeType): any {
+    let newLabel = nodeDef.app_data.ui_data?.label as any;
 
     const filenameRef = this.resolveParameterRef(node.op, 'filehandler');
     const parameters = node.app_data?.component_parameters;
@@ -244,9 +250,9 @@ class PipelineController extends CanvasController {
       typeof parameters?.[filenameRef] === 'string' &&
       parameters?.[filenameRef] !== ''
     ) {
-      newLabel = getFileName(parameters[filenameRef], {
+      newLabel = `${getFileName(parameters[filenameRef], {
         withExtension: SHOW_EXTENSIONS
-      });
+      })}`;
     }
 
     if (

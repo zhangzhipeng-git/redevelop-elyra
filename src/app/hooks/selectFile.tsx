@@ -2,8 +2,9 @@ import { PipelineEnum, Types } from '@app/enums';
 import { FileBrowser } from '@jupyterlab/filebrowser';
 import { RequestHandler } from '@app/services';
 import Utils from '@app/util';
-import { Dialog } from '@jupyterlab/apputils';
+
 import { RequestErrors } from '@app/ui-components';
+import { Loading } from '@app/ui-components/loading';
 
 /**
  * 获取文件并上传
@@ -40,10 +41,7 @@ export async function onAfterSelectFile_UploadFile(
       body: formData,
       method: 'POST'
     },
-    new Dialog({
-      title: '正在上传文件',
-      body: '请稍等...'
-    })
+    new Loading()
   ).catch(e => {
     RequestErrors.serverError(e);
     throw new Error('文件上次失败！');

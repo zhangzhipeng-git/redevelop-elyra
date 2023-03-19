@@ -23,7 +23,7 @@
             "scala"
           ]
         },
-        "mainApplicationFile": {
+        "localFile": {
           "type": "string",
           "title": "文件路径",
           "description": "文件路径",
@@ -92,7 +92,7 @@
       "required": [
         "name",
         "type",
-        "mainApplicationFile",
+        "localFile",
         "kubernetes_conn_id"
       ]
     }

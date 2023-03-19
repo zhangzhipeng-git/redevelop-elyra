@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-declare module "@elyra/canvas" {
+declare module '@elyra/canvas' {
   interface TipPaletteItemEvent {
     nodeTemplate: any;
   }
@@ -48,22 +48,22 @@ declare module "@elyra/canvas" {
 
   interface CanvasEditEvent {
     editType: string;
-    editSource?: "canvas" | "contextmenu";
+    editSource?: 'canvas' | 'contextmenu';
     pipelineId?: string;
     [key: string]: any;
   }
 
-  type ClickType = "DOUBLE_CLICK" | "SINGLE_CLICK_CONTEXTMENU" | "SINGLE_CLICK";
+  type ClickType = 'DOUBLE_CLICK' | 'SINGLE_CLICK_CONTEXTMENU' | 'SINGLE_CLICK';
 
   type CanvasClickEvent =
     | {
         clickType: ClickType;
-        objectType: "canvas";
+        objectType: 'canvas';
         selectedObjectIds: string[];
       }
     | {
         clickType: ClickType;
-        objectType: "node" | "link" | "comment";
+        objectType: 'node' | 'link' | 'comment';
         selectedObjectIds: string[];
         id: string;
         pipelineId: string;
@@ -111,9 +111,9 @@ declare module "@elyra/canvas" {
       enableInternalObjectModel?: boolean;
       enableMarkdownInComments?: boolean;
       emptyCanvasContent?: any;
-      enablePaletteLayout?: "Flyout" | "None" | "Modal";
-      enableNodeFormatType?: "Horizontal";
-      enableToolbarLayout?: "None" | "Top";
+      enablePaletteLayout?: 'Flyout' | 'None' | 'Modal';
+      enableNodeFormatType?: 'Horizontal';
+      enableToolbarLayout?: 'None' | 'Top';
       enableNodeLayout?: {
         bodyPath?: string;
         selectionPath?: string;
@@ -121,9 +121,14 @@ declare module "@elyra/canvas" {
         imagePosY?: number;
         imageWidth?: number;
         imageHeight?: number;
+        labelWidth?: number,
+		labelHeight?: number,
         labelPosX?: number;
         labelMaxWidth?: number;
         defaultNodeHeight?: number;
+        defaultNodeWidth?: number;
+        labelMaxCharacters?: null; // null allows unlimited characters
+        labelAllowReturnKey?: boolean; // true allows line feed to be inserted into label, "save" to make the return key save the label.
         inputPortLeftPosY?: number;
         outputPortRightPosY?: number;
         dropShadow?: boolean;
@@ -232,7 +237,7 @@ declare module "@elyra/canvas" {
     /**
      * Pipeline-flow schema version
      */
-    version: "3.0";
+    version: '3.0';
     /**
      * Refers to the JSON schema used to validate documents of this type
      */
@@ -307,27 +312,27 @@ declare module "@elyra/canvas" {
            * Field measurement level
            */
           measure?:
-            | "range"
-            | "discrete"
-            | "flag"
-            | "set"
-            | "ordered-set"
-            | "typeless"
-            | "collection"
-            | "geospatial"
-            | "default";
+            | 'range'
+            | 'discrete'
+            | 'flag'
+            | 'set'
+            | 'ordered-set'
+            | 'typeless'
+            | 'collection'
+            | 'geospatial'
+            | 'default';
           /**
            * Field role for modeling
            */
           modeling_role?:
-            | "input"
-            | "target"
-            | "both"
-            | "none"
-            | "partition"
-            | "split"
-            | "frequency"
-            | "record-id";
+            | 'input'
+            | 'target'
+            | 'both'
+            | 'none'
+            | 'partition'
+            | 'split'
+            | 'frequency'
+            | 'record-id';
           /**
            * Maximum length for fields. Length is unlimited when not present
            */
@@ -429,27 +434,27 @@ declare module "@elyra/canvas" {
                * Field measurement level
                */
               measure?:
-                | "range"
-                | "discrete"
-                | "flag"
-                | "set"
-                | "ordered-set"
-                | "typeless"
-                | "collection"
-                | "geospatial"
-                | "default";
+                | 'range'
+                | 'discrete'
+                | 'flag'
+                | 'set'
+                | 'ordered-set'
+                | 'typeless'
+                | 'collection'
+                | 'geospatial'
+                | 'default';
               /**
                * Field role for modeling
                */
               modeling_role?:
-                | "input"
-                | "target"
-                | "both"
-                | "none"
-                | "partition"
-                | "split"
-                | "frequency"
-                | "record-id";
+                | 'input'
+                | 'target'
+                | 'both'
+                | 'none'
+                | 'partition'
+                | 'split'
+                | 'frequency'
+                | 'record-id';
               /**
                * Maximum length for fields. Length is unlimited when not present
                */
@@ -542,7 +547,7 @@ declare module "@elyra/canvas" {
       /**
        * The parameter type.
        */
-      type: "string" | "integer" | "object" | "array" | "boolean";
+      type: 'string' | 'integer' | 'object' | 'array' | 'boolean';
       /**
        * Whether the parameter is required or not
        */
@@ -719,7 +724,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'execution_node' for non-model pipeline elements
      */
-    type: "execution_node";
+    type: 'execution_node';
     /**
      * Operator type identifier
      */
@@ -836,18 +841,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -882,7 +887,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -915,18 +920,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -1086,18 +1091,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -1136,7 +1141,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'super_node' for supernode elements
      */
-    type: "super_node";
+    type: 'super_node';
     /**
      * Name of the tool which can be used to view or edit the sub-flow for this supernode. The default is 'canvas'
      */
@@ -1263,18 +1268,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -1309,7 +1314,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -1342,18 +1347,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -1460,7 +1465,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'binding' for binding elements
      */
-    type: "binding";
+    type: 'binding';
     outputs?: PortsDef;
     /**
      * Object containing app-specific data
@@ -1562,18 +1567,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -1608,7 +1613,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -1641,18 +1646,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -1783,7 +1788,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'binding' for binding elements
      */
-    type: "binding";
+    type: 'binding';
     inputs?: PortsDef;
     /**
      * Object containing app-specific data
@@ -1885,18 +1890,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -1931,7 +1936,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -1964,18 +1969,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -2106,7 +2111,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'model_node' for model pipeline elements
      */
-    type: "model_node";
+    type: 'model_node';
     /**
      * Reference to the binary model
      */
@@ -2227,18 +2232,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -2273,7 +2278,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -2306,18 +2311,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */
@@ -2376,7 +2381,7 @@ declare module "@elyra/canvas" {
     /**
      * Palette schema version
      */
-    version?: "3.0";
+    version?: '3.0';
     /**
      * Array of palette categories
      */
@@ -2432,7 +2437,7 @@ declare module "@elyra/canvas" {
     /**
      * Node type - always 'execution_node' for non-model pipeline elements
      */
-    type: "execution_node";
+    type: 'execution_node';
     /**
      * Label used for displaying node
      */
@@ -2518,18 +2523,18 @@ declare module "@elyra/canvas" {
                * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
                */
               position?:
-                | "topLeft"
-                | "topCenter"
-                | "topRight"
-                | "middleLeft"
-                | "middleCenter"
-                | "middleRight"
-                | "bottomLeft"
-                | "bottomCenter"
-                | "bottomRight"
-                | "source"
-                | "middle"
-                | "target";
+                | 'topLeft'
+                | 'topCenter'
+                | 'topRight'
+                | 'middleLeft'
+                | 'middleCenter'
+                | 'middleRight'
+                | 'bottomLeft'
+                | 'bottomCenter'
+                | 'bottomRight'
+                | 'source'
+                | 'middle'
+                | 'target';
               /**
                * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
                */
@@ -2678,18 +2683,18 @@ declare module "@elyra/canvas" {
                * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
                */
               position?:
-                | "topLeft"
-                | "topCenter"
-                | "topRight"
-                | "middleLeft"
-                | "middleCenter"
-                | "middleRight"
-                | "bottomLeft"
-                | "bottomCenter"
-                | "bottomRight"
-                | "source"
-                | "middle"
-                | "target";
+                | 'topLeft'
+                | 'topCenter'
+                | 'topRight'
+                | 'middleLeft'
+                | 'middleCenter'
+                | 'middleRight'
+                | 'bottomLeft'
+                | 'bottomCenter'
+                | 'bottomRight'
+                | 'source'
+                | 'middle'
+                | 'target';
               /**
                * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
                */
@@ -2894,18 +2899,18 @@ declare module "@elyra/canvas" {
              * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
              */
             position?:
-              | "topLeft"
-              | "topCenter"
-              | "topRight"
-              | "middleLeft"
-              | "middleCenter"
-              | "middleRight"
-              | "bottomLeft"
-              | "bottomCenter"
-              | "bottomRight"
-              | "source"
-              | "middle"
-              | "target";
+              | 'topLeft'
+              | 'topCenter'
+              | 'topRight'
+              | 'middleLeft'
+              | 'middleCenter'
+              | 'middleRight'
+              | 'bottomLeft'
+              | 'bottomCenter'
+              | 'bottomRight'
+              | 'source'
+              | 'middle'
+              | 'target';
             /**
              * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
              */
@@ -2940,7 +2945,7 @@ declare module "@elyra/canvas" {
           /**
            * Type of message
            */
-          type: "info" | "error" | "warning";
+          type: 'info' | 'error' | 'warning';
           /**
            * Message string
            */
@@ -2973,18 +2978,18 @@ declare module "@elyra/canvas" {
            * Indicates an anchor point on the node or link from which the decoration will be displayed. If x_pos and y_pos are not provided the decoration is displayed with a default offset from this position.
            */
           position?:
-            | "topLeft"
-            | "topCenter"
-            | "topRight"
-            | "middleLeft"
-            | "middleCenter"
-            | "middleRight"
-            | "bottomLeft"
-            | "bottomCenter"
-            | "bottomRight"
-            | "source"
-            | "middle"
-            | "target";
+            | 'topLeft'
+            | 'topCenter'
+            | 'topRight'
+            | 'middleLeft'
+            | 'middleCenter'
+            | 'middleRight'
+            | 'bottomLeft'
+            | 'bottomCenter'
+            | 'bottomRight'
+            | 'source'
+            | 'middle'
+            | 'target';
           /**
            * X position of the decorator relative to the node's position field. If position is not provided it is relative to the 'topLeft' position
            */

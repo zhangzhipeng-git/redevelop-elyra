@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, Fragment } from 'react';
-import Select from 'antd/lib/select/index.js';
-import TimePicker from 'antd/lib/time-picker/index.js';
-import Input from 'antd/lib/input/index.js';
+import Select from 'antd/lib/select';
+import TimePicker from 'antd/lib/time-picker';
+import Input from 'antd/lib/input';
 import dayjs from 'dayjs';
 
 const Option = Select.Option;

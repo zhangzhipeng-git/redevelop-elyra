@@ -35,6 +35,7 @@ interface Props {
     type?: string;
     required?: boolean;
   }[];
+  handleAfterSelectFileUploadFile?: (paths: string[]) => Promise<{paths: string[]}>;
 }
 
 const Heading = styled.div`
@@ -79,7 +80,8 @@ function NodeProperties({
   upstreamNodes,
   onFileRequested,
   onChange,
-  parameters
+  parameters,
+  handleAfterSelectFileUploadFile
 }: Props) {
   if (selectedNodes === undefined || selectedNodes.length === 0) {
     return <Message>请选择节点编辑它的属性。</Message>;
@@ -295,6 +297,7 @@ function NodeProperties({
           onChange?.(selectedNode.id, data);
         }}
         onFileRequested={onFileRequested}
+        handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
       />
     </div>
   );

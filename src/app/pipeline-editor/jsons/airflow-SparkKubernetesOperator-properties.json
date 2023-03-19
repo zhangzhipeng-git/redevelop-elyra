@@ -36,7 +36,7 @@
             "ui:placeholder": "请填写Spark应用程序主类"
           }
         },
-        "mainApplicationFile": {
+        "localFile": {
           "type": "string",
           "title": "文件路径",
           "description": "文件路径",
@@ -98,7 +98,7 @@
         "name",
         "mode",
         "type",
-        "mainApplicationFile",
+        "localFile",
         "kubernetes_conn_id"
       ]
     }
