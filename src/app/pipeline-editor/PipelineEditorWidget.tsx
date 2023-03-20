@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PipelineEditor, ThemeProvider } from '@app/base-pipeline-editor';
+import { PipelineEditor, ThemeProvider } from '@src/app/base-pipeline-editor';
 import { validate } from '@elyra/pipeline-services';
 // import { ContentParser } from '../services';
 import {
@@ -27,7 +27,7 @@ import {
   Dropzone,
   RequestErrors,
   showFormDialog
-} from '@app/ui-components';
+} from '@src/app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
 import { Dialog, ReactWidget, showDialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
@@ -54,11 +54,10 @@ import {
   EmptyGenericPipeline,
   EmptyPlatformSpecificPipeline
 } from './EmptyPipelineContent';
-import { formDialogWidget } from './formDialogWidget';
+
 import { usePalette } from './pipeline-hooks';
-import { PipelineExportDialog } from './PipelineExportDialog';
 import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
-import { PipelineSubmissionDialog } from './PipelineSubmissionDialog';
+
 import {
   createRuntimeData,
   getConfigDetails,
@@ -68,7 +67,7 @@ import { theme } from './theme';
 
 import { deleteNodeImage, attachNodeImage } from './node-image-transform';
 
-import { onBeforeAddNode_GetOp } from '@app/hooks/addNode';
+import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
 import { PipelineEnum } from '../enums';
 import { onAfterSelectFile_UploadFile } from '../hooks/selectFile';
 
@@ -472,18 +471,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         PathExt.extname(contextRef.current.path)
       );
 
-      // TODO: Parallelize this
-      const runtimes = await PipelineService.getRuntimes().catch(error =>
-        RequestErrors.serverError(error)
-      );
-      const schema = await PipelineService.getRuntimesSchema().catch(error =>
-        RequestErrors.serverError(error)
-      );
-      const runtimeTypes = await PipelineService.getRuntimeTypes();
-
       const runtimeData = createRuntimeData({
-        schema,
-        runtimes,
         allowLocal: actionType === 'run'
       });
 
@@ -538,14 +526,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         case 'run':
           dialogOptions = {
             title,
-            body: formDialogWidget(
-              <PipelineSubmissionDialog
-                name={pipelineName}
-                runtimeData={runtimeData}
-                pipelineType={type}
-                parameters={parameters}
-              />
-            ),
+            body: '是否确认单次运行？',
             buttons: [
               Dialog.cancelButton({ label: '取消' }),
               Dialog.okButton({ label: '确定' })
@@ -557,15 +538,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         case 'submit':
           dialogOptions = {
             title,
-            body: formDialogWidget(
-              <PipelineExportDialog
-                runtimeData={runtimeData}
-                runtimeTypeInfo={runtimeTypes}
-                pipelineType={type}
-                exportName={pipelineName}
-                parameters={parameters}
-              />
-            ),
+            body: '是否确认提交',
             buttons: [
               Dialog.cancelButton({ label: '取消' }),
               Dialog.okButton({ label: '确定' })
@@ -628,27 +601,10 @@ const PipelineWrapper: React.FC<IProps> = ({
       pipelineJson.pipelines[0].app_data.runtime_config =
         configDetails?.id ?? null;
 
-      // Export info
-      const pipeline_dir = PathExt.dirname(contextRef.current.path);
-      const basePath = pipeline_dir ? `${pipeline_dir}/` : '';
-      const exportType = dialogResult.value.pipeline_filetype;
-      const exportName = dialogResult.value.export_name;
-      const exportPath = `${basePath}${exportName}.${exportType}`;
-
       switch (actionType) {
         case 'run':
-          PipelineService.submitPipeline(
-            pipelineJson,
-            configDetails?.platform.displayName ?? ''
-          ).catch(error => RequestErrors.serverError(error));
           break;
         case 'submit':
-          PipelineService.exportPipeline(
-            pipelineJson,
-            exportType,
-            exportPath,
-            dialogResult.value.overwrite
-          ).catch(error => RequestErrors.serverError(error));
           break;
       }
     },
@@ -721,13 +677,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           break;
       }
     },
-    [
-      handleSubmission,
-      handleClearPipeline,
-      panelOpen,
-      shell,
-      commands
-    ]
+    [handleSubmission, handleClearPipeline, panelOpen, shell, commands]
   );
 
   const toolbar = {

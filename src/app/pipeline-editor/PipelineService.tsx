@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RequestHandler, MetadataService, IDictionary } from '../services';
+import { RequestHandler } from '../services';
 
-import { RequestErrors } from '@app/ui-components';
-
-import { showDialog, Dialog } from '@jupyterlab/apputils';
+import { Dialog } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
 
-import Utils from '@app/util';
+import Utils from '@src/app/util';
 
 // 配置项：json数据
 import componentCatalogsAirflow from './jsons/airflow-component-catalogs.json';
@@ -29,7 +27,23 @@ import propertiesAirflowKubernetesPodOperator from './jsons/airflow-KubernetesPo
 import propertiesAirflowSparkKubernetesOperator from './jsons/airflow-SparkKubernetesOperator-properties.json';
 import runtimeJSON from './jsons/runtime-types.json';
 
-import { svgMap } from '@assets/svgs';
+import { svgMap } from '@src/assets/svgs';
+import {
+  AppsResponse,
+  CancelRequest,
+  CancelResponse,
+  ConnRequest,
+  ConnResponse,
+  LogsRequest,
+  LogsResponse,
+  OperatorRequest,
+  OperatorResponse,
+  RemoveFileRequest,
+  RemoveFileResponse,
+  StatusRequest,
+  StatusResponse,
+  UploadFileResponse
+} from '@src/app/model';
 
 export const KFP_SCHEMA = 'kfp';
 export const RUNTIMES_SCHEMASPACE = 'runtimes';
@@ -110,56 +124,6 @@ export class PipelineService {
   }
 
   /**
-   * Returns a list of external runtime configurations available as
-   * `runtimes metadata`. This is used to submit the pipeline to be
-   * executed on these runtimes.
-   */
-  static async getRuntimes(): Promise<any> {
-    return MetadataService.getMetadata(RUNTIMES_SCHEMASPACE);
-  }
-
-  /**
-   * Returns a list of runtime schema
-   */
-  static async getRuntimesSchema(showError = true): Promise<any> {
-    return MetadataService.getSchema(RUNTIMES_SCHEMASPACE).then(schema => {
-      if (showError && Object.keys(schema).length === 0) {
-        return RequestErrors.noMetadataError('schema');
-      }
-
-      return schema;
-    });
-  }
-
-  /**
-   * Return a list of configured container images that are used as runtimes environments
-   * to run the pipeline nodes.
-   */
-  static async getRuntimeImages(): Promise<any> {
-    try {
-      let runtimeImages = await MetadataService.getMetadata('runtime-images');
-
-      runtimeImages = runtimeImages.sort(
-        (a: any, b: any) => 0 - (a.name > b.name ? -1 : 1)
-      );
-
-      if (Object.keys(runtimeImages).length === 0) {
-        return RequestErrors.noMetadataError('runtime image');
-      }
-
-      const images: IDictionary<string> = {};
-      for (const image in runtimeImages) {
-        const imageName: string =
-          runtimeImages[image]['metadata']['image_name'];
-        images[imageName] = runtimeImages[image]['display_name'];
-      }
-      return images;
-    } catch (error) {
-      Promise.reject(error);
-    }
-  }
-
-  /**
    * 获取 pipeline 的节点目录
    * @param {string} type pipeline 的类型
    */
@@ -177,24 +141,23 @@ export class PipelineService {
     return fnMap[type]();
   }
 
-    /**
+  /**
    * 获取 pipeline 的属性配置
    * @param {string} type pipeline 的类型
    */
-    static async getPipelineProperties<T>(type = 'local') {
-      const fnMap: { [k: string]: () => Promise<any> } = {
-        local: () =>
-          RequestHandler.makeGetRequest<T>(`elyra/pipeline/local/properties`),
-        APACHE_AIRFLOW: () =>
-          Promise.resolve(Utils.clone(airflowPipelineProperties)),
-        KUBEFLOW_PIPELINES: () =>
-          RequestHandler.makeGetRequest<T>(
-            `elyra/pipeline/components/KUBEFLOW_PIPELINES`
-          )
-      };
-      return fnMap[type]();
-    }
-  
+  static async getPipelineProperties<T>(type = 'local') {
+    const fnMap: { [k: string]: () => Promise<any> } = {
+      local: () =>
+        RequestHandler.makeGetRequest<T>(`elyra/pipeline/local/properties`),
+      APACHE_AIRFLOW: () =>
+        Promise.resolve(Utils.clone(airflowPipelineProperties)),
+      KUBEFLOW_PIPELINES: () =>
+        RequestHandler.makeGetRequest<T>(
+          `elyra/pipeline/components/KUBEFLOW_PIPELINES`
+        )
+    };
+    return fnMap[type]();
+  }
 
   /**
    * 获取节点属性
@@ -217,16 +180,95 @@ export class PipelineService {
     );
   }
 
+  /** 格式化请求参数，用于get等请求 */
+  static _parse(params: any) {
+    if (typeof params !== 'object') return params;
+    let arr = [] as string[];
+    Object.keys(params).forEach((k: string) => {
+      let v = params[k];
+      if (Array.isArray(v)) v = v.join(',');
+      arr.push(`${k}=${v}`);
+    });
+    return arr.join('&');
+  }
+
   /**
-   * Submit a request to refresh the component cache. If catalogName is given
-   * only refreshes the given catalog
-   *
-   * @param catalogName
+   * 应用查询接口
    */
-  static async refreshComponentsCache(catalogName?: string): Promise<void> {
-    return await RequestHandler.makePutRequest(
-      `elyra/pipeline/components/cache${catalogName ? '/' + catalogName : ''}`,
-      JSON.stringify({ action: 'refresh' })
+  static apps() {
+    return RequestHandler.makeGetRequest<AppsResponse>(`/api/v1/apps`);
+  }
+
+  /**
+   * 资源信息查询接口
+   * @param {ConnRequest} params
+   */
+  static conn(params: ConnRequest) {
+    return RequestHandler.makeGetRequest<ConnResponse>(
+      `/api/v1/conn?${this._parse(params)}`
+    );
+  }
+
+  /**
+   * 文件上传接口
+   * @param {FormData} params
+   */
+  static uploadFile(params: FormData) {
+    return RequestHandler.makePostRequest<UploadFileResponse>(
+      `/api/v1/uploadFile`,
+      params
+    );
+  }
+
+  /**
+   * 文件删除接口
+   * @param {RemoveFileRequest} params
+   */
+  static removeFile(params: RemoveFileRequest) {
+    return RequestHandler.makeGetRequest<RemoveFileResponse>(
+      `/api/v1/removeFile?${this._parse(params)}`
+    );
+  }
+
+  /**
+   * 工作流-节点实例运行日志查询接口
+   * @param {LogsRequest} params
+   */
+  static logs(params: LogsRequest) {
+    return RequestHandler.makePostRequest<LogsResponse>(
+      `/api/v1/dag/dagRuns/taskInstances/logs`,
+      JSON.stringify(params)
+    );
+  }
+
+  /**
+   * 工作流-节点实例运行状态查询接口，该接口定时轮询
+   * @param {StatusRequest} params
+   */
+  static status(params: StatusRequest) {
+    return RequestHandler.makeGetRequest<StatusResponse>(
+      `/api/v1/dag/dagRuns/taskInstances/status?${this._parse(params)}`
+    );
+  }
+
+  /**
+   * 工作流终止运行接口
+   * @param {CancelRequest} params
+   */
+  static cancel(params: CancelRequest) {
+    return RequestHandler.makeGetRequest<CancelResponse>(
+      `/api/v1/dag/dagRuns/cancel?${this._parse(params)}`
+    );
+  }
+
+  /**
+   * 工作流单次运行接口
+   * @param {LogsRequest} params
+   */
+  static operator(params: OperatorRequest) {
+    return RequestHandler.makePostRequest<OperatorResponse>(
+      `/api/v1/dag/operator`,
+      JSON.stringify(params)
     );
   }
 
@@ -241,133 +283,6 @@ export class PipelineService {
       title: title,
       body: body,
       buttons: [Dialog.okButton()]
-    });
-  }
-
-  /**
-   * Submit the pipeline to be executed on an external runtime (e.g. Kbeflow Pipelines)
-   *
-   * @param pipeline
-   * @param runtimeName
-   */
-  static async submitPipeline(
-    pipeline: any,
-    runtimeName: string
-  ): Promise<any> {
-    return RequestHandler.makePostRequest(
-      'elyra/pipeline/schedule',
-      JSON.stringify(pipeline),
-      this.getWaitDialog('Packaging and submitting pipeline ...')
-    ).then((response: any) => {
-      let dialogTitle;
-      let dialogBody;
-      if (response['run_url']) {
-        // pipeline executed remotely in a runtime of choice
-        dialogTitle = 'Job submission to ' + runtimeName + ' succeeded';
-        dialogBody = (
-          <p>
-            {response['platform'] === 'APACHE_AIRFLOW' ? (
-              <p>
-                Apache Airflow DAG 已经被推送到{' '}
-                <a
-                  href={response['git_url']}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Git 仓库.
-                </a>
-                <br />
-              </p>
-            ) : null}
-            在{' '}
-            <a
-              href={response['run_url']}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {' '}
-              运行详情页面{' '}
-            </a>
-            查看任务状态。
-            {response['object_storage_path'] !== null ? (
-              <p>
-                输出结果在 {response['object_storage_path']}{' '}
-                工作目录下，该目录位于{' '}
-                <a
-                  href={response['object_storage_url']}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  对象存储URL
-                </a>
-                。
-              </p>
-            ) : null}
-            <br />
-          </p>
-        );
-      } else {
-        // pipeline executed in-place locally
-        dialogTitle = '任务执行成功';
-        dialogBody = <p>任务已在本地执行。</p>;
-      }
-
-      return showDialog({
-        title: dialogTitle,
-        body: dialogBody,
-        buttons: [Dialog.okButton()]
-      });
-    });
-  }
-
-  /**
-   * Export a pipeline to different formats (e.g. DSL, YAML, etc). These formats
-   * are understood by a given runtime.
-   *
-   * @param pipeline
-   * @param pipeline_export_format
-   * @param pipeline_export_path
-   * @param overwrite
-   */
-  static async exportPipeline(
-    pipeline: any,
-    pipeline_export_format: string,
-    pipeline_export_path: string,
-    overwrite: boolean
-  ): Promise<any> {
-    /// to-do
-    console.log(
-      'Exporting pipeline to [' + pipeline_export_format + '] format'
-    );
-
-    console.log('Overwriting existing file: ' + overwrite);
-
-    const body = {
-      pipeline: pipeline,
-      export_format: pipeline_export_format,
-      export_path: pipeline_export_path,
-      overwrite: overwrite
-    };
-
-    return RequestHandler.makePostRequest(
-      'elyra/pipeline/export',
-      JSON.stringify(body),
-      this.getWaitDialog('正在生成产出文件...'),
-      'blob'
-    ).then(({ headers, data }: any) => {
-      const filename = headers.get('Content-Disposition')?.split('=')[1];
-      return showDialog({
-        title: 'Pipeline 导出成功',
-        body: (
-          <p>
-            导出文件:{' '}
-            <a href={window.URL.createObjectURL(data)} download={filename}>
-              {filename}{' '}
-            </a>
-          </p>
-        ),
-        buttons: [Dialog.okButton()]
-      });
     });
   }
 

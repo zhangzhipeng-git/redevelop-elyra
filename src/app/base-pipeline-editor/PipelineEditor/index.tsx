@@ -431,35 +431,21 @@ const PipelineEditor = forwardRef(
       async (e: CanvasEditEvent) => {
         let payload;
         let type = e.editType;
-        if (e.editType === 'openFile') {
-          const filenameRef = controller.current.resolveParameterRef(
-            e.targetObject.op,
-            'filehandler'
-          );
-          if (filenameRef) {
-            payload =
-              e.targetObject?.app_data?.component_parameters?.[filenameRef];
-          }
-        }
-        // save ，run，submit clean，toggleOpenPanel，properties，openFile
-        onAction?.({ type: type, payload });
 
-        if (e.editType === 'newFileNode') {
-          console.log('==从文件中新建节点==');
-
-          const nodes = controller.current.getAllPaletteNodes();
-          let extensions = nodes.map(n => n.app_data.extensions).flat();
-          extensions = Array.from(new Set(extensions));
-
-          const [filepath] = await onFileRequested?.({
-            canSelectMany: false,
-            filters: { File: extensions }
-          });
-          const node = nodes.find(n =>
-            n.app_data.extensions?.includes(path.extname(filepath))
-          );
-
-          if (node !== undefined) {
+        switch (type) {
+          case 'newFileNode':
+            console.log('==从文件中新建节点==');
+            const nodes = controller.current.getAllPaletteNodes();
+            let extensions = nodes.map(n => n.app_data.extensions).flat();
+            extensions = Array.from(new Set(extensions));
+            const [filepath] = await onFileRequested?.({
+              canSelectMany: false,
+              filters: { File: extensions }
+            });
+            const node = nodes.find(n =>
+              n.app_data.extensions?.includes(path.extname(filepath))
+            );
+            if (!node) return;
             const op = await handleBeforeAddNodeGetOp?.(node.op);
             const { paths } = await handleAfterSelectFileUploadFile([filepath]);
             controller.current.editActionHandler({
@@ -471,36 +457,39 @@ const PipelineEditor = forwardRef(
               path: filepath,
               mainApplicationFile: paths[0]
             });
-          }
-        }
-
-        if (e.editType === 'openPipelineProperties') {
-          setCurrentTab('pipeline-properties');
-          setPanelOpen(true);
-        }
-
-        if (e.editType === 'properties') {
-          setCurrentTab('properties');
-          setPanelOpen(true);
-        }
-
-        if (e.editType === 'toggleOpenPanel') {
-          setPanelOpen(prev => !prev);
-        }
-
-        // Catch any events where a save isn't necessary.
-        switch (e.editType) {
-          case 'properties':
+            break;
           case 'openFile':
+            const filenameRef = controller.current.resolveParameterRef(
+              e.targetObject.op,
+              'filehandler'
+            );
+            if (!filenameRef) return;
+            payload =
+              e.targetObject?.app_data?.component_parameters?.[filenameRef];
+            break;
+          case 'openPipelineProperties':
+            setCurrentTab('pipeline-properties');
+            setPanelOpen(true);
+            return;
+          case 'properties':
+            setCurrentTab('properties');
+            setPanelOpen(true);
+            return;
           case 'toggleOpenPanel':
-          case 'copy': // NOTE: "cut" deletes an item so needs a save.
-          case 'displaySubPipeline':
+            setPanelOpen(prev => !prev);
+            return;
           case 'displayPreviousPipeline':
+          case 'displaySubPipeline':
+          case 'copy':
             return;
         }
 
+        // save ，run，submit clean，toggleOpenPanel，properties，openFile
+        onAction?.({ type, payload });
+
         // 设置异步任务，等待前序所有变化（比如批量插入节点）在画布中完成后，再重新设置 pipeline 数据
         Promise.resolve().then(() => {
+          // Catch any events where a save isn't necessary.
           onChange?.(controller.current.getPipelineFlow());
         });
       },

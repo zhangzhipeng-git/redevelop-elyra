@@ -2,8 +2,8 @@
  * pipeline
  */
 
-import { PIPELINE_CURRENT_VERSION } from '@app/base-pipeline-editor';
-import { pipelineIcon, RequestErrors } from '@app/ui-components';
+import { PIPELINE_CURRENT_VERSION } from '@src/app/base-pipeline-editor';
+import { pipelineIcon, RequestErrors } from '@src/app/ui-components';
 
 import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
 import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
@@ -243,7 +243,7 @@ export default async function activatePipeline(
     // '[data-file-type="python"]',
     '[data-file-type="r"]',
     '[title*=".jar"]',
-    '[title*=".py"]',
+    '[title*=".py"]'
   ];
 
   supportFileSelectors.forEach(selector => {

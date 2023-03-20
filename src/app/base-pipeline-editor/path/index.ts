@@ -1,4 +1,4 @@
-export default {
+const path = {
   /**
    * 获取文件后缀，例如：.py , .r
    * @param {string} filename 文件名
@@ -32,3 +32,4 @@ export default {
     return filename.substring(0, index);
   }
 };
+export default path;

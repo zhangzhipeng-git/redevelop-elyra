@@ -21,8 +21,8 @@ import useSWR from 'swr';
 
 import { PipelineService } from './PipelineService';
 
-import { SvgRequestUrl, svgMap } from '@assets/svgs';
-import Utils from '@app/util';
+import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
+import Utils from '@src/app/util';
 
 export const GENERIC_CATEGORY_ID = 'Elyra';
 

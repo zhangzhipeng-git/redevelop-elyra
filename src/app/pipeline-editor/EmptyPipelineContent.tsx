@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { dragDropIcon } from '@app/ui-components';
+import { dragDropIcon } from '@src/app/ui-components';
 import { settingsIcon } from '@jupyterlab/ui-components';
 
 import React from 'react';

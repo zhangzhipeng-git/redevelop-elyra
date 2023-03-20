@@ -1,10 +1,10 @@
-import { PipelineEnum, Types } from '@app/enums';
+import { PipelineEnum, Types } from '@src/app/enums';
 import { FileBrowser } from '@jupyterlab/filebrowser';
-import { RequestHandler } from '@app/services';
-import Utils from '@app/util';
 
-import { RequestErrors } from '@app/ui-components';
-import { Loading } from '@app/ui-components/loading';
+import Utils from '@src/app/util';
+import { UploadFileResponse } from '@src/app/model';
+import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
+import { mask, unmask } from '../ui-components/loading';
 
 /**
  * 获取文件并上传
@@ -17,9 +17,8 @@ export async function onAfterSelectFile_UploadFile(
   fileBrowser: FileBrowser,
   paths: string[]
 ) {
-  switch (type) {
-    case PipelineEnum.APACHE_AIRFLOW:
-  }
+  if (type !== PipelineEnum.APACHE_AIRFLOW) return { paths: [] };
+
   const filePromises = paths.map((p: string) =>
     fileBrowser.model.manager.services.contents.get(p, {
       type: 'file',
@@ -27,23 +26,24 @@ export async function onAfterSelectFile_UploadFile(
       format: 'base64'
     })
   );
-  const files = await Promise.all(filePromises);
-  const formData = new FormData();
-  files.forEach(f => {
-    const { content, mimetype, name } = f;
-    const blob = Utils.base64toBlob(content, mimetype);
-    const file = new File([blob], name, { type: mimetype });
-    formData.append('file', file);
-  });
-  return RequestHandler.makeServerRequest<{ paths: string[] }>(
-    '/upload/file',
-    {
-      body: formData,
-      method: 'POST'
-    },
-    new Loading()
-  ).catch(e => {
-    RequestErrors.serverError(e);
-    throw new Error('文件上次失败！');
-  });
+
+  let uploadFiles: UploadFileResponse[] = [];
+  mask();
+  try {
+    const files = await Promise.all(filePromises);
+    const uploadPromises = files.map(f => {
+      const { content, mimetype, name } = f;
+      const blob = Utils.base64toBlob(content, mimetype);
+      const file = new File([blob], name, { type: mimetype });
+      const formData = new FormData();
+      formData.append('file', file);
+      return PipelineService.uploadFile(formData);
+    });
+    uploadFiles = await Promise.all(uploadPromises);
+  } catch (e) {
+    console.warn('上传文件失败！');
+  }
+  unmask();
+
+  return { paths: uploadFiles.map(v => v.url) };
 }

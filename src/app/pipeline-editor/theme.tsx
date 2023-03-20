@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { trashIcon } from '@app/ui-components';
+import { trashIcon } from '@src/app/ui-components';
 import {
   closeIcon,
   caretDownEmptyIcon,

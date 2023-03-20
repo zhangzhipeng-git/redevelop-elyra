@@ -15,9 +15,9 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 import { ITranslator } from '@jupyterlab/translation';
 import { IFormComponentRegistry } from '@jupyterlab/ui-components';
 
-import activatePipeline from '@app/pipeline-editor';
+import activatePipeline from '@src/app/pipeline-editor';
 
-import userIdentify from '@app/user';
+import userIdentify from '@src/app/user';
 
 userIdentify.then((identify: any) => console.log(identify, 'user.identify'));
 
@@ -48,20 +48,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     browserFactory: IFileBrowserFactory,
     restorer: ILayoutRestorer,
     menu: IMainMenu,
-    registry: ISettingRegistry,
-    editorServices: IEditorServices,
-    status: ILabStatus,
-    componentRegistry: IFormComponentRegistry,
-    translator: ITranslator
+    registry: ISettingRegistry
   ) => {
-    // activateMetadataEditor(
-    //   app,
-    //   palette,
-    //   editorServices,
-    //   status,
-    //   componentRegistry,
-    //   translator
-    // );
     activatePipeline(
       app,
       palette,

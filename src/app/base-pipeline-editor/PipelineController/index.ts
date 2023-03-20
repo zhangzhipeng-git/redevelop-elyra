@@ -22,6 +22,7 @@ import {
   NodeType
 } from '@elyra/canvas';
 import { validate } from '@elyra/pipeline-services';
+import { PathExt } from '@jupyterlab/coreutils';
 import { getDefaultFormState } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv6';
 import produce from 'immer';
@@ -151,11 +152,8 @@ class PipelineController extends CanvasController {
       nodeTemplate: { op },
       ...rest
     } = item;
-
     console.log('==添加节点==', item);
-
     const nodeTemplate: any = this.getPaletteNode(op);
-
     const defaults =
       getDefaultFormState(validator, nodeTemplate.app_data.properties ?? {}) ??
       {};
@@ -182,6 +180,12 @@ class PipelineController extends CanvasController {
     if (mainApplicationFile)
       data.nodeTemplate.app_data.component_parameters.mainApplicationFile =
         mainApplicationFile;
+
+    if (path) {
+      const typeMap: any = { '.py': 'python', '.jar': 'java' };
+      const ext = PathExt.extname(path);
+      data.nodeTemplate.app_data.component_parameters.type = typeMap[ext];
+    }
 
     this.editActionHandler(data);
   }
@@ -404,6 +408,7 @@ class PipelineController extends CanvasController {
 
   setPalette(palette: any) {
     this.palette = palette;
+    console.log(palette, 'setPalette');
     this.setPipelineFlowPalette(palette);
   }
 

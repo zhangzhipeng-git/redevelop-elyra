@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PIPELINE_CURRENT_VERSION } from '@app/base-pipeline-editor';
+import { PIPELINE_CURRENT_VERSION } from '@src/app/base-pipeline-editor';
 
 import { LabShell } from '@jupyterlab/application';
 import { PathExt } from '@jupyterlab/coreutils';

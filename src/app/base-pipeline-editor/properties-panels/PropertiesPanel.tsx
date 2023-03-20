@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Form, { UiSchema, Widget, AjvError } from '@rjsf/core';
+import Form, { UiSchema, Widget, AjvError, FormValidation } from '@rjsf/core';
 import { produce } from 'immer';
 import styled from 'styled-components';
 
@@ -26,6 +26,14 @@ import {
 } from '../CustomFormControls';
 import { MyReactCron } from '../CustomFormControls/ReactCron';
 import { MyDateTime } from '../CustomFormControls/DateTime';
+import { JSONSchema7 } from 'json-schema';
+
+import { PathExt } from '@jupyterlab/coreutils';
+import path from '../path';
+
+import { TYPE_MAP } from '@src/app/const';
+import { ErrorEnum } from '@src/app/enums';
+import Utils from '@src/app/util';
 
 export const Message = styled.div`
   margin-top: 14px;
@@ -45,7 +53,7 @@ const widgets: { [id: string]: Widget } = {
 
 interface Props {
   data: any;
-  schema?: any;
+  schema?: JSONSchema7 | any;
   onChange?: (data: any) => any;
   onFileRequested?: (options: any) => any;
   noValidate?: boolean;
@@ -68,11 +76,10 @@ export function PropertiesPanel({
   id,
   handleAfterSelectFileUploadFile
 }: Props) {
-  if (schema === undefined) {
-    return <Message>未定义属性.</Message>;
-  }
+  if (!schema) return <Message>未定义属性.</Message>;
 
   const uiSchema: UiSchema = {};
+
   function genUISchemaFromSchema(schema: any, uiSchema: UiSchema) {
     if (schema.uihints) Object.assign(uiSchema, schema.uihints);
     if (!schema.properties) return;
@@ -85,7 +92,7 @@ export function PropertiesPanel({
 
   function onChangeFn(e: any) {
     const newFormData = e.formData;
-    const params = schema.properties?.component_parameters?.properties;
+    const params = schema!.properties?.component_parameters?.properties ?? {};
     for (const field in params) {
       if (params[field].oneOf) {
         for (const option of params[field].oneOf) {
@@ -96,7 +103,31 @@ export function PropertiesPanel({
         }
       }
     }
-    onChange?.(e.formData);
+
+    const nodeParams = e.formData.component_parameters;
+    if (nodeParams) {
+      const { type, localFile } = nodeParams;
+      const fileType = TYPE_MAP[path.extname(localFile)];
+      if (type !== fileType) {
+        delete nodeParams.mainApplicationFile;
+        delete nodeParams.localFile;
+        // to-do 删除文件
+      }
+    }
+
+    onChange && Utils.debounceExecute(onChange, [e.formData], 100);
+  }
+
+  function customValidate(formData: any, errors: FormValidation) {
+    const data = formData.component_parameters;
+    const error = errors.component_parameters as any;
+    const needValidate = data && error;
+    const field = 'priority_class_name';
+
+    if (needValidate && ['java', 'scala'].includes(data.type) && !data[field])
+      error?.[field]?.addError(ErrorEnum.REQUIRED);
+
+    return errors;
   }
 
   const formContext = {
@@ -121,18 +152,17 @@ export function PropertiesPanel({
       onChange?.(newFormData ?? data);
     },
 
-    onFileRequested: async (args: any, fieldName: string) => {
+    onFileRequested: async (args: any) => {
       const values = await onFileRequested?.({
         ...args,
         filename: data.component_parameters.filename
       });
 
-      console.log(args, fieldName, 'onFileRequested');
-
       let s3Paths: string[] = [];
       if (handleAfterSelectFileUploadFile)
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
 
+      const typeMap: any = { '.py': 'python', '.jar': 'java' };
       const newFormData = produce(data, (draft: any) => {
         if (args.canSelectMany) {
           draft.component_parameters[args.propertyID] = [
@@ -140,15 +170,22 @@ export function PropertiesPanel({
             ...values
           ];
           draft.component_parameters.mainApplicationFile = s3Paths;
-        } else {
-          if (args.parentID) {
-            draft.component_parameters[args.parentID].value = values?.[0];
-          } else {
-            draft.component_parameters[args.propertyID] = values?.[0];
-          }
-          draft.component_parameters.mainApplicationFile = values?.[0];
+          draft.component_parameters.type = values.map(
+            (v: string) => typeMap[PathExt.extname(v)]
+          );
+          return;
         }
+
+        if (args.parentID) {
+          draft.component_parameters[args.parentID].value = values?.[0];
+        } else {
+          draft.component_parameters[args.propertyID] = values?.[0];
+        }
+        draft.component_parameters.mainApplicationFile = values?.[0];
+        draft.component_parameters.type =
+          typeMap[PathExt.extname(values[0])] || 'java';
       });
+
       onChange?.(newFormData ?? data);
     },
     // 点击刷新按钮时调用
@@ -163,7 +200,7 @@ export function PropertiesPanel({
       .filter(e => e.name !== 'oneOf') // oneOf 使用自定义的校验逻辑
       .map(e => ({
         ...e,
-        message: e.name === 'required' ? '是必填属性' : e.message
+        message: e.name === 'required' ? ErrorEnum.REQUIRED : e.message
       }));
   }
 
@@ -171,8 +208,9 @@ export function PropertiesPanel({
     <Form
       formData={data}
       uiSchema={uiSchema}
-      schema={schema as any}
+      schema={schema}
       onChange={onChangeFn}
+      validate={customValidate}
       formContext={formContext}
       id={id}
       widgets={widgets}

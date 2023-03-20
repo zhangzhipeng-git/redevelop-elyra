@@ -1,11 +1,11 @@
 import { Dialog } from '@jupyterlab/apputils';
 
-import { PipelineEnum, Types } from '@app/enums';
-import { showFormDialog } from '@app/ui-components';
+import { PipelineEnum, Types } from '@src/app/enums';
+import { showFormDialog } from '@src/app/ui-components';
 
-import { formDialogWidget } from '@app/pipeline-editor/formDialogWidget';
-import { OperatorSelect } from '@app/pipeline-editor/PipelineAddFileDialog';
-import { PipelineService } from '@app/pipeline-editor/PipelineService';
+import { formDialogWidget } from '@src/app/pipeline-editor/formDialogWidget';
+import { OperatorSelect } from '@src/app/pipeline-editor/PipelineAddFileDialog';
+import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 
 /**
  * 在添加节点前，获取节点的 op ，如：

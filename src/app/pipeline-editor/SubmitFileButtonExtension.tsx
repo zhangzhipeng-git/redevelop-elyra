@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-import { ContentParser } from '../services';
-import { RequestErrors, showFormDialog } from '@app/ui-components';
+import { /* RequestErrors, */ showFormDialog } from '@src/app/ui-components';
 import { Dialog, showDialog, ToolbarButton } from '@jupyterlab/apputils';
 import { PathExt } from '@jupyterlab/coreutils';
 import { DocumentRegistry, DocumentWidget } from '@jupyterlab/docregistry';
 import { IDisposable } from '@lumino/disposable';
 
-import { FileSubmissionDialog } from './FileSubmissionDialog';
-import { formDialogWidget } from './formDialogWidget';
-import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
-import { createRuntimeData, getConfigDetails } from './runtime-utils';
-import Utils from './utils';
+// import { PipelineService } from './PipelineService';
+// import { getConfigDetails } from './runtime-utils';
+// import Utils from './utils';
 
 /**
  * Submit file button extension
@@ -55,51 +52,13 @@ export class SubmitFileButtonExtension<
       await context.save();
     }
 
-    const env = await ContentParser.getEnvVars(context.path).catch(error =>
-      RequestErrors.serverError(error)
-    );
-    const runtimes = await PipelineService.getRuntimes().catch(error =>
-      RequestErrors.serverError(error)
-    );
-    const images = await PipelineService.getRuntimeImages().catch(error =>
-      RequestErrors.serverError(error)
-    );
-    const schema = await PipelineService.getRuntimesSchema().catch(error =>
-      RequestErrors.serverError(error)
-    );
-
-    const runtimeData = createRuntimeData({ schema, runtimes });
-
-    if (!runtimeData.platforms.find(p => p.configs.length > 0)) {
-      const res = await RequestErrors.noMetadataError(
-        'runtime',
-        `run file as pipeline.`
-      );
-
-      if (res.button.label.includes(RUNTIMES_SCHEMASPACE)) {
-        // Open the runtimes widget
-        Utils.getLabShell(document).activateById(
-          `elyra-metadata:${RUNTIMES_SCHEMASPACE}`
-        );
-      }
-      return;
-    }
-
     let dependencyFileExtension = PathExt.extname(context.path);
     if (dependencyFileExtension === '.ipynb') {
       dependencyFileExtension = '.py';
     }
 
     const dialogOptions = {
-      title: 'Run file as pipeline',
-      body: formDialogWidget(
-        <FileSubmissionDialog
-          env={env}
-          dependencyFileExtension={dependencyFileExtension}
-          images={images}
-          runtimeData={runtimeData}
-        />
-      ),
+      title: '将文件作为 pipeline 运行',
       buttons: [
         Dialog.cancelButton({ label: '取消' }),
         Dialog.okButton({ label: '确定' })
@@ -113,35 +72,30 @@ export class SubmitFileButtonExtension<
       return;
     }
 
-    const {
-      runtime_config,
-      framework,
-      cpu,
-      gpu,
-      memory,
-      dependency_include,
-      dependencies,
-      ...envObject
-    } = dialogResult.value;
+    // const {
+    //   runtime_config,
+    //   framework,
+    //   cpu,
+    //   gpu,
+    //   memory,
+    //   dependency_include,
+    //   dependencies,
+    //   ...envObject
+    // } = dialogResult.value;
 
-    const configDetails = getConfigDetails(runtimeData, runtime_config);
+    // const configDetails = getConfigDetails({} as any, runtime_config);
 
     // prepare file submission details
-    const pipeline = Utils.generateSingleFilePipeline(
-      context.path,
-      configDetails,
-      framework,
-      dependency_include ? dependencies.split(',') : undefined,
-      envObject,
-      cpu,
-      gpu,
-      memory
-    );
-
-    PipelineService.submitPipeline(
-      pipeline,
-      configDetails?.platform.displayName ?? ''
-    ).catch(error => RequestErrors.serverError(error));
+    // const pipeline = Utils.generateSingleFilePipeline(
+    //   context.path,
+    //   configDetails,
+    //   framework,
+    //   dependency_include ? dependencies.split(',') : undefined,
+    //   envObject,
+    //   cpu,
+    //   gpu,
+    //   memory
+    // );
   };
 
   createNew(editor: T): IDisposable {

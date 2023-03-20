@@ -1141,10 +1141,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bigbigbird/mock@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@bigbigbird/mock/-/mock-3.0.0.tgz#d658f31a668fc8d65b953096bdaf3dbeb5ecd1cf"
-  integrity sha512-KarERv92BxQnKVtRB9SLndx9WcZR4w1wtSrOjApna8mdsQDkeDIB6gpHzPDALzuECztljUVUsBPg7zVI25KUAA==
+"@bigbigbird/mock@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@bigbigbird/mock/-/mock-3.0.1.tgz#566c4708ecbadde7f2128476cedb006976672cdf"
+  integrity sha512-uT6fsWm+XzMuPJJbW5aXUH812NgaOIFBK0nqCv5UCK0tIeLE5Lm5vy0EUSepi1roSg1Q7HzfenmEGWiCSZiYPw==
   dependencies:
     colors "^1.4.0"
     cross-env "^6.0.3"
@@ -15326,10 +15326,8 @@ watchpack@^1.7.4:
   resolved "https://registry.npmjs.org/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

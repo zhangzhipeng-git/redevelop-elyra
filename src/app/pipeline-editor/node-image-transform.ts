@@ -9,8 +9,8 @@
  * 节点图标的时候，再通过映射关系找到base64编码去渲染图标。
  */
 
-import { SvgRequestUrl, svgMap } from '@assets/svgs';
-import Utils from '@app/util';
+import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
+import Utils from '@src/app/util';
 
 enum NodeSvgKey {
   SparkKubernetesOperator = 'execute-SparkKubernetesOperator-node',

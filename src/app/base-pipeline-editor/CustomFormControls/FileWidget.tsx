@@ -17,14 +17,20 @@
 import { useCallback } from 'react';
 
 import { Widget } from '@rjsf/core';
+import { EXT_MAP } from '@src/app/const';
 
 // TODO: Make the file clearable
 export const FileWidget: Widget = props => {
   const handleChooseFile = useCallback(async () => {
+    const fileType = props.formContext.formData.component_parameters.type;
+    const File = EXT_MAP[fileType]
+      ? [EXT_MAP[fileType]]
+      : props.uiSchema.extensions;
+
     props.formContext.onFileRequested({
       canSelectMany: false,
       defaultUri: props.value,
-      filters: { File: props.uiSchema.extensions },
+      filters: { File },
       propertyID: props.id.replace('root_component_parameters_', ''),
       parentID: props.uiSchema?.parentID
     });

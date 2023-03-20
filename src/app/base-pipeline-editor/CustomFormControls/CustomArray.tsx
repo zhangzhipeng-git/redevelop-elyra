@@ -95,6 +95,7 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
       propertyID: props.idSchema.$id.replace('root_component_parameters_', '')
     });
   }, [props]);
+
   return (
     <div className={props.className}>
       {props.items.map(item => {

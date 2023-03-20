@@ -17,23 +17,17 @@
               "type": "java",
               "executor_cores": 1,
               "cmds": [],
-              "localFile": "setup.py",
-              "mainApplicationFile": "setup.py"
+              "kubernetes_conn_id": "11",
+              "priority_class_name": "11",
+              "localFile": "jsrun.jar",
+              "mainApplicationFile": "jsrun.jar",
+              "name": "测试任务1"
             },
             "ui_data": {
-              "label": "setup.py",
-              "x_pos": 166,
+              "label": "jsrun.jar",
+              "x_pos": 68,
               "y_pos": 82,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
+              "description": "Run KubernetesPodOperator Node"
             }
           },
           "inputs": [
@@ -66,21 +60,76 @@
           ]
         },
         {
-          "id": "77a105a2-62df-4241-8c3d-bff75ae8954f",
+          "id": "901326df-a199-41d7-9a29-03c4d1fb31bd",
           "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
+          "op": "execute-SparkKubernetesOperator-node",
           "app_data": {
             "component_parameters": {
               "type": "java",
               "executor_cores": 1,
-              "cmds": [],
-              "localFile": "setup.py",
-              "mainApplicationFile": "setup.py"
+              "cmds": []
             },
             "ui_data": {
-              "label": "setup.py",
-              "x_pos": 172,
-              "y_pos": 140,
+              "label": "SparkKubernetesOperator",
+              "x_pos": 90,
+              "y_pos": 156,
+              "description": "Run SparkKubernetesOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "49db37cb-a290-43d5-a6fe-00fcc542beff",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node1.py",
+              "mainApplicationFile": "C:\\Users\\zzp\\AppData\\Local\\Temp\\TmJvV0GYXhEZBnYr8sYyJAlg.py"
+            },
+            "ui_data": {
+              "label": "node1.py",
+              "x_pos": 248,
+              "y_pos": 361,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {
@@ -123,21 +172,363 @@
           ]
         },
         {
-          "id": "bfcd2d5e-511c-4e1e-af44-080899e0fcdd",
+          "id": "9ac238a6-eb3a-468a-92a1-859d8d4173f5",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "java",
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node2.py",
+              "mainApplicationFile": "C:\\Users\\zzp\\AppData\\Local\\Temp\\vsuSKrUskdxsVSXXaMctItI1.py"
+            },
+            "ui_data": {
+              "label": "node2.py",
+              "x_pos": 268,
+              "y_pos": 381,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1785b3c-e912-4474-872d-e085610a6cc8",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
               "executor_cores": 1,
               "cmds": [],
               "localFile": "node3.py",
-              "mainApplicationFile": "D:\\frontend\\jupyterlab\\redevelop-elyra-cat\\birdmock\\upload\\PKMP9vOPX7I1NaI9kAhe_gFV.py"
+              "mainApplicationFile": "C:\\Users\\zzp\\AppData\\Local\\Temp\\nXo_ASWVpGQ2ZUDWDqQ17dY7.py"
             },
             "ui_data": {
               "label": "node3.py",
-              "x_pos": 180,
-              "y_pos": 220,
+              "x_pos": 288,
+              "y_pos": 401,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "e4d6a1f1-8f02-4210-89b0-743af9195b77",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node4.py",
+              "mainApplicationFile": "C:\\Users\\zzp\\AppData\\Local\\Temp\\qAVTkNQZ6gdf19jbtOjB3sgl.py"
+            },
+            "ui_data": {
+              "label": "node4.py",
+              "x_pos": 308,
+              "y_pos": 421,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "42484e4d-9356-448b-9b0c-88109bb781ae",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node1.py",
+              "mainApplicationFile": "%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+            },
+            "ui_data": {
+              "label": "node1.py",
+              "x_pos": 466,
+              "y_pos": 85,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "513e3c50-0065-4b6b-bc91-c3e3590a2544",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node2.py",
+              "mainApplicationFile": "%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+            },
+            "ui_data": {
+              "label": "node2.py",
+              "x_pos": 555,
+              "y_pos": 217,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "02aa11a9-3e32-4ade-b7fe-19be3eaa057f",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node3.py",
+              "mainApplicationFile": "%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+            },
+            "ui_data": {
+              "label": "node3.py",
+              "x_pos": 575,
+              "y_pos": 237,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "93b70e78-dc58-4d5b-9c7a-ef1b1559f7a8",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "executor_cores": 1,
+              "cmds": [],
+              "localFile": "node4.py",
+              "mainApplicationFile": "%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+            },
+            "ui_data": {
+              "label": "node4.py",
+              "x_pos": 595,
+              "y_pos": 257,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {

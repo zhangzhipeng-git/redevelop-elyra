@@ -9,3 +9,8 @@ export type Types =
   | PipelineEnum.APACHE_AIRFLOW
   | PipelineEnum.KUBEFLOW_PIPELINES
   | PipelineEnum.Local;
+
+/** 错误提示枚举 */
+export enum ErrorEnum {
+  REQUIRED = '是必填属性'
+}

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { IRuntime, ISchema } from './PipelineService';
-
 export interface IRuntimeData {
   platforms: {
     id: string;
@@ -32,34 +30,11 @@ export interface IRuntimeData {
 }
 
 export const createRuntimeData = ({
-  runtimes,
-  schema,
   allowLocal
 }: {
-  runtimes: IRuntime[];
-  schema: ISchema[];
   allowLocal?: boolean;
 }): IRuntimeData => {
   const platforms: IRuntimeData['platforms'] = [];
-  for (const s of schema) {
-    const found = platforms.find(p => p.id === s.runtime_type);
-    if (found) {
-      continue;
-    }
-    platforms.push({
-      id: s.runtime_type,
-      displayName: s.title,
-      configs: runtimes
-        .filter(r => r.metadata.runtime_type === s.runtime_type)
-        .map(r => ({
-          id: r.name,
-          displayName: r.display_name,
-          processor: {
-            id: r.schema_name
-          }
-        }))
-    });
-  }
   return { platforms, allowLocal: !!allowLocal };
 };
 
@@ -79,8 +54,8 @@ export const getConfigDetails = (
   runtimeData: IRuntimeData,
   configId: string
 ): IConfigDetails | undefined => {
-  for (const platform of runtimeData.platforms) {
-    for (const config of platform.configs) {
+  for (const platform of runtimeData?.platforms) {
+    for (const config of platform?.configs) {
       if (config.id === configId) {
         return {
           id: config.id,

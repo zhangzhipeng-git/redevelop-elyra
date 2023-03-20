@@ -19,7 +19,8 @@ import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 
 import CONFIG from '@src/config.json';
-import { Loading } from '@app/ui-components/loading';
+import { Loading } from '@src/app/ui-components/loading';
+import { RequestErrors } from '../ui-components';
 
 /**
  * A service class for making requests to the jupyter lab server.
@@ -183,7 +184,7 @@ export class RequestHandler {
       Object.assign(CONFIG, config || {})
     );
     const requestUrl = URLExt.join(settings.baseUrl, requestPath);
-
+    // credentials: "include"
     const { type = 'json', ...requestInit } = options;
 
     console.log(`Sending a ${requestInit.method} request to ${requestUrl}`);
@@ -229,9 +230,24 @@ export class RequestHandler {
           return reject(reason);
         }
       );
-    });
+    })
+      .then((res: any) => {
+        // 返回成功
+        if (res.code === '0' && res.data) {
+          return res.data as T;
+        }
+        // 返回失败
+        if (res.code !== undefined && res.msg) {
+          return Promise.reject(res.msg);
+        }
+        // 其他结构数据
+        return res;
+      })
+      .catch(error => {
+        RequestErrors.serverError(error);
+        return Promise.reject(error);
+      });
 
-    const serverResponse: any = await getServerResponse;
-    return serverResponse;
+    return getServerResponse;
   }
 }

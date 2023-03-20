@@ -28,4 +28,23 @@ export default class Utils {
     }
     return new Blob([u8arr], { type });
   };
+
+  /** 防抖，直接塞进要执行的函数体，前提是fn是不可变的！，否则防抖不生效 */
+  static debounceExecute(
+    fn: any,
+    args: any[],
+    debounceTime: number,
+    immediate: boolean = false,
+    ctx?: object | null
+  ) {
+    if (immediate && !fn.immediate) {
+      fn();
+      fn.immediate = true;
+      return;
+    }
+    clearTimeout(fn.timer);
+    fn.timer = setTimeout(() => {
+      fn.apply(ctx, args);
+    }, debounceTime);
+  }
 }
