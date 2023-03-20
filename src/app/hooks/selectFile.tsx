@@ -17,7 +17,9 @@ export async function onAfterSelectFile_UploadFile(
   fileBrowser: FileBrowser,
   paths: string[]
 ) {
-  if (type !== PipelineEnum.APACHE_AIRFLOW) return { paths: [] };
+  let defaultPahts = { paths: [] };
+  if (type !== PipelineEnum.APACHE_AIRFLOW) return defaultPahts;
+  if (!paths || !paths[0]) return defaultPahts;
 
   const filePromises = paths.map((p: string) =>
     fileBrowser.model.manager.services.contents.get(p, {

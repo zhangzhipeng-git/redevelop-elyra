@@ -42,8 +42,10 @@ import styled, { useTheme } from 'styled-components';
 
 import NodeTooltip from '../NodeTooltip';
 import PipelineController from '../PipelineController';
+
 import { NodeProperties } from '../properties-panels';
-import { PropertiesPanel } from '../properties-panels/PropertiesPanel';
+import { PipelinePropertiesPanel } from '../properties-panels/';
+
 import SplitPanelLayout from '../SplitPanelLayout';
 import TabbedPanelLayout from '../TabbedPanelLayout';
 import { InternalThemeProvider } from '../ThemeProvider';
@@ -68,6 +70,7 @@ interface Props {
   handleAfterSelectFileUploadFile: (
     paths: string[]
   ) => Promise<{ paths: string[] }>;
+  onUpdateNodeProperties: (o: { type: string; applictionId: number }) => void;
 }
 
 /** pipeline 只读时的节点路径 */
@@ -165,7 +168,8 @@ const PipelineEditor = forwardRef(
       nativeKeyboardActions,
       leftPalette = true,
       handleBeforeAddNodeGetOp,
-      handleAfterSelectFileUploadFile
+      handleAfterSelectFileUploadFile,
+      onUpdateNodeProperties
     }: Props,
     ref
   ) => {
@@ -206,7 +210,8 @@ const PipelineEditor = forwardRef(
             editType: 'createNode',
             ...payload
           });
-        }
+        },
+        controller
       }),
       []
     );
@@ -586,11 +591,11 @@ const PipelineEditor = forwardRef(
         title: '编辑管道属性',
         icon: theme.overrides?.pipelineIcon,
         content: (
-          <PropertiesPanel
+          <PipelinePropertiesPanel
             data={pipeline?.pipelines?.[0]?.app_data?.properties}
             schema={pipelineProperties}
-            onFileRequested={onFileRequested}
             onChange={handlePipelinePropertiesChange}
+            onUpdateNodeProperties={onUpdateNodeProperties}
           />
         )
       },

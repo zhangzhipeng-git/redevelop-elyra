@@ -52,16 +52,18 @@
           "title": "k8s集群连接信息",
           "description": "k8s集群连接信息",
           "type": "string",
+          "default": "k8s",
           "uihints": {
-            "ui:disabeld": true
+            "ui:readonly": true
           }
         },
         "namespace": {
           "type": "string",
           "title": "k8s命名空间",
           "description": "k8s命名空间",
+          "default": "k8s",
           "uihints": {
-            "ui:disabeld": true
+            "ui:readonly": true
           }
         },
         "executor_cores": {
@@ -86,12 +88,7 @@
         "cmds": {
           "title": "bash命令",
           "description": "bash命令",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "default": ""
-          },
-          "default": []
+          "type": "string"
         }
       },
       "required": [

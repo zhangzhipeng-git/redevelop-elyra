@@ -18,34 +18,9 @@ import { FieldTemplateProps } from '@rjsf/core';
 
 export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
   let children = props.children;
-  // 隐藏字段
-  if (props.uiSchema['ui:field'] === 'hidden') {
-    return <div />;
-  }
-  // 只读
-  if (props.uiSchema['ui:readonly']) {
-    children = (
-      <div style={{ paddingTop: '8px' }}>
-        {props.formData ?? props.schema.default}
-      </div>
-    );
-  }
-  if (
-    props.schema.uniqueItems &&
-    (props.schema.items as any)?.enum?.length === 0
-  ) {
-    children = <div style={{ paddingTop: '8px' }}>没有定义管道参数.</div>;
-  } else if (props.schema.uniqueItems && props.formData) {
-    const filteredItems = props.formData.filter((item: any) => {
-      return (props.schema.items as any)?.enum?.includes(item);
-    });
-    if (filteredItems.length !== props.formData.length) {
-      props.onChange(filteredItems);
-    }
-  }
 
   const requiredError = props.required && props.formData === undefined;
-  const hasError = props.rawErrors[0] || requiredError;
+  const hasError = props.rawErrors?.[0] || requiredError;
   return (
     <div
       className={`${props.classNames} ${

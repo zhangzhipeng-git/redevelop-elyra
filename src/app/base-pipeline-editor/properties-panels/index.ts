@@ -15,4 +15,4 @@
  */
 
 export { default as NodeProperties } from "./NodeProperties";
-export { default as PipelineProperties } from "./PipelineProperties";
+export { default as PipelinePropertiesPanel } from "./PipelinePropertiesPanel";

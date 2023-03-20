@@ -1,7 +1,7 @@
 {
     "type": "object",
     "properties": {
-        "name": {
+        "dagName": {
             "title": "名称",
             "description": "工作流名称",
             "type": "string",
@@ -9,11 +9,12 @@
                 "ui:placeholder": "请填写工作流名称"
             }
         },
-        "app": {
+        "applicationId": {
             "title": "归属应用",
             "description": "归属应用",
-            "type": "string",
+            "type": "number",
             "enum": [],
+            "enumNames": [],
             "uihints": {
                 "ui:placeholder": "请选择归属应用"
             }
@@ -27,28 +28,26 @@
                 "ui:placeholder": "请填写警告邮箱"
             }
         },
-        "isFlow": {
+        "isStream": {
             "title": "是否流式任务",
             "description": "是否流式任务",
             "type": "boolean",
             "default": false
         },
-        "isDependency": {
-            "title": "是否跨任务依赖",
-            "description": "是跨任务依赖（暂不可编辑）",
+        "whetherRetry": {
+            "title": "是否重试",
+            "description": "是否重试",
             "type": "boolean",
-            "default": false,
-            "uihints": {
-                "ui:disabled": true
-            }
+            "default": true
         },
-        "retryCount": {
+        "retry": {
             "title": "重试次数",
             "description": "重试次数",
             "type": "integer",
+            "minimum": 0,
             "default": 0
         },
-        "description": {
+        "dagDesc": {
             "title": "任务描述",
             "description": "任务描述",
             "type": "string",
@@ -57,7 +56,7 @@
                 "ui:widget": "textarea"
             }
         },
-        "scheduleCycle": {
+        "scheduleInterval": {
             "title": "调度周期",
             "description": "调度周期",
             "type": "string",
@@ -65,7 +64,7 @@
                 "ui:widget": "myReactCron"
             }
         },
-        "date": {
+        "startTime": {
             "title": "回填时间",
             "description": "回填时间",
             "type": "string",
@@ -75,10 +74,10 @@
         }
     },
     "required": [
-        "name",
-        "app",
-        "email",
-        "description",
-        "scheduleCycle"
+        "dagName",
+        "applicationId",
+        "whetherRetry",
+        "retry",
+        "dagDesc"
     ]
 }

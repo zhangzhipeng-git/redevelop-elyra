@@ -55,21 +55,18 @@ import {
   EmptyPlatformSpecificPipeline
 } from './EmptyPipelineContent';
 
-import { usePalette } from './pipeline-hooks';
-import { PipelineService, RUNTIMES_SCHEMASPACE } from './PipelineService';
+import { PipelineService } from './PipelineService';
 
-import {
-  createRuntimeData,
-  getConfigDetails,
-  IRuntimeData
-} from './runtime-utils';
 import { theme } from './theme';
 
 import { deleteNodeImage, attachNodeImage } from './node-image-transform';
 
+import { PipelineEnum } from '@src/app/enums';
+import { usePalette } from '@src/app/hooks/pipeline-hooks';
 import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
-import { PipelineEnum } from '../enums';
-import { onAfterSelectFile_UploadFile } from '../hooks/selectFile';
+import { onAfterSelectFile_UploadFile } from '@src/app/hooks/selectFile';
+import { onUpdateNodeProperties } from '@src/app/hooks/editPipelineProperties';
+import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -99,17 +96,6 @@ const getAllPaletteNodes = (palette: any): any[] => {
   }
 
   return nodes;
-};
-
-const isRuntimeTypeAvailable = (data: IRuntimeData, type?: string): boolean => {
-  for (const p of data.platforms) {
-    if (type === undefined || p.id === type) {
-      if (p.configs.length > 0) {
-        return true;
-      }
-    }
-  }
-  return false;
 };
 
 class PipelineEditorWidget extends ReactWidget {
@@ -420,6 +406,14 @@ const PipelineWrapper: React.FC<IProps> = ({
     }
   };
 
+  const timerRef = useRef<number>();
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, []);
+
   const handleSubmission = useCallback(
     async (actionType: 'run' | 'submit'): Promise<void> => {
       const pipelineJson: any = context.model.toJSON();
@@ -466,62 +460,20 @@ const PipelineWrapper: React.FC<IProps> = ({
         }
       }
 
-      const pipelineName = PathExt.basename(
-        contextRef.current.path,
-        PathExt.extname(contextRef.current.path)
+      timerRef.current = onUpdateNodeStatus(
+        ref?.current.controller.current,
+        ''
       );
-
-      const runtimeData = createRuntimeData({
-        allowLocal: actionType === 'run'
-      });
 
       let title =
         type !== undefined
           ? `${actionType} pipeline for ${runtimeDisplayName}`
           : `${actionType} pipeline`;
 
-      if (actionType === 'submit' || type !== undefined) {
-        if (!isRuntimeTypeAvailable(runtimeData, type)) {
-          const res = await RequestErrors.noMetadataError(
-            'runtime',
-            `${actionType} pipeline.`,
-            type !== undefined ? runtimeDisplayName : undefined
-          );
-
-          if (res.button.label.includes(RUNTIMES_SCHEMASPACE)) {
-            // Open the runtimes widget
-            shell.activateById(`elyra-metadata:${RUNTIMES_SCHEMASPACE}`);
-          }
-          return;
-        }
-      }
       // Capitalize
       title = title.charAt(0).toUpperCase() + title.slice(1);
 
       let dialogOptions: Partial<Dialog.IOptions<any>>;
-
-      pipelineJson.pipelines[0].app_data.properties.pipeline_parameters =
-        pipelineJson.pipelines[0].app_data.properties.pipeline_parameters?.filter(
-          (param: any) => {
-            return !!pipelineJson.pipelines[0].nodes.find((node: any) => {
-              return (
-                param.name !== '' &&
-                (node.app_data.component_parameters?.pipeline_parameters?.includes(
-                  param.name
-                ) ||
-                  Object.values(node.app_data.component_parameters ?? {}).find(
-                    (property: any) =>
-                      property.widget === 'parameter' &&
-                      property.value === param.name
-                  ))
-              );
-            });
-          }
-        );
-
-      const parameters =
-        pipelineJson?.pipelines[0].app_data.properties.pipeline_parameters;
-
       switch (actionType) {
         case 'run':
           dialogOptions = {
@@ -554,58 +506,6 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (dialogResult.value === null) {
         // When Cancel is clicked on the dialog, just return
         return;
-      }
-
-      const configDetails = getConfigDetails(
-        runtimeData,
-        dialogResult.value.runtime_config
-      );
-
-      PipelineService.setNodePathsRelativeToWorkspace(
-        pipelineJson.pipelines[0],
-        getAllPaletteNodes(palette),
-        contextRef.current.path
-      );
-
-      // Metadata
-      pipelineJson.pipelines[0].app_data.name =
-        dialogResult.value.pipeline_name ?? pipelineName;
-      pipelineJson.pipelines[0].app_data.source = PathExt.basename(
-        contextRef.current.path
-      );
-
-      // Pipeline parameter overrides
-      for (const paramIndex in parameters ?? []) {
-        const param = parameters[paramIndex];
-        if (param.name) {
-          let paramOverride = dialogResult.value[`${param.name}-paramInput`];
-          if (
-            (param.default_value?.type === 'Integer' ||
-              param.default_value?.type === 'Float') &&
-            paramOverride !== ''
-          ) {
-            paramOverride = Number(paramOverride);
-          }
-          pipelineJson.pipelines[0].app_data.properties.pipeline_parameters[
-            paramIndex
-          ].value =
-            paramOverride === '' ? param.default_value?.value : paramOverride;
-        }
-      }
-
-      // Pipeline name
-      pipelineJson.pipelines[0].app_data.name =
-        dialogResult.value.pipeline_name ?? pipelineName;
-
-      // Runtime info
-      pipelineJson.pipelines[0].app_data.runtime_config =
-        configDetails?.id ?? null;
-
-      switch (actionType) {
-        case 'run':
-          break;
-        case 'submit':
-          break;
       }
     },
     [context.model, palette, runtimeDisplayName, type, shell]
@@ -909,6 +809,7 @@ const PipelineWrapper: React.FC<IProps> = ({
             leftPalette={true}
             handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
             handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+            onUpdateNodeProperties={onUpdateNodeProperties}
           >
             {type === undefined ? (
               <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />

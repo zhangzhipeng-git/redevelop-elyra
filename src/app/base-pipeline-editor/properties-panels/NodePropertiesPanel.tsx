@@ -21,11 +21,9 @@ import styled from 'styled-components';
 import {
   FileWidget,
   CustomFieldTemplate,
-  ArrayTemplate,
-  CustomOneOf
+  ArrayTemplate
 } from '../CustomFormControls';
-import { MyReactCron } from '../CustomFormControls/ReactCron';
-import { MyDateTime } from '../CustomFormControls/DateTime';
+
 import { JSONSchema7 } from 'json-schema';
 
 import { PathExt } from '@jupyterlab/coreutils';
@@ -34,6 +32,7 @@ import path from '../path';
 import { TYPE_MAP } from '@src/app/const';
 import { ErrorEnum } from '@src/app/enums';
 import Utils from '@src/app/util';
+import { genUISchemaFromSchema } from './util';
 
 export const Message = styled.div`
   margin-top: 14px;
@@ -46,9 +45,7 @@ export const Message = styled.div`
 `;
 
 const widgets: { [id: string]: Widget } = {
-  file: FileWidget,
-  myReactCron: MyReactCron,
-  myDateTime: MyDateTime
+  file: FileWidget
 };
 
 interface Props {
@@ -67,7 +64,7 @@ interface Props {
  * @param {object} 管道的属性对象，可应用于管道中的所有节点
  * @param {schema} 管道的属性表单配置
  */
-export function PropertiesPanel({
+export function NodePropertiesPanel({
   data,
   schema,
   onChange,
@@ -77,34 +74,13 @@ export function PropertiesPanel({
   handleAfterSelectFileUploadFile
 }: Props) {
   if (!schema) return <Message>未定义属性.</Message>;
-
   const uiSchema: UiSchema = {};
-
-  function genUISchemaFromSchema(schema: any, uiSchema: UiSchema) {
-    if (schema.uihints) Object.assign(uiSchema, schema.uihints);
-    if (!schema.properties) return;
-    for (const field in schema.properties) {
-      const property = schema.properties[field];
-      genUISchemaFromSchema(property, (uiSchema[field] = {}));
-    }
-  }
   genUISchemaFromSchema(schema, uiSchema);
 
   function onChangeFn(e: any) {
     const newFormData = e.formData;
-    const params = schema!.properties?.component_parameters?.properties ?? {};
-    for (const field in params) {
-      if (params[field].oneOf) {
-        for (const option of params[field].oneOf) {
-          if (option.widget?.const !== undefined) {
-            newFormData.component_parameters[field].widget =
-              option.widget.const;
-          }
-        }
-      }
-    }
 
-    const nodeParams = e.formData.component_parameters;
+    const nodeParams = newFormData.component_parameters;
     if (nodeParams) {
       const { type, localFile } = nodeParams;
       const fileType = TYPE_MAP[path.extname(localFile)];
@@ -115,7 +91,7 @@ export function PropertiesPanel({
       }
     }
 
-    onChange && Utils.debounceExecute(onChange, [e.formData], 100);
+    onChange && Utils.debounceExecute(onChange, [newFormData], 100);
   }
 
   function customValidate(formData: any, errors: FormValidation) {
@@ -131,27 +107,6 @@ export function PropertiesPanel({
   }
 
   const formContext = {
-    /**
-     * 自定义组件更改pipeline属性，重新加载 pipeline 数据
-     * @param param0 属性字段名称拼接字符串，如 root_a_b_c
-     */
-    onPipelinePropertyChange: ({ propertyID, v }: any) => {
-      if (!propertyID) return;
-      const keys = propertyID.split('_');
-      if (!keys[1] && keys[0] === 'root') return;
-      const newFormData = produce(data, (draft: any) => {
-        let o = draft;
-        let i = 1;
-        for (; i < keys.length - 1; i++) {
-          o = o?.[keys[i]];
-        }
-        const lk = keys[i];
-        if (!o) return;
-        o[lk] = v;
-      });
-      onChange?.(newFormData ?? data);
-    },
-
     onFileRequested: async (args: any) => {
       const values = await onFileRequested?.({
         ...args,
@@ -162,7 +117,6 @@ export function PropertiesPanel({
       if (handleAfterSelectFileUploadFile)
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
 
-      const typeMap: any = { '.py': 'python', '.jar': 'java' };
       const newFormData = produce(data, (draft: any) => {
         if (args.canSelectMany) {
           draft.component_parameters[args.propertyID] = [
@@ -171,7 +125,7 @@ export function PropertiesPanel({
           ];
           draft.component_parameters.mainApplicationFile = s3Paths;
           draft.component_parameters.type = values.map(
-            (v: string) => typeMap[PathExt.extname(v)]
+            (v: string) => TYPE_MAP[PathExt.extname(v)]
           );
           return;
         }
@@ -183,14 +137,10 @@ export function PropertiesPanel({
         }
         draft.component_parameters.mainApplicationFile = values?.[0];
         draft.component_parameters.type =
-          typeMap[PathExt.extname(values[0])] || 'java';
+          TYPE_MAP[PathExt.extname(values[0])] || 'java';
       });
 
       onChange?.(newFormData ?? data);
-    },
-    // 点击刷新按钮时调用
-    onPropertiesUpdateRequested: async (args: any) => {
-      onChange?.(args);
     },
     formData: data
   };
@@ -214,9 +164,6 @@ export function PropertiesPanel({
       formContext={formContext}
       id={id}
       widgets={widgets}
-      fields={{
-        OneOfField: CustomOneOf
-      }}
       liveValidate={!noValidate}
       ArrayFieldTemplate={ArrayTemplate}
       noHtml5Validate

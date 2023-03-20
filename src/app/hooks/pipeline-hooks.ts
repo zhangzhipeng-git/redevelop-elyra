@@ -19,7 +19,7 @@ import { MetadataService } from '../services';
 import produce from 'immer';
 import useSWR from 'swr';
 
-import { PipelineService } from './PipelineService';
+import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 
 import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
 import Utils from '@src/app/util';
@@ -160,6 +160,7 @@ const NodeIcons: Map<string, string> = new Map([
 // TODO: We should decouple components and properties to support lazy loading.
 // TODO: type this
 export const componentFetcher = async (type: string): Promise<any> => {
+  /** 节点目录配置，目前就两种 */
   const palettePromise =
     PipelineService.getComponentCatalogs<IRuntimeComponentsResponse>(type);
 
@@ -170,11 +171,20 @@ export const componentFetcher = async (type: string): Promise<any> => {
   /** 查 pipeline 运行环境类型 */
   const typesPromise = PipelineService.getRuntimeTypes();
 
-  const [palette, types, pipelineProperties] = await Promise.all([
+  /** 查应用 */
+  const appsPromise = PipelineService.apps();
+
+  const [palette, types, pipelineProperties, apps] = await Promise.all([
     palettePromise,
     typesPromise,
-    pipelinePropertiesPromise
+    pipelinePropertiesPromise,
+    appsPromise,
   ]);
+
+  const applicationId = pipelineProperties?.properties?.applicationId ?? {};
+  applicationId.enum = apps.map(({applicationId}) => applicationId);
+  applicationId.enumNames = apps.map(({applicationName}) => applicationName);
+  applicationId.enumCodes = apps.map(({applicationCode}) => applicationCode);
 
   palette.properties = pipelineProperties;
 

@@ -18,7 +18,7 @@ import { NodeType } from '@elyra/canvas';
 import produce from 'immer';
 import styled from 'styled-components';
 
-import { PropertiesPanel, Message } from './PropertiesPanel';
+import { NodePropertiesPanel, Message } from './NodePropertiesPanel';
 
 interface Props {
   selectedNodes?: any[];
@@ -35,7 +35,9 @@ interface Props {
     type?: string;
     required?: boolean;
   }[];
-  handleAfterSelectFileUploadFile?: (paths: string[]) => Promise<{paths: string[]}>;
+  handleAfterSelectFileUploadFile?: (
+    paths: string[]
+  ) => Promise<{ paths: string[] }>;
 }
 
 const Heading = styled.div`
@@ -289,7 +291,7 @@ function NodeProperties({
       <span className="nodeDescription">
         {nodePropertiesSchema.description}
       </span>
-      <PropertiesPanel
+      <NodePropertiesPanel
         key={selectedNode.id}
         schema={getNodeProperties()}
         data={selectedNode.app_data}
