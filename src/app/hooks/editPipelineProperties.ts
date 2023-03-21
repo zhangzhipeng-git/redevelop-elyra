@@ -19,11 +19,16 @@ export async function onAfterSelectApp({
   const clonePalette = Utils.clone(palette);
   const res = await PipelineService.conn({ type, applicationId });
   const node_types = clonePalette.categories?.[0]?.node_types;
+  const connIds = res.map(({ connId }) => connId);
+  const connNames = res.map(({ connName }) => connName);
   node_types?.forEach((node: any) => {
     const properties =
       node.app_data.properties.properties.component_parameters.properties;
-    properties.connection.enum = res.map(({ connId }) => connId);
-    properties.namespace.enumValues = res.map(({ connName }) => connName);
+    properties.connection.enum = connIds;
+    properties.namespace.enumValues = connNames;
+
+    properties.connection.default = connIds[0];
+    properties.namespace.default = connNames[0];
   });
   controller.setPalette(clonePalette);
 
@@ -34,8 +39,8 @@ export async function onAfterSelectApp({
   clonePipelineFlow.pipelines.forEach((p: any) => {
     p?.nodes.forEach((n: any) => {
       const nodeProperties = n?.app_data?.component_parameters ?? {};
-      delete nodeProperties.connection;
-      delete nodeProperties.namespace;
+      nodeProperties.connection = connIds[0];
+      nodeProperties.namespace = connNames[0];
     });
   });
   controller.setPipelineFlow(clonePipelineFlow);

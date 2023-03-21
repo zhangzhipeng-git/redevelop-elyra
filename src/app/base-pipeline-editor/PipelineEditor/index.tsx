@@ -190,12 +190,10 @@ const PipelineEditor = forwardRef(
     useEffect(() => {
       try {
         controller.current.open(pipeline);
-        if (!readOnly) {
+        if (readOnly) return controller.current.resetStyles();
+        if (!controller.current.existPalette())
           controller.current.setPalette(palette);
-          controller.current.validate({ redColor: theme.palette.error.main });
-        } else {
-          controller.current.resetStyles();
-        }
+        controller.current.validate({ redColor: theme.palette.error.main });
         // don't call to persist change because it will cause an infinate loop
       } catch (e) {
         console.error(e, 'error');
@@ -261,10 +259,6 @@ const PipelineEditor = forwardRef(
               {
                 action: 'newFileNode',
                 label: '从文件中新建节点'
-              },
-              {
-                action: 'createComment',
-                label: '创建注释节点'
               },
               {
                 divider: true
@@ -438,6 +432,8 @@ const PipelineEditor = forwardRef(
         let payload;
         let type = e.editType;
 
+        // save ，run，submit clean，toggleOpenPanel，properties，openFile
+        onAction?.({ type, payload });
         switch (type) {
           case 'newFileNode':
             console.log('==从文件中新建节点==');
@@ -490,8 +486,6 @@ const PipelineEditor = forwardRef(
             return;
         }
 
-        // save ，run，submit clean，toggleOpenPanel，properties，openFile
-        onAction?.({ type, payload });
 
         // 设置异步任务，等待前序所有变化（比如批量插入节点）在画布中完成后，再重新设置 pipeline 数据
         Promise.resolve().then(() => {
@@ -585,10 +579,6 @@ const PipelineEditor = forwardRef(
       ? controller.current.getUpstreamNodes(selectedNodeIDs[0])
       : [];
 
-    // 有默认的应用
-    if (pipeline?.pipelines?.[0]?.app_data?.properties?.applicationId) {
-      // 1. 先查询是否是有效的应用标识，在查出来的
-    }
     const panelTabs = [
       {
         id: 'pipeline-properties',
@@ -612,7 +602,7 @@ const PipelineEditor = forwardRef(
         content: (
           <NodeProperties
             selectedNodes={selectedNodes}
-            nodes={controller.current.getAllPaletteNodes()}
+            getNodes={() => controller.current.getAllPaletteNodes()}
             upstreamNodes={upstreamNodes}
             onFileRequested={onFileRequested}
             onChange={handlePropertiesChange}

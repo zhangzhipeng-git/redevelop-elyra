@@ -22,7 +22,7 @@ import { NodePropertiesPanel, Message } from './NodePropertiesPanel';
 
 interface Props {
   selectedNodes?: any[];
-  nodes: NodeType[];
+  getNodes: () => NodeType[];
   upstreamNodes?: any[];
   onFileRequested?: (options: any) => any;
   onChange?: (nodeID: string, data: any) => any;
@@ -78,13 +78,14 @@ function getOneOfValue(value: string, option: string, label: string) {
 
 function NodeProperties({
   selectedNodes,
-  nodes,
+  getNodes,
   upstreamNodes,
   onFileRequested,
   onChange,
   parameters,
   handleAfterSelectFileUploadFile
 }: Props) {
+  const nodes = getNodes();
   if (selectedNodes === undefined || selectedNodes.length === 0) {
     return <Message>请选择节点编辑它的属性。</Message>;
   }

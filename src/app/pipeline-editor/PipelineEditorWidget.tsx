@@ -25,7 +25,6 @@ import {
   savePipelineIcon,
   showBrowseFileDialog,
   Dropzone,
-  RequestErrors,
   showFormDialog
 } from '@src/app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
@@ -62,11 +61,11 @@ import { theme } from './theme';
 import { deleteNodeImage, attachNodeImage } from './node-image-transform';
 
 import { PipelineEnum } from '@src/app/enums';
-import { usePalette } from '@src/app/hooks/pipeline-hooks';
 import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
 import { onAfterSelectFile_UploadFile } from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
+import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
 
 import Utils from '@src/app/util';
 
@@ -164,9 +163,12 @@ const PipelineWrapper: React.FC<IProps> = ({
   settings,
   widgetId
 }) => {
-  console.log('==编辑器初始化==');
+  console.log('==编辑器内部状态变化，导致重新渲染==');
 
   const ref = useRef<any>(null);
+  const palette = useRef<any>(null);
+  const contextRef = useRef(context);
+
   const [loading, setLoading] = useState(true);
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = React.useState(false);
@@ -178,59 +180,42 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const runtimeDisplayName = type;
 
-  const {
-    data: palette, // 编辑器面板参数，左侧是palette.catagories, 右侧是palette.pipelineProperties
-    error: paletteError,
-    mutate: mutatePalette
-  } = usePalette(type);
-
   // 自动展开左侧面板节点目录
   useEffect(() => {
-    if (!palette) return;
+    if (!palette.current) return;
     setTimeout(() => {
       const btns = document.querySelectorAll(
         '.bx--accordion__item > button[aria-expanded=false]'
       );
       btns.forEach((btn: any) => btn.click());
     }, 1500);
-  }, [palette]);
+  }, []);
 
-  useEffect(() => {
-    const handleMutateSignal = (): void => {
-      mutatePalette();
-    };
+  useEffect((): any => {
+    const handleMutateSignal = async () =>
+      (palette.current = await onReadyOrRefresh(contextRef.current, type));
+
     refreshPaletteSignal.connect(handleMutateSignal);
-    return (): void => {
-      refreshPaletteSignal.disconnect(handleMutateSignal);
-    };
-  }, [refreshPaletteSignal, mutatePalette]);
+    return () => refreshPaletteSignal.disconnect(handleMutateSignal);
+  }, [refreshPaletteSignal]);
 
-  useEffect(() => {
-    if (paletteError) {
-      RequestErrors.serverError(paletteError);
-    }
-  }, [paletteError]);
-
-  const contextRef = useRef(context);
-
-  useEffect(() => {
+  useEffect((): any => {
     const currentContext = contextRef.current;
     const changeHandler = (): void => {
-      console.log('==监听到 pipeline 数据被改变==');
-      const pipelineJson: any = currentContext.model.toJSON();
+      const pipelineJson = currentContext.model.toJSON();
       attachNodeImage(pipelineJson);
       setPipeline(pipelineJson);
       setLoading(false);
     };
-    currentContext.ready.then(changeHandler);
+    currentContext.ready.then(async () => {
+      palette.current = await onReadyOrRefresh(currentContext, type);
+      changeHandler();
+    });
     currentContext.model.contentChanged.connect(changeHandler);
-    return (): void => {
-      currentContext.model.contentChanged.disconnect(changeHandler);
-    };
+    return () => currentContext.model.contentChanged.disconnect(changeHandler);
   }, []);
 
   const onChange = useCallback((pipelineJson: any): void => {
-    console.log('==改变 Pipeline 数据，会重新设置画布的 pipeline 数据==');
     pipelineJson = Utils.removeNullValues(pipelineJson);
     if (contextRef.current.isReady) {
       deleteNodeImage(pipelineJson);
@@ -301,7 +286,9 @@ const PipelineWrapper: React.FC<IProps> = ({
       const node = pipeline.pipelines[0].nodes.find(
         (node: any) => node.id === data.selectedObjectIds[i]
       );
-      const nodeDef = getAllPaletteNodes(palette).find(n => n.op === node?.op);
+      const nodeDef = getAllPaletteNodes(palette.current).find(
+        n => n.op === node?.op
+      );
       const filenameRef = nodeDef?.app_data?.parameter_refs?.['filehandler'];
       if (!filenameRef) {
         console.warn(
@@ -337,8 +324,8 @@ const PipelineWrapper: React.FC<IProps> = ({
       // Check that all nodes are valid
       const errorMessages = validate(
         JSON.stringify(pipelineJson),
-        getAllPaletteNodes(palette),
-        palette.properties
+        getAllPaletteNodes(palette.current),
+        palette.current?.properties ?? {}
       );
       if (errorMessages && errorMessages.length > 0) {
         const chMsgType = {
@@ -425,7 +412,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         return;
       }
     },
-    [context.model, palette, runtimeDisplayName, type, shell]
+    [context.model, runtimeDisplayName, type, shell]
   );
 
   const handleClearPipeline = useCallback(async (data: any): Promise<any> => {
@@ -464,6 +451,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const onAction = useCallback(
     (args: { type: string; payload?: any }) => {
+      console.log(type, 'type');
       switch (args.type) {
         case 'save':
           contextRef.current.save();
@@ -530,7 +518,6 @@ const PipelineWrapper: React.FC<IProps> = ({
       { action: 'cut', label: '剪切' },
       { action: 'copy', label: '复制' },
       { action: 'paste', label: '粘贴' },
-      { action: 'createAutoComment', label: '添加注释', enable: true },
       { action: 'deleteSelectedObjects', label: '删除' },
       {
         action: 'arrangeHorizontally',
@@ -695,7 +682,7 @@ const PipelineWrapper: React.FC<IProps> = ({
     };
   }, [addFileToPipelineSignal, handleAddFileToPipeline]);
 
-  if (loading || palette === undefined) {
+  if (loading || !palette.current) {
     return <div className="elyra-loader"></div>;
   }
 
@@ -721,8 +708,8 @@ const PipelineWrapper: React.FC<IProps> = ({
         <Dropzone onDrop={handleDrop}>
           <PipelineEditor
             ref={ref}
-            palette={palette}
-            pipelineProperties={palette.properties}
+            palette={palette.current}
+            pipelineProperties={palette.current.properties}
             toolbar={toolbar}
             pipeline={pipeline}
             onAction={onAction}

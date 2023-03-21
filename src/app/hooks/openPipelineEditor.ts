@@ -14,65 +14,18 @@
  * limitations under the License.
  */
 
-import { MetadataService } from '../services';
-
-import useSWR from 'swr';
-
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 
 import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
 import Utils from '@src/app/util';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 export const GENERIC_CATEGORY_ID = 'Elyra';
-
-interface IReturn<T> {
-  data?: T | undefined;
-  error?: any;
-  mutate?: any;
-}
-
-type IRuntimeImagesResponse = IRuntimeImage[];
-
-interface IRuntimeImage {
-  name: string;
-  display_name: string;
-  metadata: {
-    image_name: string;
-  };
-}
-
-const metadataFetcher = async <T>(key: string): Promise<T> => {
-  return await MetadataService.getMetadata(key);
-};
-
-export const useRuntimeImages = (): IReturn<IRuntimeImagesResponse> => {
-  console.log('==获取节点运行时镜像==');
-  const { data, error } = useSWR<IRuntimeImagesResponse>(
-    'runtime-images',
-    metadataFetcher
-  );
-
-  data?.sort((a, b) => 0 - (a.name > b.name ? -1 : 1));
-
-  return { data, error };
-};
-
-const schemaFetcher = async <T>(key: string): Promise<T> => {
-  return await MetadataService.getSchema(key);
-};
-
-// TODO: type this
-export const useRuntimesSchema = (): IReturn<any> => {
-  const { data, error } = useSWR<any>('runtimes', schemaFetcher);
-
-  return { data, error };
-};
 
 interface IRuntimeComponentsResponse {
   version: string;
   categories: IRuntimeComponent[];
   properties: IComponentPropertiesResponse;
-  parameters: IComponentPropertiesResponse;
 }
 
 export interface IRuntimeComponent {
@@ -111,85 +64,27 @@ interface IComponentPropertiesResponse {
       data: any;
     }[];
   };
-  group_info: {
-    group_info: {
-      id: string;
-      parameter_refs: string[];
-    }[];
-  }[];
 }
-
-/**
- * Sort palette in place. Takes a list of categories each containing a list of
- * components.
- * - Categories: alphabetically by "label" (exception: "generic" always first)
- * - Components: alphabetically by "op" (where is component label stored?)
- */
-export const sortPalette = (palette: {
-  categories: IRuntimeComponent[];
-}): void => {
-  palette.categories.sort((a, b) => {
-    if (a.id === GENERIC_CATEGORY_ID) {
-      return -1;
-    }
-    if (b.id === GENERIC_CATEGORY_ID) {
-      return 1;
-    }
-    return a.label.localeCompare(b.label, undefined, { numeric: true });
-  });
-
-  for (const components of palette.categories) {
-    components.node_types.sort((a, b) =>
-      a.label.localeCompare(b.label, undefined, {
-        numeric: true
-      })
-    );
-  }
-};
 
 // TODO: This should be enabled through `extensions`
 const NodeIcons: Map<string, string> = new Map([
-  ['execute-notebook-node', '/static/elyra/notebook.svg'],
-  ['execute-python-node', '/static/elyra/python.svg'],
-  ['execute-r-node', '/static/elyra/r-logo.svg'],
   ['execute-KubernetesPodOperator-node', '/static/elyra/airflow.svg'],
   ['execute-SparkKubernetesOperator-node', '/static/elyra/airflow.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
 // TODO: type this
-export const componentFetcher = async (type: string): Promise<any> => {
+export const componentFetcher = (type: string) => {
   /** 节点目录配置，目前就两种 */
-  const palettePromise =
+  const palette =
     PipelineService.getComponentCatalogs<IRuntimeComponentsResponse>(type);
 
   /** 查管道属性 */
-  const pipelinePropertiesPromise =
+  const pipelineProperties =
     PipelineService.getPipelineProperties<IComponentPropertiesResponse>(type);
 
   /** 查 pipeline 运行环境类型 */
-  const typesPromise = PipelineService.getRuntimeTypes();
-
-  /** 查应用 */
-  const appsPromise = PipelineService.apps();
-
-  const [palette, types, pipelineProperties, apps] = await Promise.all([
-    palettePromise,
-    typesPromise,
-    pipelinePropertiesPromise,
-    appsPromise
-  ]);
-
-  const applicationId = pipelineProperties?.properties?.applicationId ?? {};
-  const applicationCode = pipelineProperties?.properties?.applicationCode ?? {};
-  const enums = apps.map(({ applicationId }) => applicationId);
-  const enumNames = apps.map(({ applicationName }) => applicationName);
-  const enumCodes = apps.map(({ applicationCode }) => applicationCode);
-  applicationId.enum = enums;
-  applicationId.default = enums[0];
-  applicationId.enumNames = enumNames;
-  applicationId.enumCodes = enumCodes;
-  applicationCode.default = enumCodes[0];
+  const types = PipelineService.getRuntimeTypes();
 
   palette.properties = pipelineProperties;
 
@@ -202,20 +97,16 @@ export const componentFetcher = async (type: string): Promise<any> => {
   }
 
   /** 查节点属性 */
-  const propertiesPromises = componentList.map(async componentID => {
-    const res =
-      await PipelineService.getNodeProperties<IComponentPropertiesResponse>(
-        type,
-        componentID
-      );
+  const properties = componentList.map(componentID => {
+    const res = PipelineService.getNodeProperties<IComponentPropertiesResponse>(
+      type,
+      componentID
+    );
     return {
       id: componentID,
       properties: res
     };
   });
-
-  // load all of the properties in parallel instead of serially
-  const properties = await Promise.all(propertiesPromises);
 
   // inject properties
   // 管线编辑器左侧展开面板节点树目录
@@ -245,25 +136,94 @@ export const componentFetcher = async (type: string): Promise<any> => {
     }
   }
 
-  sortPalette(palette);
-
   return palette;
 };
 
-export const usePalette = (type = 'local'): IReturn<any> => {
+let oldData: Promise<any> | null;
+export const getPalette = (type = 'local') => {
   console.log(
     '==获取 palette 参数：节点目录、管道属性表单配置和节点属性表单配置=='
   );
-
-  const {
-    data: palette,
-    error: paletteError,
-    mutate: mutate
-  } = useSWR(type, componentFetcher);
-
-  return {
-    data: palette,
-    error: paletteError,
-    mutate: mutate
-  };
+  return oldData || (oldData = componentFetcher(type));
 };
+
+export async function onReadyOrRefresh(
+  currentContext: DocumentRegistry.Context,
+  type: string,
+  setDefaultValue = false
+) {
+  const pipelineJson = currentContext.model.toJSON();
+  const palette = Utils.clone(getPalette(type)); // 有read-only问题，这里克隆一下
+
+  // 表单数据-pipeline
+  // @ts-ignore
+  const pipeline = pipelineJson?.pipelines?.[0] ?? {};
+  const pipelineProperties = pipeline.app_data?.properties ?? {};
+  // 表单数据-nodes
+  const nodes = pipeline.nodes ?? [];
+
+  // 表单配置-pipeline
+  const pipelineSchema = palette.properties?.properties ?? {};
+  // 表单配置-nodes
+  const nodeSchemas = palette.categories?.[0].node_types?.map((nt: any) => {
+    return (
+      nt?.app_data?.properties?.properties?.component_parameters?.properties ??
+      {}
+    );
+  });
+  const {
+    applicationId: applicationIdSchema,
+    applicationCode: applicationCodeSchema
+  } = pipelineSchema;
+  const apps = await PipelineService.apps();
+  const ids = apps.map(({ applicationId }) => applicationId);
+  const names = apps.map(({ applicationName }) => applicationName);
+  const codes = apps.map(({ applicationCode }) => applicationCode);
+  applicationIdSchema.enum = ids;
+  applicationIdSchema.enumNames = names;
+  applicationCodeSchema.enum = codes;
+
+  applicationIdSchema.default = ids[0];
+  applicationCodeSchema.default = codes[0];
+
+  let changeFlag;
+  let id = ids[0];
+  let { applicationId, applicationCode } = pipelineProperties;
+  if (!ids.includes(applicationId) || !codes.includes(applicationCode)) {
+    pipelineProperties.applicationId = ids[0];
+    pipelineProperties.applicationCode = codes[0];
+    changeFlag = true;
+  } else {
+    id = applicationId;
+  }
+
+  const conn = await PipelineService.conn({
+    type: 'kubernetes',
+    applicationId: id
+  });
+  const connIds = conn.map(({ connId }) => connId);
+  const connNames = conn.map(({ connName }) => connName);
+  nodeSchemas?.forEach((ns: any) => {
+    ns.connection.enum = connIds;
+    ns.namespace.enumValues = connNames;
+
+    ns.connection.default = connIds[0];
+    ns.namespace.default = connNames[0];
+  });
+
+  nodes?.forEach((n: any) => {
+    const { connection, namespace } = n?.app_data?.component_parameters ?? {};
+    if (!connIds.includes(connection) || !connNames.includes(namespace)) {
+      if (n?.app_data?.component_parameters?.connection)
+        n.app_data.component_parameters.connection = connIds[0];
+      if (n?.app_data?.component_parameters?.namespace)
+        n.app_data.component_parameters.namespace = connNames[0];
+      changeFlag = true;
+    }
+  });
+
+  if (changeFlag)
+    currentContext.model.fromString(JSON.stringify(pipelineJson, null, 2));
+
+  return palette;
+}

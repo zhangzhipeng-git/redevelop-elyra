@@ -78,8 +78,9 @@ export default function PipelinePropertiesPanel({
     if (applicationId == null)
       return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
 
-    const { enum: enumId, enumCodes } = schema.properties.applicationId;
-    const index = enumId.findIndex((e: number) => e === applicationId);
+    const { enum: enumIds } = schema.properties.applicationId;
+    const { enum: enumCodes } = schema.properties.applicationCode;
+    const index = enumIds.findIndex((e: number) => e === applicationId);
     newFormData.applicationCode = enumCodes[index];
     await handleUpdateNodeProperties?.({ type: 'kubernetes', applicationId });
     onChange && Utils.debounceExecute(onChange, [newFormData], 100);

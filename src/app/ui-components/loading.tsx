@@ -12,7 +12,7 @@ let wrap: HTMLDivElement;
 export function mask({
   selector = '#pipeline-eidtor-wrapper',
   tip = '',
-  delay = 500
+  delay = 100
 }: LoadingProps = {}) {
   if (typeof selector === 'string') node = document.querySelector(selector)!;
   else node = selector;

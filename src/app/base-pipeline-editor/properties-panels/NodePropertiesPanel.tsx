@@ -162,12 +162,10 @@ export function NodePropertiesPanel({
   };
 
   function transformErrors(errors: AjvError[]) {
-    return errors
-      .filter(e => e.name !== 'oneOf') // oneOf 使用自定义的校验逻辑
-      .map(e => ({
-        ...e,
-        message: e.name === 'required' ? ErrorEnum.REQUIRED : e.message
-      }));
+    return errors.map(e => ({
+      ...e,
+      message: e.name === 'required' ? ErrorEnum.REQUIRED : '请填写正确的值'
+    }));
   }
 
   return (

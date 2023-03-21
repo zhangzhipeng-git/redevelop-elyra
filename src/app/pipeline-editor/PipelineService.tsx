@@ -111,52 +111,32 @@ export class PipelineService {
    * 根据 url 获取图标svg内容（非base64，如果需要base64 内联展示，需要调用 Utils.svgToBase64）
    */
   static getIcon(key: string) {
-    return Promise.resolve(svgMap.get(key));
+    return svgMap.get(key);
   }
 
   /**
    * 返回与每个活动运行环境对应的资源列表
    */
-  static getRuntimeTypes(): Promise<IRuntimeType[]> {
+  static getRuntimeTypes(): IRuntimeType[] {
     const res = Utils.clone(runtimeJSON);
     res.runtime_types.sort((a: any, b: any) => a.id.localeCompare(b.id));
-    return Promise.resolve(res.runtime_types);
+    return res.runtime_types;
   }
 
   /**
    * 获取 pipeline 的节点目录
    * @param {string} type pipeline 的类型
    */
-  static async getComponentCatalogs<T>(type = 'local') {
-    const fnMap: { [k: string]: () => Promise<any> } = {
-      local: () =>
-        RequestHandler.makeGetRequest<T>(`elyra/pipeline/components/local`),
-      APACHE_AIRFLOW: () =>
-        Promise.resolve(Utils.clone(componentCatalogsAirflow)),
-      KUBEFLOW_PIPELINES: () =>
-        RequestHandler.makeGetRequest<T>(
-          `elyra/pipeline/components/KUBEFLOW_PIPELINES`
-        )
-    };
-    return fnMap[type]();
+  static getComponentCatalogs<T>(type = 'local') {
+    return Utils.clone(componentCatalogsAirflow);
   }
 
   /**
    * 获取 pipeline 的属性配置
    * @param {string} type pipeline 的类型
    */
-  static async getPipelineProperties<T>(type = 'local') {
-    const fnMap: { [k: string]: () => Promise<any> } = {
-      local: () =>
-        RequestHandler.makeGetRequest<T>(`elyra/pipeline/local/properties`),
-      APACHE_AIRFLOW: () =>
-        Promise.resolve(Utils.clone(airflowPipelineProperties)),
-      KUBEFLOW_PIPELINES: () =>
-        RequestHandler.makeGetRequest<T>(
-          `elyra/pipeline/components/KUBEFLOW_PIPELINES`
-        )
-    };
-    return fnMap[type]();
+  static getPipelineProperties<T>(type = 'local') {
+    return Utils.clone(airflowPipelineProperties);
   }
 
   /**
@@ -164,20 +144,15 @@ export class PipelineService {
    * @param {string} type pipeline 运行环境类型
    * @param {string} componentID 组件节点ID
    */
-  static async getNodeProperties<T>(type = 'local', componentID: string) {
-    const fnMap: { [k: string]: () => Promise<any> } = {
+  static getNodeProperties<T>(type = 'local', componentID: string) {
+    const fnMap: { [k: string]: () => any } = {
       'APACHE_AIRFLOW-KubernetesPodOperator': () =>
-        Promise.resolve(Utils.clone(propertiesAirflowKubernetesPodOperator)),
+        Utils.clone(propertiesAirflowKubernetesPodOperator),
       'APACHE_AIRFLOW-SparkKubernetesOperator': () =>
-        Promise.resolve(Utils.clone(propertiesAirflowSparkKubernetesOperator))
+        Utils.clone(propertiesAirflowSparkKubernetesOperator)
     };
     const fn = fnMap[`${type}-${componentID}`];
     if (typeof fn == 'function') return fn();
-
-    /// to-do
-    return RequestHandler.makeGetRequest<T>(
-      `elyra/pipeline/components/${type}/${componentID}/properties`
-    );
   }
 
   /** 格式化请求参数，用于get等请求 */

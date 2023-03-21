@@ -3,7 +3,7 @@
  */
 
 import { PIPELINE_CURRENT_VERSION } from '@src/app/base-pipeline-editor';
-import { pipelineIcon, RequestErrors } from '@src/app/ui-components';
+import { pipelineIcon } from '@src/app/ui-components';
 
 import type { JupyterFrontEnd, ILayoutRestorer } from '@jupyterlab/application';
 import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
@@ -31,14 +31,14 @@ const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
 const PLUGIN_ID = 'redevelop-elyra:plugin';
 
 /** 获取插件在 launcher 面板的菜单图标 */
-const createRemoteIcon = async ({
+const createRemoteIcon = ({
   name,
   url
 }: {
   name: string;
   url: string;
-}): Promise<LabIcon> => {
-  let svgstr = await PipelineService.getIcon(url);
+}): LabIcon => {
+  let svgstr = PipelineService.getIcon(url);
   return new LabIcon({ name, svgstr });
 };
 
@@ -201,21 +201,17 @@ export default async function activatePipeline(
     category: 'Pipeline Editor'
   });
 
-  const types = await PipelineService.getRuntimeTypes();
+  const types = PipelineService.getRuntimeTypes();
 
-  const promises = types.map(async t => {
+  const resolvedTypes = types.map(t => {
     return {
       ...t,
-      icon: await createRemoteIcon({
+      icon: createRemoteIcon({
         name: `elyra:platform:${t.id}`,
         url: t.icon
       })
     };
   });
-
-  const resolvedTypes = await Promise.all(promises).catch(error =>
-    RequestErrors.serverError(error)
-  );
 
   // Add the command to the launcher
   if (launcher) {
@@ -238,13 +234,7 @@ export default async function activatePipeline(
     menu.fileMenu.newMenu.addGroup(fileMenuItems);
   }
 
-  const supportFileSelectors = [
-    '[data-file-type="notebook"]',
-    // '[data-file-type="python"]',
-    '[data-file-type="r"]',
-    '[title*=".jar"]',
-    '[title*=".py"]'
-  ];
+  const supportFileSelectors = ['[title*=".jar"]', '[title*=".py"]'];
 
   supportFileSelectors.forEach(selector => {
     app.contextMenu.addItem({
@@ -252,29 +242,4 @@ export default async function activatePipeline(
       command: addFileToPipelineCommand
     });
   });
-
-  // SubmitNotebookButtonExtension initialization code
-  // const notebookButtonExtension = new SubmitFileButtonExtension();
-  // app.docRegistry.addWidgetExtension('Notebook', notebookButtonExtension);
-  // app.contextMenu.addItem({
-  //   selector: '.jp-Notebook',
-  //   command: commandIDs.submitNotebook,
-  //   rank: -0.5
-  // });
-
-  // // SubmitScriptButtonExtension initialization code
-  // const scriptButtonExtension = new SubmitFileButtonExtension();
-  // app.docRegistry.addWidgetExtension('Python Editor', scriptButtonExtension);
-  // app.contextMenu.addItem({
-  //   selector: '.elyra-ScriptEditor',
-  //   command: commandIDs.submitScript,
-  //   rank: -0.5
-  // });
-
-  // app.docRegistry.addWidgetExtension('R Editor', scriptButtonExtension);
-  // app.contextMenu.addItem({
-  //   selector: '.elyra-ScriptEditor',
-  //   command: commandIDs.submitScript,
-  //   rank: -0.5
-  // });
 }

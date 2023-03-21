@@ -439,6 +439,10 @@ class PipelineController extends CanvasController {
     return this.palette;
   }
 
+  existPalette() {
+    return !!this.palette.categories?.[0];
+  }
+
   // Updates the uihints to include pipeline default
   addPipelineDefaultUihints(
     schema: any,
