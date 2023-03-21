@@ -65,8 +65,10 @@ import { PipelineEnum } from '@src/app/enums';
 import { usePalette } from '@src/app/hooks/pipeline-hooks';
 import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
 import { onAfterSelectFile_UploadFile } from '@src/app/hooks/selectFile';
-import { onUpdateNodeProperties } from '@src/app/hooks/editPipelineProperties';
+import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
+
+import Utils from '@src/app/util';
 
 const PIPELINE_CLASS = 'elyra-PipelineEditor';
 
@@ -169,16 +171,15 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = React.useState(false);
 
-  const type: string =
-    pipeline?.pipelines?.[0]?.app_data?.runtime_type ?? 'APACHE_AIRFLOW';
+  const type: string = 'APACHE_AIRFLOW';
 
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
 
-  const runtimeDisplayName = type ?? 'Generic';
+  const runtimeDisplayName = type;
 
   const {
-    data: palette, // 编辑器面板参数，左侧是palette.catagories, 右侧是palette.pipelineProperties 和 palette.pipelineParameters
+    data: palette, // 编辑器面板参数，左侧是palette.catagories, 右侧是palette.pipelineProperties
     error: paletteError,
     mutate: mutatePalette
   } = usePalette(type);
@@ -195,9 +196,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [palette]);
 
   useEffect(() => {
-    console.log('==订阅刷新信息，来重新获取 palette 参数 ==');
     const handleMutateSignal = (): void => {
-      console.log('==重新获取 palette 参数');
       mutatePalette();
     };
     refreshPaletteSignal.connect(handleMutateSignal);
@@ -208,7 +207,6 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   useEffect(() => {
     if (paletteError) {
-      console.log('获取 palette 参数失败发生错误！');
       RequestErrors.serverError(paletteError);
     }
   }, [paletteError]);
@@ -217,86 +215,23 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   useEffect(() => {
     const currentContext = contextRef.current;
-
     const changeHandler = (): void => {
       console.log('==监听到 pipeline 数据被改变==');
       const pipelineJson: any = currentContext.model.toJSON();
-
-      // map IDs to display names
-      const nodes = pipelineJson?.pipelines?.[0]?.nodes;
-      if (nodes?.length > 0) {
-        for (const node of nodes) {
-          if (node?.app_data?.component_parameters) {
-            for (const [key, val] of Object.entries(
-              node?.app_data?.component_parameters
-            )) {
-              if (val === null) {
-                node.app_data.component_parameters[key] = undefined;
-              }
-            }
-          }
-        }
-      }
-      // TODO: don't persist this, but this will break things right now
-      if (pipelineJson?.pipelines?.[0]?.app_data) {
-        if (!pipelineJson.pipelines[0].app_data.properties) {
-          pipelineJson.pipelines[0].app_data.properties = {};
-        }
-
-        pipelineJson.pipelines[0].app_data.properties.runtime =
-          runtimeDisplayName;
-      }
       attachNodeImage(pipelineJson);
       setPipeline(pipelineJson);
       setLoading(false);
     };
-
     currentContext.ready.then(changeHandler);
     currentContext.model.contentChanged.connect(changeHandler);
-
     return (): void => {
       currentContext.model.contentChanged.disconnect(changeHandler);
     };
-  }, [runtimeDisplayName]);
+  }, []);
 
   const onChange = useCallback((pipelineJson: any): void => {
     console.log('==改变 Pipeline 数据，会重新设置画布的 pipeline 数据==');
-    const removeNullValues = (data: any, removeEmptyString?: boolean): void => {
-      for (const key in data) {
-        if (
-          data[key] === null ||
-          data[key] === undefined ||
-          (removeEmptyString && data[key] === '')
-        ) {
-          delete data[key];
-        } else if (Array.isArray(data[key])) {
-          const newArray = [];
-          for (const i in data[key]) {
-            if (typeof data[key][i] === 'object') {
-              removeNullValues(data[key][i], true);
-              if (Object.keys(data[key][i]).length > 0) {
-                newArray.push(data[key][i]);
-              }
-            } else if (data[key][i] !== null && data[key][i] !== '') {
-              newArray.push(data[key][i]);
-            }
-          }
-          data[key] = newArray;
-        } else if (typeof data[key] === 'object') {
-          removeNullValues(data[key]);
-        }
-      }
-    };
-
-    // Remove all null values from the pipeline
-    for (const node of pipelineJson?.pipelines?.[0]?.nodes ?? []) {
-      removeNullValues(node.app_data ?? {});
-    }
-    removeNullValues(
-      pipelineJson?.pipelines?.[0]?.app_data?.properties?.pipeline_defaults ??
-        {}
-    );
-
+    pipelineJson = Utils.removeNullValues(pipelineJson);
     if (contextRef.current.isReady) {
       deleteNodeImage(pipelineJson);
       contextRef.current.model.fromString(
@@ -329,24 +264,6 @@ const PipelineWrapper: React.FC<IProps> = ({
       contextRef.current.path,
       args.filename ?? ''
     );
-    if (args.propertyID?.includes('dependencies')) {
-      const res = await showBrowseFileDialog(
-        browserFactory.defaultBrowser.model.manager,
-        {
-          multiselect: true,
-          includeDir: true,
-          rootPath: PathExt.dirname(filename),
-          filter: (model: any): boolean => {
-            return model.path !== filename;
-          }
-        }
-      );
-
-      if (res.button.accept && res.value.length) {
-        return res.value.map((v: any) => v.path);
-      }
-      return;
-    }
 
     const res = await showBrowseFileDialog(
       browserFactory.defaultBrowser.model.manager,
@@ -662,6 +579,16 @@ const PipelineWrapper: React.FC<IProps> = ({
     [type]
   );
 
+  const handleUpdateNodeProperties = useCallback(
+    (o: { type: string; applicationId: number }) => {
+      return onAfterSelectApp({
+        ...o,
+        controller: ref?.current.controller.current
+      });
+    },
+    [type]
+  );
+
   const handleAddFileToPipeline = useCallback(
     async (location?: { x: number; y: number }) => {
       const fileBrowser = browserFactory.defaultBrowser;
@@ -796,7 +723,6 @@ const PipelineWrapper: React.FC<IProps> = ({
             ref={ref}
             palette={palette}
             pipelineProperties={palette.properties}
-            pipelineParameters={palette.parameters}
             toolbar={toolbar}
             pipeline={pipeline}
             onAction={onAction}
@@ -809,7 +735,7 @@ const PipelineWrapper: React.FC<IProps> = ({
             leftPalette={true}
             handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
             handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
-            onUpdateNodeProperties={onUpdateNodeProperties}
+            handleUpdateNodeProperties={handleUpdateNodeProperties}
           >
             {type === undefined ? (
               <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />

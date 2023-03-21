@@ -408,7 +408,6 @@ class PipelineController extends CanvasController {
 
   setPalette(palette: any) {
     this.palette = palette;
-    console.log(palette, 'setPalette');
     this.setPipelineFlowPalette(palette);
   }
 
@@ -434,6 +433,10 @@ class PipelineController extends CanvasController {
     nodes = this.propagatePipelineDefaultProperties(nodes, this.palette);
 
     return nodes;
+  }
+
+  getPalette() {
+    return this.palette;
   }
 
   // Updates the uihints to include pipeline default

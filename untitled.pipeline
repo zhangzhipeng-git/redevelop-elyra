@@ -15,8 +15,6 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "kubernetes_conn_id": "k8s",
-              "namespace": "k8s",
               "executor_cores": 1,
               "localFile": "node1.py",
               "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
@@ -24,9 +22,18 @@
             },
             "ui_data": {
               "label": "node1.py",
-              "x_pos": 50,
-              "y_pos": 50,
-              "description": "Run KubernetesPodOperator Node"
+              "x_pos": 69,
+              "y_pos": 106,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -65,18 +72,26 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "kubernetes_conn_id": "k8s",
-              "namespace": "k8s",
               "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
               "localFile": "node2.py",
               "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
               "name": "测试任务2"
             },
             "ui_data": {
               "label": "node2.py",
-              "x_pos": 49,
-              "y_pos": 156,
-              "description": "Run KubernetesPodOperator Node"
+              "x_pos": 120,
+              "y_pos": 211,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -123,7 +138,6 @@
             "component_parameters": {
               "type": "python",
               "kubernetes_conn_id": "k8s",
-              "namespace": "k8s",
               "executor_cores": 1,
               "localFile": "node3.py",
               "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
@@ -131,9 +145,18 @@
             },
             "ui_data": {
               "label": "node3.py",
-              "x_pos": 50,
-              "y_pos": 290,
-              "description": "Run KubernetesPodOperator Node"
+              "x_pos": 118,
+              "y_pos": 298,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -189,7 +212,8 @@
           "whetherRetry": true,
           "retry": 3,
           "applicationId": 1,
-          "applicationCode": "SYS_FBSGFKGKC"
+          "applicationCode": "SYS_FBSGFKGKC",
+          "dagName": "1"
         }
       },
       "runtime_ref": ""

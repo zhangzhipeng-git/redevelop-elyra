@@ -46,7 +46,10 @@ interface Props {
   data: any;
   schema?: JSONSchema7 | any;
   onChange?: (data: any) => any;
-  onUpdateNodeProperties?: (options: any) => any;
+  handleUpdateNodeProperties?: (options: {
+    type: string;
+    applicationId: number;
+  }) => Promise<void>;
   noValidate?: boolean;
   id?: string;
 }
@@ -59,7 +62,7 @@ export default function PipelinePropertiesPanel({
   data,
   schema,
   onChange,
-  onUpdateNodeProperties,
+  handleUpdateNodeProperties,
   noValidate,
   id
 }: Props) {
@@ -68,7 +71,7 @@ export default function PipelinePropertiesPanel({
   const uiSchema: UiSchema = {};
   genUISchemaFromSchema(schema, uiSchema);
 
-  function onChangeFn(e: any) {
+  async function onChangeFn(e: any) {
     const newFormData = e.formData;
     const schema = e.schema;
     const applicationId = newFormData.applicationId;
@@ -78,7 +81,7 @@ export default function PipelinePropertiesPanel({
     const { enum: enumId, enumCodes } = schema.properties.applicationId;
     const index = enumId.findIndex((e: number) => e === applicationId);
     newFormData.applicationCode = enumCodes[index];
-    onUpdateNodeProperties?.({ type: 'kubernetes', applicationId });
+    await handleUpdateNodeProperties?.({ type: 'kubernetes', applicationId });
     onChange && Utils.debounceExecute(onChange, [newFormData], 100);
   }
 

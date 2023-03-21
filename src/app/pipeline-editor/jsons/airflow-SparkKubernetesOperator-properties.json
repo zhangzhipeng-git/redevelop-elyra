@@ -48,20 +48,16 @@
             ]
           }
         },
-        "kubernetes_conn_id": {
+        "connection": {
           "title": "k8s集群连接信息",
           "description": "k8s集群连接信息",
           "type": "string",
-          "default": "k8s",
-          "uihints": {
-            "ui:readonly": true
-          }
+          "enum": []
         },
         "namespace": {
           "type": "string",
           "title": "k8s命名空间",
           "description": "k8s命名空间",
-          "default": "k8s",
           "uihints": {
             "ui:readonly": true
           }
@@ -96,7 +92,7 @@
         "mode",
         "type",
         "localFile",
-        "kubernetes_conn_id"
+        "connection"
       ]
     }
   },

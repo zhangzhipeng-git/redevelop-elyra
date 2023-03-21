@@ -47,4 +47,28 @@ export default class Utils {
       fn.apply(ctx, args);
     }, debounceTime);
   }
+
+  /**
+   * 将数组或对象的空值移除
+   * @param o 数组或对象
+   */
+  static removeNullValues(o: any) {
+    if (Array.isArray(o)) {
+      const newArr: any[] = [];
+      o.forEach(v => {
+        if (v == null || v === '') return;
+        newArr.push(this.removeNullValues(v));
+      });
+      return newArr;
+    }
+    if (typeof o === 'object') {
+      Object.keys(o).forEach((k: string) => {
+        const v = o[k];
+        if (v == null || o === '') return delete o[k];
+        o[k] = this.removeNullValues(v);
+      });
+      return o;
+    }
+    return o;
+  }
 }

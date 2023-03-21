@@ -16,7 +16,6 @@
 
 import { MetadataService } from '../services';
 
-import produce from 'immer';
 import useSWR from 'swr';
 
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
@@ -178,13 +177,19 @@ export const componentFetcher = async (type: string): Promise<any> => {
     palettePromise,
     typesPromise,
     pipelinePropertiesPromise,
-    appsPromise,
+    appsPromise
   ]);
 
   const applicationId = pipelineProperties?.properties?.applicationId ?? {};
-  applicationId.enum = apps.map(({applicationId}) => applicationId);
-  applicationId.enumNames = apps.map(({applicationName}) => applicationName);
-  applicationId.enumCodes = apps.map(({applicationCode}) => applicationCode);
+  const applicationCode = pipelineProperties?.properties?.applicationCode ?? {};
+  const enums = apps.map(({ applicationId }) => applicationId);
+  const enumNames = apps.map(({ applicationName }) => applicationName);
+  const enumCodes = apps.map(({ applicationCode }) => applicationCode);
+  applicationId.enum = enums;
+  applicationId.default = enums[0];
+  applicationId.enumNames = enumNames;
+  applicationId.enumCodes = enumCodes;
+  applicationCode.default = enumCodes[0];
 
   palette.properties = pipelineProperties;
 
@@ -245,35 +250,10 @@ export const componentFetcher = async (type: string): Promise<any> => {
   return palette;
 };
 
-const updateRuntimeImages = (
-  properties: any,
-  runtimeImages: IRuntimeImage[] | undefined
-): void => {
-  const runtimeImageProperties =
-    properties?.properties?.component_parameters?.properties?.runtime_image ??
-    properties?.properties?.pipeline_defaults?.properties?.runtime_image;
-
-  const imageNames = (runtimeImages ?? []).map(i => i.metadata.image_name);
-
-  const displayNames: { [key: string]: string } = {};
-
-  (runtimeImages ?? []).forEach((i: IRuntimeImage) => {
-    displayNames[i.metadata.image_name] = i.display_name;
-  });
-
-  if (runtimeImageProperties) {
-    runtimeImageProperties.enumNames = (runtimeImages ?? []).map(
-      i => i.display_name
-    );
-    runtimeImageProperties.enum = imageNames;
-  }
-};
-
 export const usePalette = (type = 'local'): IReturn<any> => {
   console.log(
     '==获取 palette 参数：节点目录、管道属性表单配置和节点属性表单配置=='
   );
-  const { data: runtimeImages, error: runtimeError } = useRuntimeImages();
 
   const {
     data: palette,
@@ -281,23 +261,9 @@ export const usePalette = (type = 'local'): IReturn<any> => {
     mutate: mutate
   } = useSWR(type, componentFetcher);
 
-  console.log('==设置节点表单配置的运行时镜像选项==');
-  let updatedPalette;
-  if (palette !== undefined) {
-    updatedPalette = produce(palette, (draft: any) => {
-      for (const category of draft.categories) {
-        for (const node of category.node_types) {
-          // update runtime images
-          updateRuntimeImages(node.app_data.properties, runtimeImages);
-        }
-      }
-      updateRuntimeImages(draft.properties, runtimeImages);
-    });
-  }
-
   return {
-    data: updatedPalette,
-    error: runtimeError ?? paletteError,
+    data: palette,
+    error: paletteError,
     mutate: mutate
   };
 };

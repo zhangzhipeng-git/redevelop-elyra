@@ -43,20 +43,16 @@
             "ui:placeholder": "请填写启动Pod的类名"
           }
         },
-        "kubernetes_conn_id": {
+        "connection": {
           "type": "string",
           "title": "k8s集群连接信息",
           "description": "k8s集群连接信息",
-          "default": "k8s",
-          "uihints": {
-            "ui:readonly": true
-          }
+          "enum": []
         },
         "namespace": {
           "type": "string",
           "title": "命名空间",
           "description": "命名空间",
-          "default": "k8s",
           "uihints": {
             "ui:readonly": true
           }
@@ -90,7 +86,7 @@
         "name",
         "type",
         "localFile",
-        "kubernetes_conn_id"
+        "connection"
       ]
     }
   },

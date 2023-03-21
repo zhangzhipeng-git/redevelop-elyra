@@ -14,8 +14,8 @@ export type AppsResponse = AppInfo[];
 /** 资源信息请求参数 */
 export interface ConnRequest {
   /** 资源类型 */
-  type: 'kubernetes';
   /** 应用 id */
+  type: string;
   applicationId: number;
 }
 

@@ -17,8 +17,8 @@
 import { FieldTemplateProps } from '@rjsf/core';
 
 export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
+  if (props.uiSchema['ui:field'] === 'hidden') return <div />;
   let children = props.children;
-
   const requiredError = props.required && props.formData === undefined;
   const hasError = props.rawErrors?.[0] || requiredError;
   return (

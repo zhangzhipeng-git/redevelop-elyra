@@ -96,7 +96,7 @@ function NodeProperties({
   const selectedNode = selectedNodes[0];
 
   if (!selectedNode) {
-    return <Message>请选择节点编辑它的属性。.</Message>;
+    return <Message>请选择节点编辑它的属性。</Message>;
   }
 
   if (selectedNode.type !== 'execution_node') {
@@ -105,44 +105,8 @@ function NodeProperties({
 
   const nodePropertiesSchema = nodes.find(n => n.op === selectedNode.op);
 
-  const parseComponent = (): any => {
-    const messageBody: Array<any> = [];
-    try {
-      const componentSourceJson = JSON.parse(
-        selectedNode.app_data.component_source
-      );
-      messageBody.push(`catalog_type: ${componentSourceJson.catalog_type}`);
-      for (const [key, value] of Object.entries(
-        componentSourceJson.component_ref
-      )) {
-        messageBody.push(`${key}: ${value}`);
-      }
-    } catch {
-      messageBody.push(selectedNode.app_data.component_source);
-    }
-    return messageBody;
-  };
-
-  if (nodePropertiesSchema === undefined) {
-    return (
-      <Message>
-        该节点未定义或者被删除
-        <br />
-        该节点不在您的节点配置目录中。
-        {selectedNode.app_data.component_source !== undefined
-          ? parseComponent().map((line: any, i: any) => (
-              <span key={i}>
-                <br />
-                {line}
-              </span>
-            ))
-          : ''}
-      </Message>
-    );
-  }
-
   if (nodePropertiesSchema?.app_data.properties === undefined) {
-    return <Message>该类型的节点没有可编辑的属性。.</Message>;
+    return <Message>该类型的节点没有可编辑的属性。</Message>;
   }
 
   // returns the node properties for selectedNode with the most recent content

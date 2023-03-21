@@ -55,7 +55,6 @@ interface Props {
   pipeline: any;
   toolbar?: any;
   palette?: any;
-  pipelineParameters?: any;
   pipelineProperties?: any;
   onAction?: (action: { type: string; payload?: any }) => any;
   onChange?: (pipeline: any) => any;
@@ -70,7 +69,10 @@ interface Props {
   handleAfterSelectFileUploadFile: (
     paths: string[]
   ) => Promise<{ paths: string[] }>;
-  onUpdateNodeProperties: (o: { type: string; applictionId: number }) => void;
+  handleUpdateNodeProperties: (o: {
+    type: string;
+    applicationId: number;
+  }) => Promise<void>;
 }
 
 /** pipeline 只读时的节点路径 */
@@ -156,7 +158,6 @@ const PipelineEditor = forwardRef(
       pipeline,
       palette,
       pipelineProperties,
-      pipelineParameters,
       toolbar,
       onAction,
       onChange,
@@ -169,7 +170,7 @@ const PipelineEditor = forwardRef(
       leftPalette = true,
       handleBeforeAddNodeGetOp,
       handleAfterSelectFileUploadFile,
-      onUpdateNodeProperties
+      handleUpdateNodeProperties
     }: Props,
     ref
   ) => {
@@ -584,6 +585,10 @@ const PipelineEditor = forwardRef(
       ? controller.current.getUpstreamNodes(selectedNodeIDs[0])
       : [];
 
+    // 有默认的应用
+    if (pipeline?.pipelines?.[0]?.app_data?.properties?.applicationId) {
+      // 1. 先查询是否是有效的应用标识，在查出来的
+    }
     const panelTabs = [
       {
         id: 'pipeline-properties',
@@ -595,7 +600,7 @@ const PipelineEditor = forwardRef(
             data={pipeline?.pipelines?.[0]?.app_data?.properties}
             schema={pipelineProperties}
             onChange={handlePipelinePropertiesChange}
-            onUpdateNodeProperties={onUpdateNodeProperties}
+            handleUpdateNodeProperties={handleUpdateNodeProperties}
           />
         )
       },
@@ -612,10 +617,6 @@ const PipelineEditor = forwardRef(
             onFileRequested={onFileRequested}
             onChange={handlePropertiesChange}
             handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
-            parameters={
-              pipeline?.pipelines?.[0]?.app_data?.properties
-                ?.pipeline_parameters
-            }
           />
         )
       }

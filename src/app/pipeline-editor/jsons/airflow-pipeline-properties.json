@@ -19,6 +19,13 @@
                 "ui:placeholder": "请选择归属应用"
             }
         },
+        "applicationCode": {
+            "type": "string",
+            "default": "",
+            "uihints": {
+                "ui:field": "hidden"
+            }
+        },
         "email": {
             "title": "告警邮箱",
             "description": "告警邮箱",

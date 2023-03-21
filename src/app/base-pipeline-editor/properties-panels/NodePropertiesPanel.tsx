@@ -78,17 +78,33 @@ export function NodePropertiesPanel({
   genUISchemaFromSchema(schema, uiSchema);
 
   function onChangeFn(e: any) {
+    console.log(e, 'onChangeFn');
     const newFormData = e.formData;
-
     const nodeParams = newFormData.component_parameters;
-    if (nodeParams) {
-      const { type, localFile } = nodeParams;
-      const fileType = TYPE_MAP[path.extname(localFile)];
-      if (type !== fileType) {
-        delete nodeParams.mainApplicationFile;
-        delete nodeParams.localFile;
-        // to-do 删除文件
-      }
+
+    if (!nodeParams)
+      return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
+
+    const properties = e.schema.properties.component_parameters.properties;
+
+    // 1. 任务类型更改后，置空文件路径和删除对应的文件
+    const { type, localFile } = nodeParams;
+    const fileType = TYPE_MAP[path.extname(localFile)];
+    if (type !== fileType) {
+      delete nodeParams.mainApplicationFile;
+      delete nodeParams.localFile;
+      // to-do 删除文件
+    }
+
+    // 2. 集群连接信息改变后，命名空间也要跟着改变
+    const { connection } = nodeParams;
+    if (!connection) delete nodeParams.namespace;
+    else {
+      const { connection: schema_connection, namespace } = properties;
+      const index = schema_connection.enum.findIndex(
+        (e: string) => e === connection
+      );
+      if (index > -1) nodeParams.namespace = namespace.enumValues[index];
     }
 
     onChange && Utils.debounceExecute(onChange, [newFormData], 100);

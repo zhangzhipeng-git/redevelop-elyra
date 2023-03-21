@@ -25,6 +25,13 @@ jupyter lab
 pip install jupyterlab-language-pack-zh-CN
 # 去编辑器的settings里设置language
 
+## 打包部署
+# 打包 & 安装
+pip install build
+python -m build
+pip install jupyterlab_apod/dist/jupyterlab_apod-0.1.0-py3-none-any.whl
+# 发布 npm 包 & 下载编译安装
+
 
 jupyterlab 插件示例：
 https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html#build-and-install-the-extension-for-development

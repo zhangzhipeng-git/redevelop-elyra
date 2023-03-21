@@ -15,22 +15,25 @@ module.exports = {
       }
     ]
   }),
-  '/api/v1/conn': () => ({
-    code: '0',
-    msg: null,
-    data: [
-      {
-        connName: 'kubernetes_default',
-        connectionId: 50,
-        connId: 'kubernetes_default'
-      },
-      {
-        connName: 'kubernetes_default2',
-        connectionId: 51,
-        connId: 'kubernetes_default2'
-      }
-    ]
-  }),
+  '/api/v1/conn': params => {
+    const id = params.applicationId;
+    return {
+      code: '0',
+      msg: null,
+      data: [
+        {
+          connName: `kubernetes_default_${id}`,
+          connectionId: 50,
+          connId: `kubernetes_default_${id}`
+        },
+        {
+          connName: `kubernetes_default2_${id}`,
+          connectionId: 51,
+          connId: `kubernetes_default2_${id}`
+        }
+      ]
+    };
+  },
   '/api/v1/uploadFile': () => ({
     code: '0',
     msg: null,
