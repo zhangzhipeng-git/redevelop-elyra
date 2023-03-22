@@ -36,6 +36,12 @@ import trashIconSvg from './style/icons/trashIcon.svg';
 import viewOffIconSvg from './style/icons/view--off.svg';
 import viewIconSvg from './style/icons/view.svg';
 import whatsNewSvg from './style/icons/whats-new.svg';
+import pauseSvg from './style/icons/pause.svg';
+
+export const pauseIcon = new LabIcon({
+  name: 'elyra:pause',
+  svgstr: pauseSvg
+});
 
 export const importIcon = new LabIcon({
   name: 'elyra:import',

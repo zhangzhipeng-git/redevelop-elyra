@@ -25,7 +25,8 @@ import {
   savePipelineIcon,
   showBrowseFileDialog,
   Dropzone,
-  showFormDialog
+  showFormDialog,
+  pauseIcon
 } from '@src/app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
 import { Dialog, ReactWidget, showDialog } from '@jupyterlab/apputils';
@@ -58,14 +59,17 @@ import { PipelineService } from './PipelineService';
 
 import { theme } from './theme';
 
-import { deleteNodeImage, attachNodeImage } from './node-image-transform';
-
 import { PipelineEnum } from '@src/app/enums';
 import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
 import { onAfterSelectFile_UploadFile } from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
+import {
+  onChangePipeline,
+  onRenderPipeline,
+  onRunOrSubmit
+} from '@src/app/hooks/handlePipeline';
 
 import Utils from '@src/app/util';
 
@@ -119,10 +123,6 @@ class PipelineEditorWidget extends ReactWidget {
     this.settings = options.settings;
   }
 
-  // onUpdateRequest(prevProps: any) {
-  //   console.log(this, prevProps, 'componentDidUpdate');
-  // }
-
   render(): any {
     console.log(
       '==渲染编辑器（聚焦 Pipeline Editor 标签页会重新渲染编辑器）=='
@@ -171,7 +171,11 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const [loading, setLoading] = useState(true);
   const [pipeline, setPipeline] = useState<any>(null);
-  const [panelOpen, setPanelOpen] = React.useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  const [timer, setTimer] = useState<number>();
+  const [readOnly, setReadOnly] = useState<boolean>(false);
+  const [runRes, setRunRes] = useState<any>(null);
 
   const type: string = 'APACHE_AIRFLOW';
 
@@ -202,8 +206,9 @@ const PipelineWrapper: React.FC<IProps> = ({
   useEffect((): any => {
     const currentContext = contextRef.current;
     const changeHandler = (): void => {
+      console.log('==监听到pipeline数据变化，重新渲染编辑器==');
       const pipelineJson = currentContext.model.toJSON();
-      attachNodeImage(pipelineJson);
+      onRenderPipeline(pipelineJson);
       setPipeline(pipelineJson);
       setLoading(false);
     };
@@ -212,13 +217,16 @@ const PipelineWrapper: React.FC<IProps> = ({
       changeHandler();
     });
     currentContext.model.contentChanged.connect(changeHandler);
-    return () => currentContext.model.contentChanged.disconnect(changeHandler);
+    return () => {
+      currentContext.model.contentChanged.disconnect(changeHandler);
+    };
   }, []);
 
   const onChange = useCallback((pipelineJson: any): void => {
+    console.log('==重新设置pipeline数据==');
     pipelineJson = Utils.removeNullValues(pipelineJson);
     if (contextRef.current.isReady) {
-      deleteNodeImage(pipelineJson);
+      onChangePipeline(pipelineJson);
       contextRef.current.model.fromString(
         JSON.stringify(pipelineJson, null, 2)
       );
@@ -310,11 +318,9 @@ const PipelineWrapper: React.FC<IProps> = ({
     }
   };
 
-  const timerRef = useRef<number>();
-
   useEffect(() => {
     return () => {
-      clearTimeout(timerRef.current);
+      pausePipeline();
     };
   }, []);
 
@@ -327,11 +333,8 @@ const PipelineWrapper: React.FC<IProps> = ({
         getAllPaletteNodes(palette.current),
         palette.current?.properties ?? {}
       );
+      const actionTypeMap = { run: '运行', submit: '提交' };
       if (errorMessages && errorMessages.length > 0) {
-        const chMsgType = {
-          run: '运行',
-          submit: '提交'
-        };
         let msgs = [];
         for (const error of errorMessages) {
           let msg = error.message;
@@ -339,7 +342,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           msgs.push(msg);
         }
         toast.error(
-          `${chMsgType[actionType]}失败:\n\n ${Array.from(new Set(msgs))
+          `${actionTypeMap[actionType]}失败:\n\n ${Array.from(new Set(msgs))
             .join('\n')
             .replace(/The property/g, '属性')
             .replace(/on node/g, '在节点')
@@ -363,11 +366,6 @@ const PipelineWrapper: React.FC<IProps> = ({
           return;
         }
       }
-
-      timerRef.current = onUpdateNodeStatus(
-        ref?.current.controller.current,
-        ''
-      );
 
       let title =
         type !== undefined
@@ -405,14 +403,53 @@ const PipelineWrapper: React.FC<IProps> = ({
           break;
       }
 
-      const dialogResult = await showFormDialog(dialogOptions);
+      const result = await showFormDialog(dialogOptions);
 
-      if (dialogResult.value === null) {
+      if (!result.button.accept) {
         // When Cancel is clicked on the dialog, just return
         return;
       }
+
+      const newPipeline = onRunOrSubmit(pipelineJson, actionType);
+      if (!newPipeline) return;
+
+      const res = await PipelineService.operator(newPipeline);
+      setRunRes(res);
+
+      if (actionType === 'submit') {
+        toast('提交成功', { autoClose: 1000, type: 'success' });
+        return;
+      }
+
+      setReadOnly(true);
+      const promise = new Promise((resolve, reject) => {
+        setTimer(
+          onUpdateNodeStatus(
+            ref?.current.controller.current,
+            res.dagId,
+            (state: boolean) => {
+              setReadOnly(false);
+              if (state) resolve('运行成功');
+              else reject('运行失败');
+            }
+          )
+        );
+      });
+      toast.promise(promise, {
+        pending: '运行中...',
+        success: {
+          render({ data }) {
+            return data;
+          }
+        },
+        error: {
+          render({ data }) {
+            return data;
+          }
+        }
+      });
     },
-    [context.model, runtimeDisplayName, type, shell]
+    [context.model, runtimeDisplayName, type, shell, readOnly]
   );
 
   const handleClearPipeline = useCallback(async (data: any): Promise<any> => {
@@ -421,7 +458,6 @@ const PipelineWrapper: React.FC<IProps> = ({
       body: '是否确实要清除 pipeline ?',
       buttons: [
         Dialog.cancelButton({ label: '取消' }),
-        Dialog.okButton({ label: '全部清除' }),
         Dialog.okButton({ label: '清除画布' })
       ]
     }).then(result => {
@@ -449,19 +485,61 @@ const PipelineWrapper: React.FC<IProps> = ({
     });
   }, []);
 
+  const pausePipeline = useCallback(async () => {
+    if (!runRes) return;
+    const { dagId, dagRunId } = runRes;
+    setReadOnly(false);
+    clearTimeout(timer);
+    await PipelineService.cancel({ dagId, dagRunId });
+  }, []);
+
+  const onReadOnlyAction = useCallback(
+    async ({ type, payload }: any) => {
+      const runResult = runRes.current;
+      if (!runResult) return;
+      const { dagId, dagRunId } = runResult;
+      switch (type) {
+        case 'log':
+          const task =
+            runResult.task.find(({ taskId }: any) => taskId === payload) ?? {};
+          const { taskId, taskTryNumber } = task;
+          const res = await PipelineService.logs({
+            dagId,
+            dagRunId,
+            taskId,
+            taskTryNumber
+          });
+          new Dialog({
+            title: '日志',
+            body: res,
+            buttons: [Dialog.okButton({ label: '确定' })]
+          }).launch();
+          break;
+        case 'pause':
+          pausePipeline();
+          break;
+        case 'submit':
+          handleSubmission(type);
+          break;
+        default:
+          break;
+      }
+    },
+    [handleSubmission, pausePipeline, shell, commands, type]
+  );
+
   const onAction = useCallback(
-    (args: { type: string; payload?: any }) => {
-      console.log(type, 'type');
-      switch (args.type) {
+    ({ type, payload }: any) => {
+      switch (type) {
         case 'save':
           contextRef.current.save();
           break;
         case 'run':
         case 'submit':
-          handleSubmission(args.type);
+          handleSubmission(type);
           break;
         case 'clear':
-          handleClearPipeline(args.payload);
+          handleClearPipeline(payload);
           break;
         case 'toggleOpenPanel':
           setPanelOpen(!panelOpen);
@@ -473,9 +551,9 @@ const PipelineWrapper: React.FC<IProps> = ({
           commands.execute(commandIDs.openDocManager, {
             path: PipelineService.getWorkspaceRelativeNodePath(
               contextRef.current.path,
-              args.payload
-            ),
-            readOnly: true
+              payload
+            )
+            // readOnly: true
           });
           break;
         default:
@@ -548,6 +626,31 @@ const PipelineWrapper: React.FC<IProps> = ({
       }
     ]
   };
+  const readOnlyToolbar = {
+    leftBar: [
+      {
+        action: 'pause',
+        label: '暂停',
+        enable: true,
+        iconEnabled: IconUtil.encode(pauseIcon)
+      },
+      {
+        action: 'submit',
+        label: '提交',
+        enable: true,
+        iconEnabled: IconUtil.encode(exportPipelineIcon)
+      }
+    ],
+    rightBar: [
+      {
+        action: '',
+        label: `运行环境: ${runtimeDisplayName}`,
+        incLabelWithIcon: 'before',
+        enable: false,
+        kind: 'tertiary'
+      }
+    ]
+  };
 
   const [defaultPosition, setDefaultPosition] = useState(10);
 
@@ -578,6 +681,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const handleAddFileToPipeline = useCallback(
     async (location?: { x: number; y: number }) => {
+      if (readOnly) return;
       const fileBrowser = browserFactory.defaultBrowser;
       // Only add file to pipeline if it is currently in focus
       if (shell.currentWidget?.id !== widgetId) {
@@ -664,11 +768,10 @@ const PipelineWrapper: React.FC<IProps> = ({
       // update position if the default coordinates were used
       if (missingXY) setDefaultPosition(position);
     },
-    [browserFactory.defaultBrowser, defaultPosition, shell, widgetId, type]
+    [browserFactory.defaultBrowser, defaultPosition, shell, widgetId, readOnly]
   );
 
   const handleDrop = async (e: IDragEvent): Promise<void> => {
-    console.log('handleDrop', e);
     handleAddFileToPipeline({ x: e.offsetX, y: e.offsetY });
   };
 
@@ -692,13 +795,13 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   return (
     <div
-      id="pipeline-eidtor-wrapper"
+      id={`pipeline-eidtor-wrapper`}
       style={{ position: 'relative', height: '100%' }}
     >
       <ThemeProvider theme={theme}>
         <ToastContainer
           position="bottom-center"
-          autoClose={30000}
+          autoClose={3000}
           hideProgressBar
           closeOnClick={false}
           className="elyra-PipelineEditor-toast"
@@ -711,8 +814,11 @@ const PipelineWrapper: React.FC<IProps> = ({
             palette={palette.current}
             pipelineProperties={palette.current.properties}
             toolbar={toolbar}
+            readOnlyToolbar={readOnlyToolbar}
+            readOnly={readOnly}
             pipeline={pipeline}
             onAction={onAction}
+            onReadOnlyAction={onReadOnlyAction}
             onChange={onChange}
             onDoubleClickNode={
               doubleClickToOpenProperties ? undefined : onDoubleClick

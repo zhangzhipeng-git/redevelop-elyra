@@ -1,14 +1,3 @@
-/**
- * pipeline 的节点是有图标展示的，在elyra的pipeline编辑器中，图标是请求本地的静态资源，
- * 会发起网络请求。而本项目是请求第三方服务，为了减少不必要的请求，前端静态资源统一在本地
- * 以内联的方式引入，所以在生成的pipeline文件中，会出现image字段的图标base64编码，这使得
- * 文件内容变得很大。
- *
- * 现在有一种解决方式就是：只在节点渲染的时候使用base64编码，而保存到文件或提交给第三方服务
- * 的时候，image字段其实是不重要的，因此在pipeline文件中，可以将image定义为空，而真正渲染
- * 节点图标的时候，再通过映射关系找到base64编码去渲染图标。
- */
-
 import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
 import Utils from '@src/app/util';
 
@@ -31,12 +20,11 @@ base64Map.set(
   NodeSvgKey.Error,
   Utils.svgToBase64(svgMap.get(SvgRequestUrl.Error))
 );
-
 /**
- * 在编辑器解析pipeline数据时需要将 image 赋值为节点图标 base64
+ * 在编辑器解析渲染pipeline数据时需要将 image 赋值为节点图标 base64
  * @param {any} pipeline
  */
-export function attachNodeImage(pipeline: any) {
+export function onRenderPipeline(pipeline: any) {
   pipeline?.pipelines?.forEach((p: any) => {
     p?.nodes?.forEach((n: any) => {
       const ui_data = n?.app_data?.ui_data;
@@ -54,7 +42,7 @@ export function attachNodeImage(pipeline: any) {
  * 在编辑器保存pipeline数据时，删除节点的 image
  * @param {any} pipeline
  */
-export function deleteNodeImage(pipeline: any) {
+export function onChangePipeline(pipeline: any) {
   pipeline?.pipelines?.forEach((p: any) => {
     p?.nodes?.forEach((n: any) => {
       const ui_data = n?.app_data?.ui_data;
@@ -66,4 +54,46 @@ export function deleteNodeImage(pipeline: any) {
       });
     });
   });
+}
+
+/**
+ * 在运行或提交pipeline时，需要获取转化的pipeline
+ * @param {any} pipeline
+ */
+export function onRunOrSubmit(pipeline: any, operator = 'run') {
+  console.log(pipeline);
+  if (!pipeline) return;
+
+  let newPipeline;
+  const pipelineObj = pipeline?.pipelines?.[0] ?? {};
+  const dag = pipelineObj.app_data?.properties ?? {};
+  const task: any[] = [];
+  const taskDependency: any[] = [];
+  pipelineObj.nodes?.forEach((n: any) => {
+    const id = n?.id;
+    const operatorType = n.op?.split('-')[1];
+    task.push({
+      taskId: id,
+      operatorType,
+      ...n?.app_data?.component_parameters
+    });
+    n?.inputs?.[0]?.links?.forEach((link: any) => {
+      taskDependency.push({
+        source: link?.node_id_ref,
+        target: id
+      });
+    });
+  });
+
+  newPipeline = {
+    dagFileUuid: `${pipeline.uuid}-${pipelineObj.id}`,
+    operator,
+    caller: 'elyra',
+    dag,
+    task,
+    taskDependency
+  };
+
+  console.log(newPipeline, `${operator} newPipeline`);
+  return newPipeline;
 }

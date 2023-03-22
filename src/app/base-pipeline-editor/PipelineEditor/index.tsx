@@ -54,9 +54,11 @@ import useBlockEvents from './useBlockEvents';
 interface Props {
   pipeline: any;
   toolbar?: any;
+  readOnlyToolbar?: any;
   palette?: any;
   pipelineProperties?: any;
   onAction?: (action: { type: string; payload?: any }) => any;
+  onReadOnlyAction?: (action: { type: string; payload?: any }) => any;
   onChange?: (pipeline: any) => any;
   onDoubleClickNode?: (e: CanvasClickEvent) => any;
   onError?: (error: Error) => any;
@@ -77,7 +79,7 @@ interface Props {
 
 /** pipeline 只读时的节点路径 */
 const READ_ONLY_NODE_SVG_PATH =
-  'M 0 0 h 160 a 6 6 0 0 1 6 6 v 28 a 6 6 0 0 1 -6 6 h -160 a 6 6 0 0 1 -6 -6 v -28 a 6 6 0 0 1 6 -6 z';
+  'M 0 0 h 200 a 6 6 0 0 1 6 6 v 28 a 6 6 0 0 1 -6 6 h -200 a 6 6 0 0 1 -6 -6 v -28 a 6 6 0 0 1 6 -6 z';
 
 function isCreateNodeEvent(e: CanvasEditEvent): e is {
   editType: 'createNode' | 'createAutoNode';
@@ -159,7 +161,9 @@ const PipelineEditor = forwardRef(
       palette,
       pipelineProperties,
       toolbar,
+      readOnlyToolbar,
       onAction,
+      onReadOnlyAction,
       onChange,
       onDoubleClickNode,
       onError,
@@ -183,8 +187,8 @@ const PipelineEditor = forwardRef(
     useCloseContextMenu(controller);
 
     const blockingRef = useBlockEvents({
-      wheel: true,
-      contextmenu: readOnly
+      wheel: true
+      // contextmenu: readOnly
     });
 
     useEffect(() => {
@@ -380,6 +384,16 @@ const PipelineEditor = forwardRef(
       []
     );
 
+    const handleReadOnlyContextMenu = useCallback(
+      (e: ContextMenuEvent, defaultMenu: ContextMenu): ContextMenu => {
+        if (e.selectedObjectIds.length > 1) return [];
+        if (e.type === 'node') return [{ action: 'log', label: '查看日志' }];
+        // anything else
+        return [];
+      },
+      []
+    );
+
     const handleClickAction = useCallback(
       (e: CanvasClickEvent) => {
         if (e.clickType === 'DOUBLE_CLICK' && e.objectType === 'node') {
@@ -414,7 +428,6 @@ const PipelineEditor = forwardRef(
       }
 
       if (isCreateNodeEvent(e)) {
-        // the edit was created by canvas, reconstruct and pass to addNode
         console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
         controller.current.addNode({
           ...e
@@ -432,7 +445,6 @@ const PipelineEditor = forwardRef(
         let payload;
         let type = e.editType;
 
-        // save ，run，submit clean，toggleOpenPanel，properties，openFile
         onAction?.({ type, payload });
         switch (type) {
           case 'newFileNode':
@@ -485,15 +497,17 @@ const PipelineEditor = forwardRef(
           case 'copy':
             return;
         }
-
-
-        // 设置异步任务，等待前序所有变化（比如批量插入节点）在画布中完成后，再重新设置 pipeline 数据
-        Promise.resolve().then(() => {
-          // Catch any events where a save isn't necessary.
-          onChange?.(controller.current.getPipelineFlow());
-        });
+        onChange?.(controller.current.getPipelineFlow());
       },
       [onAction, onChange, onFileRequested]
+    );
+
+    const handleReadOnlyEditAction = useCallback(
+      async (e: CanvasEditEvent) => {
+        let type = e.editType;
+        onReadOnlyAction?.({ type, payload: e.id || e.targetObject.id });
+      },
+      [onReadOnlyAction]
     );
 
     const handlePropertiesChange = useCallback(
@@ -520,6 +534,7 @@ const PipelineEditor = forwardRef(
     );
 
     const handleTooltip = (tipType: string, e: TipEvent) => {
+      if (readOnly) return;
       function isNodeTipEvent(type: string, _e: TipEvent): _e is TipNode {
         return type === 'tipTypeNode';
       }
@@ -550,22 +565,23 @@ const PipelineEditor = forwardRef(
           <IntlProvider locale="en">
             <CommonCanvas
               canvasController={controller.current}
-              contextMenuHandler={() => {}}
-              editActionHandler={() => {
-                controller.current.setPipelineFlow(pipeline);
-                controller.current.resetStyles();
+              contextMenuHandler={handleReadOnlyContextMenu}
+              toolbarConfig={readOnlyToolbar ?? []}
+              editActionHandler={e => {
+                handleReadOnlyEditAction(e);
+                controller.current.resetStyles(readOnly);
               }}
-              toolbarConfig={[]}
               config={{
                 enableInternalObjectModel: false,
                 emptyCanvasContent: children,
-                enablePaletteLayout: 'None',
+                enablePaletteLayout: 'Flyout',
                 enableNodeFormatType: 'Horizontal',
-                enableToolbarLayout: 'None',
+                enableToolbarLayout: 'Top',
                 enableNodeLayout: {
                   bodyPath: READ_ONLY_NODE_SVG_PATH,
                   selectionPath: READ_ONLY_NODE_SVG_PATH,
-                  dropShadow: false
+                  dropShadow: false,
+                  labelWidth: 118 - 5 + 40
                 }
               }}
             />
@@ -639,7 +655,7 @@ const PipelineEditor = forwardRef(
                     imageWidth: 16,
                     imageHeight: 35,
                     labelPosX: 32 + 2.5,
-                    labelMaxWidth: 118 - 5,
+                    labelWidth: 118 - 5 + 40,
                     labelHeight: 25,
                     defaultNodeHeight: 40,
                     defaultNodeWidth: 200,

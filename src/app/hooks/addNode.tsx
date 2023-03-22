@@ -12,9 +12,6 @@ import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
  * ```
  * execute-KubernetesPodOperator-node
  * execute-SparkKubernetesOperator-node
- * execute-python-node
- * execute-notebook-node
- * execute-r-node
  * ```
  * 用于查询对应的节点模板配置
  * @param type pipeline 类型

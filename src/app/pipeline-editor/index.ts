@@ -24,6 +24,7 @@ import { PipelineService } from './PipelineService';
 
 // import { SubmitFileButtonExtension } from './SubmitFileButtonExtension';
 import getPipelineJSON from './pipeline-json';
+import Utils from '@src/app/util';
 
 const PIPELINE_EDITOR = 'Pipeline Editor';
 const PIPELINE = 'pipeline';
@@ -176,7 +177,8 @@ export default async function activatePipeline(
           const runtime_type = platformId === 'LOCAL' ? undefined : platformId;
           const pipelineJson = getPipelineJSON({
             version: PIPELINE_CURRENT_VERSION,
-            runtime_type
+            runtime_type,
+            uuid: Utils.shortUUID()
           });
           const newWidget = await app.commands.execute(
             commandIDs.openDocManager,
