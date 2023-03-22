@@ -25,7 +25,8 @@ import {
   savePipelineIcon,
   showBrowseFileDialog,
   Dropzone,
-  showFormDialog
+  showFormDialog,
+  pauseIcon
 } from '@src/app/ui-components';
 import { ILabShell } from '@jupyterlab/application';
 import { Dialog, ReactWidget, showDialog } from '@jupyterlab/apputils';
@@ -172,6 +173,10 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = useState(false);
 
+  const [timer, setTimer] = useState<number>();
+  const [readOnly, setReadOnly] = useState<boolean>(false);
+  const [runRes, setRunRes] = useState<any>(null);
+
   const type: string = 'APACHE_AIRFLOW';
 
   const doubleClickToOpenProperties =
@@ -313,13 +318,9 @@ const PipelineWrapper: React.FC<IProps> = ({
     }
   };
 
-  const timerRef = useRef<number>();
-  const [readOnly, setReadOnly] = useState<boolean>(false);
-
   useEffect(() => {
     return () => {
-      // 暂停任务 to-do
-      clearTimeout(timerRef.current);
+      pausePipeline();
     };
   }, []);
 
@@ -413,17 +414,42 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (!newPipeline) return;
 
       const res = await PipelineService.operator(newPipeline);
-      toast.success(`${actionTypeMap[actionType]}成功`);
-      if (actionType !== 'run') return;
+      setRunRes(res);
+
+      if (actionType === 'submit') {
+        toast('提交成功', { autoClose: 1000, type: 'success' });
+        return;
+      }
 
       setReadOnly(true);
-      timerRef.current = onUpdateNodeStatus(
-        ref?.current.controller.current,
-        res.dagId,
-        () => setReadOnly(false)
-      );
+      const promise = new Promise((resolve, reject) => {
+        setTimer(
+          onUpdateNodeStatus(
+            ref?.current.controller.current,
+            res.dagId,
+            (state: boolean) => {
+              setReadOnly(false);
+              if (state) resolve('运行成功');
+              else reject('运行失败');
+            }
+          )
+        );
+      });
+      toast.promise(promise, {
+        pending: '运行中...',
+        success: {
+          render({ data }) {
+            return data;
+          }
+        },
+        error: {
+          render({ data }) {
+            return data;
+          }
+        }
+      });
     },
-    [context.model, runtimeDisplayName, type, shell]
+    [context.model, runtimeDisplayName, type, shell, readOnly]
   );
 
   const handleClearPipeline = useCallback(async (data: any): Promise<any> => {
@@ -459,19 +485,61 @@ const PipelineWrapper: React.FC<IProps> = ({
     });
   }, []);
 
+  const pausePipeline = useCallback(async () => {
+    if (!runRes) return;
+    const { dagId, dagRunId } = runRes;
+    setReadOnly(false);
+    clearTimeout(timer);
+    await PipelineService.cancel({ dagId, dagRunId });
+  }, []);
+
+  const onReadOnlyAction = useCallback(
+    async ({ type, payload }: any) => {
+      const runResult = runRes.current;
+      if (!runResult) return;
+      const { dagId, dagRunId } = runResult;
+      switch (type) {
+        case 'log':
+          const task =
+            runResult.task.find(({ taskId }: any) => taskId === payload) ?? {};
+          const { taskId, taskTryNumber } = task;
+          const res = await PipelineService.logs({
+            dagId,
+            dagRunId,
+            taskId,
+            taskTryNumber
+          });
+          new Dialog({
+            title: '日志',
+            body: res,
+            buttons: [Dialog.okButton({ label: '确定' })]
+          }).launch();
+          break;
+        case 'pause':
+          pausePipeline();
+          break;
+        case 'submit':
+          handleSubmission(type);
+          break;
+        default:
+          break;
+      }
+    },
+    [handleSubmission, pausePipeline, shell, commands, type]
+  );
+
   const onAction = useCallback(
-    (args: { type: string; payload?: any }) => {
-      console.log(type, 'type');
-      switch (args.type) {
+    ({ type, payload }: any) => {
+      switch (type) {
         case 'save':
           contextRef.current.save();
           break;
         case 'run':
         case 'submit':
-          handleSubmission(args.type);
+          handleSubmission(type);
           break;
         case 'clear':
-          handleClearPipeline(args.payload);
+          handleClearPipeline(payload);
           break;
         case 'toggleOpenPanel':
           setPanelOpen(!panelOpen);
@@ -483,7 +551,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           commands.execute(commandIDs.openDocManager, {
             path: PipelineService.getWorkspaceRelativeNodePath(
               contextRef.current.path,
-              args.payload
+              payload
             )
             // readOnly: true
           });
@@ -555,6 +623,31 @@ const PipelineWrapper: React.FC<IProps> = ({
         label: panelOpen ? '关闭面板' : '打开面板',
         enable: true,
         iconTypeOverride: panelOpen ? 'paletteOpen' : 'paletteClose'
+      }
+    ]
+  };
+  const readOnlyToolbar = {
+    leftBar: [
+      {
+        action: 'pause',
+        label: '暂停',
+        enable: true,
+        iconEnabled: IconUtil.encode(pauseIcon)
+      },
+      {
+        action: 'submit',
+        label: '提交',
+        enable: true,
+        iconEnabled: IconUtil.encode(exportPipelineIcon)
+      }
+    ],
+    rightBar: [
+      {
+        action: '',
+        label: `运行环境: ${runtimeDisplayName}`,
+        incLabelWithIcon: 'before',
+        enable: false,
+        kind: 'tertiary'
       }
     ]
   };
@@ -702,13 +795,13 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   return (
     <div
-      id="pipeline-eidtor-wrapper"
+      id={`pipeline-eidtor-wrapper`}
       style={{ position: 'relative', height: '100%' }}
     >
       <ThemeProvider theme={theme}>
         <ToastContainer
           position="bottom-center"
-          autoClose={30000}
+          autoClose={3000}
           hideProgressBar
           closeOnClick={false}
           className="elyra-PipelineEditor-toast"
@@ -721,9 +814,11 @@ const PipelineWrapper: React.FC<IProps> = ({
             palette={palette.current}
             pipelineProperties={palette.current.properties}
             toolbar={toolbar}
+            readOnlyToolbar={readOnlyToolbar}
             readOnly={readOnly}
             pipeline={pipeline}
             onAction={onAction}
+            onReadOnlyAction={onReadOnlyAction}
             onChange={onChange}
             onDoubleClickNode={
               doubleClickToOpenProperties ? undefined : onDoubleClick

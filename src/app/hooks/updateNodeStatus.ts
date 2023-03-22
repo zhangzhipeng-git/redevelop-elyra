@@ -2,7 +2,6 @@ import PipelineController from '@src/app/base-pipeline-editor/PipelineController
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 
 let timer: number = -999;
-
 async function getNodeStatus(
   controller: PipelineController,
   dagId: string,
@@ -24,6 +23,7 @@ async function getNodeStatus(
 
   const pipelineId = dagId.split('-')[1];
   let done = true;
+  let arr: string[] = [];
   task.forEach((t: any) => {
     done = done && ['success', 'fail'].includes(t.state);
     const node: any = controller.getNode(t.taskId, pipelineId);
@@ -33,11 +33,12 @@ async function getNodeStatus(
       `${limitLength(oldLabel)} ${statusMap[t.state]}`,
       pipelineId
     );
+    arr.push(t.state);
   });
   if (!done) return;
   clearTimeout(timer);
   if (typeof doneFn !== 'function') return;
-  doneFn();
+  doneFn(!arr.includes('fail'));
 }
 
 export function onUpdateNodeStatus(

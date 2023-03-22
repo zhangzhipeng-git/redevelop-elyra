@@ -54,9 +54,11 @@ import useBlockEvents from './useBlockEvents';
 interface Props {
   pipeline: any;
   toolbar?: any;
+  readOnlyToolbar?: any;
   palette?: any;
   pipelineProperties?: any;
   onAction?: (action: { type: string; payload?: any }) => any;
+  onReadOnlyAction?: (action: { type: string; payload?: any }) => any;
   onChange?: (pipeline: any) => any;
   onDoubleClickNode?: (e: CanvasClickEvent) => any;
   onError?: (error: Error) => any;
@@ -159,7 +161,9 @@ const PipelineEditor = forwardRef(
       palette,
       pipelineProperties,
       toolbar,
+      readOnlyToolbar,
       onAction,
+      onReadOnlyAction,
       onChange,
       onDoubleClickNode,
       onError,
@@ -441,7 +445,6 @@ const PipelineEditor = forwardRef(
         let payload;
         let type = e.editType;
 
-        // save ，run，submit clean，toggleOpenPanel，properties，openFile
         onAction?.({ type, payload });
         switch (type) {
           case 'newFileNode':
@@ -499,6 +502,14 @@ const PipelineEditor = forwardRef(
       [onAction, onChange, onFileRequested]
     );
 
+    const handleReadOnlyEditAction = useCallback(
+      async (e: CanvasEditEvent) => {
+        let type = e.editType;
+        onReadOnlyAction?.({ type, payload: e.id || e.targetObject.id });
+      },
+      [onReadOnlyAction]
+    );
+
     const handlePropertiesChange = useCallback(
       (nodeID, data) => {
         controller.current.updateProperties(nodeID, data);
@@ -523,6 +534,7 @@ const PipelineEditor = forwardRef(
     );
 
     const handleTooltip = (tipType: string, e: TipEvent) => {
+      if (readOnly) return;
       function isNodeTipEvent(type: string, _e: TipEvent): _e is TipNode {
         return type === 'tipTypeNode';
       }
@@ -554,16 +566,17 @@ const PipelineEditor = forwardRef(
             <CommonCanvas
               canvasController={controller.current}
               contextMenuHandler={handleReadOnlyContextMenu}
-              editActionHandler={() => {
+              toolbarConfig={readOnlyToolbar ?? []}
+              editActionHandler={e => {
+                handleReadOnlyEditAction(e);
                 controller.current.resetStyles(readOnly);
               }}
-              toolbarConfig={[]}
               config={{
                 enableInternalObjectModel: false,
                 emptyCanvasContent: children,
-                enablePaletteLayout: 'None',
+                enablePaletteLayout: 'Flyout',
                 enableNodeFormatType: 'Horizontal',
-                enableToolbarLayout: 'None',
+                enableToolbarLayout: 'Top',
                 enableNodeLayout: {
                   bodyPath: READ_ONLY_NODE_SVG_PATH,
                   selectionPath: READ_ONLY_NODE_SVG_PATH,
