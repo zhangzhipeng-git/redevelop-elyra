@@ -34,14 +34,15 @@ module.exports = {
       ]
     };
   },
-  '/api/v1/uploadFile': () => ({
+  '/api/v1/uploadFile': () => {return ({
+    timeout: 2000,
     code: '0',
     msg: null,
     data: {
       fileName: '%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg',
       url: 'http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg'
     }
-  }),
+  })},
   '/api/v1/removeFile': () => ({
     code: '0',
     msg: null,
@@ -97,7 +98,7 @@ module.exports = {
           taskId: 'bd54de82-ef99-49a2-85f3-b0c1773565f3',
           taskName: 'string1',
           start_date: 'string1',
-          state: 'success'
+          state: 'running'
         },
         {
           taskId: '12b6c341-5e2d-47c2-b561-2a45022286ed',
@@ -109,7 +110,7 @@ module.exports = {
           taskId: 'cf0896a6-60eb-4c6f-8a9a-7922a16d9152',
           taskName: 'string1',
           start_date: 'string1',
-          state: 'success'
+          state: 'fail'
         }
       ]
     }

@@ -5,7 +5,8 @@ let timer: number = -999;
 async function getNodeStatus(
   controller: PipelineController,
   dagId: string,
-  doneFn: any
+  doneFn: any,
+  el?: HTMLElement
 ) {
   const res = await PipelineService.status({ dagId });
   const task = res.task;
@@ -35,6 +36,32 @@ async function getNodeStatus(
     );
     arr.push(t.state);
   });
+  const labels = el?.querySelectorAll(
+    '.d3-node-label > span'
+  ) as unknown as HTMLElement[];
+
+  labels?.forEach((n: HTMLElement) => {
+    const text = n.textContent ?? '';
+    const seg = text?.split(' ') ?? [];
+    const name = seg[0];
+    const sate = seg[1];
+    let st = text;
+    switch (sate) {
+      case statusMap.success:
+        st = `<div style="float:right;color:green;">${sate}</div>`;
+        break;
+      case statusMap.fail:
+        st = `<div style="float:right;color:red;">${sate}</div>`;
+        break;
+      case statusMap.running:
+        st = `<div style="float:right;color:#06b;">${sate}...</div>`;
+        break;
+      default:
+        st = `<div style="float:right;color:orange;">${sate}</div>`;
+    }
+    n.style.display = 'block';
+    n.innerHTML = `${name} ${st}`;
+  });
   if (!done) return;
   clearTimeout(timer);
   if (typeof doneFn !== 'function') return;
@@ -44,13 +71,14 @@ async function getNodeStatus(
 export function onUpdateNodeStatus(
   controller: any,
   dagId: string,
-  doneFn: any
+  doneFn: any,
+  el?: HTMLElement
 ) {
   if (!dagId) return;
   clearTimeout(timer);
-  getNodeStatus(controller, dagId, doneFn);
+  getNodeStatus(controller, dagId, doneFn, el);
   timer = setTimeout(() => {
-    onUpdateNodeStatus(controller, dagId, doneFn);
+    onUpdateNodeStatus(controller, dagId, doneFn, el);
   }, 10000);
   return timer;
 }

@@ -194,7 +194,7 @@ const PipelineEditor = forwardRef(
     useEffect(() => {
       try {
         controller.current.open(pipeline);
-        if (readOnly) return controller.current.resetStyles();
+        if (readOnly) return controller.current.resetStyles(readOnly);
         if (!controller.current.existPalette())
           controller.current.setPalette(palette);
         controller.current.validate({ redColor: theme.palette.error.main });
@@ -505,7 +505,7 @@ const PipelineEditor = forwardRef(
     const handleReadOnlyEditAction = useCallback(
       async (e: CanvasEditEvent) => {
         let type = e.editType;
-        onReadOnlyAction?.({ type, payload: e.id || e.targetObject.id });
+        onReadOnlyAction?.({ type, payload: e.id || e.targetObject?.id });
       },
       [onReadOnlyAction]
     );

@@ -4,7 +4,7 @@ import { FileBrowser } from '@jupyterlab/filebrowser';
 import Utils from '@src/app/util';
 import { UploadFileResponse } from '@src/app/model';
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
-import { mask, unmask } from '../ui-components/loading';
+import { useMask } from '../ui-components/loading';
 
 /**
  * 获取文件并上传
@@ -15,8 +15,10 @@ import { mask, unmask } from '../ui-components/loading';
 export async function onAfterSelectFile_UploadFile(
   type = PipelineEnum.APACHE_AIRFLOW as Types,
   fileBrowser: FileBrowser,
-  paths: string[]
+  paths: string[],
+  maskHost?: HTMLElement
 ) {
+  const { mask, unmask } = useMask();
   let defaultPahts = { paths: [] };
   if (type !== PipelineEnum.APACHE_AIRFLOW) return defaultPahts;
   if (!paths || !paths[0]) return defaultPahts;
@@ -30,7 +32,7 @@ export async function onAfterSelectFile_UploadFile(
   );
 
   let uploadFiles: UploadFileResponse[] = [];
-  mask();
+  mask({ selector: maskHost });
   try {
     const files = await Promise.all(filePromises);
     const uploadPromises = files.map(f => {

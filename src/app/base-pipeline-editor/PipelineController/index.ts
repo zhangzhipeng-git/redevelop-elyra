@@ -273,6 +273,7 @@ class PipelineController extends CanvasController {
   }
 
   resetStyles(readOnly = false) {
+    if (readOnly) return;
     this.removeAllStyles();
 
     for (const pipeline of this.getPipelineFlow().pipelines) {
@@ -301,10 +302,11 @@ class PipelineController extends CanvasController {
           continue;
         }
 
+
         const newLabel = this.getLabelForNode(node, nodeDef);
         // `setNodeLabel` is VERY slow, so make sure we HAVE to set it before
         // setting it.
-        if (node.app_data!.ui_data!.label !== newLabel && !readOnly) {
+        if (node.app_data!.ui_data!.label !== newLabel) {
           this.setNodeLabel(node.id, newLabel as string, pipeline.id);
         }
 

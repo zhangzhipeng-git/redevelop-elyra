@@ -168,14 +168,15 @@ const PipelineWrapper: React.FC<IProps> = ({
   const ref = useRef<any>(null);
   const palette = useRef<any>(null);
   const contextRef = useRef(context);
+  const timer = useRef<number>();
+  const runRes = useRef<any>(null);
+  const editorWrapRef = useRef<any>();
 
   const [loading, setLoading] = useState(true);
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = useState(false);
-
-  const [timer, setTimer] = useState<number>();
   const [readOnly, setReadOnly] = useState<boolean>(false);
-  const [runRes, setRunRes] = useState<any>(null);
+  const uuid = useRef(Utils.shortUUID());
 
   const type: string = 'APACHE_AIRFLOW';
 
@@ -252,43 +253,46 @@ const PipelineWrapper: React.FC<IProps> = ({
     [shell.currentWidget]
   );
 
-  const onFileRequested = async (args: any): Promise<string[] | undefined> => {
-    const filename = PipelineService.getWorkspaceRelativeNodePath(
-      contextRef.current.path,
-      args.filename ?? ''
-    );
-
-    const res = await showBrowseFileDialog(
-      browserFactory.defaultBrowser.model.manager,
-      {
-        startPath: PathExt.dirname(filename),
-        filter: (model: any): boolean => {
-          if (!model) return false;
-          if (args.filters?.File === undefined) return true;
-
-          const { path, type } = model;
-          if (type === 'directory') return true;
-
-          const ext = PathExt.extname(path);
-          return args.filters.File.includes(ext);
-        }
-      }
-    );
-
-    if (res.button.accept && res.value.length) {
-      const file = PipelineService.getPipelineRelativeNodePath(
+  const onFileRequested = useCallback(
+    async (args: any): Promise<string[] | undefined> => {
+      const filename = PipelineService.getWorkspaceRelativeNodePath(
         contextRef.current.path,
-        res.value[0].path
+        args.filename ?? ''
       );
 
-      return [file];
-    }
-  };
+      const res = await showBrowseFileDialog(
+        browserFactory.defaultBrowser.model.manager,
+        {
+          startPath: PathExt.dirname(filename),
+          filter: (model: any): boolean => {
+            if (!model) return false;
+            if (args.filters?.File === undefined) return true;
+
+            const { path, type } = model;
+            if (type === 'directory') return true;
+
+            const ext = PathExt.extname(path);
+            return args.filters.File.includes(ext);
+          }
+        }
+      );
+
+      if (res.button.accept && res.value.length) {
+        const file = PipelineService.getPipelineRelativeNodePath(
+          contextRef.current.path,
+          res.value[0].path
+        );
+
+        return [file];
+      }
+    },
+    []
+  );
 
   /**
    * 未设置双击打开节点属性时，双击打开文件。
    */
-  const onDoubleClick = (data: any): void => {
+  const onDoubleClick = useCallback((data: any): void => {
     console.log('==双击节点打开文件==');
     for (let i = 0; i < data.selectedObjectIds.length; i++) {
       const node = pipeline.pipelines[0].nodes.find(
@@ -316,7 +320,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         )
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -341,12 +345,14 @@ const PipelineWrapper: React.FC<IProps> = ({
           if (msg.indexOf('circular reference') > -1) msg = 'DAG 图存在环路.';
           msgs.push(msg);
         }
+
         toast.error(
           `${actionTypeMap[actionType]}失败:\n\n ${Array.from(new Set(msgs))
             .join('\n')
             .replace(/The property/g, '属性')
             .replace(/on node/g, '在节点')
-            .replace(/is required/g, '上是必填的')}`
+            .replace(/is required/g, '上是必填的')}`,
+          { containerId: uuid.current }
         );
         return;
       }
@@ -414,42 +420,49 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (!newPipeline) return;
 
       const res = await PipelineService.operator(newPipeline);
-      setRunRes(res);
+      runRes.current = res;
 
       if (actionType === 'submit') {
-        toast('提交成功', { autoClose: 1000, type: 'success' });
+        toast('提交成功', {
+          autoClose: 1000,
+          type: 'success',
+          containerId: uuid.current
+        });
         return;
       }
 
       setReadOnly(true);
       const promise = new Promise((resolve, reject) => {
-        setTimer(
-          onUpdateNodeStatus(
-            ref?.current.controller.current,
-            res.dagId,
-            (state: boolean) => {
-              setReadOnly(false);
-              if (state) resolve('运行成功');
-              else reject('运行失败');
-            }
-          )
+        timer.current = onUpdateNodeStatus(
+          ref?.current.controller.current,
+          res.dagId,
+          (state: boolean) => {
+            setReadOnly(false);
+            if (state) resolve('运行成功');
+            else reject('运行失败');
+          },
+          editorWrapRef.current
         );
       });
-      toast.promise(promise, {
-        pending: '运行中...',
-        success: {
-          render({ data }) {
-            return data;
+      toast.promise(
+        promise,
+        {
+          pending: '运行中...',
+          success: {
+            render({ data }) {
+              return data;
+            }
+          },
+          error: {
+            render({ data }) {
+              return data;
+            }
           }
         },
-        error: {
-          render({ data }) {
-            return data;
-          }
-        }
-      });
+        { containerId: uuid.current, toastId: uuid.current + 'loading' }
+      );
     },
-    [context.model, runtimeDisplayName, type, shell, readOnly]
+    []
   );
 
   const handleClearPipeline = useCallback(async (data: any): Promise<any> => {
@@ -485,48 +498,46 @@ const PipelineWrapper: React.FC<IProps> = ({
     });
   }, []);
 
-  const pausePipeline = useCallback(async () => {
-    if (!runRes) return;
-    const { dagId, dagRunId } = runRes;
-    setReadOnly(false);
-    clearTimeout(timer);
+  async function pausePipeline() {
+    if (!runRes.current) return;
+    const { dagId, dagRunId } = runRes.current;
     await PipelineService.cancel({ dagId, dagRunId });
-  }, []);
+    clearTimeout(timer.current);
+    toast.dismiss(uuid.current + 'loading');
+    setReadOnly(false);
+  }
 
-  const onReadOnlyAction = useCallback(
-    async ({ type, payload }: any) => {
-      const runResult = runRes.current;
-      if (!runResult) return;
-      const { dagId, dagRunId } = runResult;
-      switch (type) {
-        case 'log':
-          const task =
-            runResult.task.find(({ taskId }: any) => taskId === payload) ?? {};
-          const { taskId, taskTryNumber } = task;
-          const res = await PipelineService.logs({
-            dagId,
-            dagRunId,
-            taskId,
-            taskTryNumber
-          });
-          new Dialog({
-            title: '日志',
-            body: res,
-            buttons: [Dialog.okButton({ label: '确定' })]
-          }).launch();
-          break;
-        case 'pause':
-          pausePipeline();
-          break;
-        case 'submit':
-          handleSubmission(type);
-          break;
-        default:
-          break;
-      }
-    },
-    [handleSubmission, pausePipeline, shell, commands, type]
-  );
+  const onReadOnlyAction = useCallback(async ({ type, payload }: any) => {
+    if (!runRes.current) return;
+    const { dagId, dagRunId } = runRes.current;
+    switch (type) {
+      case 'log':
+        const task =
+          runRes.current.task.find(({ taskId }: any) => taskId === payload) ??
+          {};
+        const { taskId, taskTryNumber } = task;
+        const res = await PipelineService.logs({
+          dagId,
+          dagRunId,
+          taskId,
+          taskTryNumber
+        });
+        new Dialog({
+          title: '日志',
+          body: res,
+          buttons: [Dialog.okButton({ label: '确定' })]
+        }).launch();
+        break;
+      case 'pause':
+        pausePipeline();
+        break;
+      case 'submit':
+        handleSubmission(type);
+        break;
+      default:
+        break;
+    }
+  }, []);
 
   const onAction = useCallback(
     ({ type, payload }: any) => {
@@ -540,6 +551,9 @@ const PipelineWrapper: React.FC<IProps> = ({
           break;
         case 'clear':
           handleClearPipeline(payload);
+          break;
+        case 'openPipelineProperties':
+          setPanelOpen(true);
           break;
         case 'toggleOpenPanel':
           setPanelOpen(!panelOpen);
@@ -560,7 +574,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           break;
       }
     },
-    [handleSubmission, handleClearPipeline, panelOpen, shell, commands]
+    [panelOpen]
   );
 
   const toolbar = {
@@ -656,7 +670,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const handleBeforeAddNodeGetOp = useCallback(
     (op?: string) => onBeforeAddNode_GetOp(type as any, op),
-    [type]
+    []
   );
 
   const handleAfterSelectFileUploadFile = useCallback(
@@ -664,9 +678,10 @@ const PipelineWrapper: React.FC<IProps> = ({
       onAfterSelectFile_UploadFile(
         type as any,
         browserFactory.defaultBrowser,
-        paths
+        paths,
+        editorWrapRef.current
       ),
-    [type]
+    []
   );
 
   const handleUpdateNodeProperties = useCallback(
@@ -676,7 +691,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         controller: ref?.current.controller.current
       });
     },
-    [type]
+    []
   );
 
   const handleAddFileToPipeline = useCallback(
@@ -768,7 +783,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       // update position if the default coordinates were used
       if (missingXY) setDefaultPosition(position);
     },
-    [browserFactory.defaultBrowser, defaultPosition, shell, widgetId, readOnly]
+    []
   );
 
   const handleDrop = async (e: IDragEvent): Promise<void> => {
@@ -783,7 +798,7 @@ const PipelineWrapper: React.FC<IProps> = ({
     return (): void => {
       addFileToPipelineSignal.disconnect(handleSignal);
     };
-  }, [addFileToPipelineSignal, handleAddFileToPipeline]);
+  }, [addFileToPipelineSignal]);
 
   if (loading || !palette.current) {
     return <div className="elyra-loader"></div>;
@@ -795,11 +810,14 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   return (
     <div
+      ref={editorWrapRef}
       id={`pipeline-eidtor-wrapper`}
       style={{ position: 'relative', height: '100%' }}
     >
       <ThemeProvider theme={theme}>
         <ToastContainer
+          enableMultiContainer
+          containerId={uuid.current}
           position="bottom-center"
           autoClose={3000}
           hideProgressBar

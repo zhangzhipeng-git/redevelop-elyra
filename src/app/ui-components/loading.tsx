@@ -7,47 +7,51 @@ interface LoadingProps {
   delay?: number;
 }
 
-let node: Element | null = null;
-let wrap: HTMLDivElement;
-export function mask({
-  selector = '#pipeline-eidtor-wrapper',
-  tip = '',
-  delay = 100
-}: LoadingProps = {}) {
-  if (typeof selector === 'string') node = document.querySelector(selector)!;
-  else node = selector;
+export function useMask() {
+  let node: Element | null = null;
+  let wrap: HTMLDivElement;
 
-  if (!wrap) {
-    wrap = document.createElement('div');
-    wrap.style.cssText =
-      'display:inline-block;position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);';
+  function mask({ selector = '', tip = '', delay = 0 }: LoadingProps = {}) {
+    if (typeof selector === 'string') node = document.querySelector(selector)!;
+    else node = selector;
+    if (!node) return;
+
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.style.cssText =
+        'display:inline-block;position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);';
+    } else {
+      node.removeChild(wrap);
+    }
+
+    ReactDOM.render(<Spin tip={tip} delay={delay} />, wrap);
+    node.appendChild(wrap);
   }
 
-  ReactDOM.render(<Spin tip={tip} delay={delay} />, wrap);
-  node.appendChild(wrap);
-}
-
-export function unmask() {
-  if (!wrap) return;
-  ReactDOM.unmountComponentAtNode(wrap);
-  if (!node) return;
-  node.removeChild(wrap);
-}
-
-export interface Loading {
-  launch(p?: LoadingProps): void;
-  resolve(): void;
+  function unmask() {
+    if (!wrap) return;
+    ReactDOM.unmountComponentAtNode(wrap);
+    if (!node) return;
+    node.removeChild(wrap);
+  }
+  return {
+    mask,
+    unmask
+  };
 }
 
 export class Loading {
   props;
+  mask: any;
+  unmask: any;
   constructor(props?: LoadingProps) {
     this.props = props;
+    Object.assign(useMask());
   }
   launch() {
-    mask(this.props);
+    this.mask(this.props);
   }
   resolve() {
-    unmask();
+    this.unmask();
   }
 }

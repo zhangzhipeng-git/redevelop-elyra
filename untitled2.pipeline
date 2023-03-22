@@ -460,6 +460,64 @@
               }
             }
           ]
+        },
+        {
+          "id": "569bfd6e-8a45-4b41-abc7-14eaa1214b87",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "connection": "kubernetes_default_1",
+              "namespace": "kubernetes_default_1",
+              "executor_cores": 1,
+              "localFile": "node3.py",
+              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+            },
+            "ui_data": {
+              "label": "node3.py",
+              "x_pos": 309,
+              "y_pos": 522,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
         }
       ],
       "app_data": {
@@ -467,7 +525,16 @@
           "comments": []
         },
         "version": 8,
-        "runtime_type": "APACHE_AIRFLOW"
+        "runtime_type": "APACHE_AIRFLOW",
+        "properties": {
+          "applicationId": 1,
+          "applicationCode": "SYS_FBSGFKGKC",
+          "email": "airflow@example.com",
+          "isStream": false,
+          "whetherRetry": true,
+          "retry": 0,
+          "scheduleInterval": "0 0 0 * * ? *"
+        }
       },
       "runtime_ref": ""
     }

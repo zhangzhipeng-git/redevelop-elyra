@@ -75,8 +75,8 @@
             },
             "ui_data": {
               "label": "node2.py",
-              "x_pos": 69,
-              "y_pos": 349,
+              "x_pos": 66,
+              "y_pos": 375,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -197,8 +197,8 @@
             },
             "ui_data": {
               "label": "js.jar",
-              "x_pos": 376.0000305175781,
-              "y_pos": 272,
+              "x_pos": 399.0000305175781,
+              "y_pos": 273,
               "description": "Run SparkKubernetesOperator Node"
             }
           },
