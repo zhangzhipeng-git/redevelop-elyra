@@ -24,8 +24,8 @@
             },
             "ui_data": {
               "label": "node1.py",
-              "x_pos": 96,
-              "y_pos": 54,
+              "x_pos": 28,
+              "y_pos": 158,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -75,8 +75,8 @@
             },
             "ui_data": {
               "label": "node2.py",
-              "x_pos": 109,
-              "y_pos": 117,
+              "x_pos": 69,
+              "y_pos": 349,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -122,29 +122,21 @@
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "python",
+              "type": "java",
               "connection": "kubernetes_default_2",
               "namespace": "kubernetes_default_2",
               "executor_cores": 1,
               "kubernetes_conn_id": "k8s",
-              "localFile": "node3.py",
-              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-              "name": "测试任务3"
+              "name": "测试任务3",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111"
             },
             "ui_data": {
-              "label": "node3.py",
-              "x_pos": 132,
-              "y_pos": 196,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
+              "label": "js.jar",
+              "x_pos": 401.0000305175781,
+              "y_pos": 120,
+              "description": "Run KubernetesPodOperator Node"
             }
           },
           "inputs": [
@@ -163,6 +155,74 @@
                 {
                   "id": "09d44151-760e-44c2-abc0-c99b38777378",
                   "node_id_ref": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
+                  "port_id_ref": "outPort"
+                },
+                {
+                  "id": "b3fe69d9-588a-4470-bb22-aec731c0382d",
+                  "node_id_ref": "1c10b4a9-7232-4632-8dd5-797aa495884a",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "cf0896a6-60eb-4c6f-8a9a-7922a16d9152",
+          "type": "execution_node",
+          "op": "execute-SparkKubernetesOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_2",
+              "namespace": "kubernetes_default_2",
+              "executor_cores": 1,
+              "name": "测试任务4",
+              "mode": "111",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 375.0000305175781,
+              "y_pos": 272,
+              "description": "Run SparkKubernetesOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "b2e36424-5bfd-4b2d-96a5-24a98d22fe74",
+                  "node_id_ref": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
+                  "port_id_ref": "outPort"
+                },
+                {
+                  "id": "0ce115d1-b311-469b-bd5a-927ba6ea9c60",
+                  "node_id_ref": "12b6c341-5e2d-47c2-b561-2a45022286ed",
                   "port_id_ref": "outPort"
                 }
               ]
@@ -207,5 +267,6 @@
       "runtime_ref": ""
     }
   ],
-  "schemas": []
+  "schemas": [],
+  "uuid": "_35051676511679449047272"
 }

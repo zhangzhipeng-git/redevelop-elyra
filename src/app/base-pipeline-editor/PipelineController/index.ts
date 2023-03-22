@@ -34,6 +34,8 @@ import {
 } from './../errors';
 import { getFileName, prefixedToNested } from './utils';
 
+import Utils from '@src/app/util';
+
 export const PIPELINE_CURRENT_VERSION = 8;
 
 // TODO: Experiment with pipeline editor settings.
@@ -83,7 +85,8 @@ class PipelineController extends CanvasController {
         version: '3.0',
         json_schema:
           'http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json',
-        id: 'elyra-auto-generated-pipeline',
+        id: 'auto-generated-pipeline',
+        uuid: Utils.shortUUID(),
         primary_pipeline: 'primary',
         pipelines: [
           {
@@ -269,7 +272,7 @@ class PipelineController extends CanvasController {
     return newLabel ?? '';
   }
 
-  resetStyles() {
+  resetStyles(readOnly = false) {
     this.removeAllStyles();
 
     for (const pipeline of this.getPipelineFlow().pipelines) {
@@ -301,7 +304,7 @@ class PipelineController extends CanvasController {
         const newLabel = this.getLabelForNode(node, nodeDef);
         // `setNodeLabel` is VERY slow, so make sure we HAVE to set it before
         // setting it.
-        if (node.app_data!.ui_data!.label !== newLabel) {
+        if (node.app_data!.ui_data!.label !== newLabel && !readOnly) {
           this.setNodeLabel(node.id, newLabel as string, pipeline.id);
         }
 

@@ -121,10 +121,9 @@ declare module '@elyra/canvas' {
         imagePosY?: number;
         imageWidth?: number;
         imageHeight?: number;
-        labelWidth?: number,
-		labelHeight?: number,
+        labelWidth?: number;
+        labelHeight?: number;
         labelPosX?: number;
-        labelMaxWidth?: number;
         defaultNodeHeight?: number;
         defaultNodeWidth?: number;
         labelMaxCharacters?: null; // null allows unlimited characters

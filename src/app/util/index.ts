@@ -1,4 +1,5 @@
 export default class Utils {
+  private static _unique = 0;
   /**
    * 将svg字符串转为 base64 编码
    * @param svgString svg 字符串
@@ -70,5 +71,12 @@ export default class Utils {
       return o;
     }
     return o;
+  }
+
+  static shortUUID(prefix = ''): string {
+    const time = Date.now();
+    const random = Math.floor(Math.random() * 1000000000);
+    this._unique++;
+    return prefix + '_' + random + this._unique + String(time);
   }
 }

@@ -47,54 +47,69 @@ module.exports = {
     msg: null,
     data: null
   }),
-  '/api/v1/dag/operator': () => ({
-    code: '0',
-    msg: null,
-    data: {
-      dagId: 'sys_xx_test_id',
-      dagRunId: 'sys_xx_test_run_id',
-      task: [
-        {
-          taskName: 'test_task_1',
-          taskId: 'sys_xx_test_task_id',
-          taskTryNumber: 1
-        },
-        {
-          taskName: 'test_task_2',
-          taskId: 'sys_xx_test_task_id_2',
-          taskTryNumber: 1
-        },
-        {
-          taskName: 'test_task_3',
-          taskId: 'sys_xx_test_task_id_3',
-          taskTryNumber: 1
-        }
-      ]
-    }
-  }),
+  '/api/v1/dag/operator': params => {
+    console.log(params, params.dagFileUuid);
+    return {
+      code: '0',
+      msg: null,
+      data: {
+        dagId: `${params.dagFileUuid}`,
+        dagRunId: 'sys_xx_test_run_id',
+        task: [
+          {
+            taskName: 'test_task_1',
+            taskId: 'sys_xx_test_task_id',
+            taskTryNumber: 1
+          },
+          {
+            taskName: 'test_task_2',
+            taskId: 'sys_xx_test_task_id_2',
+            taskTryNumber: 1
+          },
+          {
+            taskName: 'test_task_3',
+            taskId: 'sys_xx_test_task_id_3',
+            taskTryNumber: 1
+          }
+        ]
+      }
+    };
+  },
   '/api/v1/dag/dagRuns/cancel': () => ({
     code: '0',
     msg: null,
     data: null
   }),
-  '/api/v1/dag/dagRuns/taskInstances/status': () => ({
+  '/api/v1/dag/dagRuns/taskInstances/status': params => ({
     code: '0',
     msg: null,
     data: {
-      dagId: 'string',
+      dagId: `${params.dagId}`,
       dagRunId: 'string',
       task: [
         {
-          taskId: 'string',
+          taskId: '1c10b4a9-7232-4632-8dd5-797aa495884a',
           taskName: 'string',
           start_date: 'string',
-          state: 'success'
+          state: 'fail'
         },
         {
-          taskId: 'string1',
+          taskId: 'bd54de82-ef99-49a2-85f3-b0c1773565f3',
           taskName: 'string1',
           start_date: 'string1',
           state: 'success'
+        },
+        {
+          taskId: '12b6c341-5e2d-47c2-b561-2a45022286ed',
+          taskName: 'string1',
+          start_date: 'string1',
+          state: 'running'
+        },
+        {
+          taskId: 'cf0896a6-60eb-4c6f-8a9a-7922a16d9152',
+          taskName: 'string1',
+          start_date: 'string1',
+          state: ''
         }
       ]
     }

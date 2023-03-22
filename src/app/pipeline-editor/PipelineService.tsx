@@ -191,7 +191,8 @@ export class PipelineService {
   static uploadFile(params: FormData) {
     return RequestHandler.makePostRequest<UploadFileResponse>(
       `/api/v1/uploadFile`,
-      params
+      params,
+      true
     );
   }
 

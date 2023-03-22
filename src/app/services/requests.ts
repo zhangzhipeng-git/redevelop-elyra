@@ -77,12 +77,18 @@ export class RequestHandler {
   static async makePostRequest<T = any>(
     requestPath: string,
     requestBody: any,
-    longRequestDialog?: Dialog<any>,
-    type?: 'blob' | 'json' | 'text' | undefined
+    isUpload = false,
+    headers: any = { 'Content-Type': 'application/json;charset=utf-8' },
+    longRequestDialog?: Dialog<any>
   ): Promise<T> {
+    if (isUpload && headers['Content-Type']) delete headers['Content-Type'];
     return this.makeServerRequest(
       requestPath,
-      { method: 'POST', body: requestBody, type },
+      {
+        method: 'POST',
+        headers,
+        body: requestBody
+      },
       longRequestDialog
     );
   }
@@ -110,11 +116,18 @@ export class RequestHandler {
   static async makePutRequest<T = any>(
     requestPath: string,
     requestBody: any,
+    isUpload = false,
+    headers: any = { 'Content-Type': 'application/json;charset=utf-8' },
     longRequestDialog?: Dialog<any>
   ): Promise<T> {
+    if (isUpload && headers['Content-Type']) delete headers['Content-Type'];
     return this.makeServerRequest(
       requestPath,
-      { method: 'PUT', body: requestBody },
+      {
+        method: 'PUT',
+        headers,
+        body: requestBody
+      },
       longRequestDialog
     );
   }

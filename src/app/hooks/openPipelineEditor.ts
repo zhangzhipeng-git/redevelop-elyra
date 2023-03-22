@@ -152,11 +152,10 @@ export async function onReadyOrRefresh(
   type: string,
   setDefaultValue = false
 ) {
-  const pipelineJson = currentContext.model.toJSON();
+  const pipelineJson = currentContext.model.toJSON() as any;
   const palette = Utils.clone(getPalette(type)); // 有read-only问题，这里克隆一下
 
   // 表单数据-pipeline
-  // @ts-ignore
   const pipeline = pipelineJson?.pipelines?.[0] ?? {};
   const pipelineProperties = pipeline.app_data?.properties ?? {};
   // 表单数据-nodes
@@ -221,6 +220,11 @@ export async function onReadyOrRefresh(
       changeFlag = true;
     }
   });
+
+  if (!pipelineJson?.uuid) {
+    pipelineJson.uuid = Utils.shortUUID();
+    changeFlag = true;
+  }
 
   if (changeFlag)
     currentContext.model.fromString(JSON.stringify(pipelineJson, null, 2));
