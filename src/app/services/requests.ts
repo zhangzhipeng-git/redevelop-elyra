@@ -18,7 +18,7 @@ import { Dialog } from '@jupyterlab/apputils';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 
-import CONFIG from '@src/config.json';
+import CONFIG from '@src/config';
 import { Loading } from '@src/app/ui-components/loading';
 import { RequestErrors } from '../ui-components';
 
@@ -194,9 +194,13 @@ export class RequestHandler {
     // use ServerConnection utility to make calls to Jupyter Based services
     // which in this case are in the extension installed by this package
     const settings = ServerConnection.makeSettings(
-      Object.assign(CONFIG, config || {})
+      Object.assign({ baseUrl: CONFIG.baseUrl }, config || {})
     );
-    const requestUrl = URLExt.join(settings.baseUrl, requestPath);
+
+    const requestUrl = URLExt.join(
+      settings.baseUrl,
+      `${CONFIG.apiContext ?? ''}${requestPath}`
+    );
     // credentials: "include"
     const { type = 'json', ...requestInit } = options;
 

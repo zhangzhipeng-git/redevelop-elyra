@@ -19,9 +19,9 @@ export async function onAfterSelectFile_UploadFile(
   maskHost?: HTMLElement
 ) {
   const { mask, unmask } = useMask();
-  let defaultPahts = { paths: [] };
-  if (type !== PipelineEnum.APACHE_AIRFLOW) return defaultPahts;
-  if (!paths || !paths[0]) return defaultPahts;
+  let defaultPaths = { paths: [] };
+  if (type !== PipelineEnum.APACHE_AIRFLOW) return defaultPaths;
+  if (!paths || !paths[0]) return defaultPaths;
 
   const filePromises = paths.map((p: string) =>
     fileBrowser.model.manager.services.contents.get(p, {
@@ -50,4 +50,23 @@ export async function onAfterSelectFile_UploadFile(
   unmask();
 
   return { paths: uploadFiles.map(v => v.url) };
+}
+
+/**
+ * 移除之前上传的文件
+ * @param type
+ * @param filePath
+ */
+export function onAfterSelectFile_RemoveFile(
+  type: string,
+  filePath: string | string[]
+) {
+  if (type !== PipelineEnum.APACHE_AIRFLOW || !filePath) return;
+  if (!Array.isArray(filePath)) {
+    PipelineService.removeFile({ filePath });
+    return;
+  }
+  filePath.forEach((fp: string) =>
+    PipelineService.removeFile({ filePath: fp })
+  );
 }

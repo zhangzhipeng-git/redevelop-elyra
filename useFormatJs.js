@@ -23,10 +23,8 @@ require('colors'); // 彩色字体
 var multiparty = require('multiparty'); // 文件上传解析模块
 
 var path = require('path');
-var resolve = dir => path.relative(process.cwd(), dir);
-var mockPath = process.env.mockPath
-  ? resolve(process.env.mockPath)
-  : resolve('./birdmock');
+var resolve = (...dir) => path.resolve(process.cwd(), ...dir);
+var mockPath = resolve(process.env.mockPath || 'birdmock');
 
 var paths = process.argv.slice(2);
 var configPath = paths[0];
@@ -44,6 +42,7 @@ appenderKeys.forEach(key => {
 });
 log = getLogger(log4js);
 
+var parseJSON = process.env.parseJSON || config['parseJSON'];
 var apiContext = process.env.apiContext || config['localServerKey'] || '/api';
 var localServer =
   process.env.localServer ||
@@ -52,8 +51,13 @@ var localServer =
 var proxyServer = process.env.proxyServer || config['localServerProxy'];
 // 为 true 时，才会将请求代理到 proxyServer
 var forwardMode = process.env.forwardMode;
-var parseJSON = process.env.parseJSON || config['parseJSON'];
 var proxy = proxyServer;
+var apiExp = process.env.pathRewrite || config.proxy.pathRewrite || ':';
+var expArr = apiExp.split(':');
+var api1 = expArr[0];
+var api2 = expArr[1];
+var changeOrigin =
+  process.env.changeOrigin || config.proxy.changeOrigin || true;
 
 // 本地端口
 var localPort = Number(localServer.split(':')[2] || localServer.split(':')[1]);
@@ -78,6 +82,33 @@ forEachFile(mocksPath, file => {
   }
 });
 
+/**
+ * 是否请求体类型为 JSON 格式
+ * @param {object} req 请求对象
+ */
+function isJSONRequestBody(req) {
+  return req.headers['content-type'].indexOf('application/json') > -1;
+}
+
+/**
+ * 是否请求类型为 FormData 格式
+ * @param {object} req 请求对象
+ */
+function isFormDataBody(req) {
+  return req.headers['content-type'].indexOf('multipart/form-data') > -1;
+}
+
+/**
+ * 是否请求类型为普通的请求，如 get 请求
+ * @param {object} req 请求对象
+ */
+function isGenericQuery(req) {
+  return (
+    req.headers['content-type'].indexOf('application/x-www-form-urlencoded') >
+    -1
+  );
+}
+
 /** 本地服务器 */
 var server;
 (function () {
@@ -92,7 +123,7 @@ var server;
         case 'PUT':
           if (isFormDataBody(req)) {
             var form = new multiparty.Form({
-              uploadDir: resolve(mockPath, './upload')
+              uploadDir: resolve(mockPath, 'upload')
             });
             form.parse(req, (err, fields, files) => {
               /// request error log
@@ -130,13 +161,13 @@ var server;
     });
     return;
   }
+
   // 代理转发请求模式
   server = http.createServer((req, res) => {
     var params;
     var method = req.method;
     var arr = proxy.split(':');
     var hostname = arr[1].replace(/\//g, '');
-    var changeOrigin = proxyConfig.changeOrigin;
     // 不允许请求代理到来源
     if (proxy === req.headers.referer) {
       console.log('无法将源请求代理到源服务~'.red.bold);
@@ -145,7 +176,7 @@ var server;
     var options = {
       protocol: arr[0] + ':', // 协议
       hostname: hostname, // 主机
-      path: req.url, // 请求接口
+      path: req.url.replace(api1, api2), // 请求接口
       method: method, // 请求方式
       headers: req.headers // 请求头
     };
@@ -181,6 +212,7 @@ var server;
           if (isJSONRequestBody(req)) params = JSON.parse(rawData);
           else if (isGenericQuery(req)) params = qs.parse(rawData);
           else params = rawData;
+          options.body = rawData;
           proxyResponse(httpX, options, params, req, res);
         });
         return;
@@ -188,39 +220,14 @@ var server;
       case 'DELETE':
       case 'OPTIONS':
       default:
-        params = qs.parse(req.url.split('?')[1]);
+        const queryStr = req.url.split('?')[1];
+        options.query = queryStr;
+        params = qs.parse(queryStr);
         break;
     }
     proxyResponse(httpX, options, params, req, res);
   });
 })();
-
-/**
- * 是否请求体类型为 JSON 格式
- * @param {object} req 请求对象
- */
-function isJSONRequestBody(req) {
-  return req.headers['content-type'].indexOf('application/json') > -1;
-}
-
-/**
- * 是否请求类型为 FormData 格式
- * @param {object} req 请求对象
- */
-function isFormDataBody(req) {
-  return req.headers['content-type'].indexOf('multipart/form-data') > -1;
-}
-
-/**
- * 是否请求类型为普通的请求，如 get 请求
- * @param {object} req 请求对象
- */
-function isGenericQuery(req) {
-  return (
-    req.headers['content-type'].indexOf('application/x-www-form-urlencoded') >
-    -1
-  );
-}
 
 /**
  * 寻找mocks文件夹下，js文件中已经注册的接口地址
@@ -348,8 +355,11 @@ function response(req, res, params) {
 function proxyResponse(httpX, options, params, req, res) {
   /// request log
   log.info(
-    `[${req.headers['host']}] [${req.url}]${req.method}=>请求参数:\r\n` +
-      JSON.stringify(params, null, parseJSON ? '\t' : null)
+    `[${req.headers['host']}] [${options.url}]${req.method}=>请求参数:\r\n` +
+      JSON.stringify(params, null, parseJSON ? '\t' : null) +
+      `\r\n` +
+      `请求选项:\r\n` +
+      JSON.stringify(options)
   );
   /// request log
 

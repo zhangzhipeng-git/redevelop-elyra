@@ -14,3 +14,9 @@ export type Types =
 export enum ErrorEnum {
   REQUIRED = '是必填属性'
 }
+
+/** 动作映射 */
+export enum ActionEnum {
+  RUN = 'run',
+  SUBMIT = 'submit'
+}

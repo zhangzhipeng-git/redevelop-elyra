@@ -15,7 +15,7 @@
  */
 
 import { PipelineEditor, ThemeProvider } from '@src/app/base-pipeline-editor';
-import { validate } from '@elyra/pipeline-services';
+// import { validate } from '@elyra/pipeline-services';
 // import { ContentParser } from '../services';
 import {
   IconUtil,
@@ -61,14 +61,18 @@ import { theme } from './theme';
 
 import { PipelineEnum } from '@src/app/enums';
 import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
-import { onAfterSelectFile_UploadFile } from '@src/app/hooks/selectFile';
+import {
+  onAfterSelectFile_RemoveFile,
+  onAfterSelectFile_UploadFile
+} from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
 import {
   onChangePipeline,
   onRenderPipeline,
-  onRunOrSubmit
+  onRunOrSubmit,
+  validatePipeline
 } from '@src/app/hooks/handlePipeline';
 
 import Utils from '@src/app/util';
@@ -168,7 +172,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   const ref = useRef<any>(null);
   const palette = useRef<any>(null);
   const contextRef = useRef(context);
-  const timer = useRef<number>();
+  const defaultPosition = useRef(10);
   const runRes = useRef<any>(null);
   const editorWrapRef = useRef<any>();
 
@@ -176,13 +180,11 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [readOnly, setReadOnly] = useState<boolean>(false);
+
   const uuid = useRef(Utils.shortUUID());
-
   const type: string = 'APACHE_AIRFLOW';
-
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
-
   const runtimeDisplayName = type;
 
   // 自动展开左侧面板节点目录
@@ -214,6 +216,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       setLoading(false);
     };
     currentContext.ready.then(async () => {
+      console.log('==context.model已就绪==');
       palette.current = await onReadyOrRefresh(currentContext, type);
       changeHandler();
     });
@@ -331,28 +334,16 @@ const PipelineWrapper: React.FC<IProps> = ({
   const handleSubmission = useCallback(
     async (actionType: 'run' | 'submit'): Promise<void> => {
       const pipelineJson: any = context.model.toJSON();
-      // Check that all nodes are valid
-      const errorMessages = validate(
-        JSON.stringify(pipelineJson),
-        getAllPaletteNodes(palette.current),
-        palette.current?.properties ?? {}
-      );
+      const controllerPalette = ref.current?.controller?.current?.getPalette();
+      const errorMessages = validatePipeline(pipelineJson, controllerPalette);
       const actionTypeMap = { run: '运行', submit: '提交' };
       if (errorMessages && errorMessages.length > 0) {
-        let msgs = [];
-        for (const error of errorMessages) {
-          let msg = error.message;
-          if (msg.indexOf('circular reference') > -1) msg = 'DAG 图存在环路.';
-          msgs.push(msg);
-        }
-
+        let msgs = errorMessages.map(({ message }: any) => message);
         toast.error(
-          `${actionTypeMap[actionType]}失败:\n\n ${Array.from(new Set(msgs))
-            .join('\n')
-            .replace(/The property/g, '属性')
-            .replace(/on node/g, '在节点')
-            .replace(/is required/g, '上是必填的')}`,
-          { containerId: uuid.current }
+          `${actionTypeMap[actionType]}失败:\n\n ${Array.from(
+            new Set(msgs)
+          ).join('\n')}`,
+          { containerId: uuid.current, autoClose: 30000 }
         );
         return;
       }
@@ -433,7 +424,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       setReadOnly(true);
       const promise = new Promise((resolve, reject) => {
-        timer.current = onUpdateNodeStatus(
+        onUpdateNodeStatus(
           ref?.current.controller.current,
           res.dagId,
           (state: boolean) => {
@@ -502,8 +493,11 @@ const PipelineWrapper: React.FC<IProps> = ({
     if (!runRes.current) return;
     const { dagId, dagRunId } = runRes.current;
     await PipelineService.cancel({ dagId, dagRunId });
-    clearTimeout(timer.current);
+    const controller = ref?.current?.controller?.current ?? {};
+    clearTimeout(controller.timer);
     toast.dismiss(uuid.current + 'loading');
+    console.log(pipeline, 'pipeline');
+    controller.setPipelineFlowPalette(palette.current);
     setReadOnly(false);
   }
 
@@ -540,14 +534,14 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, []);
 
   const onAction = useCallback(
-    ({ type, payload }: any) => {
-      switch (type) {
+    ({ type: actionType, payload }: any) => {
+      switch (actionType) {
         case 'save':
           contextRef.current.save();
           break;
         case 'run':
         case 'submit':
-          handleSubmission(type);
+          handleSubmission(actionType);
           break;
         case 'clear':
           handleClearPipeline(payload);
@@ -570,6 +564,8 @@ const PipelineWrapper: React.FC<IProps> = ({
             // readOnly: true
           });
           break;
+        case 'deleteSelectedObjects':
+          onAfterSelectFile_RemoveFile(type, payload);
         default:
           break;
       }
@@ -666,21 +662,24 @@ const PipelineWrapper: React.FC<IProps> = ({
     ]
   };
 
-  const [defaultPosition, setDefaultPosition] = useState(10);
-
   const handleBeforeAddNodeGetOp = useCallback(
     (op?: string) => onBeforeAddNode_GetOp(type as any, op),
     []
   );
 
   const handleAfterSelectFileUploadFile = useCallback(
-    (paths: string[]) =>
+    (paths: string[], prePaths = []) =>
       onAfterSelectFile_UploadFile(
         type as any,
         browserFactory.defaultBrowser,
         paths,
         editorWrapRef.current
       ),
+    []
+  );
+
+  const handleAfterSelectFileRemoveOldFile = useCallback(
+    (prePath: string) => onAfterSelectFile_RemoveFile(type as any, prePath),
     []
   );
 
@@ -708,7 +707,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       // if either x or y is undefined use the default coordinates
       if (missingXY) {
-        position = defaultPosition;
+        position = defaultPosition.current;
         location = {
           x: 75,
           y: 85
@@ -781,7 +780,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       }
 
       // update position if the default coordinates were used
-      if (missingXY) setDefaultPosition(position);
+      if (missingXY) defaultPosition.current = position;
     },
     []
   );
@@ -845,8 +844,11 @@ const PipelineWrapper: React.FC<IProps> = ({
             onFileRequested={onFileRequested}
             leftPalette={true}
             handleBeforeAddNodeGetOp={handleBeforeAddNodeGetOp}
-            handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
             handleUpdateNodeProperties={handleUpdateNodeProperties}
+            handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+            handleAfterSelectFileRemoveOldFile={
+              handleAfterSelectFileRemoveOldFile
+            }
           >
             {type === undefined ? (
               <EmptyGenericPipeline onOpenSettings={handleOpenSettings} />

@@ -75,7 +75,8 @@ export default function PipelinePropertiesPanel({
     const newFormData = e.formData;
     const schema = e.schema;
     const applicationId = newFormData.applicationId;
-    if (applicationId == null)
+
+    if (applicationId == null || applicationId === data.applicationId)
       return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
 
     const { enum: enumIds } = schema.properties.applicationId;

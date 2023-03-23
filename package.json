@@ -56,7 +56,8 @@
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "tsc -w",
     "watch:labextension": "jupyter labextension watch .",
-    "mock": "birdmock"
+    "mock": "birdmock",
+    "mock:proxy": "cross-env forwardMode=true proxyServer=http://172.100.1.104:8881  pathRewrite=/api/v1:/measurementcenter/applicationOut changeOrigin=true birdmock"
   },
   "dependencies": {
     "@elyra/canvas": "^12.23.2",

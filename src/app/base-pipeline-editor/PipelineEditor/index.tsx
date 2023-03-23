@@ -71,6 +71,7 @@ interface Props {
   handleAfterSelectFileUploadFile: (
     paths: string[]
   ) => Promise<{ paths: string[] }>;
+  handleAfterSelectFileRemoveOldFile: (prePath: string) => void;
   handleUpdateNodeProperties: (o: {
     type: string;
     applicationId: number;
@@ -174,13 +175,13 @@ const PipelineEditor = forwardRef(
       leftPalette = true,
       handleBeforeAddNodeGetOp,
       handleAfterSelectFileUploadFile,
+      handleAfterSelectFileRemoveOldFile,
       handleUpdateNodeProperties
     }: Props,
     ref
   ) => {
     const theme = useTheme();
     const controller = useRef(new PipelineController());
-
     const [currentTab, setCurrentTab] = useState<string | undefined>();
     const [panelOpen, setPanelOpen] = useState(false);
 
@@ -193,8 +194,9 @@ const PipelineEditor = forwardRef(
 
     useEffect(() => {
       try {
+        if (readOnly) return;
         controller.current.open(pipeline);
-        if (readOnly) return controller.current.resetStyles(readOnly);
+        // 这里 palette 不需要刷新，可以直接调用 controller 刷新
         if (!controller.current.existPalette())
           controller.current.setPalette(palette);
         controller.current.validate({ redColor: theme.palette.error.main });
@@ -445,7 +447,18 @@ const PipelineEditor = forwardRef(
         let payload;
         let type = e.editType;
 
-        onAction?.({ type, payload });
+        if (type === 'deleteSelectedObjects')
+          payload = e.selectedObjects
+            .filter(({ type }: any) => type === 'execute-node')
+            .map(
+              (a: any) => a?.app_data?.component_parameters?.mainApplicationFile
+            );
+
+        onAction?.({
+          type,
+          payload
+        });
+
         switch (type) {
           case 'newFileNode':
             console.log('==从文件中新建节点==');
@@ -569,7 +582,6 @@ const PipelineEditor = forwardRef(
               toolbarConfig={readOnlyToolbar ?? []}
               editActionHandler={e => {
                 handleReadOnlyEditAction(e);
-                controller.current.resetStyles(readOnly);
               }}
               config={{
                 enableInternalObjectModel: false,
@@ -623,6 +635,9 @@ const PipelineEditor = forwardRef(
             onFileRequested={onFileRequested}
             onChange={handlePropertiesChange}
             handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+            handleAfterSelectFileRemoveOldFile={
+              handleAfterSelectFileRemoveOldFile
+            }
           />
         )
       }

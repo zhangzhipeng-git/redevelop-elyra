@@ -171,7 +171,7 @@ export class PipelineService {
    * 应用查询接口
    */
   static apps() {
-    return RequestHandler.makeGetRequest<AppsResponse>(`/api/v1/apps`);
+    return RequestHandler.makeGetRequest<AppsResponse>(`/apps`);
   }
 
   /**
@@ -180,7 +180,7 @@ export class PipelineService {
    */
   static conn(params: ConnRequest) {
     return RequestHandler.makeGetRequest<ConnResponse>(
-      `/api/v1/conn?${this._parse(params)}`
+      `/conn?${this._parse(params)}`
     );
   }
 
@@ -190,7 +190,7 @@ export class PipelineService {
    */
   static uploadFile(params: FormData) {
     return RequestHandler.makePostRequest<UploadFileResponse>(
-      `/api/v1/uploadFile`,
+      `/uploadFile`,
       params,
       true
     );
@@ -202,7 +202,7 @@ export class PipelineService {
    */
   static removeFile(params: RemoveFileRequest) {
     return RequestHandler.makeGetRequest<RemoveFileResponse>(
-      `/api/v1/removeFile?${this._parse(params)}`
+      `/removeFile?${this._parse(params)}`
     );
   }
 
@@ -212,7 +212,7 @@ export class PipelineService {
    */
   static logs(params: LogsRequest) {
     return RequestHandler.makePostRequest<LogsResponse>(
-      `/api/v1/dag/dagRuns/taskInstances/logs`,
+      `/dag/dagRuns/taskInstances/logs`,
       JSON.stringify(params)
     );
   }
@@ -223,7 +223,7 @@ export class PipelineService {
    */
   static status(params: StatusRequest) {
     return RequestHandler.makeGetRequest<StatusResponse>(
-      `/api/v1/dag/dagRuns/taskInstances/status?${this._parse(params)}`
+      `/dag/dagRuns/taskInstances/status?${this._parse(params)}`
     );
   }
 
@@ -233,7 +233,7 @@ export class PipelineService {
    */
   static cancel(params: CancelRequest) {
     return RequestHandler.makeGetRequest<CancelResponse>(
-      `/api/v1/dag/dagRuns/cancel?${this._parse(params)}`
+      `/dag/dagRuns/cancel?${this._parse(params)}`
     );
   }
 
@@ -243,7 +243,7 @@ export class PipelineService {
    */
   static operator(params: OperatorRequest) {
     return RequestHandler.makePostRequest<OperatorResponse>(
-      `/api/v1/dag/operator`,
+      `/dag/operator`,
       JSON.stringify(params)
     );
   }

@@ -272,8 +272,7 @@ class PipelineController extends CanvasController {
     return newLabel ?? '';
   }
 
-  resetStyles(readOnly = false) {
-    if (readOnly) return;
+  resetStyles() {
     this.removeAllStyles();
 
     for (const pipeline of this.getPipelineFlow().pipelines) {
@@ -301,7 +300,6 @@ class PipelineController extends CanvasController {
           // We don't have a nodedef, skipping...
           continue;
         }
-
 
         const newLabel = this.getLabelForNode(node, nodeDef);
         // `setNodeLabel` is VERY slow, so make sure we HAVE to set it before
@@ -365,6 +363,8 @@ class PipelineController extends CanvasController {
       this.getAllPaletteNodes()
     );
 
+    console.log(problems, 'validate problems');
+
     const linksWithErrors: { [key: string]: string[] } = {};
     const nodesWithErrors: { [key: string]: string[] } = {};
     for (const problem of problems) {
@@ -395,6 +395,8 @@ class PipelineController extends CanvasController {
           break;
       }
     }
+    console.log(linksWithErrors, styleOptions, 'setLinkErrors');
+    console.log(nodesWithErrors, styleOptions, 'setNodeErrors');
     this.setLinkErrors(linksWithErrors, styleOptions);
     this.setNodeErrors(nodesWithErrors, styleOptions);
 

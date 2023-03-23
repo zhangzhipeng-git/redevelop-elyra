@@ -38,6 +38,7 @@ interface Props {
   handleAfterSelectFileUploadFile?: (
     paths: string[]
   ) => Promise<{ paths: string[] }>;
+  handleAfterSelectFileRemoveOldFile?: (prePath: string) => void;
 }
 
 const Heading = styled.div`
@@ -83,7 +84,8 @@ function NodeProperties({
   onFileRequested,
   onChange,
   parameters,
-  handleAfterSelectFileUploadFile
+  handleAfterSelectFileUploadFile,
+  handleAfterSelectFileRemoveOldFile
 }: Props) {
   const nodes = getNodes();
   if (selectedNodes === undefined || selectedNodes.length === 0) {
@@ -265,6 +267,7 @@ function NodeProperties({
         }}
         onFileRequested={onFileRequested}
         handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+        handleAfterSelectFileRemoveOldFile={handleAfterSelectFileRemoveOldFile}
       />
     </div>
   );

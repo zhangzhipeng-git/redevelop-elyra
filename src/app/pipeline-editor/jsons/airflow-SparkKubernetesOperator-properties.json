@@ -13,7 +13,7 @@
           "type": "string",
           "title": "Spark应用的类型",
           "description": "Spark应用的类型（java/python/scala)",
-          "default": "java",
+          "default": "python",
           "enum": [
             "java",
             "python",
@@ -44,7 +44,7 @@
             "ui:widget": "file",
             "extensions": [
               ".py",
-              ".jvar"
+              ".jar"
             ]
           }
         },
@@ -62,14 +62,14 @@
             "ui:readonly": true
           }
         },
-        "executor_cores": {
+        "taskCpu": {
           "type": "integer",
           "title": "CPU(个)",
           "default": 1,
           "description": "对于CPU密集型工作负载，您可以选择多个CPU",
           "minimum": 1
         },
-        "executor_memory": {
+        "taskMemory": {
           "type": "integer",
           "title": "内存(GB)",
           "description": "指定的RAM大小",

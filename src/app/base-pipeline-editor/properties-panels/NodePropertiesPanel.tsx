@@ -58,6 +58,7 @@ interface Props {
   handleAfterSelectFileUploadFile?: (
     paths: string[]
   ) => Promise<{ paths: string[] }>;
+  handleAfterSelectFileRemoveOldFile?: (prePath: string) => void;
 }
 
 /**
@@ -71,7 +72,8 @@ export function NodePropertiesPanel({
   onFileRequested,
   noValidate,
   id,
-  handleAfterSelectFileUploadFile
+  handleAfterSelectFileUploadFile,
+  handleAfterSelectFileRemoveOldFile
 }: Props) {
   if (!schema) return <Message>未定义属性.</Message>;
   const uiSchema: UiSchema = {};
@@ -85,15 +87,19 @@ export function NodePropertiesPanel({
     if (!nodeParams)
       return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
 
-    const properties = e.schema.properties.component_parameters.properties;
+    const paramSchema = e.schema.properties.component_parameters;
+    const properties = paramSchema.properties;
+    console.log(paramSchema, 'componentParameters');
 
     // 1. 任务类型更改后，置空文件路径和删除对应的文件
     const { type, localFile } = nodeParams;
     const fileType = TYPE_MAP[path.extname(localFile)];
     if (type !== fileType) {
+      // 删除文件 & 重置字段
+      const prePath = nodeParams.mainApplicationFile;
+      handleAfterSelectFileRemoveOldFile?.(prePath);
       delete nodeParams.mainApplicationFile;
       delete nodeParams.localFile;
-      // to-do 删除文件
     }
 
     // 2. 集群连接信息改变后，命名空间也要跟着改变
@@ -104,7 +110,7 @@ export function NodePropertiesPanel({
       const index = schema_connection.enum.findIndex(
         (e: string) => e === connection
       );
-      if (index > -1) nodeParams.namespace = namespace.enumValues[index];
+      if (index > -1) nodeParams.namespace = namespace.enumValues?.[index];
     }
 
     onChange && Utils.debounceExecute(onChange, [newFormData], 100);
@@ -114,7 +120,7 @@ export function NodePropertiesPanel({
     const data = formData.component_parameters;
     const error = errors.component_parameters as any;
     const needValidate = data && error;
-    const field = 'priority_class_name';
+    const field = 'mainClass';
 
     if (needValidate && ['java', 'scala'].includes(data.type) && !data[field])
       error?.[field]?.addError(ErrorEnum.REQUIRED);
@@ -123,11 +129,17 @@ export function NodePropertiesPanel({
   }
 
   const formContext = {
+    /** 文件上传 */
     onFileRequested: async (args: any) => {
       const values = await onFileRequested?.({
         ...args,
-        filename: data.component_parameters.filename
+        filename: data.component_parameters.localFile
       });
+
+      if (handleAfterSelectFileRemoveOldFile) {
+        const preS3Path = data.component_parameters.mainApplicationFile;
+        handleAfterSelectFileRemoveOldFile(preS3Path);
+      }
 
       let s3Paths: string[] = [];
       if (handleAfterSelectFileUploadFile)
@@ -151,7 +163,7 @@ export function NodePropertiesPanel({
         } else {
           draft.component_parameters[args.propertyID] = values?.[0];
         }
-        draft.component_parameters.mainApplicationFile = values?.[0];
+        draft.component_parameters.mainApplicationFile = s3Paths?.[0];
         draft.component_parameters.type =
           TYPE_MAP[PathExt.extname(values[0])] || 'java';
       });
