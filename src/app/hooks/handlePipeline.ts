@@ -76,7 +76,7 @@ function getPipelineEdges(pipelineObj: any) {
  * @param {any} pipeline
  */
 export function onRunOrSubmit(pipeline: any, operator = 'run') {
-  console.log(pipeline);
+  
   if (!pipeline) return;
 
   let newPipeline;
@@ -109,7 +109,7 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
     taskDependency
   };
 
-  console.log(newPipeline, `${operator} newPipeline`);
+  
   return newPipeline;
 }
 

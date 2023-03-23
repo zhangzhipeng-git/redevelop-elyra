@@ -47,7 +47,7 @@ async function getNodeStatus(
   const res = await PipelineService.status({ dagId });
   const task = res.task;
 
-  const limitLength = (str: string, len = 10) =>
+  const limitLength = (str: string, len = 5) =>
     !!str[len] ? str.substr(0, len) + '...' : str;
 
   const pipelineId = dagId.split('-')[1];

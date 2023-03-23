@@ -80,7 +80,7 @@ export function NodePropertiesPanel({
   genUISchemaFromSchema(schema, uiSchema);
 
   function onChangeFn(e: any) {
-    console.log(e, 'onChangeFn');
+    
     const newFormData = e.formData;
     const nodeParams = newFormData.component_parameters;
 
@@ -89,7 +89,7 @@ export function NodePropertiesPanel({
 
     const paramSchema = e.schema.properties.component_parameters;
     const properties = paramSchema.properties;
-    console.log(paramSchema, 'componentParameters');
+    
 
     // 1. 任务类型更改后，置空文件路径和删除对应的文件
     const { type, localFile } = nodeParams;

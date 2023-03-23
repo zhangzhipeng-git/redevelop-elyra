@@ -155,7 +155,7 @@ class PipelineController extends CanvasController {
       nodeTemplate: { op },
       ...rest
     } = item;
-    console.log('==添加节点==', item);
+
     const nodeTemplate: any = this.getPaletteNode(op);
     const defaults =
       getDefaultFormState(validator, nodeTemplate.app_data.properties ?? {}) ??
@@ -363,8 +363,6 @@ class PipelineController extends CanvasController {
       this.getAllPaletteNodes()
     );
 
-    console.log(problems, 'validate problems');
-
     const linksWithErrors: { [key: string]: string[] } = {};
     const nodesWithErrors: { [key: string]: string[] } = {};
     for (const problem of problems) {
@@ -395,8 +393,6 @@ class PipelineController extends CanvasController {
           break;
       }
     }
-    console.log(linksWithErrors, styleOptions, 'setLinkErrors');
-    console.log(nodesWithErrors, styleOptions, 'setNodeErrors');
     this.setLinkErrors(linksWithErrors, styleOptions);
     this.setNodeErrors(nodesWithErrors, styleOptions);
 
@@ -565,6 +561,32 @@ class PipelineController extends CanvasController {
     if (node?.type === 'execution_node') {
       const nodes = this.getAllPaletteNodes();
       const problems = validate(JSON.stringify(this.getPipelineFlow()), nodes);
+
+      (function (_this) {
+        const pipelineObj = _this.getPipelineFlow()?.pipelines?.[0];
+        pipelineObj?.nodes?.forEach(n => {
+          const nodeParams: any = n?.app_data?.component_parameters ?? {};
+          if (
+            ['java', 'scala'].includes(nodeParams.type) &&
+            !nodeParams.mainClass
+          ) {
+            problems.push({
+              info: {
+                nodeID: n.id,
+                pipelineID: pipelineObj.id,
+                property: 'mainClass',
+                type: 'missingProperty'
+              },
+              severity: undefined,
+              range: {
+                offset: 0,
+                length: 0
+              },
+              message: ''
+            });
+          }
+        });
+      })(this);
 
       const nodeProblems = [];
 

@@ -11,7 +11,7 @@ export async function onAfterSelectApp({
   applicationId: number;
   controller: PipelineController;
 }) {
-  console.log('onUpdateNodeProperties');
+  
 
   // 1. 重新设置节点的k8s集群连接信息选项
   const palette = controller.getPalette();

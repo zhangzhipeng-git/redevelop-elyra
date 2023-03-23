@@ -66,7 +66,10 @@ import {
   onAfterSelectFile_UploadFile
 } from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
-import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
+import {
+  changeNodeStyles,
+  onUpdateNodeStatus
+} from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
 import {
   onChangePipeline,
@@ -128,9 +131,6 @@ class PipelineEditorWidget extends ReactWidget {
   }
 
   render(): any {
-    console.log(
-      '==渲染编辑器（聚焦 Pipeline Editor 标签页会重新渲染编辑器）=='
-    );
     return (
       <PipelineWrapper
         context={this.context}
@@ -167,7 +167,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   settings,
   widgetId
 }) => {
-  console.log('==编辑器内部状态变化，导致重新渲染==');
+  
 
   const ref = useRef<any>(null);
   const palette = useRef<any>(null);
@@ -187,6 +187,9 @@ const PipelineWrapper: React.FC<IProps> = ({
     settings?.composite['doubleClickToOpenProperties'] ?? true;
   const runtimeDisplayName = type;
 
+  if (readOnly && editorWrapRef.current)
+    setTimeout(() => changeNodeStyles(editorWrapRef.current));
+
   // 自动展开左侧面板节点目录
   useEffect(() => {
     if (!palette.current) return;
@@ -195,7 +198,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         '.bx--accordion__item > button[aria-expanded=false]'
       );
       btns.forEach((btn: any) => btn.click());
-    }, 1500);
+    }, 2000);
   }, []);
 
   useEffect((): any => {
@@ -209,14 +212,14 @@ const PipelineWrapper: React.FC<IProps> = ({
   useEffect((): any => {
     const currentContext = contextRef.current;
     const changeHandler = (): void => {
-      console.log('==监听到pipeline数据变化，重新渲染编辑器==');
+      
       const pipelineJson = currentContext.model.toJSON();
       onRenderPipeline(pipelineJson);
       setPipeline(pipelineJson);
       setLoading(false);
     };
     currentContext.ready.then(async () => {
-      console.log('==context.model已就绪==');
+      
       palette.current = await onReadyOrRefresh(currentContext, type);
       changeHandler();
     });
@@ -227,7 +230,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, []);
 
   const onChange = useCallback((pipelineJson: any): void => {
-    console.log('==重新设置pipeline数据==');
+    
     pipelineJson = Utils.removeNullValues(pipelineJson);
     if (contextRef.current.isReady) {
       onChangePipeline(pipelineJson);
@@ -296,7 +299,7 @@ const PipelineWrapper: React.FC<IProps> = ({
    * 未设置双击打开节点属性时，双击打开文件。
    */
   const onDoubleClick = useCallback((data: any): void => {
-    console.log('==双击节点打开文件==');
+    
     for (let i = 0; i < data.selectedObjectIds.length; i++) {
       const node = pipeline.pipelines[0].nodes.find(
         (node: any) => node.id === data.selectedObjectIds[i]
@@ -496,8 +499,6 @@ const PipelineWrapper: React.FC<IProps> = ({
     const controller = ref?.current?.controller?.current ?? {};
     clearTimeout(controller.timer);
     toast.dismiss(uuid.current + 'loading');
-    console.log(pipeline, 'pipeline');
-    controller.setPipelineFlowPalette(palette.current);
     setReadOnly(false);
   }
 
@@ -894,9 +895,6 @@ export class PipelineEditorFactory extends ABCWidgetFactory<DocumentWidget> {
       settings: this.settings
     };
 
-    console.log(
-      '==创建新的编辑器（打开 Pipeline Editor 标签页会新建编辑器）=='
-    );
     const content = new PipelineEditorWidget(props);
 
     const widget = new DocumentWidget({ content, context });

@@ -15,15 +15,16 @@
           "op": "execute-SparkKubernetesOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "scala",
+              "type": "python",
               "connection": "kubernetes_default_1",
               "namespace": "kubernetes_default_1",
+              "taskCpu": 1,
               "executor_cores": 1
             },
             "ui_data": {
               "label": "SparkKubernetesOperator",
-              "x_pos": 150,
-              "y_pos": 170,
+              "x_pos": 157,
+              "y_pos": 191,
               "description": "Run SparkKubernetesOperator Node",
               "decorations": [
                 {
@@ -47,7 +48,77 @@
                   },
                   "label": "Input Port"
                 }
+              },
+              "links": [
+                {
+                  "id": "c694eaca-8106-48e7-9653-583cf92fa477",
+                  "node_id_ref": "68058ca3-6d3d-42e0-a06e-476c6b265909",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
               }
+            }
+          ]
+        },
+        {
+          "id": "68058ca3-6d3d-42e0-a06e-476c6b265909",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "python",
+              "connection": "kubernetes_default_1",
+              "namespace": "kubernetes_default_1",
+              "taskCpu": 1
+            },
+            "ui_data": {
+              "label": "KubernetesPodOperator",
+              "x_pos": 234,
+              "y_pos": 326,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "8eb79a15-0ea6-4fe9-a17e-3b28806f597d",
+                  "node_id_ref": "4987ead2-258c-42cb-b10c-73d450fc1eaa",
+                  "port_id_ref": "outPort"
+                }
+              ]
             }
           ],
           "outputs": [

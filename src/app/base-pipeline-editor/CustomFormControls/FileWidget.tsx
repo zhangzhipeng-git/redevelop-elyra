@@ -45,7 +45,7 @@ export const FileWidget: Widget = props => {
         value={props.value ?? ''}
         placeholder={props.uiSchema?.['ui:placeholder']}
         onChange={e => {
-          console.log(e);
+          
         }}
         disabled
       />

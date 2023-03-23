@@ -430,7 +430,6 @@ const PipelineEditor = forwardRef(
       }
 
       if (isCreateNodeEvent(e)) {
-        console.log('==从文件新建节点或拖拽节点到 pipeline 中==');
         controller.current.addNode({
           ...e
         });
@@ -461,7 +460,6 @@ const PipelineEditor = forwardRef(
 
         switch (type) {
           case 'newFileNode':
-            console.log('==从文件中新建节点==');
             const nodes = controller.current.getAllPaletteNodes();
             let extensions = nodes.map(n => n.app_data.extensions).flat();
             extensions = Array.from(new Set(extensions));

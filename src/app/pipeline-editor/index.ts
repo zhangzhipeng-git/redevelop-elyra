@@ -52,7 +52,7 @@ export default async function activatePipeline(
   menu: IMainMenu,
   registry: ISettingRegistry
 ): Promise<void> {
-  console.log('==Pipeline 插件已激活==');
+  
 
   // Fetch the initial state of the settings.
   const settings = await registry

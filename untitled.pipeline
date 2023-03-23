@@ -17,6 +17,7 @@
               "type": "python",
               "connection": "kubernetes_default_2",
               "namespace": "kubernetes_default_2",
+              "taskCpu": 1,
               "executor_cores": 1,
               "localFile": "node1.py",
               "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
@@ -137,7 +138,7 @@
             "ui_data": {
               "label": "js.jar",
               "x_pos": 378.0000305175781,
-              "y_pos": 136,
+              "y_pos": 114,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -183,26 +184,24 @@
           ]
         },
         {
-          "id": "cf0896a6-60eb-4c6f-8a9a-7922a16d9152",
+          "id": "b0115ed6-dc34-4d6a-b3f7-0f2a216cbf81",
           "type": "execution_node",
           "op": "execute-SparkKubernetesOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "java",
+              "type": "python",
               "connection": "kubernetes_default_2",
               "namespace": "kubernetes_default_2",
               "taskCpu": 1,
-              "executor_cores": 1,
+              "localFile": "我试试所所所所所所所所.py",
+              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
               "name": "测试任务4",
-              "mode": "111",
-              "mainClass": "test.main",
-              "localFile": "js.jar",
-              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
+              "mode": "111"
             },
             "ui_data": {
-              "label": "js.jar",
-              "x_pos": 399.0000305175781,
-              "y_pos": 273,
+              "label": "我试试所所所所所所所所.py",
+              "x_pos": 386,
+              "y_pos": 269,
               "description": "Run SparkKubernetesOperator Node"
             }
           },
@@ -220,13 +219,13 @@
               },
               "links": [
                 {
-                  "id": "b2e36424-5bfd-4b2d-96a5-24a98d22fe74",
-                  "node_id_ref": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
+                  "id": "be354ddf-4caa-4150-b695-d6123900036f",
+                  "node_id_ref": "12b6c341-5e2d-47c2-b561-2a45022286ed",
                   "port_id_ref": "outPort"
                 },
                 {
-                  "id": "0ce115d1-b311-469b-bd5a-927ba6ea9c60",
-                  "node_id_ref": "12b6c341-5e2d-47c2-b561-2a45022286ed",
+                  "id": "a3e704aa-ae3f-4268-99f9-d6e773fc0fde",
+                  "node_id_ref": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
                   "port_id_ref": "outPort"
                 }
               ]
