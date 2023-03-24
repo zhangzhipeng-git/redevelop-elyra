@@ -68,8 +68,8 @@ interface IComponentPropertiesResponse {
 
 // TODO: This should be enabled through `extensions`
 const NodeIcons: Map<string, string> = new Map([
-  ['execute-KubernetesPodOperator-node', '/static/elyra/airflow.svg'],
-  ['execute-SparkKubernetesOperator-node', '/static/elyra/airflow.svg']
+  ['execute-KubernetesPodOperator-node', '/static/elyra/k8s.svg'],
+  ['execute-SparkKubernetesOperator-node', '/static/elyra/spark.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
@@ -228,6 +228,5 @@ export async function onReadyOrRefresh(
 
   if (changeFlag)
     currentContext.model.fromString(JSON.stringify(pipelineJson, null, 2));
-
   return palette;
 }

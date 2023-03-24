@@ -2,17 +2,11 @@ import PipelineController from '@src/app/base-pipeline-editor/PipelineController
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 import Utils from '@src/app/util';
 
-export async function onAfterSelectApp({
-  type,
-  applicationId,
-  controller
-}: {
-  type: string;
-  applicationId: number;
-  controller: PipelineController;
-}) {
-  
-
+export async function onAfterSelectApp(
+  params: { type: string; applicationId: string },
+  controller: PipelineController
+) {
+  const { type, applicationId } = params as any;
   // 1. 重新设置节点的k8s集群连接信息选项
   const palette = controller.getPalette();
   if (!palette) return;

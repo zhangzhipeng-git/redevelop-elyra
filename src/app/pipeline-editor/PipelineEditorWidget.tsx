@@ -60,7 +60,10 @@ import { PipelineService } from './PipelineService';
 import { theme } from './theme';
 
 import { PipelineEnum } from '@src/app/enums';
-import { onBeforeAddNode_GetOp } from '@src/app/hooks/addNode';
+import {
+  onBeforeAddNode_GetOp,
+  onCopyValidateNodeProperties
+} from '@src/app/hooks/addNode';
 import {
   onAfterSelectFile_RemoveFile,
   onAfterSelectFile_UploadFile
@@ -167,8 +170,6 @@ const PipelineWrapper: React.FC<IProps> = ({
   settings,
   widgetId
 }) => {
-  
-
   const ref = useRef<any>(null);
   const palette = useRef<any>(null);
   const contextRef = useRef(context);
@@ -212,14 +213,12 @@ const PipelineWrapper: React.FC<IProps> = ({
   useEffect((): any => {
     const currentContext = contextRef.current;
     const changeHandler = (): void => {
-      
       const pipelineJson = currentContext.model.toJSON();
       onRenderPipeline(pipelineJson);
       setPipeline(pipelineJson);
       setLoading(false);
     };
     currentContext.ready.then(async () => {
-      
       palette.current = await onReadyOrRefresh(currentContext, type);
       changeHandler();
     });
@@ -230,7 +229,6 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, []);
 
   const onChange = useCallback((pipelineJson: any): void => {
-    
     pipelineJson = Utils.removeNullValues(pipelineJson);
     if (contextRef.current.isReady) {
       onChangePipeline(pipelineJson);
@@ -299,7 +297,6 @@ const PipelineWrapper: React.FC<IProps> = ({
    * 未设置双击打开节点属性时，双击打开文件。
    */
   const onDoubleClick = useCallback((data: any): void => {
-    
     for (let i = 0; i < data.selectedObjectIds.length; i++) {
       const node = pipeline.pipelines[0].nodes.find(
         (node: any) => node.id === data.selectedObjectIds[i]
@@ -392,7 +389,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         case 'submit':
           dialogOptions = {
             title,
-            body: '是否确认提交',
+            body: '是否确认提交？',
             buttons: [
               Dialog.cancelButton({ label: '取消' }),
               Dialog.okButton({ label: '确定' })
@@ -567,11 +564,19 @@ const PipelineWrapper: React.FC<IProps> = ({
           break;
         case 'deleteSelectedObjects':
           onAfterSelectFile_RemoveFile(type, payload);
+          break;
+        case 'copy':
+          onCopyValidateNodeProperties(
+            type,
+            ref.current?.controller?.current,
+            payload
+          );
+          break;
         default:
           break;
       }
     },
-    [panelOpen]
+    [panelOpen, type]
   );
 
   const toolbar = {
@@ -685,11 +690,11 @@ const PipelineWrapper: React.FC<IProps> = ({
   );
 
   const handleUpdateNodeProperties = useCallback(
-    (o: { type: string; applicationId: number }) => {
-      return onAfterSelectApp({
-        ...o,
-        controller: ref?.current.controller.current
-      });
+    async (params: { type: string; applicationId: string }, key: string) => {
+      switch (key) {
+        case 'connection':
+          return onAfterSelectApp(params, ref?.current.controller.current);
+      }
     },
     []
   );

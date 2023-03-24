@@ -12,7 +12,7 @@
         "applicationId": {
             "title": "归属应用",
             "description": "归属应用",
-            "type": "number",
+            "type": "string",
             "enum": [],
             "enumNames": [],
             "uihints": {

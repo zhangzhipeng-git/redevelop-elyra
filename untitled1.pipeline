@@ -16,8 +16,6 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connection": "kubernetes_default_1",
-              "namespace": "kubernetes_default_1",
               "taskCpu": 1,
               "executor_cores": 1
             },
@@ -80,8 +78,6 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connection": "kubernetes_default_1",
-              "namespace": "kubernetes_default_1",
               "taskCpu": 1
             },
             "ui_data": {
@@ -135,6 +131,118 @@
               }
             }
           ]
+        },
+        {
+          "id": "92475862-87b0-4907-89f7-2439d8ac1271",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 548.6666259765625,
+              "y_pos": 274,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "b3c30aaf-fad9-49c7-9f2b-7cd78b07dcb3",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 527.6666259765625,
+              "y_pos": 385,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
         }
       ],
       "app_data": {
@@ -144,7 +252,7 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": 1,
+          "applicationId": "022",
           "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,

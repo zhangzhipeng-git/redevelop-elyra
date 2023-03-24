@@ -86,51 +86,13 @@ export class RequestErrors {
    */
   private static server404(endpoint: string): Promise<Dialog.IResult<any>> {
     return showDialog({
-      title: 'Error contacting server',
+      title: '404',
       body: (
         <p>
-          Endpoint <code>{endpoint}</code> not found.
+          找不到请求资源: <code>{endpoint}</code>
         </p>
       ),
       buttons: [Dialog.okButton()]
-    });
-  }
-
-  /**
-   * Displays a dialog for error cases during metadata calls.
-   *
-   * @param schemaspace - the metadata schemaspace that was being accessed when
-   * the error occurred
-   *
-   * @param action (optional) - the pipeline action that required the metadata when
-   * the error occurred
-   * eg. run pipeline, export pipeline, run notebook as pipeline
-   *
-   * @returns A promise that resolves with whether the dialog was accepted.
-   */
-  static noMetadataError(
-    schemaspace: string,
-    action?: string,
-    schemaName?: string
-  ): Promise<Dialog.IResult<any>> {
-    return showDialog({
-      title: action ? `Cannot ${action}` : 'Error retrieving metadata',
-      body: (
-        <div>
-          <p>
-            No {schemaspace} configuration{schemaName && ` for ${schemaName}`}{' '}
-            is defined.
-          </p>
-          <p>Please create one and try again.</p>
-        </div>
-      ),
-      buttons:
-        schemaspace === 'runtime'
-          ? [
-              Dialog.cancelButton({ label: '取消' }),
-              Dialog.okButton({ label: `打开运行环境` })
-            ]
-          : [Dialog.okButton({ label: '确定' })]
     });
   }
 }

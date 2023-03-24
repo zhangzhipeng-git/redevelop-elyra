@@ -54,19 +54,17 @@ export async function onAfterSelectFile_UploadFile(
 
 /**
  * 移除之前上传的文件
- * @param type
- * @param filePath
+ * @param {string} type pipeline 运行平台类型
+ * @param {string} path 之前的文件上传后的路径
  */
 export function onAfterSelectFile_RemoveFile(
   type: string,
-  filePath: string | string[]
+  path: string | string[]
 ) {
-  if (type !== PipelineEnum.APACHE_AIRFLOW || !filePath) return;
-  if (!Array.isArray(filePath)) {
-    PipelineService.removeFile({ filePath });
-    return;
-  }
-  filePath.forEach((fp: string) =>
-    PipelineService.removeFile({ filePath: fp })
+  if (type !== PipelineEnum.APACHE_AIRFLOW || !path) return;
+  let paths = Array.isArray(path) ? path : [path];
+  paths = paths.map((p: string) => p?.split('path=')[1]);
+  paths.forEach(
+    (filePath: string) => filePath && PipelineService.removeFile({ filePath })
   );
 }

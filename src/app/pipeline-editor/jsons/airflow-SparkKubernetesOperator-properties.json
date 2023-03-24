@@ -20,14 +20,6 @@
             "scala"
           ]
         },
-        "mode": {
-          "type": "string",
-          "title": "Spark应用的部署模式",
-          "description": "Spark应用的部署模式",
-          "uihints": {
-            "ui:placeholder": "请填写Spark应用的部署模式"
-          }
-        },
         "mainClass": {
           "type": "string",
           "title": "Spark应用程序主类",
@@ -65,26 +57,36 @@
         "taskCpu": {
           "type": "integer",
           "title": "CPU(个)",
-          "default": 1,
           "description": "对于CPU密集型工作负载，您可以选择多个CPU",
+          "default": 1,
           "minimum": 1
         },
         "taskMemory": {
           "type": "integer",
           "title": "内存(GB)",
           "description": "指定的RAM大小",
-          "minimum": 0
+          "default": 2,
+          "minimum": 1
         },
         "num_executors": {
           "type": "integer",
           "title": "executor数量(个)",
           "description": "executor数量",
-          "minimum": 0
+          "default": 1,
+          "minimum": 1
         },
         "cmds": {
           "title": "bash命令",
           "description": "bash命令",
           "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "title": "Spark应用的部署模式",
+          "description": "Spark应用的部署模式",
+          "uihints": {
+            "ui:placeholder": "请填写Spark应用的部署模式"
+          }
         }
       },
       "required": [

@@ -72,10 +72,13 @@ interface Props {
     paths: string[]
   ) => Promise<{ paths: string[] }>;
   handleAfterSelectFileRemoveOldFile: (prePath: string) => void;
-  handleUpdateNodeProperties: (o: {
-    type: string;
-    applicationId: number;
-  }) => Promise<void>;
+  handleUpdateNodeProperties: (
+    o: {
+      type: string;
+      applicationId: string;
+    },
+    key: string
+  ) => Promise<void>;
 }
 
 /** pipeline 只读时的节点路径 */
@@ -448,10 +451,15 @@ const PipelineEditor = forwardRef(
 
         if (type === 'deleteSelectedObjects')
           payload = e.selectedObjects
-            .filter(({ type }: any) => type === 'execute-node')
+            .filter(({ type }: any) => type === 'execution_node')
             .map(
               (a: any) => a?.app_data?.component_parameters?.mainApplicationFile
             );
+        else if (type === 'copy') {
+          payload = e.selectedObjects
+            .filter(({ type }: any) => type === 'execution_node')
+            .map((a: any) => a?.id);
+        }
 
         onAction?.({
           type,
@@ -591,6 +599,9 @@ const PipelineEditor = forwardRef(
                   bodyPath: READ_ONLY_NODE_SVG_PATH,
                   selectionPath: READ_ONLY_NODE_SVG_PATH,
                   dropShadow: false,
+                  imagePosY: 10,
+                  imageWidth: 20,
+                  imageHeight: 20,
                   labelWidth: 118 - 5 + 40
                 }
               }}
@@ -664,9 +675,9 @@ const PipelineEditor = forwardRef(
                   enableToolbarLayout: toolbar === undefined ? 'None' : 'Top',
                   enableNodeLayout: {
                     imagePosX: 10 + 2.5,
-                    imagePosY: 0,
-                    imageWidth: 16,
-                    imageHeight: 35,
+                    imagePosY: 10,
+                    imageWidth: 20,
+                    imageHeight: 20,
                     labelPosX: 32 + 2.5,
                     labelWidth: 118 - 5 + 40,
                     labelHeight: 25,

@@ -35,6 +35,7 @@ import {
 import { getFileName, prefixedToNested } from './utils';
 
 import Utils from '@src/app/util';
+import { PipelineEnum } from '@src/app/enums';
 
 export const PIPELINE_CURRENT_VERSION = 8;
 
@@ -554,6 +555,27 @@ class PipelineController extends CanvasController {
     return undefined;
   }
 
+  pathValidateError(problems: any, type = PipelineEnum.APACHE_AIRFLOW) {
+    if (type !== PipelineEnum.APACHE_AIRFLOW) return;
+    const pipelineObj = this.getPipelineFlow()?.pipelines?.[0];
+    pipelineObj?.nodes?.forEach(n => {
+      const nodeParams: any = n?.app_data?.component_parameters ?? {};
+      if (
+        !['java', 'scala'].includes(nodeParams.type) ||
+        !!nodeParams.mainClass
+      )
+        return;
+      problems.push({
+        info: {
+          nodeID: n.id,
+          pipelineID: pipelineObj.id,
+          property: 'mainClass',
+          type: 'missingProperty'
+        }
+      });
+    });
+  }
+
   // TODO: only validate one node.
   errors(nodeID: string) {
     const node = this.findExecutionNode(nodeID);
@@ -562,31 +584,9 @@ class PipelineController extends CanvasController {
       const nodes = this.getAllPaletteNodes();
       const problems = validate(JSON.stringify(this.getPipelineFlow()), nodes);
 
-      (function (_this) {
-        const pipelineObj = _this.getPipelineFlow()?.pipelines?.[0];
-        pipelineObj?.nodes?.forEach(n => {
-          const nodeParams: any = n?.app_data?.component_parameters ?? {};
-          if (
-            ['java', 'scala'].includes(nodeParams.type) &&
-            !nodeParams.mainClass
-          ) {
-            problems.push({
-              info: {
-                nodeID: n.id,
-                pipelineID: pipelineObj.id,
-                property: 'mainClass',
-                type: 'missingProperty'
-              },
-              severity: undefined,
-              range: {
-                offset: 0,
-                length: 0
-              },
-              message: ''
-            });
-          }
-        });
-      })(this);
+      // 专门用来校验airflow pipeline 节点的主类属性
+      // 目前就airflow pipeline一个类型，这里都加上这个校验
+      this.pathValidateError(problems);
 
       const nodeProblems = [];
 

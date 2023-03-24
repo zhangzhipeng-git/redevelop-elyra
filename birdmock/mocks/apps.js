@@ -1,15 +1,15 @@
 module.exports = {
   '/measurementcenter/applicationOut/apps': () => ({
     code: '0',
-    msg: null,
+    msg: 'Error: connect ECONNREFUSED 172.100.1.104:8881',
     data: [
       {
-        applicationId: 1,
+        applicationId: '022',
         applicationName: '分布式光伏可观可测',
         applicationCode: 'SYS_FBSGFKGKC'
       },
       {
-        applicationId: 2,
+        applicationId: '033',
         applicationName: '电科院最小化推演',
         applicationCode: 'SYS_DKY_ZXHTY'
       }
@@ -36,7 +36,6 @@ module.exports = {
   },
   '/measurementcenter/applicationOut/uploadFile': () => {
     return {
-      timeout: 2000,
       code: '0',
       msg: null,
       data: {

@@ -71,7 +71,9 @@ export const ExpandableErrorDialog: React.FC<IErrorDialogProps> = ({
 
   return (
     <div className={MESSAGE_DISPLAY}>
-      <div>{message}</div>
+      {message ? (
+        <div dangerouslySetInnerHTML={{ __html: message }}></div>
+      ) : null}
       {traceback ? (
         <ExpandableComponent
           displayName="Error details: "
@@ -81,7 +83,7 @@ export const ExpandableErrorDialog: React.FC<IErrorDialogProps> = ({
           <pre>{traceback}</pre>
         </ExpandableComponent>
       ) : null}
-      <div>{defaultMessage}</div>
+      {defaultMessage ? <div>{defaultMessage}</div> : null}
     </div>
   );
 };

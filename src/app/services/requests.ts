@@ -191,10 +191,17 @@ export class RequestHandler {
     longRequestDialog?: Dialog<any> | Loading,
     config?: { baseUrl: string }
   ): Promise<T> {
+    const _baseUrl = CONFIG.baseUrl;
     // use ServerConnection utility to make calls to Jupyter Based services
     // which in this case are in the extension installed by this package
     const settings = ServerConnection.makeSettings(
-      Object.assign({ baseUrl: CONFIG.baseUrl }, config || {})
+      Object.assign(
+        {
+          baseUrl:
+            _baseUrl.indexOf('http') > -1 ? _baseUrl : `http://${_baseUrl}`
+        },
+        config || {}
+      )
     );
 
     const requestUrl = URLExt.join(
@@ -255,7 +262,9 @@ export class RequestHandler {
         }
         // 返回失败
         if (res.code !== undefined && res.msg) {
-          return Promise.reject(res.msg);
+          return Promise.reject({
+            message: _getErrorHtml(requestUrl, requestInit, res)
+          });
         }
         // 其他结构数据
         return res;
@@ -267,4 +276,18 @@ export class RequestHandler {
 
     return getServerResponse;
   }
+}
+
+function _getErrorHtml(requestUrl: string, requestInit: RequestInit, res: any) {
+  const { method, body } = requestInit;
+  return (
+    `<div style="word-break:break-all; line-height:20px">` +
+    `请求地址：<a target="_blank" href="${requestUrl}">${requestUrl}</a><br/>` +
+    `请求方式：${method}<br/>` +
+    `${
+      ['POST', 'PUT'].includes(method ?? '') ? `请求参数：${body}<br/>` : ''
+    }` +
+    `失败原因：${res.msg}` +
+    `</div>`
+  );
 }

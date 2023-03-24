@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Form, { UiSchema, Widget, AjvError } from '@rjsf/core';
+import Form, { UiSchema, Widget } from '@rjsf/core';
 import { produce } from 'immer';
 import styled from 'styled-components';
 
@@ -23,9 +23,8 @@ import { MyReactCron } from '../CustomFormControls/ReactCron';
 import { MyDateTime } from '../CustomFormControls/DateTime';
 import { JSONSchema7 } from 'json-schema';
 
-import { ErrorEnum } from '@src/app/enums';
 import Utils from '@src/app/util';
-import { genUISchemaFromSchema } from './util';
+import { genUISchemaFromSchema, transformErrors } from './util';
 
 export const Message = styled.div`
   margin-top: 14px;
@@ -46,10 +45,13 @@ interface Props {
   data: any;
   schema?: JSONSchema7 | any;
   onChange?: (data: any) => any;
-  handleUpdateNodeProperties?: (options: {
-    type: string;
-    applicationId: number;
-  }) => Promise<void>;
+  handleUpdateNodeProperties?: (
+    options: {
+      type: string;
+      applicationId: string;
+    },
+    key: string
+  ) => Promise<void>;
   noValidate?: boolean;
   id?: string;
 }
@@ -73,17 +75,23 @@ export default function PipelinePropertiesPanel({
 
   async function onChangeFn(e: any) {
     const newFormData = e.formData;
-    const schema = e.schema;
-    const applicationId = newFormData.applicationId;
-
-    if (applicationId == null || applicationId === data.applicationId)
+    if (!newFormData)
       return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
 
-    const { enum: enumIds } = schema.properties.applicationId;
-    const { enum: enumCodes } = schema.properties.applicationCode;
-    const index = enumIds.findIndex((e: number) => e === applicationId);
-    newFormData.applicationCode = enumCodes[index];
-    await handleUpdateNodeProperties?.({ type: 'kubernetes', applicationId });
+    // 选择归属应用，更新节点的连接信息
+    const schema = e.schema;
+    const applicationId = newFormData.applicationId;
+    if (applicationId != null && applicationId !== data.applicationId) {
+      const { enum: enumIds } = schema.properties.applicationId;
+      const { enum: enumCodes } = schema.properties.applicationCode;
+      const index = enumIds.indexOf(applicationId);
+      newFormData.applicationCode = enumCodes[index];
+      await handleUpdateNodeProperties?.(
+        { type: 'kubernetes', applicationId },
+        'connection'
+      );
+    }
+
     onChange && Utils.debounceExecute(onChange, [newFormData], 100);
   }
 
@@ -110,15 +118,6 @@ export default function PipelinePropertiesPanel({
     },
     formData: data
   };
-
-  function transformErrors(errors: AjvError[]) {
-    return errors
-      .filter(e => e.name !== 'oneOf') // oneOf 使用自定义的校验逻辑
-      .map(e => ({
-        ...e,
-        message: e.name === 'required' ? ErrorEnum.REQUIRED : e.message
-      }));
-  }
 
   return (
     <Form

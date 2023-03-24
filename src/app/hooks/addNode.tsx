@@ -6,6 +6,7 @@ import { showFormDialog } from '@src/app/ui-components';
 import { formDialogWidget } from '@src/app/pipeline-editor/formDialogWidget';
 import { OperatorSelect } from '@src/app/pipeline-editor/PipelineAddFileDialog';
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
+import PipelineController from '@src/app/base-pipeline-editor/PipelineController';
 
 /**
  * 在添加节点前，获取节点的 op ，如：
@@ -44,4 +45,17 @@ export async function onBeforeAddNode_GetOp(
     default:
       return op;
   }
+}
+
+export function onCopyValidateNodeProperties(
+  type: string,
+  controller: PipelineController,
+  payload: string[]
+) {
+  if (type !== PipelineEnum.APACHE_AIRFLOW) return;
+  if (!controller) return;
+
+  const pipelineObj = controller.getPipelineFlow()?.pipelines?.[0] ?? {};
+  const nodes = controller.getAllPaletteNodes();
+  console.log(payload, pipelineObj, nodes, 'validateNodeProperties');
 }

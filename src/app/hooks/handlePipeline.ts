@@ -11,11 +11,11 @@ enum NodeSvgKey {
 const base64Map = new Map();
 base64Map.set(
   NodeSvgKey.KubernetesPodOperator,
-  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Airflow))
+  Utils.svgToBase64(svgMap.get(SvgRequestUrl.K8s))
 );
 base64Map.set(
-  NodeSvgKey.KubernetesPodOperator,
-  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Airflow))
+  NodeSvgKey.SparkKubernetesOperator,
+  Utils.svgToBase64(svgMap.get(SvgRequestUrl.Spark))
 );
 base64Map.set(
   NodeSvgKey.Error,
@@ -76,7 +76,6 @@ function getPipelineEdges(pipelineObj: any) {
  * @param {any} pipeline
  */
 export function onRunOrSubmit(pipeline: any, operator = 'run') {
-  
   if (!pipeline) return;
 
   let newPipeline;
@@ -104,12 +103,15 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
     dagFileUuid: `${pipeline.uuid}-${pipelineObj.id}`,
     operator,
     caller: 'elyra',
-    dag,
+    dag: {
+      ...dag,
+      isStream: +dag.isStream,
+      whetherRetry: +dag.whetherRetry
+    },
     task,
     taskDependency
   };
 
-  
   return newPipeline;
 }
 
@@ -129,7 +131,7 @@ export function validatePipeline(pipeline: any, palette: any) {
   // 1.先检验有没有环路
   const edges = getPipelineEdges(pipelineObj);
   if (new Topology().isLoop(edges)) {
-    errors.push({ message: 'DAG存在环路' });
+    errors.push({ message: '工作流存在环路' });
   }
   // 2.根据 palette 校验 pipeline属性和节点属性
   const pipelineProperties = pipelineObj.app_data?.properties ?? {};
