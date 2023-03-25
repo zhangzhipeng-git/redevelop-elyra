@@ -18,7 +18,7 @@ import { useCallback } from 'react';
 
 import { Widget } from '@rjsf/core';
 
-import Corn from './cron/index.js';
+import Corn from './cron';
 
 /**
  * cron 表达式组件，使用网上的插件

@@ -160,7 +160,8 @@ export default function CronForm({
         MM: freq === 'year' ? ['1'] : '*',
         ...(freq === 'custom'
           ? {
-              stringValue: cornStringify(oldObj)
+              // stringValue: cornStringify(oldObj)
+              stringValue: ''
             }
           : {})
       };
@@ -234,10 +235,26 @@ export default function CronForm({
   }, []);
   useEffect(() => {
     thisCron.current = value;
-    const objValue = cornFormat(value || defaultValue, multiple);
+    const initValue = value || defaultValue;
+    if (!initValue) {
+      // 0 0 0 * * ? *
+      setObjValue({
+        freq: 'custom',
+        stringValue: '',
+        ss: '0',
+        mm: '0',
+        HH: '0',
+        dd: '*',
+        MM: '*',
+        week: '?',
+        yyyy: '*'
+      });
+      return;
+    }
+    const objValue = cornFormat(initValue, multiple);
     setObjValue(objValue);
     // 默认按天调度
-    if (!value && !defaultValue) {
+    if (!initValue) {
       changeValue(objValue);
     }
   }, []);
