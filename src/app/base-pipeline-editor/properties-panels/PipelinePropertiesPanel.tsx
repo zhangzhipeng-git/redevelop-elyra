@@ -25,7 +25,15 @@ import { JSONSchema7 } from 'json-schema';
 
 import Utils from '@src/app/util';
 import { genUISchemaFromSchema, transformErrors } from './util';
-
+const Heading = styled.div`
+  margin-top: 14px;
+  padding: 0 20px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.fontWeight};
+  font-size: 16px;
+  color: ${({ theme }) => theme.palette.text.primary};
+  opacity: 0.5;
+`;
 export const Message = styled.div`
   margin-top: 14px;
   padding: 0 22px;
@@ -81,7 +89,7 @@ export default function PipelinePropertiesPanel({
     // 选择归属应用，更新节点的连接信息
     const schema = e.schema;
     const applicationId = newFormData.applicationId;
-    if (applicationId != null && applicationId !== data.applicationId) {
+    if (applicationId != null && applicationId !== data?.applicationId) {
       const { enum: enumIds } = schema.properties.applicationId;
       const { enum: enumCodes } = schema.properties.applicationCode;
       const index = enumIds.indexOf(applicationId);
@@ -120,7 +128,9 @@ export default function PipelinePropertiesPanel({
   };
 
   return (
-    <Form
+    <div>
+      <Heading>工作流基本信息</Heading>
+      <Form
       formData={data}
       uiSchema={uiSchema}
       schema={schema}
@@ -134,5 +144,6 @@ export default function PipelinePropertiesPanel({
       className={'elyra-formEditor'}
       transformErrors={transformErrors}
     />
+    </div>
   );
 }

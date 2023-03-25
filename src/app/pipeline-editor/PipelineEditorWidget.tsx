@@ -62,7 +62,7 @@ import { theme } from './theme';
 import { PipelineEnum } from '@src/app/enums';
 import {
   onBeforeAddNode_GetOp,
-  onCopyValidateNodeProperties
+  onPasteValidateNodeProperties
 } from '@src/app/hooks/addNode';
 import {
   onAfterSelectFile_RemoveFile,
@@ -565,12 +565,8 @@ const PipelineWrapper: React.FC<IProps> = ({
         case 'deleteSelectedObjects':
           onAfterSelectFile_RemoveFile(type, payload);
           break;
-        case 'copy':
-          onCopyValidateNodeProperties(
-            type,
-            ref.current?.controller?.current,
-            payload
-          );
+        case 'paste':
+          onPasteValidateNodeProperties(type, ref.current?.controller?.current);
           break;
         default:
           break;

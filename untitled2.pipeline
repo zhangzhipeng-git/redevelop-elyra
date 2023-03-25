@@ -16,14 +16,16 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connection": "kubernetes_default_1",
-              "namespace": "kubernetes_default_1",
-              "taskCpu": 1
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1
             },
             "ui_data": {
               "label": "SparkKubernetesOperator",
-              "x_pos": 149,
-              "y_pos": 99,
+              "x_pos": 52,
+              "y_pos": 117,
               "description": "Run SparkKubernetesOperator Node",
               "decorations": [
                 {
@@ -72,14 +74,250 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connection": "kubernetes_default_1",
-              "namespace": "kubernetes_default_1",
-              "taskCpu": 1
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1
             },
             "ui_data": {
-              "label": "",
-              "x_pos": 128,
-              "y_pos": 191
+              "label": "KubernetesPodOperator",
+              "x_pos": 100,
+              "y_pos": 228,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "ebbbabc0-1fc4-4865-a918-116357fe56ff",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 310.6000061035156,
+              "y_pos": 337,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "3c4f77ca-eff9-4344-8cd7-8108bf1f3f79",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 10,
+              "taskMemory": 20,
+              "num_executors": 10,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3_diid",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 160.60000610351562,
+              "y_pos": 420,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "ed46b6d5-55a2-44d2-94c2-4bbebf8a8530",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 10,
+              "taskMemory": 20,
+              "num_executors": 10,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3_diid",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 154.60000610351562,
+              "y_pos": 590,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "bea72a7e-f99e-4daa-92a6-02306073f7a4",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connection": "kubernetes_default_022",
+              "namespace": "kubernetes_default_022",
+              "taskCpu": 10,
+              "taskMemory": 20,
+              "num_executors": 10,
+              "executor_cores": 1,
+              "kubernetes_conn_id": "k8s",
+              "name": "测试任务3_diid",
+              "localFile": "js.jar",
+              "mainApplicationFile": "js.jar",
+              "priority_class_name": "111",
+              "mainClass": "tet.main"
+            },
+            "ui_data": {
+              "label": "js.jar",
+              "x_pos": 88.98333740234375,
+              "y_pos": 327,
+              "description": "Run KubernetesPodOperator Node"
             }
           },
           "inputs": [
@@ -117,7 +355,16 @@
           "comments": []
         },
         "version": 8,
-        "runtime_type": "APACHE_AIRFLOW"
+        "runtime_type": "APACHE_AIRFLOW",
+        "properties": {
+          "scheduleInterval": "0 0 0 * * ? *",
+          "applicationId": "022",
+          "applicationCode": "SYS_FBSGFKGKC",
+          "email": "airflow@example.com",
+          "isStream": false,
+          "whetherRetry": true,
+          "retry": 0
+        }
       },
       "runtime_ref": ""
     }

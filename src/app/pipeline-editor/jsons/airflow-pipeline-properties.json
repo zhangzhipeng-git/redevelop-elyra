@@ -67,6 +67,7 @@
             "title": "调度周期",
             "description": "调度周期",
             "type": "string",
+            "default": "",
             "uihints": {
                 "ui:widget": "myReactCron"
             }
@@ -83,7 +84,6 @@
     "required": [
         "dagName",
         "applicationId",
-        "whetherRetry",
         "retry",
         "dagDesc"
     ]

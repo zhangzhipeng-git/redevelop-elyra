@@ -547,6 +547,8 @@ span.bx--list-box__label {
 .elyra-formEditor#pipeline-parameters
   .description-wrapper:hover
   .field-description {
+    position: relative;
+    z-index: 9999;
   transform: translate(-45%, 145%);
 }
 
@@ -1072,6 +1074,6 @@ h4.empty-pipeline-header {
   width: 60px;
 }
 /* pipeline编辑器右侧面板tab标题 */
-.sc-blmETK.jJmeue {
-  font-size: 16px;
+.pipeline-right-panel {
+  font-size: 16px !important;
 }

@@ -32,7 +32,6 @@ export const FIELD_DEFAULT_ERROR_TIP = '未通过校验';
 export function transformErrors(errors: AjvError[]) {
   return errors.map(e => {
     let message = e.message ?? '';
-    console.log(message, e, 'error');
     let matchResult = message.match(RJSF_ERROR_MESSAGE);
 
     message = matchResult

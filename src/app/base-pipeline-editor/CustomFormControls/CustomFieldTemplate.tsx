@@ -38,7 +38,19 @@ export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
           }`}
         >
           <label className="control-label" htmlFor={props.id}>
-            {`${props.schema.title}${props.required ? '*' : ''}`}
+            {props.schema.title}{' '}
+            {props.required ? (
+              <span
+                style={{
+                  position: 'relative',
+                  top: '3px',
+                  fontSize: '18px',
+                  color: 'red'
+                }}
+              >
+                *
+              </span>
+            ) : null}
           </label>
           {props.schema.description && (
             <div className="description-wrapper">

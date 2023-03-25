@@ -56,7 +56,7 @@ async function getNodeStatus(
   task.forEach((t: any) => {
     done = done && ['success', 'fail'].includes(t.state);
     const node: any = controller.getNode(t.taskId, pipelineId);
-    let oldLabel = node.label.split(' ')[0];
+    let oldLabel = node?.label?.split(' ')[0]??'';
     controller.setNodeLabel(
       t.taskId,
       `${limitLength(oldLabel)} ${statusMap[t.state]}`,

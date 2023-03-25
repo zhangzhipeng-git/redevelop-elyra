@@ -7,7 +7,6 @@ import { formDialogWidget } from '@src/app/pipeline-editor/formDialogWidget';
 import { OperatorSelect } from '@src/app/pipeline-editor/PipelineAddFileDialog';
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 import PipelineController from '@src/app/base-pipeline-editor/PipelineController';
-
 /**
  * 在添加节点前，获取节点的 op ，如：
  * ```
@@ -47,15 +46,35 @@ export async function onBeforeAddNode_GetOp(
   }
 }
 
-export function onCopyValidateNodeProperties(
+/**
+ * 粘贴节点时，如果连接信息和当前pipeline的连接信息不匹配时
+ * 需要重置连接信息并重置为默认值
+ * @param {string} type pipeline 类型
+ * @param {PipelineController} controller pipeline控制器
+ */
+export function onPasteValidateNodeProperties(
   type: string,
-  controller: PipelineController,
-  payload: string[]
+  controller: PipelineController
 ) {
   if (type !== PipelineEnum.APACHE_AIRFLOW) return;
   if (!controller) return;
-
-  const pipelineObj = controller.getPipelineFlow()?.pipelines?.[0] ?? {};
-  const nodes = controller.getAllPaletteNodes();
-  console.log(payload, pipelineObj, nodes, 'validateNodeProperties');
+  const pipelineJson = controller.getPipelineFlow() ?? {};
+  const pipelineObj = pipelineJson?.pipelines?.[0] ?? {};
+  const nodeSchemas = controller.getAllPaletteNodes();
+  let changeFlag = false;
+  pipelineObj.nodes?.forEach((nodeData: any) => {
+    const nodeParams = nodeData.app_data?.component_parameters ?? {};
+    const nodeSchema =
+      nodeSchemas.find(n => n.op === nodeData.op)?.app_data?.properties
+        ?.properties?.component_parameters?.properties ?? {};
+    const { connection, namespace } = nodeParams;
+    const conns = nodeSchema?.connection?.enum ?? [];
+    const names = nodeSchema?.namespace?.enumValues ?? [];
+    if (!conns.includes(connection) || !names.includes(namespace)) {
+      nodeParams.connection = conns[0] ?? '';
+      nodeParams.namespace = names[0] ?? '';
+      changeFlag = true;
+    }
+  });
+  if (changeFlag) controller.setPipelineFlow(pipelineJson);
 }

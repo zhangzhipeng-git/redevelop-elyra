@@ -455,11 +455,6 @@ const PipelineEditor = forwardRef(
             .map(
               (a: any) => a?.app_data?.component_parameters?.mainApplicationFile
             );
-        else if (type === 'copy') {
-          payload = e.selectedObjects
-            .filter(({ type }: any) => type === 'execution_node')
-            .map((a: any) => a?.id);
-        }
 
         onAction?.({
           type,
@@ -619,8 +614,8 @@ const PipelineEditor = forwardRef(
     const panelTabs = [
       {
         id: 'pipeline-properties',
-        label: '管道属性',
-        title: '编辑管道属性',
+        label: 'Pipeline属性',
+        title: '编辑Pipeline属性',
         icon: theme.overrides?.pipelineIcon,
         content: (
           <PipelinePropertiesPanel

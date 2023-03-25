@@ -162,6 +162,7 @@ function TabbedPanelLayout({
             <Tab key={t.id}>
               <Label
                 title={t.title}
+                className={'pipeline-right-panel'}
                 active={resolvedCurrentTab === t.id}
                 onClick={() => {
                   onTabClick?.(t.id);

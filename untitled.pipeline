@@ -15,8 +15,8 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
+              "connection": "kubernetes_default_033",
+              "namespace": "kubernetes_default_033",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -28,8 +28,8 @@
             },
             "ui_data": {
               "label": "js.jar",
-              "x_pos": 125,
-              "y_pos": 50,
+              "x_pos": 233,
+              "y_pos": 75,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -69,8 +69,8 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
+              "connection": "kubernetes_default_033",
+              "namespace": "kubernetes_default_033",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -130,16 +130,18 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "taskCpu": 1,
+              "connection": "kubernetes_default_033",
+              "namespace": "kubernetes_default_033",
+              "taskCpu": 10,
+              "taskMemory": 20,
+              "num_executors": 10,
               "executor_cores": 1,
               "kubernetes_conn_id": "k8s",
-              "name": "测试任务3",
+              "name": "测试任务3_diid",
               "localFile": "js.jar",
               "mainApplicationFile": "js.jar",
               "priority_class_name": "111",
-              "mainClass": "tet.main",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022"
+              "mainClass": "tet.main"
             },
             "ui_data": {
               "label": "js.jar",
@@ -205,8 +207,8 @@
           "isStream": true,
           "whetherRetry": true,
           "retry": 3,
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
+          "applicationId": "033",
+          "applicationCode": "SYS_DKY_ZXHTY",
           "dagDesc": "我的",
           "dagName": "测试任务"
         }
