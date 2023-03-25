@@ -9,33 +9,22 @@ const statusMap: any = {
   '': '待运行'
 };
 
-export function changeNodeStyles(el: any) {
-  const labels = el?.querySelectorAll(
-    '.d3-node-label > span'
-  ) as unknown as HTMLElement[];
-
-  labels?.forEach((n: HTMLElement) => {
-    const text = n.textContent ?? '';
-    const seg = text?.split(' ') ?? [];
-    const name = seg[0];
-    const sate = seg[1];
-    let st = text;
-    switch (sate) {
-      case statusMap.success:
-        st = `<div style="float:right;color:green;">${sate}</div>`;
-        break;
-      case statusMap.fail:
-        st = `<div style="float:right;color:red;">${sate}</div>`;
-        break;
-      case statusMap.running:
-        st = `<div style="float:right;color:#06b;">${sate}...</div>`;
-        break;
-      default:
-        st = `<div style="float:right;color:orange;">${sate}</div>`;
-    }
-    n.style.display = 'block';
-    n.innerHTML = `${name} ${st}`;
-  });
+function getStateRichText(text: string, state: string) {
+  let html = '';
+  switch (state) {
+    case statusMap.success:
+      html = `<div style="float:right;color:green;">${state}</div>`;
+      break;
+    case statusMap.fail:
+      html = `<div style="float:right;color:red;">${state}</div>`;
+      break;
+    case statusMap.running:
+      html = `<div style="float:right;color:#06b;">${state}...</div>`;
+      break;
+    default:
+      html = `<div style="float:right;color:orange;">${state}</div>`;
+  }
+  return text + html;
 }
 
 async function getNodeStatus(
@@ -47,8 +36,15 @@ async function getNodeStatus(
   const res = await PipelineService.status({ dagId });
   const task = res.task;
 
-  const limitLength = (str: string, len = 5) =>
-    !!str[len] ? str.substr(0, len) + '...' : str;
+  const limitLength = (str: string, maxLen = 10) => {
+    let count = 0;
+    for (let i = 0, len = str.length; i < len; i++) {
+      if (count >= maxLen) return str.substring(0, i) + '...';
+      var code = str.charCodeAt(i);
+      count += code > 128 ? 2 : 1;
+    }
+    return str;
+  };
 
   const pipelineId = dagId.split('-')[1];
   let done = true;
@@ -56,15 +52,15 @@ async function getNodeStatus(
   task.forEach((t: any) => {
     done = done && ['success', 'fail'].includes(t.state);
     const node: any = controller.getNode(t.taskId, pipelineId);
-    let oldLabel = node?.label?.split(' ')[0]??'';
+    let oldLabel = node?.label?.split(' ')[0] ?? '';
     controller.setNodeLabel(
       t.taskId,
-      `${limitLength(oldLabel)} ${statusMap[t.state]}`,
+      getStateRichText(limitLength(oldLabel), statusMap[t.state]),
       pipelineId
     );
     arr.push(t.state);
   });
-  changeNodeStyles(el);
+  // changeNodeStyles(el);
   if (!done) return;
   clearTimeout(controller?.timer);
   if (typeof doneFn !== 'function') return;

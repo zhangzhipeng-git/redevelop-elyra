@@ -20,7 +20,7 @@ import {
   PaletteV3,
   ExecutionNodeDef,
   NodeType
-} from '@elyra/canvas';
+} from 'elyra-canvas-fix';
 import { validate } from '@elyra/pipeline-services';
 import { PathExt } from '@jupyterlab/coreutils';
 import { getDefaultFormState } from '@rjsf/utils';

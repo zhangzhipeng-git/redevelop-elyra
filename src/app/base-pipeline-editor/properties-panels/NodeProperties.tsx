@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NodeType } from '@elyra/canvas';
+import { NodeType } from 'elyra-canvas-fix';
 import styled from 'styled-components';
 
 import { NodePropertiesPanel, Message } from './NodePropertiesPanel';

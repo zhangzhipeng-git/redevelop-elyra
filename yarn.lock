@@ -1254,33 +1254,6 @@
   resolved "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@elyra/canvas@^12.23.2":
-  version "12.26.0"
-  resolved "https://registry.npmjs.org/@elyra/canvas/-/canvas-12.26.0.tgz#dd7f6357cd45ca065b2ed438ed5fa3ae8514505e"
-  integrity sha512-IF6CwCzZDQrGGfzEFX7K0cmvvF0g4YfpiSCt2b0P8BkEVjDcN+5sHNxms7uZiknuKPv4ZAZzUA5MhMsexXyRKA==
-  dependencies:
-    "@babel/runtime" "^7.16.3"
-    "@elyra/pipeline-schemas" "^3.0.63"
-    codemirror "^5.58.2"
-    d3 "^7.1.1"
-    dagre "^0.8.5"
-    date-fns "^2.28.0"
-    immutable "^4.0.0"
-    jsonschema "^1.4.0"
-    lodash "^4.17.21"
-    markdown-it "^13.0.1"
-    prop-types "^15.7.2"
-    react-codemirror2 "^7.2.1"
-    react-contextmenu "^2.14.0"
-    react-draggable "^4.4.4"
-    react-inlinesvg "^2.1.0"
-    react-portal "^4.2.1"
-    react-resize-detector "^5.2.0"
-    react-virtualized "^9.22.2"
-    redux "^4.0.5"
-    seedrandom "^3.0.5"
-    uuid "^8.3.0"
-
 "@elyra/pipeline-schemas@^3.0.63":
   version "3.0.66"
   resolved "https://registry.npmjs.org/@elyra/pipeline-schemas/-/pipeline-schemas-3.0.66.tgz#4a9518641a892026b640f3deaee566460e9f9587"
@@ -5795,9 +5768,9 @@ cyclist@^1.0.1:
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@3, d3-array@^3.2.0:
-  version "3.2.2"
-  resolved "https://registry.npmjs.org/d3-array/-/d3-array-3.2.2.tgz#f8ac4705c5b06914a7e0025bbf8d5f1513f6a86e"
-  integrity sha512-yEEyEAbDrF8C6Ob2myOBLjwBLck1Z89jMGFee0oPsn95GqjerpaOA4ch+vc2l0FNFFwMD5N7OCSEN5eAlsUbgQ==
+  version "3.2.3"
+  resolved "https://registry.npmjs.org/d3-array/-/d3-array-3.2.3.tgz#39f1f4954e4a09ff69ac597c2d61906b04e84740"
+  integrity sha512-JRHwbQQ84XuAESWhvIPaUV4/1UYTBOLiOPGWqgFDHZS1D5QN9c57FbH3QpEnQMYiOXNzKUQyGTZf+EVO7RT5TQ==
   dependencies:
     internmap "1 - 2"
 
@@ -5837,9 +5810,9 @@ d3-contour@4:
     d3-array "^3.2.0"
 
 d3-delaunay@6:
-  version "6.0.2"
-  resolved "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.2.tgz#7fd3717ad0eade2fc9939f4260acfb503f984e92"
-  integrity sha512-IMLNldruDQScrcfT+MWnazhHbDJhcRJyOEBAJfwQnHle1RPh6WDuLvxNArUju2VSMSUuKlY5BGHRJ2cYyoFLQQ==
+  version "6.0.3"
+  resolved "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.3.tgz#d0824ba2012a5f6cd17d035653d0515d1c098257"
+  integrity sha512-1gPbiMuikAgU/rFcT6WMu17zx0aelw9Hh80go7/TwZQ+/uq8DqqmiNYy+EqPEvTSp/BkJFIpQxjac4Gk/w0zOg==
   dependencies:
     delaunator "5"
 
@@ -6003,9 +5976,9 @@ d3-zoom@3:
     d3-transition "2 - 3"
 
 d3@^7.1.1:
-  version "7.8.2"
-  resolved "https://registry.npmjs.org/d3/-/d3-7.8.2.tgz#2bdb3c178d095ae03b107a18837ae049838e372d"
-  integrity sha512-WXty7qOGSHb7HR7CfOzwN1Gw04MUOzN8qh9ZUsvwycIMb4DYMpY9xczZ6jUorGtO6bR9BPMPaueIKwiDxu9uiQ==
+  version "7.8.3"
+  resolved "https://registry.npmjs.org/d3/-/d3-7.8.3.tgz#b6c862d16368e15bf764c89e248a300a56f2ab40"
+  integrity sha512-cAa866AkPXtt4IzRx6nzGf50uerq6VYks7p/tTH94be4QfhUkyTfJfaxXGPOB5ZRVUZmUV1wcM1dism/Ua0lCw==
   dependencies:
     d3-array "3"
     d3-axis "3"
@@ -6567,6 +6540,33 @@ elliptic@^6.5.3:
     inherits "^2.0.4"
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
+
+elyra-canvas-fix@^12.26.1:
+  version "12.26.1"
+  resolved "https://registry.npmjs.org/elyra-canvas-fix/-/elyra-canvas-fix-12.26.1.tgz#cebe8ba179e730c9e39410dacd9a45e9635279bb"
+  integrity sha512-NThLkTBQ/AsJUj/BrvkF4bcjb1+Ge7FJ3O1VtYKIMJvXJxS9NLn5UMvmW4jNy/mxTclSRpaI9w9BcSd989wXdQ==
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    "@elyra/pipeline-schemas" "^3.0.63"
+    codemirror "^5.58.2"
+    d3 "^7.1.1"
+    dagre "^0.8.5"
+    date-fns "^2.28.0"
+    immutable "^4.0.0"
+    jsonschema "^1.4.0"
+    lodash "^4.17.21"
+    markdown-it "^13.0.1"
+    prop-types "^15.7.2"
+    react-codemirror2 "^7.2.1"
+    react-contextmenu "^2.14.0"
+    react-draggable "^4.4.4"
+    react-inlinesvg "^2.1.0"
+    react-portal "^4.2.1"
+    react-resize-detector "^5.2.0"
+    react-virtualized "^9.22.2"
+    redux "^4.0.5"
+    seedrandom "^3.0.5"
+    uuid "^8.3.0"
 
 emittery@^0.7.1:
   version "0.7.2"
@@ -8335,9 +8335,9 @@ immer@^9.0.7:
   integrity sha512-eY+Y0qcsB4TZKwgQzLaE/lqYMlKhv5J9dyd2RhhtGhNo2njPXDqU9XPfcNfa3MIDsdtZt5KlkIsirlo4dHsWdQ==
 
 immutable@^4.0.0:
-  version "4.2.4"
-  resolved "https://registry.npmjs.org/immutable/-/immutable-4.2.4.tgz#83260d50889526b4b531a5e293709a77f7c55a2a"
-  integrity sha512-WDxL3Hheb1JkRN3sQkyujNlL/xRjAo3rJtaU5xeufUauG66JdMr32bLj4gF+vWl84DIA3Zxw7tiAjneYzRRw+w==
+  version "4.3.0"
+  resolved "https://registry.npmjs.org/immutable/-/immutable-4.3.0.tgz#eb1738f14ffb39fd068b1dbe1296117484dd34be"
+  integrity sha512-0AOCmOip+xgJwEVTQj1EfiDDOkPmuyllDuTuEX+DDXUgapLAsBIfkg3sxCYyCEA8mQqZrrxPUGjcOQ2JS3WLkg==
 
 import-cwd@^2.0.0:
   version "2.1.0"
@@ -15326,8 +15326,10 @@ watchpack@^1.7.4:
   resolved "https://registry.npmjs.org/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

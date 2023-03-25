@@ -60,7 +60,6 @@
     "mock:proxy": "cross-env forwardMode=true proxyServer=http://172.100.1.104:8881  pathRewrite=/api/v1:/measurementcenter/applicationOut changeOrigin=true birdmock"
   },
   "dependencies": {
-    "@elyra/canvas": "^12.23.2",
     "@elyra/pipeline-services": "1.12.1",
     "@jupyterlab/application": "^3.4.6",
     "@jupyterlab/apputils": "^3.4.6",
@@ -125,6 +124,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
+    "elyra-canvas-fix": "^12.26.1",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",

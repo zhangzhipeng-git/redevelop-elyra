@@ -36,7 +36,7 @@ import {
   NodeTypeDef,
   TipEvent,
   TipNode
-} from '@elyra/canvas';
+} from 'elyra-canvas-fix';
 import { IntlProvider } from 'react-intl';
 import styled, { useTheme } from 'styled-components';
 
@@ -583,6 +583,7 @@ const PipelineEditor = forwardRef(
               toolbarConfig={readOnlyToolbar ?? []}
               editActionHandler={e => {
                 handleReadOnlyEditAction(e);
+                controller.current.removeAllStyles();
               }}
               config={{
                 enableInternalObjectModel: false,

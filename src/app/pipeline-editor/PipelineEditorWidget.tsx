@@ -69,10 +69,7 @@ import {
   onAfterSelectFile_UploadFile
 } from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
-import {
-  changeNodeStyles,
-  onUpdateNodeStatus
-} from '@src/app/hooks/updateNodeStatus';
+import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
 import {
   onChangePipeline,
@@ -187,9 +184,6 @@ const PipelineWrapper: React.FC<IProps> = ({
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
   const runtimeDisplayName = type;
-
-  if (readOnly && editorWrapRef.current)
-    setTimeout(() => changeNodeStyles(editorWrapRef.current));
 
   // 自动展开左侧面板节点目录
   useEffect(() => {
