@@ -1,6 +1,6 @@
 /** 文件类型映射 */
 export const TYPE_MAP: { [k: string]: string } = {
-  '.py': 'python',
+  '.py': 'Python',
   '.jar': 'java'
 };
 
@@ -8,5 +8,5 @@ export const TYPE_MAP: { [k: string]: string } = {
 export const EXT_MAP: { [k: string]: string } = {
   java: '.jar',
   scala: '.jar',
-  python: '.py'
+  Python: '.py'
 };

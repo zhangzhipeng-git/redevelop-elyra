@@ -51,8 +51,8 @@
             "title": "重试次数",
             "description": "重试次数",
             "type": "integer",
-            "minimum": 0,
-            "default": 0
+            "minimum": 1,
+            "default": 1
         },
         "dagDesc": {
             "title": "任务描述",

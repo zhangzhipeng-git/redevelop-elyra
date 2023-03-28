@@ -1,4 +1,6 @@
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
+import PipelineController from '../base-pipeline-editor/PipelineController';
+import { StatusRequest } from '../model';
 
 const statusMap: any = {
   success: '运行成功',
@@ -27,13 +29,24 @@ function getStateRichText(text: string, state: string) {
   return text + html;
 }
 
+/**
+ * 根据外部手动生成的节点id找出elyra对应的id
+ * @param {string} id 外部手动生成的节点 id （taskId）
+ * @param {any[]} nodes 节点
+ */
+function getElyraNodeIdByTaskId(id: string, nodes: any) {
+  if (!nodes || !nodes[0]) return;
+  return nodes.find((n: any) => n?.app_data?.component_parameters?.taskId == id)
+    .id;
+}
+
 async function getNodeStatus(
-  controller: any,
-  dagId: string,
-  doneFn: any,
-  el?: HTMLElement
+  controller: PipelineController,
+  params: StatusRequest,
+  doneFn: any
 ) {
-  const res = await PipelineService.status({ dagId });
+  const { dagId } = params;
+  const res = await PipelineService.status(params);
   const task = res.task;
 
   const limitLength = (str: string, maxLen = 10) => {
@@ -49,19 +62,22 @@ async function getNodeStatus(
   const pipelineId = dagId.split('-')[1];
   let done = true;
   let arr: string[] = [];
+  const nodes = controller.getPipelineFlow()?.pipelines?.[0].nodes ?? [];
   task.forEach((t: any) => {
-    done = done && ['success', 'fail'].includes(t.state);
-    const node: any = controller.getNode(t.taskId, pipelineId);
-    let oldLabel = node?.label?.split(' ')[0] ?? '';
+    const { taskId, state } = t;
+    const id = getElyraNodeIdByTaskId(taskId, nodes);
+    done = done && ['success', 'fail'].includes(state);
+    const node: any = controller.getNode(id, pipelineId);
+    let oldLabel = node?.label?.split('<div')[0] ?? '';
     controller.setNodeLabel(
-      t.taskId,
-      getStateRichText(limitLength(oldLabel), statusMap[t.state]),
+      id,
+      getStateRichText(limitLength(oldLabel), statusMap[state]),
       pipelineId
     );
     arr.push(t.state);
   });
-  // changeNodeStyles(el);
   if (!done) return;
+  // @ts-ignore
   clearTimeout(controller?.timer);
   if (typeof doneFn !== 'function') return;
   doneFn(!arr.includes('fail'));
@@ -69,14 +85,13 @@ async function getNodeStatus(
 
 export function onUpdateNodeStatus(
   controller: any,
-  dagId: string,
-  doneFn: any,
-  el?: HTMLElement
+  params: StatusRequest,
+  doneFn: any
 ) {
-  if (!dagId) return;
+  if (!params) return;
   clearTimeout(controller.timer);
-  getNodeStatus(controller, dagId, doneFn, el);
+  getNodeStatus(controller, params, doneFn);
   controller.timer = setTimeout(() => {
-    onUpdateNodeStatus(controller, dagId, doneFn, el);
+    onUpdateNodeStatus(controller, params, doneFn);
   }, 10000);
 }

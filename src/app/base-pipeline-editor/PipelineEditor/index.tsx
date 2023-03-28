@@ -455,6 +455,15 @@ const PipelineEditor = forwardRef(
             .map(
               (a: any) => a?.app_data?.component_parameters?.mainApplicationFile
             );
+        else if (type === 'openFile') {
+          const filenameRef = controller.current.resolveParameterRef(
+            e.targetObject.op,
+            'filehandler'
+          );
+          if (!filenameRef) return;
+          payload =
+            e.targetObject?.app_data?.component_parameters?.[filenameRef];
+        }
 
         onAction?.({
           type,
@@ -486,15 +495,6 @@ const PipelineEditor = forwardRef(
               mainApplicationFile: paths[0]
             });
             break;
-          case 'openFile':
-            const filenameRef = controller.current.resolveParameterRef(
-              e.targetObject.op,
-              'filehandler'
-            );
-            if (!filenameRef) return;
-            payload =
-              e.targetObject?.app_data?.component_parameters?.[filenameRef];
-            break;
           case 'openPipelineProperties':
             setCurrentTab('pipeline-properties');
             setPanelOpen(true);
@@ -506,6 +506,7 @@ const PipelineEditor = forwardRef(
           case 'toggleOpenPanel':
             setPanelOpen(prev => !prev);
             return;
+          case 'openFile':
           case 'displayPreviousPipeline':
           case 'displaySubPipeline':
           case 'copy':

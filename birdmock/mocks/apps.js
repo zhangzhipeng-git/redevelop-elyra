@@ -77,6 +77,34 @@ module.exports = {
       }
     };
   },
+  '/measurementcenter/applicationOut/operator': params => {
+    console.log(params, params.dagFileUuid);
+    return {
+      code: '0',
+      msg: null,
+      data: {
+        dagId: `${params.dagFileUuid}`,
+        dagRunId: 'sys_xx_test_run_id',
+        task: [
+          {
+            taskName: 'test_task_1',
+            taskId: 'sys_xx_test_task_id',
+            taskTryNumber: 1
+          },
+          {
+            taskName: 'test_task_2',
+            taskId: 'sys_xx_test_task_id_2',
+            taskTryNumber: 1
+          },
+          {
+            taskName: 'test_task_3',
+            taskId: 'sys_xx_test_task_id_3',
+            taskTryNumber: 1
+          }
+        ]
+      }
+    };
+  },
   '/measurementcenter/applicationOut/dag/dagRuns/cancel': () => ({
     code: '0',
     msg: null,

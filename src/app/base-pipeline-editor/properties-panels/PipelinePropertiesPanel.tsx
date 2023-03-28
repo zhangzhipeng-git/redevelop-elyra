@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Form, { UiSchema, Widget } from '@rjsf/core';
+import Form, { FormValidation, UiSchema, Widget } from '@rjsf/core';
 import { produce } from 'immer';
 import styled from 'styled-components';
 
@@ -23,8 +23,8 @@ import { MyReactCron } from '../CustomFormControls/ReactCron';
 import { MyDateTime } from '../CustomFormControls/DateTime';
 import { JSONSchema7 } from 'json-schema';
 
-import Utils from '@src/app/util';
-import { genUISchemaFromSchema, transformErrors } from './util';
+import { ERROR_TYPE_MAP, genUISchemaFromSchema, transformErrors } from './util';
+import { useState } from 'react';
 const Heading = styled.div`
   margin-top: 14px;
   padding: 0 20px;
@@ -70,25 +70,56 @@ interface Props {
  */
 export default function PipelinePropertiesPanel({
   data,
-  schema,
+  schema: _schema,
   onChange,
   handleUpdateNodeProperties,
   noValidate,
   id
 }: Props) {
-  if (!schema) return <Message>未定义属性.</Message>;
+  if (!_schema) return <Message>未定义属性。</Message>;
 
-  const uiSchema: UiSchema = {};
-  genUISchemaFromSchema(schema, uiSchema);
+  const _uiSchema: UiSchema = {};
+  genUISchemaFromSchema(_schema, _uiSchema);
 
+  // 没有是否重试，则不需要展示重试次数和校验重试次数
+  if (!data?.whetherRetry) {
+    _uiSchema.retry['ui:field'] = 'hidden';
+    _schema.required = _schema.required.filter((r: string) => r !== 'retry');
+  }
+
+  const [options, setOptions] = useState<any>({
+    schema: _schema,
+    uiSchema: _uiSchema
+  });
+
+  /**
+   * 校验pipeline属性
+   * @param {object} formData pipeline表单
+   * @param {object} errors pipeline表单错误信息
+   */
+  function customValidate(formData: any, errors: FormValidation) {
+    const { schema } = options;
+    const propSchema = schema.properties ?? {};
+
+    // 归属应用数据选项校验（接口查回来的可能为空集合）
+    if (!propSchema.applicationId?.enum[0])
+      errors?.applicationId?.addError(ERROR_TYPE_MAP.enumRequired);
+
+    return errors;
+  }
+
+  /**
+   * pipeline属性改变
+   * @param {object} e pipeline属性改变事件的参数
+   */
   async function onChangeFn(e: any) {
     const newFormData = e.formData;
-    if (!newFormData)
-      return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
+    if (!newFormData) return;
+
+    const { schema, uiSchema } = options;
+    const { applicationId, whetherRetry } = newFormData;
 
     // 选择归属应用，更新节点的连接信息
-    const schema = e.schema;
-    const applicationId = newFormData.applicationId;
     if (applicationId != null && applicationId !== data?.applicationId) {
       const { enum: enumIds } = schema.properties.applicationId;
       const { enum: enumCodes } = schema.properties.applicationCode;
@@ -96,11 +127,27 @@ export default function PipelinePropertiesPanel({
       newFormData.applicationCode = enumCodes[index];
       await handleUpdateNodeProperties?.(
         { type: 'kubernetes', applicationId },
-        'connection'
+        'connId'
       );
     }
 
-    onChange && Utils.debounceExecute(onChange, [newFormData], 100);
+    // 不勾选是否重试，则不展示重试次数，反之则展示重试次数
+    if (whetherRetry != null && whetherRetry !== data?.whetherRetry) {
+      if (!whetherRetry) {
+        uiSchema.retry['ui:field'] = 'hidden';
+        schema.required = schema.required.filter((r: string) => r !== 'retry');
+        delete newFormData.retry;
+      } else {
+        uiSchema.retry['ui:field'] = 'visible';
+        schema.required.push('retry');
+      }
+      setOptions({
+        uiSchema,
+        schema
+      });
+    }
+
+    return onChange?.(newFormData);
   }
 
   const formContext = {
@@ -131,19 +178,20 @@ export default function PipelinePropertiesPanel({
     <div>
       <Heading>工作流基本信息</Heading>
       <Form
-      formData={data}
-      uiSchema={uiSchema}
-      schema={schema}
-      onChange={onChangeFn}
-      formContext={formContext}
-      id={id}
-      widgets={widgets}
-      liveValidate={!noValidate}
-      noHtml5Validate
-      FieldTemplate={CustomFieldTemplate}
-      className={'elyra-formEditor'}
-      transformErrors={transformErrors}
-    />
+        formData={data}
+        uiSchema={options.uiSchema}
+        schema={options.schema}
+        validate={customValidate}
+        onChange={onChangeFn}
+        formContext={formContext}
+        id={id}
+        widgets={widgets}
+        liveValidate={!noValidate}
+        noHtml5Validate
+        FieldTemplate={CustomFieldTemplate}
+        className={'elyra-formEditor'}
+        transformErrors={transformErrors}
+      />
     </div>
   );
 }

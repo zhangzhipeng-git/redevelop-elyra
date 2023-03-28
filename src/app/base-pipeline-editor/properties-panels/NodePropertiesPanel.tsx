@@ -29,8 +29,8 @@ import { JSONSchema7 } from 'json-schema';
 import { PathExt } from '@jupyterlab/coreutils';
 
 import { TYPE_MAP } from '@src/app/const';
-import Utils from '@src/app/util';
 import { ERROR_TYPE_MAP, genUISchemaFromSchema, transformErrors } from './util';
+import { useState } from 'react';
 
 export const Message = styled.div`
   margin-top: 14px;
@@ -65,7 +65,7 @@ interface Props {
  */
 export function NodePropertiesPanel({
   data,
-  schema,
+  schema: _schema,
   onChange,
   onFileRequested,
   noValidate,
@@ -73,67 +73,124 @@ export function NodePropertiesPanel({
   handleAfterSelectFileUploadFile,
   handleAfterSelectFileRemoveOldFile
 }: Props) {
-  if (!schema) return <Message>未定义属性.</Message>;
-  const uiSchema: UiSchema = {};
-  genUISchemaFromSchema(schema, uiSchema);
+  if (!_schema) return <Message>未定义属性。</Message>;
+  const _uiSchema: UiSchema = {};
+  genUISchemaFromSchema(_schema, _uiSchema);
 
+  const [options, setOptions] = useState<any>({
+    schema: _schema,
+    uiSchema: _uiSchema
+  });
+
+  const schemas = _uiSchema.component_parameters;
+  if (['java', 'scala'].includes(data?.component_parameters?.type)) {
+    if (schemas.tarPath) schemas.tarPath['ui:field'] = 'hidden';
+    if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'hidden';
+  } else {
+    if (schemas._dependencies) schemas._dependencies['ui:field'] = 'hidden';
+    if (schemas._exDependencies) schemas._exDependencies['ui:field'] = 'hidden';
+  }
+
+  /**
+   * 校验节点属性
+   * @param {object} formData 节点属性表单
+   * @param {object} errors 节点属性错误
+   */
   function customValidate(formData: any, errors: FormValidation) {
+    const { schema } = options;
+    const nodeSchema =
+      schema.properties?.component_parameters?.properties ?? {};
     const data = formData.component_parameters;
-    const error = errors.component_parameters as any;
-    const needValidate = data && error;
-    const field = 'mainClass';
+    const error: any = errors.component_parameters;
 
-    if (needValidate && ['java', 'scala'].includes(data.type) && !data[field])
+    // 1.任务类型级联启动主类校验
+    const field = 'mainClass';
+    if (['java', 'scala'].includes(data.type) && !data[field])
       error?.[field]?.addError(ERROR_TYPE_MAP.required);
+
+    // 2.连接信息数据项校验（接口查回来的可能为空集合）
+    if (!nodeSchema.connId?.enum[0])
+      error?.connId?.addError(ERROR_TYPE_MAP.enumRequired);
 
     return errors;
   }
 
+  /**
+   * 节点属性改变
+   * @param {object} 节点属性改变事件的参数
+   */
   function onChangeFn(e: any) {
     const newFormData = e.formData;
     const nodeParams = newFormData.component_parameters;
+    if (!newFormData || !nodeParams) return;
+
+    const { uiSchema, schema } = options;
     const oldNodeParams = data.component_parameters ?? {};
-
-    if (!nodeParams)
-      return onChange && Utils.debounceExecute(onChange, [newFormData], 100);
-
     const paramSchema = e.schema.properties.component_parameters;
     const properties = paramSchema.properties;
-    const { type, connection } = nodeParams;
-    const { type: oldType, connection: oldConnection } = oldNodeParams;
+    const { type, connId } = nodeParams;
+    const { type: oldType, connId: oldConnId } = oldNodeParams;
 
-    // 1. 任务类型更改后，置空文件路径和删除对应的文件
+    // 1. 任务类型更改后，置空文件路径和删除对应的文件 & 展示字段根据类型展示或隐藏
     if (type !== oldType) {
       // 删除文件 & 重置字段
       const prePath = nodeParams.mainApplicationFile;
       handleAfterSelectFileRemoveOldFile?.(prePath);
       delete nodeParams.mainApplicationFile;
-      delete nodeParams.localFile;
+      delete nodeParams._mainApplicationFile;
+      const schemas = uiSchema.component_parameters;
+      if (['java', 'scala'].includes(type)) {
+        if (schemas.tarPath) schemas.tarPath['ui:field'] = 'hidden';
+        if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'hidden';
+        if (schemas._dependencies)
+          schemas._dependencies['ui:field'] = 'visible';
+        if (schemas._exDependencies)
+          schemas._exDependencies['ui:field'] = 'visible';
+      } else {
+        if (schemas._dependencies) schemas._dependencies['ui:field'] = 'hidden';
+        if (schemas._exDependencies)
+          schemas._exDependencies['ui:field'] = 'hidden';
+        if (schemas.tarPath) schemas.tarPath['ui:field'] = 'visible';
+        if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'visible';
+      }
+      setOptions({
+        uiSchema,
+        schema
+      });
     }
 
     // 2. 集群连接信息改变后，命名空间也要跟着改变
-    if (connection !== oldConnection) {
-      if (!connection) delete nodeParams.namespace;
+    if (connId !== oldConnId) {
+      if (!connId) delete nodeParams.namespace;
       else {
-        const { connection: connectionSchema, namespace } = properties;
-        const index = connectionSchema.enum.indexOf(connection);
-        if (index > -1) nodeParams.namespace = namespace.enumValues?.[index];
+        const { connId: connIdSchema } = properties;
+        const index = connIdSchema.enum.indexOf(connId);
+        if (index > -1) {
+          nodeParams.connectionId = connIdSchema.connectionIdEnum?.[index];
+          nodeParams.namespace = connIdSchema.namespaceEnum?.[index];
+        }
       }
     }
 
-    onChange && Utils.debounceExecute(onChange, [newFormData], 100);
+    return onChange?.(newFormData);
   }
 
   const formContext = {
     /** 文件上传 */
     onFileRequested: async (args: any) => {
+      const { propertyID } = args;
+      const propValue = data.component_parameters[propertyID];
+
       const values = await onFileRequested?.({
         ...args,
-        filename: data.component_parameters.localFile
+        filename: Array.isArray(propValue) ? propValue[0] : propValue
       });
 
+      if (!values || !values[0]) return;
+
       if (handleAfterSelectFileRemoveOldFile) {
-        const preS3Path = data.component_parameters.mainApplicationFile;
+        const preS3Path =
+          data.component_parameters[propertyID.replace('_', '')];
         handleAfterSelectFileRemoveOldFile(preS3Path);
       }
 
@@ -142,26 +199,16 @@ export function NodePropertiesPanel({
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
 
       const newFormData = produce(data, (draft: any) => {
-        if (args.canSelectMany) {
-          draft.component_parameters[args.propertyID] = [
-            ...draft.component_parameters[args.propertyID],
-            ...values
-          ];
-          draft.component_parameters.mainApplicationFile = s3Paths;
-          draft.component_parameters.type = values.map(
-            (v: string) => TYPE_MAP[PathExt.extname(v)]
-          );
-          return;
-        }
-
-        if (args.parentID) {
-          draft.component_parameters[args.parentID].value = values?.[0];
+        if (propertyID === '_mainApplicationFile') {
+          draft.component_parameters._mainApplicationFile = values?.[0];
+          draft.component_parameters.mainApplicationFile = s3Paths?.[0];
+          draft.component_parameters.type =
+            TYPE_MAP[PathExt.extname(values[0])];
         } else {
-          draft.component_parameters[args.propertyID] = values?.[0];
+          draft.component_parameters[propertyID] = [...(values ?? [])];
+          draft.component_parameters[propertyID.replace('_', '')] =
+            s3Paths ?? [];
         }
-        draft.component_parameters.mainApplicationFile = s3Paths?.[0];
-        draft.component_parameters.type =
-          TYPE_MAP[PathExt.extname(values[0])] || 'java';
       });
 
       onChange?.(newFormData ?? data);
@@ -172,8 +219,8 @@ export function NodePropertiesPanel({
   return (
     <Form
       formData={data}
-      uiSchema={uiSchema}
-      schema={schema}
+      uiSchema={options.uiSchema}
+      schema={options.schema}
       onChange={onChangeFn}
       validate={customValidate}
       formContext={formContext}

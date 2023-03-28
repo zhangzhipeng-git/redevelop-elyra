@@ -72,6 +72,17 @@ function getPipelineEdges(pipelineObj: any) {
 }
 
 /**
+ * 根据elyra的id找出手动生成的节点id （taskId）
+ * @param {string} id elyra 内部生成的节点 id
+ * @param {any[]} nodes 节点
+ */
+function getTaskIdByElyraNodeId(id: string, nodes: any) {
+  if (!nodes || !nodes[0]) return;
+  return nodes.find((n: any) => n.id == id)?.app_data?.component_parameters
+    .taskId;
+}
+
+/**
  * 在运行或提交pipeline时，需要获取转化的pipeline
  * @param {any} pipeline
  */
@@ -83,22 +94,27 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
   const dag = pipelineObj.app_data?.properties ?? {};
   const task: any[] = [];
   const taskDependency: any[] = [];
+  const nodes = pipelineObj.nodes ?? [];
   pipelineObj.nodes?.forEach((n: any) => {
     const id = n?.id;
     const operatorType = n.op?.split('-')[1];
     task.push({
-      taskId: id,
       operatorType,
       ...n?.app_data?.component_parameters
     });
     n?.inputs?.[0]?.links?.forEach((link: any) => {
       taskDependency.push({
-        source: link?.node_id_ref,
-        target: id
+        source: getTaskIdByElyraNodeId(link?.node_id_ref, nodes),
+        target: getTaskIdByElyraNodeId(id, nodes)
       });
     });
   });
 
+  let startTime = dag.startTime?.replace(/\/|:| /g, ',');
+  startTime = startTime
+    .split(',')
+    .map((t: string) => parseInt(t))
+    .join(',');
   newPipeline = {
     dagFileUuid: `${pipeline.uuid}-${pipelineObj.id}`,
     operator,
@@ -106,7 +122,8 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
     dag: {
       ...dag,
       isStream: +dag.isStream,
-      whetherRetry: +dag.whetherRetry
+      whetherRetry: +dag.whetherRetry,
+      startTime
     },
     task,
     taskDependency

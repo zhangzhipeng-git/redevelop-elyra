@@ -35,7 +35,9 @@ import {
 import { getFileName, prefixedToNested } from './utils';
 
 import Utils from '@src/app/util';
+
 import { PipelineEnum } from '@src/app/enums';
+import { TYPE_MAP } from '@src/app/const';
 
 export const PIPELINE_CURRENT_VERSION = 8;
 
@@ -156,6 +158,7 @@ class PipelineController extends CanvasController {
       nodeTemplate: { op },
       ...rest
     } = item;
+    console.log('addNode...');
 
     const nodeTemplate: any = this.getPaletteNode(op);
     const defaults =
@@ -186,11 +189,12 @@ class PipelineController extends CanvasController {
         mainApplicationFile;
 
     if (path) {
-      const typeMap: any = { '.py': 'python', '.jar': 'java' };
       const ext = PathExt.extname(path);
-      data.nodeTemplate.app_data.component_parameters.type = typeMap[ext];
+      data.nodeTemplate.app_data.component_parameters.type = TYPE_MAP[ext];
     }
 
+    // 工作流节点使用自己生成的 taskId ，然后根据 elyra-canvas 内部生成的节点 id 关系映射出自己生成的 taskId 关系
+    data.nodeTemplate.app_data.component_parameters.taskId = Utils.randomUUID();
     this.editActionHandler(data);
   }
 

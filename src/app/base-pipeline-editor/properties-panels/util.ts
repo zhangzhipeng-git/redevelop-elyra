@@ -25,7 +25,8 @@ export const ERROR_TYPE_MAP: { [k: string]: string } = {
   integer: '应该是整数',
   array: '应该是数组',
   boolean: '应该是布尔类型',
-  required: '是必填属性'
+  required: '是必填属性',
+  enumRequired: '数据选项为空'
 };
 export const FIELD_DEFAULT_ERROR_TIP = '未通过校验';
 
@@ -33,7 +34,6 @@ export function transformErrors(errors: AjvError[]) {
   return errors.map(e => {
     let message = e.message ?? '';
     let matchResult = message.match(RJSF_ERROR_MESSAGE);
-
     message = matchResult
       ? `${ERROR_TYPE_MAP[matchResult[0]]}`
       : FIELD_DEFAULT_ERROR_TIP;

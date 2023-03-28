@@ -67,12 +67,18 @@ export function onPasteValidateNodeProperties(
     const nodeSchema =
       nodeSchemas.find(n => n.op === nodeData.op)?.app_data?.properties
         ?.properties?.component_parameters?.properties ?? {};
-    const { connection, namespace } = nodeParams;
-    const conns = nodeSchema?.connection?.enum ?? [];
-    const names = nodeSchema?.namespace?.enumValues ?? [];
-    if (!conns.includes(connection) || !names.includes(namespace)) {
-      nodeParams.connection = conns[0] ?? '';
-      nodeParams.namespace = names[0] ?? '';
+    const { connId, connectionId, namespace } = nodeParams;
+    const connectionIds = nodeSchema?.connId?.connectionIdEnum ?? [];
+    const namespaces = nodeSchema?.connId.namespaceEnum ?? [];
+    const connIds = nodeSchema?.connId.enum ?? [];
+    if (
+      !connectionIds.includes(connectionId) ||
+      !namespaces.includes(namespace) ||
+      !connIds.includes(connId)
+    ) {
+      nodeParams.connectionId = connectionIds[0] ?? '';
+      nodeParams.namespace = namespaces[0] ?? '';
+      nodeParams.connId = connIds[0] ?? '';
       changeFlag = true;
     }
   });

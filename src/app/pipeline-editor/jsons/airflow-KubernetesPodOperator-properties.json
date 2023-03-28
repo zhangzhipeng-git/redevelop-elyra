@@ -4,7 +4,7 @@
     "component_parameters": {
       "type": "object",
       "properties": {
-        "name": {
+        "taskName": {
           "type": "string",
           "title": "任务名称",
           "description": "任务名称",
@@ -16,14 +16,14 @@
           "type": "string",
           "title": "任务类型",
           "description": "任务类型",
-          "default": "python",
+          "default": "Python",
           "enum": [
             "java",
-            "python",
+            "Python",
             "scala"
           ]
         },
-        "localFile": {
+        "_mainApplicationFile": {
           "type": "string",
           "title": "文件路径",
           "description": "文件路径",
@@ -43,16 +43,24 @@
             "ui:placeholder": "请填写启动Pod的类名"
           }
         },
-        "connection": {
+        "connId": {
           "type": "string",
           "title": "k8s集群连接信息",
-          "description": "k8s集群连接信息",
+          "description": "k8s集群连接信息，根据PIPELINE属性中的选择的归属应用查询得出。",
           "enum": []
+        },
+        "connectionId": {
+          "type": "string",
+          "title": "资源id",
+          "description": "资源id",
+          "uihints": {
+            "ui:field": "hidden"
+          }
         },
         "namespace": {
           "type": "string",
-          "title": "命名空间",
-          "description": "命名空间",
+          "title": "租户空间",
+          "description": "租户空间，由连接信息带出",
           "uihints": {
             "ui:readonly": true
           }
@@ -78,17 +86,17 @@
           "default": 1,
           "minimum": 1
         },
-        "cmds": {
-          "title": "bash命令",
-          "description": "bash命令",
-          "type": "string"
+        "k8spodConf": {
+          "type": "string",
+          "title": "k8sPod配置参数",
+          "description": "k8sPod配置参数"
         }
       },
       "required": [
-        "name",
+        "taskName",
         "type",
-        "localFile",
-        "connection"
+        "_mainApplicationFile",
+        "connId"
       ]
     }
   },

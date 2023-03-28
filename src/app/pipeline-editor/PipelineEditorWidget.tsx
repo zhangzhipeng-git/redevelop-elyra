@@ -64,10 +64,7 @@ import {
   onBeforeAddNode_GetOp,
   onPasteValidateNodeProperties
 } from '@src/app/hooks/addNode';
-import {
-  onAfterSelectFile_RemoveFile,
-  onAfterSelectFile_UploadFile
-} from '@src/app/hooks/selectFile';
+import { onRemoveFile, onUploadFile } from '@src/app/hooks/selectFile';
 import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
@@ -261,6 +258,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       const res = await showBrowseFileDialog(
         browserFactory.defaultBrowser.model.manager,
         {
+          multiselect: args.canSelectMany,
           startPath: PathExt.dirname(filename),
           filter: (model: any): boolean => {
             if (!model) return false;
@@ -270,18 +268,25 @@ const PipelineWrapper: React.FC<IProps> = ({
             if (type === 'directory') return true;
 
             const ext = PathExt.extname(path);
+            // 所有文件
+            if (args.filters.File[0] === '*') return true;
+            // 根据类型过滤文件
             return args.filters.File.includes(ext);
           }
         }
       );
 
       if (res.button.accept && res.value.length) {
-        const file = PipelineService.getPipelineRelativeNodePath(
-          contextRef.current.path,
-          res.value[0].path
-        );
-
-        return [file];
+        let files: string[] = [];
+        res.value.forEach((item: any) => {
+          files.push(
+            PipelineService.getPipelineRelativeNodePath(
+              contextRef.current.path,
+              item.path
+            )
+          );
+        });
+        return files;
       }
     },
     []
@@ -331,12 +336,12 @@ const PipelineWrapper: React.FC<IProps> = ({
       const controllerPalette = ref.current?.controller?.current?.getPalette();
       const errorMessages = validatePipeline(pipelineJson, controllerPalette);
       const actionTypeMap = { run: '运行', submit: '提交' };
+      const actionName = actionTypeMap[actionType];
+
       if (errorMessages && errorMessages.length > 0) {
         let msgs = errorMessages.map(({ message }: any) => message);
         toast.error(
-          `${actionTypeMap[actionType]}失败:\n\n ${Array.from(
-            new Set(msgs)
-          ).join('\n')}`,
+          `${actionName}失败:\n\n ${Array.from(new Set(msgs)).join('\n')}`,
           { containerId: uuid.current, autoClose: 30000 }
         );
         return;
@@ -344,62 +349,29 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       if (contextRef.current.model.dirty) {
         const dialogResult = await showDialog({
-          title: '此管道包含未保存的更改。要提交管道，需要保存更改？',
+          title: `此pipeline包含未保存的更改，要${actionName}pipeline，需要先保存更改，是否保存？`,
           buttons: [
             Dialog.cancelButton({ label: '取消' }),
-            Dialog.okButton({ label: '保存 & 提交' })
+            Dialog.okButton({ label: '保存' })
           ]
         });
-        if (dialogResult.button && dialogResult.button.accept === true) {
-          await contextRef.current.save();
-        } else {
-          // Don't proceed if cancel button pressed
-          return;
-        }
+        if (!dialogResult.button || !dialogResult.button.accept) return;
+        await contextRef.current.save();
       }
 
-      let title =
-        type !== undefined
-          ? `${actionType} pipeline for ${runtimeDisplayName}`
-          : `${actionType} pipeline`;
+      // 重复运行会有问题，需要修改uuid
+      if (actionType === 'run') pipelineJson.uuid = Utils.shortUUID();
 
-      // Capitalize
-      title = title.charAt(0).toUpperCase() + title.slice(1);
+      const result = await showFormDialog({
+        body: `是否确认${actionName}？`,
+        buttons: [
+          Dialog.cancelButton({ label: '取消' }),
+          Dialog.okButton({ label: '确定' })
+        ],
+        defaultButton: 1
+      });
 
-      let dialogOptions: Partial<Dialog.IOptions<any>>;
-      switch (actionType) {
-        case 'run':
-          dialogOptions = {
-            title,
-            body: '是否确认单次运行？',
-            buttons: [
-              Dialog.cancelButton({ label: '取消' }),
-              Dialog.okButton({ label: '确定' })
-            ],
-            defaultButton: 1,
-            focusNodeSelector: '#pipeline_name'
-          };
-          break;
-        case 'submit':
-          dialogOptions = {
-            title,
-            body: '是否确认提交？',
-            buttons: [
-              Dialog.cancelButton({ label: '取消' }),
-              Dialog.okButton({ label: '确定' })
-            ],
-            defaultButton: 1,
-            focusNodeSelector: '#runtime_config'
-          };
-          break;
-      }
-
-      const result = await showFormDialog(dialogOptions);
-
-      if (!result.button.accept) {
-        // When Cancel is clicked on the dialog, just return
-        return;
-      }
+      if (!result.button.accept) return;
 
       const newPipeline = onRunOrSubmit(pipelineJson, actionType);
       if (!newPipeline) return;
@@ -407,6 +379,7 @@ const PipelineWrapper: React.FC<IProps> = ({
       const res = await PipelineService.operator(newPipeline);
       runRes.current = res;
 
+      // 单次提交
       if (actionType === 'submit') {
         toast('提交成功', {
           autoClose: 1000,
@@ -416,17 +389,20 @@ const PipelineWrapper: React.FC<IProps> = ({
         return;
       }
 
+      // 单次运行，轮询节点运行状态
       setReadOnly(true);
       const promise = new Promise((resolve, reject) => {
         onUpdateNodeStatus(
           ref?.current.controller.current,
-          res.dagId,
+          {
+            dagId: res.dagId,
+            runId: res.dagRunId
+          },
           (state: boolean) => {
             setReadOnly(false);
             if (state) resolve('运行成功');
             else reject('运行失败');
-          },
-          editorWrapRef.current
+          }
         );
       });
       toast.promise(
@@ -557,7 +533,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           });
           break;
         case 'deleteSelectedObjects':
-          onAfterSelectFile_RemoveFile(type, payload);
+          onRemoveFile(type, payload);
           break;
         case 'paste':
           onPasteValidateNodeProperties(type, ref.current?.controller?.current);
@@ -665,7 +641,7 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const handleAfterSelectFileUploadFile = useCallback(
     (paths: string[], prePaths = []) =>
-      onAfterSelectFile_UploadFile(
+      onUploadFile(
         type as any,
         browserFactory.defaultBrowser,
         paths,
@@ -675,14 +651,14 @@ const PipelineWrapper: React.FC<IProps> = ({
   );
 
   const handleAfterSelectFileRemoveOldFile = useCallback(
-    (prePath: string) => onAfterSelectFile_RemoveFile(type as any, prePath),
+    (prePath: string) => onRemoveFile(type as any, prePath),
     []
   );
 
   const handleUpdateNodeProperties = useCallback(
     async (params: { type: string; applicationId: string }, key: string) => {
       switch (key) {
-        case 'connection':
+        case 'connId':
           return onAfterSelectApp(params, ref?.current.controller.current);
       }
     },

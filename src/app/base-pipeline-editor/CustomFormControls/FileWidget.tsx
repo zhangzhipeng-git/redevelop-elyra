@@ -21,19 +21,40 @@ import { EXT_MAP } from '@src/app/const';
 
 // TODO: Make the file clearable
 export const FileWidget: Widget = props => {
+  const propsValue = props.value;
   const handleChooseFile = useCallback(async () => {
-    const fileType = props.formContext.formData.component_parameters.type;
-    const File = EXT_MAP[fileType]
-      ? [EXT_MAP[fileType]]
-      : props.uiSchema.extensions;
+    /** 属性键值 */
+    const propertyID = props.id.replace('root_component_parameters_', '');
+    /** 是否可以多选文件 */
+    const canSelectMany = props.schema.type === 'array';
+    const { extensions, parentID } = props.uiSchema;
 
-    props.formContext.onFileRequested({
-      canSelectMany: false,
-      defaultUri: props.value,
-      filters: { File },
-      propertyID: props.id.replace('root_component_parameters_', ''),
-      parentID: props.uiSchema?.parentID
-    });
+    const options = {
+      canSelectMany,
+      defaultUri: Array.isArray(propsValue) ? propsValue[0] : propsValue,
+      filters: { File: [] },
+      propertyID,
+      parentID
+    };
+
+    if (propertyID === '_mainApplicationFile') {
+      const fileType = props.formContext.formData.component_parameters.type;
+      options.filters.File = EXT_MAP[fileType]
+        ? [EXT_MAP[fileType]]
+        : extensions;
+    } else if (
+      [
+        '_pyPackages',
+        '_dependencies',
+        '_exDependencies',
+        '_jars',
+        '_files'
+      ].includes(propertyID)
+    ) {
+      options.filters.File = [extensions] as any;
+    }
+
+    props.formContext.onFileRequested(options);
   }, [props]);
 
   return (
@@ -42,16 +63,14 @@ export const FileWidget: Widget = props => {
         type="text"
         className="form-control"
         style={{ flex: 1 }}
-        value={props.value ?? ''}
+        value={Array.isArray(propsValue) ? propsValue.join(',') : propsValue}
         placeholder={props.uiSchema?.['ui:placeholder']}
-        onChange={e => {
-          
-        }}
+        onChange={e => {}}
         disabled
       />
       <button
         className="form-control choose-file-btn"
-        style={{ display: 'inline-block', width: '50px' }}
+        style={{ display: 'inline-block', width: '50px', marginTop: '10px' }}
         onClick={handleChooseFile}
       >
         浏览

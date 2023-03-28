@@ -3,45 +3,36 @@
   "version": "3.0",
   "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
   "id": "auto-generated-pipeline",
+  "uuid": "_28192161231679909117929",
   "primary_pipeline": "primary",
   "pipelines": [
     {
       "id": "primary",
       "nodes": [
         {
-          "id": "1c10b4a9-7232-4632-8dd5-797aa495884a",
+          "id": "df998dd2-f728-42ab-8675-26d8237b2433",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "java",
-              "connId": "kubernetes_default_022",
+              "type": "python",
+              "connId": "kubernetes_default_033",
               "connectionId": 50,
-              "namespace": "kubernetes_default_022",
+              "namespace": "kubernetes_default_033",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "connection": "kubernetes_default_022",
-              "executor_cores": 1,
-              "mainClass": "t",
-              "localFile": "js.jar",
-              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-              "name": "任务1"
+              "connection": "kubernetes_default_033",
+              "name": "任务名称1",
+              "mainClass": "a",
+              "localFile": "node3.py",
+              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
             },
             "ui_data": {
-              "label": "js.jar",
-              "x_pos": 140,
-              "y_pos": 125,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
+              "label": "node3.py",
+              "x_pos": 51,
+              "y_pos": 58,
+              "description": "Run KubernetesPodOperator Node"
             }
           },
           "inputs": [
@@ -74,38 +65,30 @@
           ]
         },
         {
-          "id": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
+          "id": "27411f0e-94bc-486d-a114-621e806f820a",
           "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
+          "op": "execute-SparkKubernetesOperator-node",
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
+              "connId": "kubernetes_default_033",
+              "connectionId": 50,
+              "namespace": "kubernetes_default_033",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "executor_cores": 1,
-              "kubernetes_conn_id": "k8s",
-              "name": "任务2",
-              "localFile": "jsrun.jar",
+              "connection": "kubernetes_default2_033",
+              "localFile": "js.jar",
               "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-              "mainClass": "com.java.test.MainClass"
+              "name": "任务名称2",
+              "mainClass": "a",
+              "mode": "aa"
             },
             "ui_data": {
-              "label": "jsrun.jar",
-              "x_pos": 506,
-              "y_pos": 208,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
+              "label": "js.jar",
+              "x_pos": 50,
+              "y_pos": 170,
+              "description": "Run SparkKubernetesOperator Node"
             }
           },
           "inputs": [
@@ -122,8 +105,8 @@
               },
               "links": [
                 {
-                  "id": "9646d007-182c-4412-8af2-a06848bdbe7c",
-                  "node_id_ref": "1c10b4a9-7232-4632-8dd5-797aa495884a",
+                  "id": "a5241590-0008-4090-b50f-173536ab2738",
+                  "node_id_ref": "df998dd2-f728-42ab-8675-26d8237b2433",
                   "port_id_ref": "outPort"
                 }
               ]
@@ -145,29 +128,27 @@
           ]
         },
         {
-          "id": "12b6c341-5e2d-47c2-b561-2a45022286ed",
+          "id": "1498b51d-d2ef-421e-a740-7ffc83c98328",
           "type": "execution_node",
           "op": "execute-KubernetesPodOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "java",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
-              "taskCpu": 10,
-              "taskMemory": 20,
-              "num_executors": 10,
-              "executor_cores": 1,
-              "kubernetes_conn_id": "k8s",
-              "name": "测试任务3_diid",
-              "localFile": "js.jar",
-              "mainApplicationFile": "js.jar",
-              "priority_class_name": "111",
-              "mainClass": "tet.main"
+              "type": "python",
+              "connId": "kubernetes_default_033",
+              "connectionId": 50,
+              "namespace": "kubernetes_default_033",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "connection": "kubernetes_default_033",
+              "localFile": "node2.py",
+              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
+              "name": "任务3"
             },
             "ui_data": {
-              "label": "js.jar",
-              "x_pos": 165,
-              "y_pos": 444,
+              "label": "node2.py",
+              "x_pos": 50,
+              "y_pos": 290,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {
@@ -194,13 +175,8 @@
               },
               "links": [
                 {
-                  "id": "09d44151-760e-44c2-abc0-c99b38777378",
-                  "node_id_ref": "bd54de82-ef99-49a2-85f3-b0c1773565f3",
-                  "port_id_ref": "outPort"
-                },
-                {
-                  "id": "b3fe69d9-588a-4470-bb22-aec731c0382d",
-                  "node_id_ref": "1c10b4a9-7232-4632-8dd5-797aa495884a",
+                  "id": "58a4db65-0771-47c5-93fe-0c57f3ccb698",
+                  "node_id_ref": "27411f0e-94bc-486d-a114-621e806f820a",
                   "port_id_ref": "outPort"
                 }
               ]
@@ -229,24 +205,20 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "runtime": "Apache Airflow",
+          "applicationId": "033",
+          "applicationCode": "SYS_DKY_ZXHTY",
           "email": "airflow@example.com",
-          "isFlow": true,
-          "name": "untitled",
-          "scheduleInterval": "0 0 0 * * ? *",
-          "isStream": true,
-          "whetherRetry": true,
-          "startTime": "2023/03/27 09:51:33",
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
-          "dagName": "工作流属性",
-          "dagDesc": "任务描述",
-          "retry": 1
+          "isStream": false,
+          "whetherRetry": false,
+          "retry": 0,
+          "scheduleInterval": "",
+          "dagName": "测试名称",
+          "dagDesc": "描述",
+          "startTime": "2023/03/27 17:34:38"
         }
       },
       "runtime_ref": ""
     }
   ],
-  "schemas": [],
-  "uuid": "_35051676511679449047272"
+  "schemas": []
 }

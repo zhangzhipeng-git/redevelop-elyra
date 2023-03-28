@@ -73,10 +73,14 @@ export default class Utils {
     return o;
   }
 
-  static shortUUID(prefix = ''): string {
+  static shortUUID(prefix = 'a'): string {
     const time = Date.now();
     const random = Math.floor(Math.random() * 1000000000);
     this._unique++;
-    return prefix + '_' + random + this._unique + String(time);
+    return prefix + random + this._unique + String(time);
+  }
+
+  static randomUUID(prefix = 'a', len = 10): string {
+    return prefix + Math.random().toString().slice(-len);
   }
 }

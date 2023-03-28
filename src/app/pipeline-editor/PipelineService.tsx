@@ -212,7 +212,7 @@ export class PipelineService {
    */
   static logs(params: LogsRequest) {
     return RequestHandler.makePostRequest<LogsResponse>(
-      `/dag/dagRuns/taskInstances/logs`,
+      `/queryRecentTaskLog`,
       JSON.stringify(params)
     );
   }
@@ -223,7 +223,7 @@ export class PipelineService {
    */
   static status(params: StatusRequest) {
     return RequestHandler.makeGetRequest<StatusResponse>(
-      `/dag/dagRuns/taskInstances/status?${this._parse(params)}`
+      `/showTaskInformation?${this._parse(params)}`
     );
   }
 
@@ -233,7 +233,7 @@ export class PipelineService {
    */
   static cancel(params: CancelRequest) {
     return RequestHandler.makeGetRequest<CancelResponse>(
-      `/dag/dagRuns/cancel?${this._parse(params)}`
+      `/dagRuns?${this._parse(params)}`
     );
   }
 
@@ -243,7 +243,7 @@ export class PipelineService {
    */
   static operator(params: OperatorRequest) {
     return RequestHandler.makePostRequest<OperatorResponse>(
-      `/dag/operator`,
+      `/operator`,
       JSON.stringify(params)
     );
   }

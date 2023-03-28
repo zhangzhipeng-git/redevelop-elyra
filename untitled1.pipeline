@@ -8,66 +8,7 @@
   "pipelines": [
     {
       "id": "primary",
-      "nodes": [
-        {
-          "id": "4ed94a8c-0139-4c5f-ba6e-b932a8a10b82",
-          "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
-          "app_data": {
-            "component_parameters": {
-              "type": "python",
-              "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
-              "taskCpu": 1,
-              "taskMemory": 2,
-              "num_executors": 1
-            },
-            "ui_data": {
-              "label": "KubernetesPodOperator",
-              "x_pos": 95,
-              "y_pos": 73,
-              "description": "Run KubernetesPodOperator Node",
-              "decorations": [
-                {
-                  "id": "error",
-                  "outline": false,
-                  "position": "topRight",
-                  "x_pos": -24,
-                  "y_pos": -8
-                }
-              ]
-            }
-          },
-          "inputs": [
-            {
-              "id": "inPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Input Port"
-                }
-              }
-            }
-          ],
-          "outputs": [
-            {
-              "id": "outPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Output Port"
-                }
-              }
-            }
-          ]
-        }
-      ],
+      "nodes": [],
       "app_data": {
         "ui_data": {
           "comments": []
@@ -75,13 +16,13 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,
           "whetherRetry": true,
-          "retry": 0,
-          "scheduleInterval": ""
+          "retry": 1,
+          "scheduleInterval": "",
+          "applicationId": "1",
+          "applicationCode": "SYS_FBSGFKGKC"
         }
       },
       "runtime_ref": ""

@@ -141,16 +141,12 @@ export const componentFetcher = (type: string) => {
 
 let oldData: Promise<any> | null;
 export const getPalette = (type = 'local') => {
-  console.log(
-    '==获取 palette 参数：节点目录、管道属性表单配置和节点属性表单配置=='
-  );
   return oldData || (oldData = componentFetcher(type));
 };
 
 export async function onReadyOrRefresh(
   currentContext: DocumentRegistry.Context,
-  type: string,
-  setDefaultValue = false
+  type: string
 ) {
   const pipelineJson = currentContext.model.toJSON() as any;
   const palette = Utils.clone(getPalette(type)); // 有read-only问题，这里克隆一下
@@ -174,7 +170,7 @@ export async function onReadyOrRefresh(
     applicationId: applicationIdSchema,
     applicationCode: applicationCodeSchema
   } = pipelineSchema;
-  const apps = await PipelineService.apps();
+  const apps = await PipelineService.apps().catch(() => []);
   const ids = apps.map(({ applicationId }) => applicationId);
   const names = apps.map(({ applicationName }) => applicationName);
   const codes = apps.map(({ applicationCode }) => applicationCode);
@@ -199,24 +195,34 @@ export async function onReadyOrRefresh(
   const conn = await PipelineService.conn({
     type: 'kubernetes',
     applicationId: id
-  });
+  }).catch(() => []);
   const connIds = conn.map(({ connId }) => connId);
+  const connectionIds = conn.map(({ connectionId }) => connectionId);
   const connNames = conn.map(({ connName }) => connName);
   nodeSchemas?.forEach((ns: any) => {
-    ns.connection.enum = connIds;
-    ns.namespace.enumValues = connNames;
+    ns.connId.connectionIdEnum = connectionIds;
+    ns.connId.namespaceEnum = connNames;
+    ns.connId.enum = connIds;
 
-    ns.connection.default = connIds[0];
+    if (ns.connectionId) ns.connectionId.default = connectionIds[0];
     ns.namespace.default = connNames[0];
+    ns.connId.default = connIds[0];
   });
 
   nodes?.forEach((n: any) => {
-    const { connection, namespace } = n?.app_data?.component_parameters ?? {};
-    if (!connIds.includes(connection) || !connNames.includes(namespace)) {
-      if (n?.app_data?.component_parameters?.connection)
-        n.app_data.component_parameters.connection = connIds[0];
+    const { connId, connectionId, namespace } =
+      n?.app_data?.component_parameters ?? {};
+    if (
+      !connectionIds.includes(connectionId) ||
+      !connNames.includes(namespace) ||
+      !connIds.includes(connId)
+    ) {
+      if (n?.app_data?.component_parameters?.connectionId)
+        n.app_data.component_parameters.connectionId = connectionIds[0];
       if (n?.app_data?.component_parameters?.namespace)
         n.app_data.component_parameters.namespace = connNames[0];
+      if (n?.app_data?.component_parameters?.connId)
+        n.app_data.component_parameters.connId = connIds[0];
       changeFlag = true;
     }
   });

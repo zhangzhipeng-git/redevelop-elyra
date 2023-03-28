@@ -48,7 +48,7 @@
               ".jar"
             ],
             "parameter_refs": {
-              "filehandler": "localFile"
+              "filehandler": "_mainApplicationFile"
             },
             "image": "",
             "ui_data": {
@@ -102,7 +102,7 @@
               ".jar"
             ],
             "parameter_refs": {
-              "filehandler": "localFile"
+              "filehandler": "_mainApplicationFile"
             },
             "image": "",
             "ui_data": {

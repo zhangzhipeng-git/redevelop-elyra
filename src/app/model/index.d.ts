@@ -72,6 +72,8 @@ export type LogsResponse = string;
 export interface StatusRequest {
   /** DagId，通过单次运行工作流的接口返回值中获取 */
   dagId: string;
+  /** runId，通过单次运行工作流的接口返回值中获取 */
+  runId: string;
 }
 
 /** 节点任务状态 */
@@ -138,8 +140,10 @@ export interface Operator {
   taskName: string;
   /** 任务类型：包括：java、Python、scala */
   type: string;
-  /** 资源链接信息，通过资源信息查询接口提取 */
-  connection: string;
+  /** 资源id，通过资源信息查询接口提取 */
+  connectionId: string;
+  /** 链接id，通过资源信息查询接口提取 */
+  connId: string;
   /** 租户空间，通过资源信息查询接口提取 */
   namespace: string;
   /** 执行器数量，默认值：1 */

@@ -4,7 +4,7 @@
     "component_parameters": {
       "type": "object",
       "properties": {
-        "name": {
+        "taskName": {
           "type": "string",
           "title": "任务名称",
           "description": "任务名称"
@@ -13,10 +13,10 @@
           "type": "string",
           "title": "Spark应用的类型",
           "description": "Spark应用的类型（java/python/scala)",
-          "default": "python",
+          "default": "Python",
           "enum": [
             "java",
-            "python",
+            "Python",
             "scala"
           ]
         },
@@ -28,7 +28,7 @@
             "ui:placeholder": "请填写Spark应用程序主类"
           }
         },
-        "localFile": {
+        "_mainApplicationFile": {
           "type": "string",
           "title": "文件路径",
           "description": "文件路径",
@@ -40,16 +40,24 @@
             ]
           }
         },
-        "connection": {
+        "connId": {
           "title": "k8s集群连接信息",
-          "description": "k8s集群连接信息",
+          "description": "k8s集群连接信息，根据PIPELINE属性中的选择的归属应用查询得出。",
           "type": "string",
           "enum": []
         },
+        "connectionId": {
+          "type": "string",
+          "title": "资源id",
+          "description": "资源id",
+          "uihints": {
+            "ui:field": "hidden"
+          }
+        },
         "namespace": {
           "type": "string",
-          "title": "k8s命名空间",
-          "description": "k8s命名空间",
+          "title": "租户空间",
+          "description": "租户空间，由连接信息带出",
           "uihints": {
             "ui:readonly": true
           }
@@ -75,26 +83,115 @@
           "default": 1,
           "minimum": 1
         },
-        "cmds": {
-          "title": "bash命令",
-          "description": "bash命令",
-          "type": "string"
+        "sparkConf": {
+          "type": "array",
+          "title": "spark配置参数",
+          "description": "spark配置参数",
+          "default": [],
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "title": "key"
+              },
+              "value": {
+                "type": "string",
+                "title": "value"
+              }
+            }
+          }
         },
-        "mode": {
+        "hadoopConf": {
+          "type": "array",
+          "title": "hadoopConf配置参数",
+          "description": "hadoopConf配置参数",
+          "default": [],
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "title": "key"
+              },
+              "value": {
+                "type": "string",
+                "title": "value"
+              }
+            }
+          }
+        },
+        "tarPath": {
           "type": "string",
-          "title": "Spark应用的部署模式",
-          "description": "Spark应用的部署模式",
+          "title": "tar路径",
+          "description": "tar路径(只有任务类型为python时才需要填写)"
+        },
+        "_pyPackages": {
+          "type": "array",
+          "title": "py依赖包集合",
+          "description": "py依赖包集合(只有任务类型为python时才需要填写)",
+          "items": {
+            "type": "string"
+          },
           "uihints": {
-            "ui:placeholder": "请填写Spark应用的部署模式"
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_dependencies": {
+          "type": "array",
+          "title": "依赖项",
+          "description": "依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_exDependencies": {
+          "type": "array",
+          "title": "排除依赖项",
+          "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_jars": {
+          "type": "array",
+          "title": "jar文件集合",
+          "description": "jar文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_files": {
+          "type": "array",
+          "title": "文件集合",
+          "description": "文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
           }
         }
       },
       "required": [
-        "name",
-        "mode",
+        "taskName",
         "type",
-        "localFile",
-        "connection"
+        "_mainApplicationFile",
+        "connId"
       ]
     }
   },

@@ -12,7 +12,7 @@ import { useMask } from '../ui-components/loading';
  * @param fileBrowser 文档浏览器
  * @param paths 文件路径
  */
-export async function onAfterSelectFile_UploadFile(
+export async function onUploadFile(
   type = PipelineEnum.APACHE_AIRFLOW as Types,
   fileBrowser: FileBrowser,
   paths: string[],
@@ -57,10 +57,7 @@ export async function onAfterSelectFile_UploadFile(
  * @param {string} type pipeline 运行平台类型
  * @param {string} path 之前的文件上传后的路径
  */
-export function onAfterSelectFile_RemoveFile(
-  type: string,
-  path: string | string[]
-) {
+export function onRemoveFile(type: string, path: string | string[]) {
   if (type !== PipelineEnum.APACHE_AIRFLOW || !path) return;
   let paths = Array.isArray(path) ? path : [path];
   paths = paths.map((p: string) => p?.split('path=')[1]);
