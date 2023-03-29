@@ -116,6 +116,7 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
       {props.canAdd && (
         <button
           className="jp-mod-styled jp-mod-reject"
+          style={{ position: 'relative', top: '-10px', left: '10px' }}
           onClick={props.onAddClick}
         >
           {'添加'}

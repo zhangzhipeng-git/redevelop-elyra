@@ -50,9 +50,12 @@ export class RequestErrors {
       return this.server404(response.requestPath);
     }
 
-    console.log(response, '请求错误响应！');
-    const reason = response.reason ? response.reason : '';
     const message = response.message ? response.message : '';
+    // response.message 可能是自定义组装的html，故删除自定义组装的html
+    if (message) delete response.message;
+    console.log(response, '请求错误响应！');
+
+    const reason = response.reason ? response.reason : '';
     const timestamp = response.timestamp ? response.timestamp : '';
     const traceback = response.issues
       ? this.formatIssues(response.issues)

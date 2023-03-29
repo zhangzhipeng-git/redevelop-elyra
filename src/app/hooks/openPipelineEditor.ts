@@ -198,14 +198,14 @@ export async function onReadyOrRefresh(
   }).catch(() => []);
   const connIds = conn.map(({ connId }) => connId);
   const connectionIds = conn.map(({ connectionId }) => connectionId);
-  const connNames = conn.map(({ connName }) => connName);
+  const nameSpaces = conn.map(({ nameSpace }) => nameSpace);
   nodeSchemas?.forEach((ns: any) => {
     ns.connId.connectionIdEnum = connectionIds;
-    ns.connId.namespaceEnum = connNames;
+    ns.connId.namespaceEnum = nameSpaces;
     ns.connId.enum = connIds;
 
     if (ns.connectionId) ns.connectionId.default = connectionIds[0];
-    ns.namespace.default = connNames[0];
+    ns.namespace.default = nameSpaces[0];
     ns.connId.default = connIds[0];
   });
 
@@ -214,13 +214,13 @@ export async function onReadyOrRefresh(
       n?.app_data?.component_parameters ?? {};
     if (
       !connectionIds.includes(connectionId) ||
-      !connNames.includes(namespace) ||
+      !nameSpaces.includes(namespace) ||
       !connIds.includes(connId)
     ) {
       if (n?.app_data?.component_parameters?.connectionId)
         n.app_data.component_parameters.connectionId = connectionIds[0];
       if (n?.app_data?.component_parameters?.namespace)
-        n.app_data.component_parameters.namespace = connNames[0];
+        n.app_data.component_parameters.namespace = nameSpaces[0];
       if (n?.app_data?.component_parameters?.connId)
         n.app_data.component_parameters.connId = connIds[0];
       changeFlag = true;

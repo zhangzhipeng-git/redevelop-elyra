@@ -10,143 +10,85 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "c4740e7f-89df-4641-a31e-0fbd2878ddec",
+          "id": "916f4e4c-0033-4313-9265-6c2043db06cd",
           "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
+          "op": "execute-SparkKubernetesOperator-node",
           "app_data": {
             "component_parameters": {
-              "type": "Python",
+              "type": "java",
               "connId": "kubernetes_default",
               "connectionId": 50,
-              "namespace": "kubernetes_default",
+              "namespace": "airflow",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "taskId": "a5755818317",
-              "taskName": "任务1",
-              "_mainApplicationFile": "node2.py",
-              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-28_21:29:28/node2.py"
-            },
-            "ui_data": {
-              "label": "node2.py",
-              "x_pos": 144,
-              "y_pos": 114,
-              "description": "Run KubernetesPodOperator Node"
-            }
-          },
-          "inputs": [
-            {
-              "id": "inPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Input Port"
-                }
-              }
-            }
-          ],
-          "outputs": [
-            {
-              "id": "outPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Output Port"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "id": "9f3ee8f7-2899-4af5-810d-b9786a86239c",
-          "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
-          "app_data": {
-            "component_parameters": {
-              "type": "Python",
-              "connId": "kubernetes_default",
-              "connectionId": 50,
-              "namespace": "kubernetes_default",
-              "taskCpu": 1,
-              "taskMemory": 2,
-              "num_executors": 1,
-              "_mainApplicationFile": "node3.py",
-              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-28_21:29:40/node3.py",
-              "taskId": "a5483801655",
-              "taskName": "任务2"
-            },
-            "ui_data": {
-              "label": "node3.py",
-              "x_pos": 143.60000610351562,
-              "y_pos": 227,
-              "description": "Run KubernetesPodOperator Node"
-            }
-          },
-          "inputs": [
-            {
-              "id": "inPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Input Port"
-                }
-              },
-              "links": [
+              "_jars": [
+                "js.jar",
+                "jsrun.jar"
+              ],
+              "_files": [
+                "node2.py",
+                "node3.py"
+              ],
+              "sparkConf": [
                 {
-                  "id": "6aa26a29-6224-482d-9c22-eda6de63a70b",
-                  "node_id_ref": "c4740e7f-89df-4641-a31e-0fbd2878ddec",
-                  "port_id_ref": "outPort"
+                  "key": "a",
+                  "value": "b"
+                },
+                {
+                  "key": "b",
+                  "value": "c"
+                },
+                {
+                  "key": "c",
+                  "value": "d"
                 }
+              ],
+              "hadoopConf": [
+                {
+                  "key": "a",
+                  "value": "b"
+                },
+                {
+                  "key": "b",
+                  "value": "c"
+                },
+                {
+                  "key": "c",
+                  "value": "d"
+                }
+              ],
+              "pyPackages": [],
+              "dependencies": [
+                "aaa",
+                "bbb",
+                "ccc"
+              ],
+              "exDependencies": [
+                "ccc",
+                "ccc",
+                "ddd",
+                "eee"
+              ],
+              "taskId": "a0164709746",
+              "taskName": "任务3",
+              "mainClass": "org.apache.spark.examples.SparkPi",
+              "_mainApplicationFile": "spark-examples_2.12-3.1.1.jar",
+              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_18:10:51/spark-examples_2.12-3.1.1.jar",
+              "jars": [
+                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:33:50/js.jar",
+                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:33:49/jsrun.jar"
+              ],
+              "files": [
+                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:34:16/node2.py",
+                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:34:16/node3.py"
               ]
-            }
-          ],
-          "outputs": [
-            {
-              "id": "outPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Output Port"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "id": "1958bbc8-9a09-4629-8e81-06cbd8256df7",
-          "type": "execution_node",
-          "op": "execute-KubernetesPodOperator-node",
-          "app_data": {
-            "component_parameters": {
-              "type": "Python",
-              "connId": "kubernetes_default",
-              "connectionId": 50,
-              "namespace": "kubernetes_default",
-              "taskCpu": 1,
-              "taskMemory": 2,
-              "num_executors": 1,
-              "_mainApplicationFile": "node4.py",
-              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-28_21:30:00/node4.py",
-              "taskId": "a9790434353",
-              "taskName": "任务3"
             },
             "ui_data": {
-              "label": "node4.py",
-              "x_pos": 244,
-              "y_pos": 368,
-              "description": "Run KubernetesPodOperator Node"
+              "label": "spark-examples_2.12-3.1.1.jar",
+              "x_pos": 46,
+              "y_pos": 49,
+              "description": "Run SparkKubernetesOperator Node"
             }
           },
           "inputs": [
@@ -160,14 +102,7 @@
                   },
                   "label": "Input Port"
                 }
-              },
-              "links": [
-                {
-                  "id": "46906fde-14c9-4a8d-a0e7-3f5b173b5a1a",
-                  "node_id_ref": "9f3ee8f7-2899-4af5-810d-b9786a86239c",
-                  "port_id_ref": "outPort"
-                }
-              ]
+              }
             }
           ],
           "outputs": [
@@ -197,10 +132,10 @@
           "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": true,
-          "whetherRetry": false,
+          "whetherRetry": true,
           "retry": 1,
           "scheduleInterval": "",
-          "dagName": "工作流测试2",
+          "dagName": "工作流测试3",
           "dagDesc": "工作流测试",
           "startTime": "2023/03/28 13:57:36"
         }

@@ -15,19 +15,19 @@ export async function onAfterSelectApp(
   const node_types = clonePalette.categories?.[0]?.node_types;
 
   const connectionIds = res.map(({ connectionId }) => connectionId);
-  const connNames = res.map(({ connName }) => connName);
+  const nameSpaces = res.map(({ nameSpace }) => nameSpace);
   const connIds = res.map(({ connId }) => connId);
 
   node_types?.forEach((node: any) => {
     const properties =
       node.app_data.properties.properties.component_parameters.properties;
     properties.connId.connectionIdEnum = connectionIds;
-    properties.connId.namespaceEnum = connNames;
+    properties.connId.namespaceEnum = nameSpaces;
     properties.connId.enum = connIds;
 
     if (properties.connectionId)
       properties.connectionId.default = connectionIds[0];
-    properties.namespace.default = connNames[0];
+    properties.namespace.default = nameSpaces[0];
     properties.connId.default = connIds[0];
   });
   controller.setPalette(clonePalette);
@@ -40,7 +40,7 @@ export async function onAfterSelectApp(
     p?.nodes.forEach((n: any) => {
       const nodeProperties = n?.app_data?.component_parameters ?? {};
       nodeProperties.connectionId = connectionIds[0];
-      nodeProperties.namespace = connNames[0];
+      nodeProperties.namespace = nameSpaces[0];
       nodeProperties.connId = connIds[0];
     });
   });

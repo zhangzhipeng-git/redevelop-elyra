@@ -19,12 +19,12 @@ export function genUISchemaFromSchema(schema: any, uiSchema: UiSchema) {
 export const RJSF_ERROR_MESSAGE =
   /string|required|object|number|integer|array|boolean/;
 export const ERROR_TYPE_MAP: { [k: string]: string } = {
-  string: '应该是字符串',
-  object: '应该是对象',
-  number: '应该是数值',
-  integer: '应该是整数',
-  array: '应该是数组',
-  boolean: '应该是布尔类型',
+  string: '',
+  object: '',
+  number: '',
+  integer: '',
+  array: '',
+  boolean: '',
   required: '是必填属性',
   enumRequired: '数据选项为空'
 };

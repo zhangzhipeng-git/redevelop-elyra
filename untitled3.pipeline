@@ -16,9 +16,9 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connId": "kubernetes_default_033",
-              "connectionId": 50,
-              "namespace": "kubernetes_default_033",
+              "connId": "66",
+              "connectionId": 70,
+              "namespace": "6",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -71,9 +71,9 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default_033",
-              "connectionId": 50,
-              "namespace": "kubernetes_default_033",
+              "connId": "66",
+              "connectionId": 70,
+              "namespace": "6",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -134,9 +134,9 @@
           "app_data": {
             "component_parameters": {
               "type": "python",
-              "connId": "kubernetes_default_033",
-              "connectionId": 50,
-              "namespace": "kubernetes_default_033",
+              "connId": "66",
+              "connectionId": 70,
+              "namespace": "6",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -205,8 +205,8 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "033",
-          "applicationCode": "SYS_DKY_ZXHTY",
+          "applicationId": "1",
+          "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,
           "whetherRetry": false,

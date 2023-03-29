@@ -42,15 +42,7 @@ export const FileWidget: Widget = props => {
       options.filters.File = EXT_MAP[fileType]
         ? [EXT_MAP[fileType]]
         : extensions;
-    } else if (
-      [
-        '_pyPackages',
-        '_dependencies',
-        '_exDependencies',
-        '_jars',
-        '_files'
-      ].includes(propertyID)
-    ) {
+    } else {
       options.filters.File = [extensions] as any;
     }
 

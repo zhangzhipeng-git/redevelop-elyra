@@ -84,11 +84,15 @@ export function NodePropertiesPanel({
 
   const schemas = _uiSchema.component_parameters;
   if (['java', 'scala'].includes(data?.component_parameters?.type)) {
-    if (schemas.tarPath) schemas.tarPath['ui:field'] = 'hidden';
-    if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'hidden';
+    if (schemas._requestParameter)
+      schemas._requestParameter['ui:field'] = 'hidden';
+    if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';
+    if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'hidden';
   } else {
-    if (schemas._dependencies) schemas._dependencies['ui:field'] = 'hidden';
-    if (schemas._exDependencies) schemas._exDependencies['ui:field'] = 'hidden';
+    if (schemas._requestParameter)
+      schemas._requestParameter['ui:field'] = 'visible';
+    if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
+    if (schemas.exDependencies) schemas.exDependencies['ui:field'] = 'hidden';
   }
 
   /**
@@ -140,18 +144,21 @@ export function NodePropertiesPanel({
       delete nodeParams._mainApplicationFile;
       const schemas = uiSchema.component_parameters;
       if (['java', 'scala'].includes(type)) {
-        if (schemas.tarPath) schemas.tarPath['ui:field'] = 'hidden';
-        if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'hidden';
-        if (schemas._dependencies)
-          schemas._dependencies['ui:field'] = 'visible';
-        if (schemas._exDependencies)
-          schemas._exDependencies['ui:field'] = 'visible';
+        if (schemas._requestParameter)
+          schemas._requestParameter['ui:field'] = 'hidden';
+        if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';
+        if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'hidden';
+        if (schemas.dependencies) schemas.dependencies['ui:field'] = 'visible';
+        if (schemas.exDependencies)
+          schemas.exDependencies['ui:field'] = 'visible';
       } else {
-        if (schemas._dependencies) schemas._dependencies['ui:field'] = 'hidden';
-        if (schemas._exDependencies)
-          schemas._exDependencies['ui:field'] = 'hidden';
-        if (schemas.tarPath) schemas.tarPath['ui:field'] = 'visible';
-        if (schemas._pyPackages) schemas._pyPackages['ui:field'] = 'visible';
+        if (schemas._requestParameter)
+          schemas._requestParameter['ui:field'] = 'visible';
+        if (schemas._tarPath) schemas._tarPath['ui:field'] = 'visible';
+        if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'visible';
+        if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
+        if (schemas.exDependencies)
+          schemas.exDependencies['ui:field'] = 'hidden';
       }
       setOptions({
         uiSchema,
@@ -199,16 +206,22 @@ export function NodePropertiesPanel({
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
 
       const newFormData = produce(data, (draft: any) => {
-        if (propertyID === '_mainApplicationFile') {
-          draft.component_parameters._mainApplicationFile = values?.[0];
-          draft.component_parameters.mainApplicationFile = s3Paths?.[0];
+        let value;
+        let path;
+        if (args.canSelectMany) {
+          // 多选文件
+          value = [...(values ?? [])];
+          path = s3Paths ?? [];
+        } else {
+          // 单选文件
+          value = values?.[0];
+          path = s3Paths?.[0];
+        }
+        draft.component_parameters[propertyID] = value; // 展示的文件路径
+        draft.component_parameters[propertyID.replace('_', '')] = path; // 实际的文件路径
+        if (propertyID === '_mainApplicationFile')
           draft.component_parameters.type =
             TYPE_MAP[PathExt.extname(values[0])];
-        } else {
-          draft.component_parameters[propertyID] = [...(values ?? [])];
-          draft.component_parameters[propertyID.replace('_', '')] =
-            s3Paths ?? [];
-        }
       });
 
       onChange?.(newFormData ?? data);

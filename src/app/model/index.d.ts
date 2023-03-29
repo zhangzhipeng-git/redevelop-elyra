@@ -27,6 +27,8 @@ export interface ConnInfo {
   connectionId: number;
   /** 资源编码 */
   connId: string;
+  /** 租户空间 */
+  nameSpace: string;
 }
 
 /** 资源信息集合 */
@@ -64,6 +66,7 @@ export interface LogsRequest {
   taskId: string;
   /** 重试次数，运行按钮返回的数据中提取，默认值：1 */
   taskTryNumber: string;
+  taskReturnId: string;
 }
 /** 工作流日志响应 */
 export type LogsResponse = string;
@@ -94,7 +97,9 @@ export interface StatusResponse {
   /** 工作流运行时分配的标识 */
   dagRunId: string;
   /** 内部节点状态集合数据 */
-  task: TaskStatus[];
+  showTask: TaskStatus[];
+  /** 运行状态说明 */
+  state: string;
 }
 
 /** 工作流终止运行请求参数 */
@@ -192,6 +197,7 @@ export interface TaskTry {
   taskId: string;
   /** 工作流中任务节点运行过程中的尝试重试次数 */
   taskTryNumber: number;
+  taskReturnId: string;
 }
 
 /** 工作流单次运行响应 */

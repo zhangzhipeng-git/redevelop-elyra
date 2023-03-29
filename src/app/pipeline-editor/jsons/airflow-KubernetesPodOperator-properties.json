@@ -90,6 +90,15 @@
           "type": "string",
           "title": "k8sPod配置参数",
           "description": "k8sPod配置参数"
+        },
+        "_requestParameter": {
+          "type": "string",
+          "title": "依赖包管理文件",
+          "description": "依赖包管理文件",
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": ".txt"
+          }
         }
       },
       "required": [

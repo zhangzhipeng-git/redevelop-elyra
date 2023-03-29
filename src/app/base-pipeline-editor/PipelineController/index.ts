@@ -158,7 +158,6 @@ class PipelineController extends CanvasController {
       nodeTemplate: { op },
       ...rest
     } = item;
-    console.log('addNode...');
 
     const nodeTemplate: any = this.getPaletteNode(op);
     const defaults =
@@ -193,6 +192,7 @@ class PipelineController extends CanvasController {
       data.nodeTemplate.app_data.component_parameters.type = TYPE_MAP[ext];
     }
 
+    // 因为elyra内部生成的节点id后端无法通过校验（原因未知），需要前端手动重新生成id
     // 工作流节点使用自己生成的 taskId ，然后根据 elyra-canvas 内部生成的节点 id 关系映射出自己生成的 taskId 关系
     data.nodeTemplate.app_data.component_parameters.taskId = Utils.randomUUID();
     this.editActionHandler(data);

@@ -20,14 +20,6 @@
             "scala"
           ]
         },
-        "mainClass": {
-          "type": "string",
-          "title": "Spark应用程序主类",
-          "description": "Spark应用程序主类(限定：Java/Scala)",
-          "uihints": {
-            "ui:placeholder": "请填写Spark应用程序主类"
-          }
-        },
         "_mainApplicationFile": {
           "type": "string",
           "title": "文件路径",
@@ -38,6 +30,14 @@
               ".py",
               ".jar"
             ]
+          }
+        },
+        "mainClass": {
+          "type": "string",
+          "title": "Spark应用程序主类",
+          "description": "Spark应用程序主类(限定：Java/Scala)",
+          "uihints": {
+            "ui:placeholder": "请填写Spark应用程序主类"
           }
         },
         "connId": {
@@ -83,6 +83,42 @@
           "default": 1,
           "minimum": 1
         },
+        "_tarPath": {
+          "type": "string",
+          "title": "tar路径",
+          "description": "tar路径(只有任务类型为python时才需要填写)",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_jars": {
+          "type": "array",
+          "title": "jar文件集合",
+          "description": "jar文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
+        "_files": {
+          "type": "array",
+          "title": "文件集合",
+          "description": "文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "ui:widget": "file",
+            "extensions": "*"
+          }
+        },
         "sparkConf": {
           "type": "array",
           "title": "spark配置参数",
@@ -121,69 +157,28 @@
             }
           }
         },
-        "tarPath": {
-          "type": "string",
-          "title": "tar路径",
-          "description": "tar路径(只有任务类型为python时才需要填写)"
-        },
-        "_pyPackages": {
+        "pyPackages": {
           "type": "array",
-          "title": "py依赖包集合",
-          "description": "py依赖包集合(只有任务类型为python时才需要填写)",
+          "title": "pyPackages",
+          "description": "pyPackages(只有任务类型为python时才需要填写)",
           "items": {
             "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
           }
         },
-        "_dependencies": {
+        "dependencies": {
           "type": "array",
           "title": "依赖项",
           "description": "依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
           "items": {
             "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
           }
         },
-        "_exDependencies": {
+        "exDependencies": {
           "type": "array",
           "title": "排除依赖项",
           "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
           "items": {
             "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
-          }
-        },
-        "_jars": {
-          "type": "array",
-          "title": "jar文件集合",
-          "description": "jar文件集合",
-          "items": {
-            "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
-          }
-        },
-        "_files": {
-          "type": "array",
-          "title": "文件集合",
-          "description": "文件集合",
-          "items": {
-            "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
           }
         }
       },

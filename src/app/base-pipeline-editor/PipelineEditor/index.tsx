@@ -83,7 +83,7 @@ interface Props {
 
 /** pipeline 只读时的节点路径 */
 const READ_ONLY_NODE_SVG_PATH =
-  'M 0 0 h 200 a 6 6 0 0 1 6 6 v 28 a 6 6 0 0 1 -6 6 h -200 a 6 6 0 0 1 -6 -6 v -28 a 6 6 0 0 1 6 -6 z';
+  'M 0 0 h 250 a 6 6 0 0 1 6 6 v 28 a 6 6 0 0 1 -6 6 h -250 a 6 6 0 0 1 -6 -6 v -28 a 6 6 0 0 1 6 -6 z';
 
 function isCreateNodeEvent(e: CanvasEditEvent): e is {
   editType: 'createNode' | 'createAutoNode';
@@ -549,27 +549,28 @@ const PipelineEditor = forwardRef(
     );
 
     const handleTooltip = (tipType: string, e: TipEvent) => {
-      if (readOnly) return;
       function isNodeTipEvent(type: string, _e: TipEvent): _e is TipNode {
         return type === 'tipTypeNode';
       }
       if (isNodeTipEvent(tipType, e) && e.node.type === 'execution_node') {
-        const error = controller.current.errors(e.node.id);
-        const properties = controller.current.properties(e.node.id);
-        const node = controller.current
-          .getAllPaletteNodes()
-          .find(n => n.op === e.node.op);
+        const pipelineObj =
+          controller.current.getPipelineFlow()?.pipelines?.[0] ?? {};
+        const node = pipelineObj.nodes.find((n: any) => n.id === e.node.id);
+        // @ts-ignore
+        const { taskName, _mainApplicationFile = node.op } =
+          node?.app_data?.component_parameters ?? {};
+        const nodeLabel = _mainApplicationFile?.split('/').pop();
+        let error;
+        if (!readOnly) error = controller.current.errors(e.node.id);
         return (
           <NodeTooltip
             error={error}
-            properties={properties}
-            nodeLabel={node?.label}
+            properties={[
+              { label: '任务名称', value: taskName },
+              { label: '节点标签', value: nodeLabel }
+            ]}
           />
         );
-      }
-      if (isNodeTipEvent(tipType, e) && e.node.type === 'super_node') {
-        // TODO: Can we can sub node errors propagated up?
-        return '父节点';
       }
       return null;
     };
@@ -582,6 +583,7 @@ const PipelineEditor = forwardRef(
               canvasController={controller.current}
               contextMenuHandler={handleReadOnlyContextMenu}
               toolbarConfig={readOnlyToolbar ?? []}
+              tipHandler={handleTooltip}
               editActionHandler={e => {
                 handleReadOnlyEditAction(e);
                 controller.current.removeAllStyles();
@@ -599,7 +601,11 @@ const PipelineEditor = forwardRef(
                   imagePosY: 10,
                   imageWidth: 20,
                   imageHeight: 20,
-                  labelWidth: 118 - 5 + 40
+                  defaultNodeHeight: 40,
+                  defaultNodeWidth: 250,
+                  labelPosY: 10,
+                  labelHeight: 24,
+                  labelWidth: 118 - 5 + 40 + 50 + 10
                 }
               }}
             />
@@ -676,10 +682,10 @@ const PipelineEditor = forwardRef(
                     imageWidth: 20,
                     imageHeight: 20,
                     labelPosX: 32 + 2.5,
-                    labelWidth: 118 - 5 + 40,
+                    labelWidth: 118 - 5 + 40 + 50,
                     labelHeight: 25,
                     defaultNodeHeight: 40,
-                    defaultNodeWidth: 200,
+                    defaultNodeWidth: 200 + 50,
                     inputPortLeftPosY: 17.5,
                     outputPortRightPosY: 17.5,
                     dropShadow: false,

@@ -15,9 +15,9 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
-              "namespace": "kubernetes_default_022",
+              "connId": "66",
+              "connectionId": 70,
+              "namespace": "6",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -81,7 +81,7 @@
             "component_parameters": {
               "type": "java",
               "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
+              "namespace": "6",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -152,7 +152,7 @@
             "component_parameters": {
               "type": "java",
               "connection": "kubernetes_default_022",
-              "namespace": "kubernetes_default_022",
+              "namespace": "6",
               "taskCpu": 10,
               "taskMemory": 20,
               "num_executors": 10,
@@ -237,7 +237,7 @@
           "isStream": true,
           "whetherRetry": true,
           "startTime": "2023/03/27 09:51:33",
-          "applicationId": "022",
+          "applicationId": "1",
           "applicationCode": "SYS_FBSGFKGKC",
           "dagName": "工作流属性",
           "dagDesc": "任务描述",

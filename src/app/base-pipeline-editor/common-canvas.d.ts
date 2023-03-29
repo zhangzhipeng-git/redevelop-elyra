@@ -105,7 +105,7 @@ declare module 'elyra-canvas-fix' {
     ) => void;
     editActionHandler?: (e: CanvasEditEvent) => void;
     selectionChangeHandler?: (e: CanvasSelectionEvent) => void;
-    tipHandler?: (tipType: string, e: TipEvent) => void;
+    tipHandler?: any;
     toolbarConfig: any[];
     config: {
       enableInternalObjectModel?: boolean;
@@ -129,6 +129,7 @@ declare module 'elyra-canvas-fix' {
         labelMaxCharacters?: null; // null allows unlimited characters
         labelAllowReturnKey?: boolean; // true allows line feed to be inserted into label, "save" to make the return key save the label.
         inputPortLeftPosY?: number;
+        outputPortTopPosX?: number;
         outputPortRightPosY?: number;
         dropShadow?: boolean;
         labelPosY?: number;

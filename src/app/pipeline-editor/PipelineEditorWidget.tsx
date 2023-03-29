@@ -69,6 +69,7 @@ import { onAfterSelectApp } from '@src/app/hooks/editPipelineProperties';
 import { onUpdateNodeStatus } from '@src/app/hooks/updateNodeStatus';
 import { onReadyOrRefresh } from '@src/app/hooks/openPipelineEditor';
 import {
+  getTaskIdByElyraNodeId,
   onChangePipeline,
   onRenderPipeline,
   onRunOrSubmit,
@@ -359,9 +360,6 @@ const PipelineWrapper: React.FC<IProps> = ({
         await contextRef.current.save();
       }
 
-      // 重复运行会有问题，需要修改uuid
-      if (actionType === 'run') pipelineJson.uuid = Utils.shortUUID();
-
       const result = await showFormDialog({
         body: `是否确认${actionName}？`,
         buttons: [
@@ -370,57 +368,62 @@ const PipelineWrapper: React.FC<IProps> = ({
         ],
         defaultButton: 1
       });
-
       if (!result.button.accept) return;
 
+      const isRun = actionType === 'run';
+      // 重复运行会有问题，需要修改uuid
+      if (isRun) pipelineJson.uuid = Utils.shortUUID();
       const newPipeline = onRunOrSubmit(pipelineJson, actionType);
       if (!newPipeline) return;
 
-      const res = await PipelineService.operator(newPipeline);
-      runRes.current = res;
+      const containerId = uuid.current;
+      const toastId = uuid.current + '-loading';
+      toast.loading(`开始${actionName}`, { containerId, toastId });
 
       // 单次提交
-      if (actionType === 'submit') {
-        toast('提交成功', {
-          autoClose: 1000,
+      if (!isRun) {
+        await PipelineService.operator(newPipeline);
+        return toast.update(toastId, {
+          containerId,
+          render: '提交成功',
+          isLoading: false,
           type: 'success',
-          containerId: uuid.current
+          autoClose: 1000
         });
-        return;
       }
 
-      // 单次运行，轮询节点运行状态
+      // 单次运行
       setReadOnly(true);
-      const promise = new Promise((resolve, reject) => {
-        onUpdateNodeStatus(
-          ref?.current.controller.current,
-          {
-            dagId: res.dagId,
-            runId: res.dagRunId
-          },
-          (state: boolean) => {
-            setReadOnly(false);
-            if (state) resolve('运行成功');
-            else reject('运行失败');
-          }
-        );
+      const res = await PipelineService.operator(newPipeline).catch(() => {
+        clearTimeout(ref.current?.controller?.current?.timer);
+        toast.dismiss(uuid.current + '-loading');
+        setReadOnly(false);
       });
-      toast.promise(
-        promise,
+      if (!res) return;
+
+      runRes.current = res;
+      // 轮询节点运行状态
+      onUpdateNodeStatus(
+        ref?.current.controller.current,
         {
-          pending: '运行中...',
-          success: {
-            render({ data }) {
-              return data;
-            }
-          },
-          error: {
-            render({ data }) {
-              return data;
-            }
-          }
+          dagId: res.dagId,
+          runId: res.dagRunId
         },
-        { containerId: uuid.current, toastId: uuid.current + 'loading' }
+        (state: boolean) => {
+          toast.update(toastId, {
+            containerId,
+            type: state ? 'success' : 'error',
+            render: `运行${state ? '成功' : '失败'}`,
+            closeOnClick: true,
+            autoClose: 30000,
+            isLoading: false,
+            closeButton: true,
+            onClose: () => setReadOnly(false)
+          });
+        },
+        (data: any) => {
+          toast.update(toastId, { containerId, render: data });
+        }
       );
     },
     []
@@ -465,7 +468,7 @@ const PipelineWrapper: React.FC<IProps> = ({
     await PipelineService.cancel({ dagId, dagRunId });
     const controller = ref?.current?.controller?.current ?? {};
     clearTimeout(controller.timer);
-    toast.dismiss(uuid.current + 'loading');
+    toast.dismiss(uuid.current + '-loading');
     setReadOnly(false);
   }
 
@@ -474,14 +477,20 @@ const PipelineWrapper: React.FC<IProps> = ({
     const { dagId, dagRunId } = runRes.current;
     switch (type) {
       case 'log':
+        const nodes =
+          ref.current?.controller.current?.getPipelineFlow()?.pipelines?.[0]
+            .nodes ?? [];
         const task =
-          runRes.current.task.find(({ taskId }: any) => taskId === payload) ??
-          {};
-        const { taskId, taskTryNumber } = task;
+          runRes.current.task.find(
+            ({ taskId }: any) =>
+              taskId === getTaskIdByElyraNodeId(payload, nodes)
+          ) ?? {};
+        const { taskId, taskTryNumber, taskReturnId } = task;
         const res = await PipelineService.logs({
           dagId,
           dagRunId,
           taskId,
+          taskReturnId,
           taskTryNumber
         });
         new Dialog({

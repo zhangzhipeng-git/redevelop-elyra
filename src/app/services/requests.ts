@@ -263,7 +263,8 @@ export class RequestHandler {
         // 返回失败
         if (res.code !== undefined) {
           return Promise.reject({
-            message: _getErrorHtml(requestUrl, requestInit, res)
+            message: _getErrorHtml(requestUrl, requestInit, res),
+            msg: res.msg
           });
         }
         // 其他结构数据
@@ -284,7 +285,7 @@ function _getErrorHtml(requestUrl: string, requestInit: RequestInit, res: any) {
     `<div style="word-break:break-all; line-height:20px">` +
     `请求地址：${requestUrl}<br/>` +
     `请求方式：${method}<br/>` +
-    `失败原因：${res.msg || '未知原因'}` +
+    `失败原因：${res.msg || '未知'}` +
     `</div>`
   );
 }
