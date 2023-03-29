@@ -44,7 +44,7 @@ function limitLength(str: string, maxLen = 10) {
   return str;
 }
 async function getNodeStatus(
-  controller: PipelineController & { timer: number },
+  controller: PipelineController & { timer: number; _payload: any },
   params: StatusRequest,
   doneFn: any,
   scheduleFn: any
@@ -52,10 +52,10 @@ async function getNodeStatus(
   const { dagId } = params;
   const res = await PipelineService.status(params).catch(() => {
     clearTimeout(controller?.timer);
-    return { state: 'failed', showTask: null };
+    return { state: 'failed' } as any;
   });
 
-  let { state } = res;
+  let { state, dagRunId } = res;
   state = state.toLocaleLowerCase();
   if (['success', 'failed'].includes(state)) {
     // 运行完毕
@@ -65,6 +65,7 @@ async function getNodeStatus(
     // 其他运行中状态
     scheduleFn(state);
   }
+  controller._payload = { dagRunId };
 
   const task = res.showTask;
   if (!task) return;

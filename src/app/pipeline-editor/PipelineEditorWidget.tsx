@@ -474,12 +474,20 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const onReadOnlyAction = useCallback(async ({ type, payload }: any) => {
     if (!runRes.current) return;
-    const { dagId, dagRunId } = runRes.current;
+    const controller = ref.current?.controller?.current ?? {};
+    const { dagRunId } = controller._payload ?? {};
+    const { dagId } = runRes.current;
     switch (type) {
       case 'log':
+        if (!dagRunId) {
+          new Dialog({
+            body: '暂时没有日志',
+            buttons: [Dialog.okButton({ label: '确定' })]
+          }).launch();
+          return;
+        }
         const nodes =
-          ref.current?.controller.current?.getPipelineFlow()?.pipelines?.[0]
-            .nodes ?? [];
+          controller.getPipelineFlow?.()?.pipelines?.[0].nodes ?? [];
         const task =
           runRes.current.task.find(
             ({ taskId }: any) =>

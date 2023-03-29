@@ -31,16 +31,18 @@ export const ERROR_TYPE_MAP: { [k: string]: string } = {
 export const FIELD_DEFAULT_ERROR_TIP = '未通过校验';
 
 export function transformErrors(errors: AjvError[]) {
-  return errors.map(e => {
-    let message = e.message ?? '';
-    let matchResult = message.match(RJSF_ERROR_MESSAGE);
-    message = matchResult
-      ? `${ERROR_TYPE_MAP[matchResult[0]]}`
-      : FIELD_DEFAULT_ERROR_TIP;
-
-    return {
-      ...e,
-      message
-    };
-  });
+  return errors
+    .map(e => {
+      let message = e.message ?? '';
+      let matchResult = message.match(RJSF_ERROR_MESSAGE);
+      message = matchResult
+        ? `${ERROR_TYPE_MAP[matchResult[0]]}`
+        : FIELD_DEFAULT_ERROR_TIP;
+      if (!message) return null as any;
+      return {
+        ...e,
+        message
+      };
+    })
+    .filter((e: AjvError) => !!e);
 }
