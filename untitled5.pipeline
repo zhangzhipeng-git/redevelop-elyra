@@ -16,24 +16,206 @@
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default",
+              "connId": "kubernetes_default_022",
               "connectionId": 50,
-              "namespace": "airflow",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
               "taskId": "a3123685875",
               "taskName": "任务1",
-              "_mainApplicationFile": "node2.py",
-              "mainApplicationFile": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:48:54/node2.py",
+              "_mainApplicationFile": "test.py",
+              "mainApplicationFile": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-30_10:49:46/test.py",
               "k8spodConf": "aaa",
-              "_requestParameter": "requirement.txt",
-              "requestParameter": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:49:17/requirement.txt"
+              "_requestParameter": "ui-tests/requirements.txt",
+              "requestParameter": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-30_10:50:05/requirements.txt"
             },
             "ui_data": {
-              "label": "node2.py",
-              "x_pos": 47,
-              "y_pos": 125,
+              "label": "test.py",
+              "x_pos": 46,
+              "y_pos": 67,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "90121251-ab52-4ecf-b814-eca36eeb60a0",
+          "type": "execution_node",
+          "op": "execute-SparkKubernetesOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "sparkConf": [],
+              "hadoopConf": [],
+              "pyPackages": [],
+              "dependencies": [],
+              "exDependencies": [],
+              "_jars": [],
+              "_files": [],
+              "taskId": "a0164709746",
+              "taskName": "任务2",
+              "mainClass": "org.apache.spark.examples.SparkPi",
+              "_mainApplicationFile": "spark-examples_2.12-3.1.1.jar",
+              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_18:10:51/spark-examples_2.12-3.1.1.jar",
+              "jars": [],
+              "files": []
+            },
+            "ui_data": {
+              "label": "spark-examples_2.12-3.1.1.jar",
+              "x_pos": 40,
+              "y_pos": 155,
+              "description": "Run SparkKubernetesOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "884d8094-3c34-45da-b69b-b0cbd539c7d1",
+                  "node_id_ref": "bcb8bb77-b795-4283-accd-9750a34c48f6",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "4b9408ab-f3ed-4049-8863-4c69e690f0b3",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "_mainApplicationFile": "test.py",
+              "mainApplicationFile": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-30_11:16:52/test.py",
+              "taskId": "a7237878704",
+              "taskName": "任务3"
+            },
+            "ui_data": {
+              "label": "test.py",
+              "x_pos": 50,
+              "y_pos": 259,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "365aa064-9040-4469-932a-69420924d0df",
+                  "node_id_ref": "90121251-ab52-4ecf-b814-eca36eeb60a0",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "62b77d49-06ad-4bf5-964f-d086a563dc3a",
+          "type": "execution_node",
+          "op": "execute-KubernetesPodOperator-node",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "_mainApplicationFile": "test.py",
+              "mainApplicationFile": "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-30_11:16:52/test.py",
+              "taskId": "a1004473467",
+              "taskName": "任务3"
+            },
+            "ui_data": {
+              "label": "test.py",
+              "x_pos": 352.79998779296875,
+              "y_pos": 358,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -74,7 +256,7 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "1",
+          "applicationId": "022",
           "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,

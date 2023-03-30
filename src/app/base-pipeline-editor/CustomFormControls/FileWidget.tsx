@@ -20,18 +20,16 @@ import { Widget } from '@rjsf/core';
 import { EXT_MAP } from '@src/app/const';
 
 // TODO: Make the file clearable
+// 单文件上传组件
 export const FileWidget: Widget = props => {
   const propsValue = props.value;
   const handleChooseFile = useCallback(async () => {
-    /** 属性键值 */
     const propertyID = props.id.replace('root_component_parameters_', '');
-    /** 是否可以多选文件 */
-    const canSelectMany = props.schema.type === 'array';
     const { extensions, parentID } = props.uiSchema;
 
     const options = {
-      canSelectMany,
-      defaultUri: Array.isArray(propsValue) ? propsValue[0] : propsValue,
+      canSelectMany: false,
+      defaultUri: propsValue,
       filters: { File: [] },
       propertyID,
       parentID
@@ -43,7 +41,7 @@ export const FileWidget: Widget = props => {
         ? [EXT_MAP[fileType]]
         : extensions;
     } else {
-      options.filters.File = [extensions] as any;
+      options.filters.File = extensions;
     }
 
     props.formContext.onFileRequested(options);
@@ -55,7 +53,7 @@ export const FileWidget: Widget = props => {
         type="text"
         className="form-control"
         style={{ flex: 1 }}
-        value={Array.isArray(propsValue) ? propsValue.join(',') : propsValue}
+        value={propsValue}
         placeholder={props.uiSchema?.['ui:placeholder']}
         onChange={e => {}}
         disabled

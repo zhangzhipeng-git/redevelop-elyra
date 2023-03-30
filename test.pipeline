@@ -16,20 +16,11 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default",
+              "connId": "kubernetes_default_022",
               "connectionId": 50,
-              "namespace": "airflow",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "_jars": [
-                "js.jar",
-                "jsrun.jar"
-              ],
-              "_files": [
-                "node2.py",
-                "node3.py"
-              ],
               "sparkConf": [
                 {
                   "key": "a",
@@ -67,8 +58,15 @@
               "exDependencies": [
                 "ccc",
                 "ccc",
-                "ddd",
-                "eee"
+                "ddd"
+              ],
+              "_jars": [
+                "js.jar",
+                "jsrun.jar"
+              ],
+              "_files": [
+                "RELEASE.md",
+                "setup.py"
               ],
               "taskId": "a0164709746",
               "taskName": "任务3",
@@ -76,18 +74,18 @@
               "_mainApplicationFile": "spark-examples_2.12-3.1.1.jar",
               "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_18:10:51/spark-examples_2.12-3.1.1.jar",
               "jars": [
-                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:33:50/js.jar",
-                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:33:49/jsrun.jar"
+                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
+                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
               ],
               "files": [
-                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:34:16/node2.py",
-                "http://192.168.18.208:8884/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_20:34:16/node3.py"
+                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
+                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
               ]
             },
             "ui_data": {
               "label": "spark-examples_2.12-3.1.1.jar",
               "x_pos": 46,
-              "y_pos": 49,
+              "y_pos": 48,
               "description": "Run SparkKubernetesOperator Node"
             }
           },
@@ -128,7 +126,7 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "1",
+          "applicationId": "022",
           "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": true,

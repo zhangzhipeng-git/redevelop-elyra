@@ -83,42 +83,6 @@
           "default": 1,
           "minimum": 1
         },
-        "_tarPath": {
-          "type": "string",
-          "title": "tar路径",
-          "description": "tar路径(只有任务类型为python时才需要填写)",
-          "items": {
-            "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
-          }
-        },
-        "_jars": {
-          "type": "array",
-          "title": "jar文件集合",
-          "description": "jar文件集合",
-          "items": {
-            "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
-          }
-        },
-        "_files": {
-          "type": "array",
-          "title": "文件集合",
-          "description": "文件集合",
-          "items": {
-            "type": "string"
-          },
-          "uihints": {
-            "ui:widget": "file",
-            "extensions": "*"
-          }
-        },
         "sparkConf": {
           "type": "array",
           "title": "spark配置参数",
@@ -179,6 +143,48 @@
           "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
           "items": {
             "type": "string"
+          }
+        },
+        "_tarPath": {
+          "type": "string",
+          "title": "tar路径",
+          "description": "tar路径(只有任务类型为python时才需要填写)",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "files": true,
+            "extensions": [
+              "*"
+            ]
+          }
+        },
+        "_jars": {
+          "type": "array",
+          "title": "jar文件集合",
+          "description": "jar文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "files": true,
+            "extensions": [
+              "*"
+            ]
+          }
+        },
+        "_files": {
+          "type": "array",
+          "title": "文件集合",
+          "description": "文件集合",
+          "items": {
+            "type": "string"
+          },
+          "uihints": {
+            "files": true,
+            "extensions": [
+              "*"
+            ]
           }
         }
       },

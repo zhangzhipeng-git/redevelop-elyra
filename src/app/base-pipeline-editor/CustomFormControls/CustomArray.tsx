@@ -88,13 +88,25 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
     props.uiSchema.pipeline_defaults ?? [],
     props
   );
+
+  const propertyID = props.idSchema.$id.replace(
+    'root_component_parameters_',
+    ''
+  );
   const handleChooseFile = useCallback(async () => {
     props.formContext.onFileRequested({
       canSelectMany: true,
       filters: { File: props.uiSchema.extensions },
-      propertyID: props.idSchema.$id.replace('root_component_parameters_', '')
+      propertyID
     });
   }, [props]);
+
+  const handleRemoveFile = useCallback(
+    index => {
+      props.formContext.onFileRemove({ propertyID, index });
+    },
+    [props]
+  );
 
   return (
     <div className={props.className}>
@@ -104,7 +116,11 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
             {item.children}
             <button
               className="jp-mod-styled jp-mod-warn"
-              onClick={item.onDropIndexClick(item.index)}
+              onClick={
+                !props.uiSchema.files
+                  ? item.onDropIndexClick(item.index)
+                  : () => handleRemoveFile(item.index)
+              }
               disabled={!item.hasRemove}
             >
               {'移除'}
@@ -113,32 +129,19 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
         );
       })}
       {renderedDefaults}
-      {props.canAdd && (
+      {props.canAdd && !props.uiSchema.files && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ position: 'relative', top: '-10px', left: '10px' }}
+          style={{ position: 'relative', top: '-10px' }}
           onClick={props.onAddClick}
         >
           {'添加'}
         </button>
       )}
-      {props.uiSchema.canRefresh && (
+      {props.uiSchema.files && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ marginLeft: '5px' }}
-          onClick={() => {
-            return props.formContext?.onPropertiesUpdateRequested(
-              props.formContext.formData
-            );
-          }}
-        >
-          {'刷新'}
-        </button>
-      )}
-      {props.uiSchema?.files && (
-        <button
-          className="jp-mod-styled jp-mod-reject"
-          style={{ marginLeft: '5px' }}
+          style={{ position: 'relative', top: '-10px' }}
           onClick={handleChooseFile}
         >
           {'浏览'}

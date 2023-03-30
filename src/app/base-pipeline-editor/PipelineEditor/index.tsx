@@ -463,6 +463,8 @@ const PipelineEditor = forwardRef(
           if (!filenameRef) return;
           payload =
             e.targetObject?.app_data?.component_parameters?.[filenameRef];
+        } else if (type === 'paste') {
+          payload = e.objects?.nodes?.map((n: any) => n.id);
         }
 
         onAction?.({

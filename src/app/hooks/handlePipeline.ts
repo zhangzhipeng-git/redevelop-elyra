@@ -57,14 +57,19 @@ export function onChangePipeline(pipeline: any) {
   });
 }
 
+/**
+ * 获取dag依赖关系
+ * @param pipelineObj pipeline
+ */
 function getPipelineEdges(pipelineObj: any) {
   const taskDependency: any[] = [];
-  pipelineObj.nodes?.forEach((n: any) => {
-    const id = n?.id;
+  const nodes = pipelineObj.nodes ?? [];
+  nodes.forEach((n: any) => {
+    const target = n.app_data?.component_parameters?.taskId;
     n?.inputs?.[0]?.links?.forEach((link: any) => {
       taskDependency.push({
-        source: link?.node_id_ref,
-        target: id
+        source: getTaskIdByElyraNodeId(link?.node_id_ref, nodes),
+        target
       });
     });
   });
@@ -93,23 +98,14 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
   const pipelineObj = pipeline?.pipelines?.[0] ?? {};
   const dag = pipelineObj.app_data?.properties ?? {};
   const task: any[] = [];
-  const taskDependency: any[] = [];
-  const nodes = pipelineObj.nodes ?? [];
   pipelineObj.nodes?.forEach((n: any) => {
-    const id = n?.id;
     const operatorType = n.op?.split('-')[1];
     task.push({
       operatorType,
       ...n?.app_data?.component_parameters
     });
-    n?.inputs?.[0]?.links?.forEach((link: any) => {
-      // 因为elyra内部生成的节点id后端无法通过校验，需要前端手动重新生成id
-      taskDependency.push({
-        source: getTaskIdByElyraNodeId(link?.node_id_ref, nodes),
-        target: getTaskIdByElyraNodeId(id, nodes)
-      });
-    });
   });
+  const taskDependency = getPipelineEdges(pipelineObj);
 
   let startTime = dag.startTime?.replace(/\/|:| /g, ',');
   startTime =

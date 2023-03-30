@@ -65,14 +65,14 @@ async function getNodeStatus(
     // 其他运行中状态
     scheduleFn(state);
   }
-  controller._payload = { dagRunId };
 
-  const task = res.showTask;
-  if (!task) return;
+  const showTask = res.showTask;
+  if (!showTask) return;
 
+  controller._payload = { dagRunId, showTask };
   const pipelineId = dagId.split('-')[1];
   const nodes = controller.getPipelineFlow()?.pipelines?.[0].nodes ?? [];
-  task.forEach((t: any) => {
+  showTask.forEach((t: any) => {
     const { taskId, state } = t;
     const id = getElyraNodeIdByTaskId(taskId, nodes);
     const node: any = controller.getNode(id, pipelineId);

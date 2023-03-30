@@ -7,6 +7,7 @@ import { formDialogWidget } from '@src/app/pipeline-editor/formDialogWidget';
 import { OperatorSelect } from '@src/app/pipeline-editor/PipelineAddFileDialog';
 import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
 import PipelineController from '@src/app/base-pipeline-editor/PipelineController';
+import Utils from '../util';
 /**
  * 在添加节点前，获取节点的 op ，如：
  * ```
@@ -53,8 +54,11 @@ export async function onBeforeAddNode_GetOp(
  * @param {PipelineController} controller pipeline控制器
  */
 export function onPasteValidateNodeProperties(
-  type: string,
-  controller: PipelineController
+  { type, payload, controller } = {} as {
+    type: string;
+    controller: PipelineController;
+    payload: string[];
+  }
 ) {
   if (type !== PipelineEnum.APACHE_AIRFLOW) return;
   if (!controller) return;
@@ -79,6 +83,13 @@ export function onPasteValidateNodeProperties(
       nodeParams.connectionId = connectionIds[0] ?? '';
       nodeParams.namespace = namespaces[0] ?? '';
       nodeParams.connId = connIds[0] ?? '';
+      changeFlag = true;
+    }
+    if (
+      payload?.includes(nodeData.id) &&
+      nodeData.app_data?.component_parameters
+    ) {
+      nodeData.app_data.component_parameters.taskId = Utils.randomUUID();
       changeFlag = true;
     }
   });

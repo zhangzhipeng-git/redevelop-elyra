@@ -74,9 +74,9 @@ export function NodePropertiesPanel({
   handleAfterSelectFileRemoveOldFile
 }: Props) {
   if (!_schema) return <Message>未定义属性。</Message>;
+
   const _uiSchema: UiSchema = {};
   genUISchemaFromSchema(_schema, _uiSchema);
-
   const [options, setOptions] = useState<any>({
     schema: _schema,
     uiSchema: _uiSchema
@@ -183,24 +183,35 @@ export function NodePropertiesPanel({
   }
 
   const formContext = {
-    /** 文件上传 */
+    /** 多文件上传中的文件删除 */
+    onFileRemove: async (args: any) => {
+      const { propertyID, index } = args;
+      let propValue = data.component_parameters[propertyID];
+      let preS3Path = data.component_parameters[propertyID.replace('_', '')];
+      handleAfterSelectFileRemoveOldFile?.(preS3Path[index]);
+      propValue.splice(index, 1);
+      preS3Path.splice(index, 1);
+      const newFormData = produce(data, (draft: any) => {
+        draft.component_parameters[propertyID] = propValue;
+        draft.component_parameters[propertyID.replace('_', '')] = preS3Path;
+      });
+      onChange?.(newFormData ?? data);
+    },
+    /** 单文件或多文件上传 */
     onFileRequested: async (args: any) => {
+      const { canSelectMany } = args;
       const { propertyID } = args;
       const propValue = data.component_parameters[propertyID];
+      const preS3Path = data.component_parameters[propertyID.replace('_', '')];
 
       const values = await onFileRequested?.({
         ...args,
         filename: Array.isArray(propValue) ? propValue[0] : propValue
       });
-
       if (!values || !values[0]) return;
 
-      if (handleAfterSelectFileRemoveOldFile) {
-        const preS3Path =
-          data.component_parameters[propertyID.replace('_', '')];
-        handleAfterSelectFileRemoveOldFile(preS3Path);
-      }
-
+      // 单文件上传时移除之前的文件
+      if (!canSelectMany) handleAfterSelectFileRemoveOldFile?.(preS3Path);
       let s3Paths: string[] = [];
       if (handleAfterSelectFileUploadFile)
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
@@ -208,10 +219,10 @@ export function NodePropertiesPanel({
       const newFormData = produce(data, (draft: any) => {
         let value;
         let path;
-        if (args.canSelectMany) {
+        if (canSelectMany) {
           // 多选文件
-          value = [...(values ?? [])];
-          path = s3Paths ?? [];
+          value = [...propValue, ...(values ?? [])];
+          path = [...preS3Path, ...(s3Paths ?? [])];
         } else {
           // 单选文件
           value = values?.[0];

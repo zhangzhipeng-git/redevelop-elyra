@@ -475,7 +475,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   const onReadOnlyAction = useCallback(async ({ type, payload }: any) => {
     if (!runRes.current) return;
     const controller = ref.current?.controller?.current ?? {};
-    const { dagRunId } = controller._payload ?? {};
+    const { dagRunId, showTask } = controller._payload ?? {};
     const { dagId } = runRes.current;
     switch (type) {
       case 'log':
@@ -488,22 +488,24 @@ const PipelineWrapper: React.FC<IProps> = ({
         }
         const nodes =
           controller.getPipelineFlow?.()?.pipelines?.[0].nodes ?? [];
+        const id = getTaskIdByElyraNodeId(payload, nodes);
         const task =
-          runRes.current.task.find(
-            ({ taskId }: any) =>
-              taskId === getTaskIdByElyraNodeId(payload, nodes)
-          ) ?? {};
-        const { taskId, taskTryNumber, taskReturnId } = task;
+          runRes.current.task.find(({ taskId }: any) => taskId === id) ?? {};
+        const scheduleTask =
+          showTask.find(({ taskId }: any) => taskId === id) ?? {};
+
+        const { taskId, taskReturnId } = task;
+        const { tryNumber } = scheduleTask;
         const res = await PipelineService.logs({
           dagId,
           dagRunId,
           taskId,
           taskReturnId,
-          taskTryNumber
+          taskTryNumber: tryNumber
         });
         new Dialog({
           title: '日志',
-          body: res,
+          body: res.replace(/\\n/g, '\r\n'),
           buttons: [Dialog.okButton({ label: '确定' })]
         }).launch();
         break;
@@ -553,7 +555,11 @@ const PipelineWrapper: React.FC<IProps> = ({
           onRemoveFile(type, payload);
           break;
         case 'paste':
-          onPasteValidateNodeProperties(type, ref.current?.controller?.current);
+          onPasteValidateNodeProperties({
+            type,
+            payload,
+            controller: ref.current?.controller?.current
+          });
           break;
         default:
           break;
