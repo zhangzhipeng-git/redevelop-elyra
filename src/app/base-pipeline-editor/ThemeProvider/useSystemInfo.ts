@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,47 +14,47 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
 function useSystemInfo() {
-  const [mode, setMode] = useState<"dark" | "light">(
-    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  const [mode, setMode] = useState<'dark' | 'light'>(
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   );
 
   useEffect(() => {
-    const darkMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     try {
       // Chrome & Firefox
-      darkMediaQuery.addEventListener("change", (e) => {
+      darkMediaQuery.addEventListener('change', e => {
         if (e.matches) {
-          setMode("dark");
+          setMode('dark');
         } else {
-          setMode("light");
+          setMode('light');
         }
       });
     } catch {
       try {
         // Old Safari
-        darkMediaQuery.addListener((e) => {
+        darkMediaQuery.addListener(e => {
           if (e.matches) {
-            setMode("dark");
+            setMode('dark');
           } else {
-            setMode("light");
+            setMode('light');
           }
         });
       } catch {}
     }
   }, []);
 
-  const platform = useMemo<"mac" | "win" | "other">(() => {
-    if (window.navigator.platform.startsWith("Mac")) {
-      return "mac";
+  const platform = useMemo<'mac' | 'win' | 'other'>(() => {
+    if (window.navigator.platform.startsWith('Mac')) {
+      return 'mac';
     }
-    if (window.navigator.platform.startsWith("Win")) {
-      return "win";
+    if (window.navigator.platform.startsWith('Win')) {
+      return 'win';
     }
-    return "other";
+    return 'other';
   }, []);
 
   return useMemo(() => ({ mode, platform }), [mode, platform]);

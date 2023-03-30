@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ export class ElyraOutOfDateError extends Error {
   constructor() {
     /* istanbul ignore next */
     super(
-      "Pipeline was last edited in a newer version of Elyra. Update Elyra to use this pipeline."
+      'Pipeline was last edited in a newer version of Redevelop-Elyra. Update Redevelop-Elyra to use this pipeline.'
     );
   }
 }
@@ -26,13 +26,13 @@ export class ElyraOutOfDateError extends Error {
 export class PipelineOutOfDateError extends Error {
   constructor() {
     /* istanbul ignore next */
-    super("Pipeline is out of date.");
+    super('Pipeline is out of date.');
   }
 }
 
 export class InvalidPipelineError extends Error {
   constructor() {
     /* istanbul ignore next */
-    super("Pipeline is invalid.");
+    super('Pipeline is invalid.');
   }
 }

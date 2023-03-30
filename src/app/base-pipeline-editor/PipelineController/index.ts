@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,12 +84,12 @@ class PipelineController extends CanvasController {
     // if pipeline is undefined/null create a new one from scratch.
     if (pipelineJson === undefined || pipelineJson === null) {
       pipelineJson = {
-        doc_type: 'pipeline',
+        doc_type: 'pipe',
         version: '3.0',
         json_schema:
           'http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json',
         id: 'auto-generated-pipeline',
-        uuid: Utils.shortUUID(),
+        uuid: Utils.timeUUID(),
         primary_pipeline: 'primary',
         pipelines: [
           {
@@ -128,12 +128,12 @@ class PipelineController extends CanvasController {
     }
 
     // the pipeline was last edited in a "more recent release"
-    // the user should update his version of Elyra to consume the pipeline
+    // the user should update his version of Redevelop-Elyra to consume the pipeline
     if (version > PIPELINE_CURRENT_VERSION) {
       throw new ElyraOutOfDateError();
     }
 
-    // in this case, pipeline was last edited in a "old" version of Elyra and
+    // in this case, pipeline was last edited in a "old" version of Redevelop-Elyra and
     // it needs to be updated/migrated.
     throw new PipelineOutOfDateError();
   }
@@ -193,7 +193,7 @@ class PipelineController extends CanvasController {
     }
 
     // 因为elyra内部生成的节点id后端无法通过校验（原因未知），需要前端手动重新生成id
-    // 工作流节点使用自己生成的 taskId ，然后根据 elyra-canvas 内部生成的节点 id 关系映射出自己生成的 taskId 关系
+    // 工作流节点使用自己生成的 taskId ，然后根据 redevelop-elyra-canvas 内部生成的节点 id 关系映射出自己生成的 taskId 关系
     data.nodeTemplate.app_data.component_parameters.taskId = Utils.randomUUID();
     this.editActionHandler(data);
   }

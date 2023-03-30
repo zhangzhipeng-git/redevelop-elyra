@@ -5,7 +5,7 @@ import Input from 'antd/lib/input';
 import dayjs from 'dayjs';
 
 const Option = Select.Option;
-const mwidth80 = { minWidth: 80, marginRight: 6 };
+const mwidth90 = { minWidth: 90, marginRight: 6 };
 const width100 = { width: 100 };
 const width150 = { width: 150 };
 const eachNum = (start: number, end: number, str: string) => {
@@ -286,7 +286,7 @@ export default function CronForm({
       <Select
         value={freq}
         onChange={onFreqChanged}
-        style={mwidth80}
+        style={mwidth90}
         disabled={disabled}
       >
         {freqList.map(({ value, label }) => (
@@ -301,7 +301,7 @@ export default function CronForm({
           value={MM}
           onChange={onMonthOfYearChanged}
           mode={mode}
-          style={mwidth80}
+          style={mwidth90}
           placeholder="月份"
           disabled={disabled}
         >
@@ -318,7 +318,7 @@ export default function CronForm({
           value={dd}
           onChange={onDayOfMonthChanged}
           mode={mode}
-          style={mwidth80}
+          style={mwidth90}
           placeholder="日期"
           allowClear={isYear}
           disabled={disabled}
@@ -342,7 +342,7 @@ export default function CronForm({
           value={week}
           onChange={onDayOfWeekChanged}
           mode={mode}
-          style={mwidth80}
+          style={mwidth90}
           placeholder="日期"
           disabled={disabled}
         >
@@ -359,7 +359,7 @@ export default function CronForm({
           value={mm}
           onChange={onMinuteOfHoursListChanged}
           mode={mode}
-          style={mwidth80}
+          style={mwidth90}
           placeholder="分钟"
           disabled={disabled}
         >

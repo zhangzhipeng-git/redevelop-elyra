@@ -1,5 +1,4 @@
 export default class Utils {
-  private static _unique = 0;
   /**
    * 将svg字符串转为 base64 编码
    * @param svgString svg 字符串
@@ -73,14 +72,20 @@ export default class Utils {
     return o;
   }
 
-  static shortUUID(prefix = 'a'): string {
-    const time = Date.now();
-    const random = Math.floor(Math.random() * 1000000000);
-    this._unique++;
-    return prefix + random + this._unique + String(time);
+  /**
+   * 生成带指定前缀的随机字符串
+   * @param {string} prefix 前缀，默认 r
+   * @param {number} len 随机数长度，默认 5
+   */
+  static randomUUID(prefix = 'r', len = 5): string {
+    return prefix + Math.random().toString().slice(-len);
   }
 
-  static randomUUID(prefix = 'a', len = 10): string {
-    return prefix + Math.random().toString().slice(-len);
+  /**
+   * 根据时间戳生成的带有指定前缀的字符串
+   * @param {string} prefix 前缀，默认 t
+   */
+  static timeUUID(prefix = 't'): string {
+    return prefix + Date.now();
   }
 }

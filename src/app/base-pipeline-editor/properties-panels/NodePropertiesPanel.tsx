@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -254,7 +254,7 @@ export function NodePropertiesPanel({
       ArrayFieldTemplate={ArrayTemplate}
       noHtml5Validate
       FieldTemplate={CustomFieldTemplate}
-      className={'elyra-formEditor'}
+      className={'redevelop-elyra-formEditor'}
       transformErrors={transformErrors}
     />
   );

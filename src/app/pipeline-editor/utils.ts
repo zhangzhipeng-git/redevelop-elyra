@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ export default class Utils {
     );
 
     return {
-      doc_type: 'pipeline',
+      doc_type: 'pipe',
       version: '3.0',
       json_schema:
         'http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json',

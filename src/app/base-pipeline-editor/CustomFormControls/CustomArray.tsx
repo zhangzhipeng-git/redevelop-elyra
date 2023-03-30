@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
       {props.canAdd && !props.uiSchema.files && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ position: 'relative', top: '-10px' }}
+          style={{ position: 'relative', top: '-8px' }}
           onClick={props.onAddClick}
         >
           {'添加'}
@@ -141,7 +141,7 @@ export const ArrayTemplate: React.FC<ArrayFieldTemplateProps> = props => {
       {props.uiSchema.files && (
         <button
           className="jp-mod-styled jp-mod-reject"
-          style={{ position: 'relative', top: '-10px' }}
+          style={{ position: 'relative', top: '-8px' }}
           onClick={handleChooseFile}
         >
           {'浏览'}

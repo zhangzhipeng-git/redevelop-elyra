@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { Field, FieldProps, utils, WidgetProps } from "@rjsf/core";
+import { Field, FieldProps, utils, WidgetProps } from '@rjsf/core';
 
 /**
- * A custom oneOf field to handle the 2 custom oneOf cases that Elyra has:
+ * A custom oneOf field to handle the 2 custom oneOf cases that Redevelop-Elyra has:
  * 1. Each oneOf entry represents a different widget:
  *       Selecting the options based on widget type: assumes the value of the field
  *       is { value, widget } so that the widget type can be saved in the json.
  * 2. "inputpath": Each oneOf entry represents a different set object
  *       Selecting the options based on the default values of the given oneOf object.
  */
-export const CustomOneOf: Field = (props) => {
+export const CustomOneOf: Field = props => {
   const { options, formData, registry } = props;
   const findOption = (): any => {
     // For inputpaths, expect a oneOf that has { value, option } for each entry
-    if (props.uiSchema?.["inputpath"]) {
+    if (props.uiSchema?.['inputpath']) {
       for (const i in props.schema.oneOf ?? []) {
         const properties: any = props.schema.oneOf?.[i];
         if (
@@ -73,8 +73,8 @@ export const CustomOneOf: Field = (props) => {
   const { widgets } = registry;
   const uiOptions = (utils.getUiOptions(props.uiSchema) ?? {}) as WidgetProps;
   const Widget = utils.getWidget(
-    { type: "number" },
-    "select",
+    { type: 'number' },
+    'select',
     widgets
   ) as React.FC<WidgetProps>;
 
@@ -95,14 +95,14 @@ export const CustomOneOf: Field = (props) => {
       ...optionSchema.uihints,
       value: {
         ...optionSchema.uihints.value,
-        parentID: props.idSchema.$id.replace("root_component_parameters_", ""),
-      },
-    },
+        parentID: props.idSchema.$id.replace('root_component_parameters_', '')
+      }
+    }
   };
 
   const enumOptions = options.map((option: any, index: number) => ({
     label: option.title || `Option ${index + 1}`,
-    value: index,
+    value: index
   }));
 
   return (
@@ -111,9 +111,9 @@ export const CustomOneOf: Field = (props) => {
         <Widget
           {...uiOptions}
           id={`${props.idSchema.$id}${
-            props.schema.oneOf ? "__oneof_select" : "__anyof_select"
+            props.schema.oneOf ? '__oneof_select' : '__anyof_select'
           }`}
-          schema={{ type: "number", default: 0 }}
+          schema={{ type: 'number', default: 0 }}
           onChange={onOptionChange}
           onBlur={props.onBlur}
           onFocus={props.onFocus}

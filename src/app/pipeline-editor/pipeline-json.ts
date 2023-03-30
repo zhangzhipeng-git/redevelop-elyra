@@ -1,6 +1,6 @@
 export default function ({ version, runtime_type, uuid }: any) {
   return {
-    doc_type: 'pipeline',
+    doc_type: 'pipe',
     version: '3.0',
     json_schema:
       'http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json',

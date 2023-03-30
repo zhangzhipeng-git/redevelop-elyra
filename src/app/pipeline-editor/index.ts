@@ -26,8 +26,8 @@ import { PipelineService } from './PipelineService';
 import getPipelineJSON from './pipeline-json';
 import Utils from '@src/app/util';
 
-const PIPELINE_EDITOR = 'Pipeline Editor';
-const PIPELINE = 'pipeline';
+const PIPELINE_EDITOR = 'Single Pipeline Editor';
+const PIPELINE = 'pipe';
 const PIPELINE_EDITOR_NAMESPACE = 'redevelop-elyra-pipeline-editor-extension';
 const PLUGIN_ID = 'redevelop-elyra:plugin';
 
@@ -52,15 +52,13 @@ export default async function activatePipeline(
   menu: IMainMenu,
   registry: ISettingRegistry
 ): Promise<void> {
-  
-
   // Fetch the initial state of the settings.
   const settings = await registry
     .load(PLUGIN_ID)
     .catch((error: any) => console.log(error));
 
-  // Set up new widget Factory for .pipeline files
-  // 使用 pipeline 编辑器工厂处理 .pipeline 文件
+  // Set up new widget Factory for .pipe files
+  // 使用 pipeline 编辑器工厂处理 .pipe 文件
   const pipelineEditorFactory = new PipelineEditorFactory({
     name: PIPELINE_EDITOR, // 组件工厂名称
     fileTypes: [PIPELINE],
@@ -72,13 +70,13 @@ export default async function activatePipeline(
     settings: settings
   });
 
-  // Add the default behavior of opening the widget for .pipeline files
-  // 添加 .pipeline 文件类型
+  // Add the default behavior of opening the widget for .pipe files
+  // 添加 .pipe 文件类型
   app.docRegistry.addFileType(
     {
       name: PIPELINE,
       displayName: 'Pipeline',
-      extensions: ['.pipeline'],
+      extensions: ['.pipe'],
       icon: pipelineIcon
     },
     ['JSON']
@@ -132,36 +130,20 @@ export default async function activatePipeline(
   const openPipelineEditorCommand: string = commandIDs.openPipelineEditor;
   app.commands.addCommand(openPipelineEditorCommand, {
     label: (args: any) => {
-      if (args.isPalette) {
-        return `New ${PIPELINE_EDITOR}`;
-      }
-      if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
-      }
-      if (args.isMenu) {
+      if (args.isPalette) return `New ${PIPELINE_EDITOR}`;
+      if (args.isMenu)
         return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
-      }
       return PIPELINE_EDITOR;
     },
     caption: (args: any) => {
-      if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
-      }
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
     iconLabel: (args: any) => {
-      if (args.isPalette) {
-        return '';
-      }
-      if (args.runtimeType?.id === 'LOCAL') {
-        return `Generic ${PIPELINE_EDITOR}`;
-      }
+      if (args.isPalette) return '';
       return `${args.runtimeType?.display_name} ${PIPELINE_EDITOR}`;
     },
     icon: (args: any) => {
-      if (args.isPalette) {
-        return undefined;
-      }
+      if (args.isPalette) return undefined;
       return args.runtimeType?.icon;
     },
     execute: (args: any) => {
@@ -170,7 +152,7 @@ export default async function activatePipeline(
         .execute(commandIDs.newDocManager, {
           type: 'file',
           path: browserFactory.defaultBrowser.model.path,
-          ext: '.pipeline'
+          ext: '.pipe'
         })
         .then(async model => {
           const platformId = args.runtimeType?.id;
@@ -178,7 +160,7 @@ export default async function activatePipeline(
           const pipelineJson = getPipelineJSON({
             version: PIPELINE_CURRENT_VERSION,
             runtime_type,
-            uuid: Utils.shortUUID()
+            uuid: Utils.timeUUID()
           });
           const newWidget = await app.commands.execute(
             commandIDs.openDocManager,
@@ -200,7 +182,7 @@ export default async function activatePipeline(
   palette.addItem({
     command: openPipelineEditorCommand,
     args: { isPalette: true },
-    category: 'Pipeline Editor'
+    category: 'Single Pipeline Editor'
   });
 
   const types = PipelineService.getRuntimeTypes();
@@ -209,27 +191,27 @@ export default async function activatePipeline(
     return {
       ...t,
       icon: createRemoteIcon({
-        name: `elyra:platform:${t.id}`,
+        name: `redevelop-elyra:platform:${t.id}`,
         url: t.icon
       })
     };
   });
 
-  // Add the command to the launcher
+  // Add the command to the
   if (launcher) {
     const fileMenuItems: IRankedMenu.IItemOptions[] = [];
     for (const t of resolvedTypes as any) {
       launcher.add({
         command: openPipelineEditorCommand,
-        category: PIPELINE_EDITOR,
+        category: 'Other',
         args: { runtimeType: t },
-        rank: t.id === 'LOCAL' ? 1 : 2
+        rank: 0
       });
 
       fileMenuItems.push({
         command: openPipelineEditorCommand,
         args: { runtimeType: t, isMenu: true },
-        rank: t.id === 'LOCAL' ? 90 : 91
+        rank: 0
       });
     }
 

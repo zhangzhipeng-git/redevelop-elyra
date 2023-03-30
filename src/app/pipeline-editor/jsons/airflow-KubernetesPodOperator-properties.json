@@ -25,8 +25,8 @@
         },
         "_mainApplicationFile": {
           "type": "string",
-          "title": "文件路径",
-          "description": "文件路径",
+          "title": "任务文件",
+          "description": "任务文件",
           "uihints": {
             "ui:widget": "file",
             "extensions": [
@@ -50,7 +50,7 @@
           "enum": []
         },
         "connectionId": {
-          "type": "string",
+          "type": "number",
           "title": "资源id",
           "description": "资源id",
           "uihints": {

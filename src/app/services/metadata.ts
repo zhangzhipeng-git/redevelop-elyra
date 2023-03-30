@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 import { IDictionary } from './parsing';
 import { RequestHandler } from './requests';
 
-const ELYRA_METADATA_API_ENDPOINT = 'elyra/metadata/';
-const ELYRA_SCHEMA_API_ENDPOINT = 'elyra/schema/';
-const ELYRA_SCHEMASPACE_API_ENDPOINT = 'elyra/schemaspace';
+const ELYRA_METADATA_API_ENDPOINT = 'redevelop-elyra/metadata/';
+const ELYRA_SCHEMA_API_ENDPOINT = 'redevelop-elyra/schema/';
+const ELYRA_SCHEMASPACE_API_ENDPOINT = 'redevelop-elyra/schemaspace';
 
 /**
- * A service class for accessing the elyra api.
+ * A service class for accessing the redevelop-elyra api.
  */
 export class MetadataService {
   /**
-   * Service function for making GET calls to the elyra metadata API.
+   * Service function for making GET calls to the redevelop-elyra metadata API.
    *
    * @param schemaspace - the metadata schemaspace being accessed
    *
@@ -40,7 +40,7 @@ export class MetadataService {
   }
 
   /**
-   * Service function for making POST calls to the elyra metadata API.
+   * Service function for making POST calls to the redevelop-elyra metadata API.
    *
    * @param schemaspace - the metadata schemaspace being accessed
    * @param requestBody - the body of the request
@@ -59,7 +59,7 @@ export class MetadataService {
   }
 
   /**
-   * Service function for making PUT calls to the elyra metadata API.
+   * Service function for making PUT calls to the redevelop-elyra metadata API.
    *
    * @param schemaspace - the metadata schemaspace being accessed
    * @param name - the metadata name being updated
@@ -80,7 +80,7 @@ export class MetadataService {
   }
 
   /**
-   * Service function for making DELETE calls to the elyra metadata API.
+   * Service function for making DELETE calls to the redevelop-elyra metadata API.
    *
    * @param schemaspace - the metadata schemaspace being accessed
    * @param name - the metadata name being updated
@@ -96,7 +96,7 @@ export class MetadataService {
   private static schemaCache: IDictionary<any> = {};
   private static _clone = (o: any) => JSON.parse(JSON.stringify(o));
   /**
-   * Service function for making GET calls to the elyra schema API.
+   * Service function for making GET calls to the redevelop-elyra schema API.
    *
    * @param schemaspace - the schema schemaspace being requested
    *
@@ -121,7 +121,7 @@ export class MetadataService {
   }
 
   /**
-   * Service function for making GET calls to the elyra schema API.
+   * Service function for making GET calls to the redevelop-elyra schema API.
    *
    * @returns a promise that resolves with the requested schemas or
    * an error dialog result

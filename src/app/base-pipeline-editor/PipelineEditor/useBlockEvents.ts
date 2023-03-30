@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface Options {
   wheel?: boolean;
@@ -45,12 +45,12 @@ function useBlockEvents(events: Options) {
     const el = ref.current;
 
     if (events.wheel) {
-      el?.addEventListener("wheel", blockEvent, options);
+      el?.addEventListener('wheel', blockEvent, options);
     }
 
     return () => {
       if (events.wheel) {
-        el?.removeEventListener("wheel", blockEvent, options);
+        el?.removeEventListener('wheel', blockEvent, options);
       }
     };
   }, [events.wheel]);
@@ -59,12 +59,12 @@ function useBlockEvents(events: Options) {
     const el = ref.current;
 
     if (events.contextmenu) {
-      ref.current?.addEventListener("contextmenu", blockEvent, options);
+      ref.current?.addEventListener('contextmenu', blockEvent, options);
     }
 
     return () => {
       if (events.contextmenu) {
-        el?.removeEventListener("contextmenu", blockEvent, options);
+        el?.removeEventListener('contextmenu', blockEvent, options);
       }
     };
   }, [events.contextmenu]);

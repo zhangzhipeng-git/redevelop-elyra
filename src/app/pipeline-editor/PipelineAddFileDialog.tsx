@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
 import * as React from 'react';
 
 interface IOperatorSelectProps {
-  label?:string;
+  label?: string;
   operators: { label: string; value: string }[];
 }
 
-const OperatorSelect: React.FC<IOperatorSelectProps> = ({ label, operators }) => {
+const OperatorSelect: React.FC<IOperatorSelectProps> = ({
+  label,
+  operators
+}) => {
   return (
-    <form className="elyra-dialog-form">
+    <form className="redevelop-elyra-dialog-form">
       {!!label && <label htmlFor="file_select_operator">{label}:</label>}
       <br />
       <select
         id="file_select_operator"
         name="file_select_operator"
-        className="elyra-form-export-filetype"
+        className="redevelop-elyra-form-export-filetype"
         data-form-required
       >
         {operators.map(o => (

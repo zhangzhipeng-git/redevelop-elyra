@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ const RuntimeConfigSelect: React.FC<IProps> = ({
           <select
             id="runtime_platform"
             name="runtime_platform"
-            className="elyra-form-runtime-platform"
+            className="redevelop-elyra-form-runtime-platform"
             value={platform}
             onChange={handleChange}
           >
@@ -81,7 +81,7 @@ const RuntimeConfigSelect: React.FC<IProps> = ({
         <select
           id="runtime_config"
           name="runtime_config"
-          className="elyra-form-runtime-config"
+          className="redevelop-elyra-form-runtime-config"
         >
           {configs.map(c => (
             <option key={c.id} value={c.id}>

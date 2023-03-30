@@ -13,3 +13,12 @@
 .my-widget-wrapper input {
   background-color: white !important;
 }
+
+.my-widget-wrapper .ant-select {
+  position: relative !important;
+}
+
+.my-widget-wrapper .ant-select-arrow {
+  position: absolute !important;
+  right: 5px !important;
+}

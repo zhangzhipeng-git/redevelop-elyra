@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ export const PipelineSubmissionDialog: React.FC<IProps> = ({
   parameters
 }) => {
   return (
-    <form className="elyra-dialog-form">
+    <form className="redevelop-elyra-dialog-form">
       <label htmlFor="pipeline_name">Pipeline Name:</label>
       <br />
       <input

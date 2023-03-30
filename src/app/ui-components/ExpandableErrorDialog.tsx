@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import * as React from 'react';
 
 import { ExpandableComponent } from './ExpandableComponent';
 
-const MESSAGE_DISPLAY = 'elyra-errorDialog-messageDisplay';
+const MESSAGE_DISPLAY = 'redevelop-elyra-errorDialog-messageDisplay';
 const ERROR_DIALOG_WIDTH = 600;
 const ERROR_DIALOG_HEIGHT = 400;
 const JP_DIALOG_CONTENT = 'jp-Dialog-content';

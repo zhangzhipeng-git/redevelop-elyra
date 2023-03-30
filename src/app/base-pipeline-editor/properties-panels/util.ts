@@ -44,5 +44,5 @@ export function transformErrors(errors: AjvError[]) {
         message
       };
     })
-    .filter((e: AjvError) => !!e);
+    .filter(e => !!e);
 }

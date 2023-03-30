@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -613,7 +613,7 @@ declare module 'elyra-canvas-fix' {
      * Object containing app-specific data
      */
     app_data?: {
-      // NOTE: elyra specific.
+      // NOTE: redevelop-elyra specific.
       version: number;
       properties: any;
       /**
@@ -2780,9 +2780,9 @@ declare module 'elyra-canvas-fix' {
      * Object containing app-specific data
      */
     app_data: {
-      // NOTE: app_data shouldn't but undefined in elyra.
+      // NOTE: app_data shouldn't but undefined in redevelop-elyra.
       //====================================================================//
-      // Elyra specific fields
+      // Redevelop-Elyra specific fields
       //====================================================================//
       /**
        * Extension that the file field uses
@@ -2794,7 +2794,7 @@ declare module 'elyra-canvas-fix' {
       properties?: PropertyDefinitions;
       /**
        * References to field names inside of `component_parameters`. Used to
-       * enable special features in Elyra.
+       * enable special features in Redevelop-Elyra.
        */
       parameter_refs?: {
         filehandler?: string;

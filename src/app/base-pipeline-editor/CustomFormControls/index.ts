@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 /* istanbul ignore file */
 
-export * from "./FileWidget";
-export * from "./CustomFieldTemplate";
-export * from "./CustomArray";
-export * from "./CustomOneOf";
+export * from './FileWidget';
+export * from './CustomFieldTemplate';
+export * from './CustomArray';
+export * from './CustomOneOf';

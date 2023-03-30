@@ -33,6 +33,7 @@ export function useMask() {
     ReactDOM.unmountComponentAtNode(wrap);
     if (!node) return;
     node.removeChild(wrap);
+    wrap = null as any;
   }
   return {
     mask,

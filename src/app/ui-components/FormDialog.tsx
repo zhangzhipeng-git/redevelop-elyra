@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import './style/index.css';
 import { Dialog } from '@jupyterlab/apputils';
 import { Widget } from '@lumino/widgets';
 
-const DEFAULT_BUTTON_CLASS = 'elyra-DialogDefaultButton';
+const DEFAULT_BUTTON_CLASS = 'redevelop-elyra-DialogDefaultButton';
 /*
  * Validate dialog fields upon display
  * - Provides a generic validation by checking if required form fields are populated

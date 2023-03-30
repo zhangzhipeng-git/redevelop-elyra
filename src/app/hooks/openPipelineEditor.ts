@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
 import Utils from '@src/app/util';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-export const GENERIC_CATEGORY_ID = 'Elyra';
+export const GENERIC_CATEGORY_ID = 'Redevelop-Elyra';
 
 interface IRuntimeComponentsResponse {
   version: string;
@@ -68,8 +68,8 @@ interface IComponentPropertiesResponse {
 
 // TODO: This should be enabled through `extensions`
 const NodeIcons: Map<string, string> = new Map([
-  ['execute-KubernetesPodOperator-node', '/static/elyra/k8s.svg'],
-  ['execute-SparkKubernetesOperator-node', '/static/elyra/spark.svg']
+  ['execute-KubernetesPodOperator-node', '/static/redevelop-elyra/k8s.svg'],
+  ['execute-SparkKubernetesOperator-node', '/static/redevelop-elyra/spark.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
@@ -228,7 +228,7 @@ export async function onReadyOrRefresh(
   });
 
   if (!pipelineJson?.uuid) {
-    pipelineJson.uuid = Utils.shortUUID();
+    pipelineJson.uuid = Utils.timeUUID();
     changeFlag = true;
   }
 

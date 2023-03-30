@@ -22,8 +22,8 @@
         },
         "_mainApplicationFile": {
           "type": "string",
-          "title": "文件路径",
-          "description": "文件路径",
+          "title": "任务文件",
+          "description": "任务文件",
           "uihints": {
             "ui:widget": "file",
             "extensions": [
@@ -47,7 +47,7 @@
           "enum": []
         },
         "connectionId": {
-          "type": "string",
+          "type": "number",
           "title": "资源id",
           "description": "资源id",
           "uihints": {
@@ -125,6 +125,7 @@
           "type": "array",
           "title": "pyPackages",
           "description": "pyPackages(只有任务类型为python时才需要填写)",
+          "default": [],
           "items": {
             "type": "string"
           }
@@ -133,6 +134,7 @@
           "type": "array",
           "title": "依赖项",
           "description": "依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "default": [],
           "items": {
             "type": "string"
           }
@@ -141,12 +143,13 @@
           "type": "array",
           "title": "排除依赖项",
           "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "default": [],
           "items": {
             "type": "string"
           }
         },
         "_tarPath": {
-          "type": "string",
+          "type": "array",
           "title": "tar路径",
           "description": "tar路径(只有任务类型为python时才需要填写)",
           "items": {

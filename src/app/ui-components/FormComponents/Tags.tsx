@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ interface ITagProps {
 /**
  * CSS STYLING
  */
-const FORM_EDITOR_TAG = 'elyra-editor-tag';
-const FORM_EDITOR_TAG_PLUS_ICON = 'elyra-editor-tag-plusIcon';
-const FORM_EDITOR_TAG_LIST = 'elyra-editor-tagList';
-const FORM_EDITOR_INPUT_TAG = 'elyra-inputTag';
+const FORM_EDITOR_TAG = 'redevelop-elyra-editor-tag';
+const FORM_EDITOR_TAG_PLUS_ICON = 'redevelop-elyra-editor-tag-plusIcon';
+const FORM_EDITOR_TAG_LIST = 'redevelop-elyra-editor-tagList';
+const FORM_EDITOR_INPUT_TAG = 'redevelop-elyra-inputTag';
 
 export const Tags: React.FC<ITagProps> = ({
   selectedTags,
@@ -226,9 +226,7 @@ export const TagsField: Field = props => {
       />
       {Object.keys(props.errorSchema).length > 0 ? (
         <ul className="error-detail bs-callout bs-callout-info">{errors}</ul>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
     </div>
   );
 };

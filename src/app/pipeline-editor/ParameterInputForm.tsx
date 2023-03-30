@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,10 +91,12 @@ export const ParameterInputForm: React.FC<IParameterProps> = ({
                   <p
                     style={{
                       transform: `translate(0px, -10%)`,
-                      left: `-${Math.min(
-                        param.name.length,
-                        Math.min(DIALOG_WIDTH, param.description.length)
-                      ) - 4}ch`
+                      left: `-${
+                        Math.min(
+                          param.name.length,
+                          Math.min(DIALOG_WIDTH, param.description.length)
+                        ) - 4
+                      }ch`
                     }}
                     className={'field-description'}
                   >

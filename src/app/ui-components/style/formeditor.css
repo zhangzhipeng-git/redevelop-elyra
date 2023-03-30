@@ -1,5 +1,13 @@
+/* stylelint-disable alpha-value-notation */
+/* stylelint-disable color-function-notation */
+/* stylelint-disable declaration-block-no-duplicate-properties */
+/* stylelint-disable length-zero-no-unit */
+/* stylelint-disable comment-empty-line-before */
+/* stylelint-disable no-descending-specificity */
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable selector-id-pattern */
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +22,11 @@
  * limitations under the License.
  */
 
-.elyra-tags {
+.redevelop-elyra-tags {
   margin-top: 8px;
 }
 
-.elyra-formEditor-form-tags input {
+.redevelop-elyra-formEditor-form-tags input {
   margin: 0;
 }
 
@@ -68,20 +76,20 @@ fieldset#root {
   min-width: 400px;
 }
 
-.elyra-formEditor datalist {
+.redevelop-elyra-formEditor datalist {
   display: none;
 }
 
-.elyra-inputTagList {
+.redevelop-elyra-inputTagList {
   list-style: none;
 }
 
-.elyra-inputTag {
+.redevelop-elyra-inputTag {
   margin-left: 8px;
   margin-right: 8px;
 }
 
-button.elyra-inputTag {
+button.redevelop-elyra-inputTag {
   cursor: pointer;
   background: none;
   border: none;
@@ -113,7 +121,7 @@ legend#root__noCategory__title {
   cursor: not-allowed;
 }
 
-.elyra-passwordFieldButton {
+.redevelop-elyra-passwordFieldButton {
   border: none;
   border-radius: 5px;
   background: var(--jp-input-active-background);
@@ -122,26 +130,26 @@ legend#root__noCategory__title {
   bottom: 5px;
 }
 
-.elyra-passwordFieldButton > div {
+.redevelop-elyra-passwordFieldButton > div {
   display: grid;
 }
 
-.elyra-passwordField {
+.redevelop-elyra-passwordField {
   position: relative;
   display: flex;
 }
 
-.elyra-passwordFieldButton:hover {
+.redevelop-elyra-passwordFieldButton:hover {
   background-color: var(--jp-border-color2);
 }
 
-.elyra-passwordFieldButton svg {
+.redevelop-elyra-passwordFieldButton svg {
   width: 25px;
   display: flex;
   color: var(--jp-content-font-color0);
 }
 
-input.elyra-inputTag {
+input.redevelop-elyra-inputTag {
   font-size: var(--jp-ui-font-size1);
   background: none;
   border: none;
@@ -162,45 +170,45 @@ input.elyra-inputTag {
   color: var(--jp-content-font-color0);
 }
 
-.elyra-editor-tagList {
+.redevelop-elyra-editor-tagList {
   list-style: none;
   margin-left: -3px;
   margin-top: 4px;
 }
 
-.elyra-editor-tag {
+.redevelop-elyra-editor-tag {
   margin-left: 3px;
   margin-right: 3px;
   padding: 0 12px;
   height: 24px;
 }
 
-button.elyra-editor-tag {
+button.redevelop-elyra-editor-tag {
   cursor: pointer;
   color: var(--jp-ui-font-color2);
   font-size: var(--jp-ui-font-size1);
 }
 
-button.elyra-editor-tag.applied-tag {
+button.redevelop-elyra-editor-tag.applied-tag {
   color: var(--jp-ui-font-color1);
 }
 
-button.elyra-editor-tag.unapplied-tag {
+button.redevelop-elyra-editor-tag.unapplied-tag {
   color: var(--jp-ui-font-color2);
   white-space: nowrap;
 }
 
-.elyra-editor-tag.tag.unapplied-tag input {
+.redevelop-elyra-editor-tag.tag.unapplied-tag input {
   border: none;
 }
 
-.elyra-formEditor h3 {
+.redevelop-elyra-formEditor h3 {
   flex-basis: 100%;
   margin-bottom: 15px;
   color: var(--jp-ui-font-color1);
 }
 
-.elyra-formEditor .elyra-form-code.jp-CodeMirrorEditor {
+.redevelop-elyra-formEditor .redevelop-elyra-form-code.jp-CodeMirrorEditor {
   background-color: var(--jp-cell-editor-background);
   border: var(--jp-border-width) solid var(--jp-input-border-color);
   overflow-y: auto;
@@ -212,32 +220,34 @@ button.elyra-editor-tag.unapplied-tag {
   margin-top: 5px;
 }
 
-.elyra-formEditor .CodeMirror.cm-s-jupyter {
+.redevelop-elyra-formEditor .CodeMirror.cm-s-jupyter {
   background-color: inherit;
   height: 100%;
 }
 
-.elyra-formEditor .elyra-formEditor-code {
+.redevelop-elyra-formEditor .redevelop-elyra-formEditor-code {
   height: auto;
   flex-basis: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.elyra-formEditor-formInput {
+.redevelop-elyra-formEditor-formInput {
   margin: 10px;
   flex-basis: 45%;
 }
 
-.elyra-formEditor .elyra-formEditor-saveButton {
+.redevelop-elyra-formEditor .redevelop-elyra-formEditor-saveButton {
   flex-basis: 100%;
   display: flex;
   flex-direction: column;
   padding-bottom: 15px;
 }
 
-.elyra-formEditor .form-group.field.elyra-formEditor-form-code,
-.elyra-formEditor .form-group.field.elyra-formEditor-form-tags {
+.redevelop-elyra-formEditor
+  .form-group.field.redevelop-elyra-formEditor-form-code,
+.redevelop-elyra-formEditor
+  .form-group.field.redevelop-elyra-formEditor-form-tags {
   width: 80%;
 }
 
@@ -262,7 +272,7 @@ button.elyra-editor-tag.unapplied-tag {
   z-index: 1;
 }
 
-.elyra-formEditor select.form-control {
+.redevelop-elyra-formEditor select.form-control {
   -moz-appearance: none !important;
   -webkit-appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
@@ -271,29 +281,29 @@ button.elyra-editor-tag.unapplied-tag {
   background-position-y: 50%;
 }
 
-.elyra-formEditor .checkbox label > span {
+.redevelop-elyra-formEditor .checkbox label > span {
   display: flex;
   align-items: center;
   padding: 3px;
   width: fit-content;
 }
 
-.elyra-formEditor#pipeline-parameters .field-boolean .checkbox label {
+.redevelop-elyra-formEditor#pipeline-parameters .field-boolean .checkbox label {
   margin: 0;
 }
 
-.elyra-formEditor .field-boolean .checkbox label > span {
+.redevelop-elyra-formEditor .field-boolean .checkbox label > span {
   display: none;
 }
 
-.elyra-formEditor .field-boolean {
+.redevelop-elyra-formEditor .field-boolean {
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
   align-items: center;
 }
 
-.elyra-formEditor .checkboxes {
+.redevelop-elyra-formEditor .checkboxes {
   height: 6em;
   overflow: scroll;
   border: 1px solid var(--jp-border-color2);
@@ -302,26 +312,26 @@ button.elyra-editor-tag.unapplied-tag {
   resize: vertical;
 }
 
-.elyra-formEditor .checkboxes::-webkit-scrollbar {
+.redevelop-elyra-formEditor .checkboxes::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
   height: 7px;
 }
 
-.elyra-formEditor .checkboxes::-webkit-scrollbar-thumb {
+.redevelop-elyra-formEditor .checkboxes::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
-.elyra-formEditor
+.redevelop-elyra-formEditor
   .label-header
   .description-wrapper
   p.field-description.short-title {
   transform: translate(-20%, -10%);
 }
 
-.elyra-formEditor .form-group.field-array .label-header {
+.redevelop-elyra-formEditor .form-group.field-array .label-header {
   margin-bottom: 10px;
 }
 
@@ -344,34 +354,34 @@ button.elyra-editor-tag.unapplied-tag {
   align-items: center;
 }
 
-.elyra-formEditor .array-item {
+.redevelop-elyra-formEditor .array-item {
   display: flex;
   margin-bottom: 15px;
 }
 
-.elyra-formEditor .field-array button {
+.redevelop-elyra-formEditor .field-array button {
   border-radius: 3px;
   margin-top: 4px;
 }
 
-.elyra-formEditor .array-item .form-group.field {
+.redevelop-elyra-formEditor .array-item .form-group.field {
   padding-bottom: 0;
   padding-right: 10px;
 }
 
-.elyra-formEditor .array-item .form-group.field input,
-.elyra-formEditor .array-item .form-group.field select {
+.redevelop-elyra-formEditor .array-item .form-group.field input,
+.redevelop-elyra-formEditor .array-item .form-group.field select {
   margin-top: 0;
 }
 
-.elyra-formEditor .jp-ArrayOperations {
+.redevelop-elyra-formEditor .jp-ArrayOperations {
   display: flex;
 }
 
-.elyra-formEditor .jp-ArrayOperations button {
+.redevelop-elyra-formEditor .jp-ArrayOperations button {
   width: max-content;
 }
 
-.elyra-formEditor .field.field-array {
+.redevelop-elyra-formEditor .field.field-array {
   width: 100%;
 }

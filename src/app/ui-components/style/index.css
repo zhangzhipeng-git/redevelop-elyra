@@ -1,5 +1,11 @@
+/* stylelint-disable shorthand-property-no-redundant-values */
+/* stylelint-disable selector-pseudo-element-colon-notation */
+/* stylelint-disable no-descending-specificity */
+/* stylelint-disable length-zero-no-unit */
+/* stylelint-disable comment-empty-line-before */
+/* stylelint-disable selector-class-pattern */
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +22,27 @@
 
 @import url('./formeditor.css');
 
-.elyra-expandableContainer-button,
-.elyra-expandableContainer-button.jp-mod-styled {
+.redevelop-elyra-expandableContainer-button,
+.redevelop-elyra-expandableContainer-button.jp-mod-styled {
   background-color: transparent;
   vertical-align: middle;
   padding: 0;
   width: 20px;
 }
 
-.elyra-expandableContainer-button:hover {
+.redevelop-elyra-expandableContainer-button:hover {
   cursor: pointer;
 }
 
-.elyra-expandableContainer-actionButton:hover {
+.redevelop-elyra-expandableContainer-actionButton:hover {
   background-color: var(--jp-layout-color1);
 }
 
-.elyra-expandableContainer-actionButton:active {
+.redevelop-elyra-expandableContainer-actionButton:active {
   background-color: var(--jp-layout-color2);
 }
 
-.elyra-expandableContainer-title {
+.redevelop-elyra-expandableContainer-title {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -44,11 +50,11 @@
   height: 36px;
 }
 
-.elyra-expandableContainer-title:hover {
+.redevelop-elyra-expandableContainer-title:hover {
   background: var(--jp-layout-color2);
 }
 
-.elyra-expandableContainer-name {
+.redevelop-elyra-expandableContainer-name {
   flex-grow: 1;
   font-size: var(--jp-ui-font-size1);
   white-space: nowrap;
@@ -58,18 +64,18 @@
   line-height: 28px;
 }
 
-.elyra-expandableContainer-name:hover {
+.redevelop-elyra-expandableContainer-name:hover {
   cursor: pointer;
 }
 
-.elyra-button {
+.redevelop-elyra-button {
   background-repeat: no-repeat;
   background-position: center;
   border: none;
   height: 100%;
 }
 
-.elyra-expandableContainer-details-visible {
+.redevelop-elyra-expandableContainer-details-visible {
   overflow-x: auto;
   overflow-y: auto;
   display: block;
@@ -81,21 +87,21 @@
   background-color: var(--jp-layout-color1);
 }
 
-.elyra-expandableContainer-details-visible textarea {
+.redevelop-elyra-expandableContainer-details-visible textarea {
   color: var(--jp-ui-font-color1);
 }
 
-.elyra-expandableContainer-details-hidden {
+.redevelop-elyra-expandableContainer-details-hidden {
   display: none;
 }
 
-.elyra-expandableContainer-action-buttons {
+.redevelop-elyra-expandableContainer-action-buttons {
   display: inline-flex;
   align-self: flex-end;
   height: 100%;
 }
 
-.elyra-errorDialog-messageDisplay pre {
+.redevelop-elyra-errorDialog-messageDisplay pre {
   min-height: 125px;
   height: 100%;
   width: 100%;
@@ -103,7 +109,7 @@
   overflow-x: scroll;
 }
 
-.elyra-errorDialog-messageDisplay {
+.redevelop-elyra-errorDialog-messageDisplay {
   padding-bottom: 5px;
   display: flex;
   flex-direction: column;
@@ -111,7 +117,7 @@
   white-space: pre-line;
 }
 
-.elyra-errorDialog-messageDisplay > div:nth-child(2) {
+.redevelop-elyra-errorDialog-messageDisplay > div:nth-child(2) {
   margin: 15px 0;
   display: flex;
   flex: 1;
@@ -128,10 +134,10 @@
   resize: both;
 }
 
-.elyra-DialogDefaultButton.jp-mod-styled:hover:disabled,
-.elyra-DialogDefaultButton.jp-mod-styled:active:disabled,
-.elyra-DialogDefaultButton.jp-mod-styled:focus:disabled,
-.elyra-DialogDefaultButton.jp-mod-styled:disabled {
+.redevelop-elyra-DialogDefaultButton.jp-mod-styled:hover:disabled,
+.redevelop-elyra-DialogDefaultButton.jp-mod-styled:active:disabled,
+.redevelop-elyra-DialogDefaultButton.jp-mod-styled:focus:disabled,
+.redevelop-elyra-DialogDefaultButton.jp-mod-styled:disabled {
   background-color: var(--jp-layout-color3);
   opacity: 0.3;
   pointer-events: none;
@@ -139,17 +145,17 @@
 
 /* icons */
 
-[data-jp-theme-light='false'] .elyra-pieBrain-icon rect.st1,
-[data-jp-theme-light='false'] .elyra-pieBrain-icon rect.st2 {
+[data-jp-theme-light='false'] .redevelop-elyra-pieBrain-icon rect.st1,
+[data-jp-theme-light='false'] .redevelop-elyra-pieBrain-icon rect.st2 {
   fill: var(--jp-inverse-layout-color3);
 }
 
-.elyra-feedbackButton {
+.redevelop-elyra-feedbackButton {
   display: inline;
   position: relative;
 }
 
-.elyra-feedbackButton[data-feedback]:not([data-feedback='']):before {
+.redevelop-elyra-feedbackButton[data-feedback]:not([data-feedback='']):before {
   border: solid;
   border-color: var(--jp-inverse-layout-color2) transparent;
   border-width: 0 6px 6px 6px;
@@ -160,7 +166,7 @@
   z-index: 999;
 }
 
-.elyra-feedbackButton[data-feedback]:not([data-feedback='']):after {
+.redevelop-elyra-feedbackButton[data-feedback]:not([data-feedback='']):after {
   background: var(--jp-inverse-layout-color2);
   border-radius: 2px;
   bottom: -20px;
@@ -178,19 +184,19 @@
   z-index: 999;
 }
 
-.elyra-formEditor#pipeline-parameters
+.redevelop-elyra-formEditor#pipeline-parameters
   .array-item
   .form-group.field
   .label-header {
   margin-top: 10px;
 }
 
-.elyra-browseFileDialog .jp-Dialog-content {
+.redevelop-elyra-browseFileDialog .jp-Dialog-content {
   height: 400px;
   width: 600px;
 }
 
-.elyra-expandableContainer-draggable:hover {
+.redevelop-elyra-expandableContainer-draggable:hover {
   cursor: grab;
 }
 

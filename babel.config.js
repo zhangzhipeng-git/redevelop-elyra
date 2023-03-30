@@ -1,1 +1,11 @@
-module.exports = require('@jupyterlab/testutils/lib/babel.config');
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        useBuiltIns: 'entry',
+        corejs: '3.22'
+      }
+    ]
+  ]
+};

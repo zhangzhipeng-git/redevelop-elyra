@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import canvasStyles from "elyra-canvas-fix/dist/styles/common-canvas.min.css";
+import canvasStyles from 'elyra-canvas-fix/dist/styles/common-canvas.min.css';
 // alias `createGlobalStyle` to `css` for prettier formatting support.
-import { createGlobalStyle as css } from "styled-components";
+import { createGlobalStyle as css } from 'styled-components';
 
 export const CanvasOverrides = css`
   ${canvasStyles}
@@ -546,7 +546,7 @@ export const CanvasOverrides = css`
   .properties-control-panel
   > .properties-control-panel
   > .properties-ctrl-wrapper:only-child
-  .elyra-errorMessage {
+  .redevelop-elyra-errorMessage {
     position: unset;
   }
 
@@ -708,42 +708,42 @@ export const CanvasOverrides = css`
 
   .context-menu-popover {
     background: ${({ theme }) =>
-      theme.mode === "dark"
-        ? "rgba(46, 46, 46, 0.72)"
-        : "rgba(231, 231, 231, 0.76)"};
+      theme.mode === 'dark'
+        ? 'rgba(46, 46, 46, 0.72)'
+        : 'rgba(231, 231, 231, 0.76)'};
   }
 
   .context-menu-popover::before {
     box-shadow: ${({ theme }) =>
-      theme.mode === "dark"
-        ? "inset 0px 0px 0px 1px rgba(0, 0, 0, 0.86), inset 0px 0px 0px 3px rgba(255, 255, 255, 0.2)"
-        : "0px 0px 0px 1px rgba(0, 0, 0, 0.22), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.1)"};
+      theme.mode === 'dark'
+        ? 'inset 0px 0px 0px 1px rgba(0, 0, 0, 0.86), inset 0px 0px 0px 3px rgba(255, 255, 255, 0.2)'
+        : '0px 0px 0px 1px rgba(0, 0, 0, 0.22), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.1)'};
   }
 
   .react-contextmenu-item {
     color: ${({ theme }) =>
-      theme.mode === "dark"
-        ? "rgba(255, 255, 255, 0.9)"
-        : "rgba(0, 0, 0, 0.85)"};
+      theme.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.9)'
+        : 'rgba(0, 0, 0, 0.85)'};
   }
 
   .react-contextmenu-item:hover {
     color: ${({ theme }) =>
-      theme.mode === "dark"
-        ? "rgba(255, 255, 255, 0.9)"
-        : "rgba(255, 255, 255, 1)"};
+      theme.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.9)'
+        : 'rgba(255, 255, 255, 1)'};
   }
 
   .react-contextmenu-item.react-contextmenu-item--disabled {
     color: ${({ theme }) =>
-      theme.mode === "dark"
-        ? "rgba(255, 255, 255, 0.355)"
-        : "rgba(0, 0, 0, 0.315)"};
+      theme.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.355)'
+        : 'rgba(0, 0, 0, 0.315)'};
   }
 
   .react-contextmenu-item.contextmenu-divider {
     background-color: ${({ theme }) =>
-      theme.mode === "dark" ? "#ffffff" : "#000000"};
-    opacity: ${({ theme }) => (theme.mode === "dark" ? 0.205 : 0.13)};
+      theme.mode === 'dark' ? '#ffffff' : '#000000'};
+    opacity: ${({ theme }) => (theme.mode === 'dark' ? 0.205 : 0.13)};
   }
 `;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ import {
 } from '@jupyterlab/filebrowser';
 import { Widget, PanelLayout } from '@lumino/widgets';
 
-const BROWSE_FILE_CLASS = 'elyra-browseFileDialog';
-const BROWSE_FILE_OPEN_CLASS = 'elyra-browseFileDialog-open';
+const BROWSE_FILE_CLASS = 'redevelop-elyra-browseFileDialog';
+const BROWSE_FILE_OPEN_CLASS = 'redevelop-elyra-browseFileDialog-open';
 
 export interface IBrowseFileDialogOptions {
   filter?: (model: any) => boolean;
@@ -60,7 +60,7 @@ class BrowseFileDialogBreadcrumbs extends BreadCrumbs {
     // if 'rootPath' is defined prevent navigating to it's parent/grandparent directories
     if (localPath && this.rootPath && localPath.indexOf(this.rootPath) === 0) {
       const breadcrumbs = document.querySelectorAll(
-        '.elyra-browseFileDialog .jp-BreadCrumbs > span[title]'
+        '.redevelop-elyra-browseFileDialog .jp-BreadCrumbs > span[title]'
       );
 
       breadcrumbs.forEach((crumb: Element): void => {
@@ -68,12 +68,12 @@ class BrowseFileDialogBreadcrumbs extends BreadCrumbs {
           (crumb as HTMLSpanElement).title.indexOf(this.rootPath ?? '') === 0
         ) {
           crumb.className = crumb.className
-            .replace('elyra-BreadCrumbs-disabled', '')
+            .replace('redevelop-elyra-BreadCrumbs-disabled', '')
             .trim();
         } else if (
-          crumb.className.indexOf('elyra-BreadCrumbs-disabled') === -1
+          crumb.className.indexOf('redevelop-elyra-BreadCrumbs-disabled') === -1
         ) {
-          crumb.className += ' elyra-BreadCrumbs-disabled';
+          crumb.className += ' redevelop-elyra-BreadCrumbs-disabled';
         }
       });
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const EnumButton = styled.button.attrs({ type: "button" })`
+export const EnumButton = styled.button.attrs({ type: 'button' })`
   /* higher specificity to override button styles */
   && {
     background-color: ${({ theme }) => theme.palette.secondary.main};
@@ -95,6 +95,6 @@ export const EnumContainer = styled.div<{ isOpen: boolean }>`
   }
 
   & ${EnumMenu} {
-    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   }
 `;

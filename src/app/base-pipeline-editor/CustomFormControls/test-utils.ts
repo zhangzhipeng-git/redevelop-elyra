@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
 export function createPropertiesStore({ name }: { name: string }, value: any) {
   const initialState = {
     propertiesReducer: {
-      [name]: value,
-    },
+      [name]: value
+    }
   };
 
   function reducer(state: any) {

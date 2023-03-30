@@ -10,7 +10,7 @@
           "op": "execute-KubernetesPodOperator-node",
           "description": "Run KubernetesPodOperator Node",
           "id": "KubernetesPodOperator",
-          "image": "/static/elyra/airflow.svg",
+          "image": "/static/redevelop-elyra/airflow.svg",
           "label": "KubernetesPodOperator",
           "type": "execution_node",
           "inputs": [
@@ -64,7 +64,7 @@
           "op": "execute-SparkKubernetesOperator-node",
           "description": "Run SparkKubernetesOperator Node",
           "id": "SparkKubernetesOperator",
-          "image": "/static/elyra/airflow.svg",
+          "image": "/static/redevelop-elyra/airflow.svg",
           "label": "SparkKubernetesOperator",
           "type": "execution_node",
           "inputs": [

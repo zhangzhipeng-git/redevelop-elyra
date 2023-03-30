@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,11 +72,15 @@ export const FileSubmissionDialog: React.FC<IProps> = ({
   };
 
   return (
-    <form className="elyra-dialog-form">
+    <form className="redevelop-elyra-dialog-form">
       <RuntimeConfigSelect runtimeData={runtimeData} />
       <label htmlFor="framework">Runtime Image:</label>
       <br />
-      <select id="framework" name="framework" className="elyra-form-framework">
+      <select
+        id="framework"
+        name="framework"
+        className="redevelop-elyra-form-framework"
+      >
         {Object.entries(images).map(([key, val]) => (
           <option key={key} value={key}>
             {val}
@@ -84,27 +88,33 @@ export const FileSubmissionDialog: React.FC<IProps> = ({
         ))}
       </select>
       <br />
-      <div className="elyra-resourcesWrapper">
-        <div className="elyra-resourceInput">
+      <div className="redevelop-elyra-resourcesWrapper">
+        <div className="redevelop-elyra-resourceInput">
           <label htmlFor="cpu"> CPU:</label>
-          <div className="elyra-resourceInputDescription" id="cpu-description">
+          <div
+            className="redevelop-elyra-resourceInputDescription"
+            id="cpu-description"
+          >
             For CPU-intensive workloads, you can choose more than 1 CPU (e.g.
             1.5).
           </div>
           <input id="cpu" type="number" name="cpu" />
         </div>
-        <div className="elyra-resourceInput">
+        <div className="redevelop-elyra-resourceInput">
           <label htmlFor="gpu"> GPU:</label>
-          <div className="elyra-resourceInputDescription" id="gpu-description">
+          <div
+            className="redevelop-elyra-resourceInputDescription"
+            id="gpu-description"
+          >
             For GPU-intensive workloads, you can choose more than 1 GPU. Must be
             an integer.
           </div>
           <input id="gpu" type="number" name="gpu" />
         </div>
-        <div className="elyra-resourceInput">
+        <div className="redevelop-elyra-resourceInput">
           <label htmlFor="memory"> RAM (GB):</label>
           <div
-            className="elyra-resourceInputDescription"
+            className="redevelop-elyra-resourceInputDescription"
             id="memory-description"
           >
             The total amount of RAM specified.
@@ -115,7 +125,7 @@ export const FileSubmissionDialog: React.FC<IProps> = ({
       <br />
       <input
         type="checkbox"
-        className="elyra-Dialog-checkbox"
+        className="redevelop-elyra-Dialog-checkbox"
         id="dependency_include"
         name="dependency_include"
         size={20}

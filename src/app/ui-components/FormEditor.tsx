@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,17 +154,19 @@ export const FormEditor: React.FC<IFormEditorProps> = ({
   const [formData, setFormData] = React.useState(originalData ?? ({} as any));
 
   /**
-   * Generate the rjsf uiSchema from uihints in the elyra metadata schema.
+   * Generate the rjsf uiSchema from uihints in the redevelop-elyra metadata schema.
    */
   const uiSchema: any = {
-    classNames: 'elyra-formEditor'
+    classNames: 'redevelop-elyra-formEditor'
   };
   for (const category in schema?.properties) {
     const properties = schema.properties[category];
     uiSchema[category] = {};
     for (const field in properties.properties) {
       uiSchema[category][field] = properties.properties[field].uihints ?? {};
-      uiSchema[category][field].classNames = `elyra-formEditor-form-${field}`;
+      uiSchema[category][
+        field
+      ].classNames = `redevelop-elyra-formEditor-form-${field}`;
     }
   }
 

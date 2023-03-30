@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { useCallback } from "react";
-import ReactDOM from "react-dom";
+import { useCallback } from 'react';
+import ReactDOM from 'react-dom';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface NodeProps {
   image: string;
@@ -80,7 +80,7 @@ const Item = styled.div.attrs({ draggable: true })`
   border: 1px solid transparent;
 `;
 
-const Icon = styled.img.attrs({ draggable: false, alt: "" })`
+const Icon = styled.img.attrs({ draggable: false, alt: '' })`
   height: 26px;
   margin: 0 7px;
 `;
@@ -107,29 +107,29 @@ interface Props {
 function PalettePanel({ nodes }: Props) {
   const handleDragStart = useCallback((e, node) => {
     const evData = {
-      operation: "addToCanvas",
+      operation: 'addToCanvas',
       data: {
-        editType: "createExternalNode",
+        editType: 'createExternalNode',
         nodeTemplate: {
-          op: node.op,
-        },
-      },
+          op: node.op
+        }
+      }
     };
 
-    const nodeGhost = document.createElement("div");
-    nodeGhost.style.position = "absolute";
-    nodeGhost.style.top = "-100px";
+    const nodeGhost = document.createElement('div');
+    nodeGhost.style.position = 'absolute';
+    nodeGhost.style.top = '-100px';
     document.body.appendChild(nodeGhost);
     ReactDOM.render(<Node {...node} />, nodeGhost);
 
     e.dataTransfer.setDragImage(nodeGhost, 86, 20);
-    e.dataTransfer.setData("text", JSON.stringify(evData));
+    e.dataTransfer.setData('text', JSON.stringify(evData));
   }, []);
 
   return (
     <Container>
-      {nodes.map((n) => (
-        <Item key={n.op} onDragStart={(e) => handleDragStart(e, n)}>
+      {nodes.map(n => (
+        <Item key={n.op} onDragStart={e => handleDragStart(e, n)}>
           <Icon src={n.app_data.ui_data?.image} />
           <Label>{n.app_data.ui_data?.label}</Label>
         </Item>

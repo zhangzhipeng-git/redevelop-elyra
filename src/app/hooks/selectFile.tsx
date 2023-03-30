@@ -62,6 +62,7 @@ export function onRemoveFile(type: string, path: string | string[]) {
   let paths = Array.isArray(path) ? path : [path];
   paths = paths.map((p: string) => p?.split('path=')[1]);
   paths.forEach(
-    (filePath: string) => filePath && PipelineService.removeFile({ filePath })
+    (filePath: string) =>
+      filePath && PipelineService.removeFile({ filePath }).catch(() => void 0)
   );
 }

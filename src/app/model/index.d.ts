@@ -179,7 +179,7 @@ export interface OperatorRequest {
   dagFileUuid: string;
   /** 操作类型：submit：提交工作流，run：运行工作流 */
   operator: string;
-  /** 调用方：默认值：elyra */
+  /** 调用方：默认值：redevelop-elyra */
   caller: string;
   /** 工作流基本属性信息 */
   dag: DAG;

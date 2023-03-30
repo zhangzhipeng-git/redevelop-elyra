@@ -89,6 +89,7 @@
     "carbon-components": "~10.8.1",
     "carbon-components-react": "^7.48.0",
     "carbon-icons": "7.0.7",
+    "core-js": "3",
     "downshift": "^6.1.2",
     "elyra-canvas-fix": "^12.26.1",
     "immer": "^9.0.7",

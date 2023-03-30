@@ -1,8 +1,9 @@
+import 'core-js';
+
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  ILayoutRestorer,
-  ILabStatus
+  ILayoutRestorer
 } from '@jupyterlab/application';
 
 import { ICommandPalette } from '@jupyterlab/apputils';
@@ -11,15 +12,12 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import { IEditorServices } from '@jupyterlab/codeeditor';
-import { ITranslator } from '@jupyterlab/translation';
-import { IFormComponentRegistry } from '@jupyterlab/ui-components';
-
+import userIdentify from '@src/app/user';
 import activatePipeline from '@src/app/pipeline-editor';
 
-import userIdentify from '@src/app/user';
-
-userIdentify.then((identify: any) => console.log(identify, 'user.identify'));
+userIdentify.then((identify: any) => {
+  console.log(identify?.username, 'username');
+});
 
 /**
  * Initialization data for the redevelop-elyra extension.
@@ -34,12 +32,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     IFileBrowserFactory,
     ILayoutRestorer,
     IMainMenu,
-    ISettingRegistry,
-    // metadata-editor
-    IEditorServices,
-    ILabStatus,
-    IFormComponentRegistry,
-    ITranslator
+    ISettingRegistry
   ],
   activate: (
     app: JupyterFrontEnd,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import { Field } from '@rjsf/core';
 
 import * as React from 'react';
 
-const DROPDOWN_ITEM_CLASS = 'elyra-form-DropDown-item';
+const DROPDOWN_ITEM_CLASS = 'redevelop-elyra-form-DropDown-item';
 
 export const DropDown: Field = props => {
   const {
@@ -60,8 +60,8 @@ export const DropDown: Field = props => {
       />
       <datalist
         id={`${label}-dataList`}
-        className={`elyra-metadataEditor-formInput ${DROPDOWN_ITEM_CLASS}`}
-        key="elyra-DropDown"
+        className={`redevelop-elyra-metadataEditor-formInput ${DROPDOWN_ITEM_CLASS}`}
+        key="redevelop-elyra-DropDown"
         style={{ width: 300 }}
       >
         {formContext.languageOptions.map((language: string) => {

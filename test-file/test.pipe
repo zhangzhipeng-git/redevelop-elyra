@@ -1,5 +1,5 @@
 {
-  "doc_type": "pipeline",
+  "doc_type": "pipe",
   "version": "3.0",
   "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
   "id": "auto-generated-pipeline",
@@ -16,7 +16,7 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default_022",
+              "connId": "kubernetes_default_undefined",
               "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
@@ -25,10 +25,6 @@
                 {
                   "key": "a",
                   "value": "b"
-                },
-                {
-                  "key": "b",
-                  "value": "c"
                 },
                 {
                   "key": "c",
@@ -84,8 +80,8 @@
             },
             "ui_data": {
               "label": "spark-examples_2.12-3.1.1.jar",
-              "x_pos": 46,
-              "y_pos": 48,
+              "x_pos": 122,
+              "y_pos": 165,
               "description": "Run SparkKubernetesOperator Node"
             }
           },
@@ -126,8 +122,6 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": true,
           "whetherRetry": true,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ export const CustomFieldTemplate: React.FC<FieldTemplateProps> = props => {
   if (props.uiSchema['ui:field'] === 'hidden') return <div />;
   let children = props.children;
   const requiredError = props.required && props.formData === undefined;
-  const hasError = props.rawErrors?.[0] || requiredError;
+  let hasError = props.rawErrors?.[0] || requiredError;
+  // 选填项-字符串数组中的字符串不需要校验必填
+  if (/pyPackages|dependencies|exDependencies/.test(props.id)) hasError = false;
   return (
     <div
       className={`${props.classNames} ${

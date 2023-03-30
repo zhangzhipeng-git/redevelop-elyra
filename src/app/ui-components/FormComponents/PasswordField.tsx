@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ export const PasswordField: Field = props => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className="elyra-passwordField">
+    <div className="redevelop-elyra-passwordField">
       <StringField
         {...props}
         uiSchema={{
@@ -35,7 +35,7 @@ export const PasswordField: Field = props => {
         }}
       />
       <button
-        className="elyra-passwordFieldButton"
+        className="redevelop-elyra-passwordFieldButton"
         onClick={(): void => setShowPassword(!showPassword)}
       >
         {showPassword ? <viewOffIcon.react /> : <viewIcon.react />}

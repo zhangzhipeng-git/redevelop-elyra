@@ -48,8 +48,9 @@ export async function onBeforeAddNode_GetOp(
 }
 
 /**
- * 粘贴节点时，如果连接信息和当前pipeline的连接信息不匹配时
+ * 1. 粘贴节点时，如果连接信息和当前pipeline的连接信息不匹配时
  * 需要重置连接信息并重置为默认值
+ * 2. 需要重新生成 taskId
  * @param {string} type pipeline 类型
  * @param {PipelineController} controller pipeline控制器
  */

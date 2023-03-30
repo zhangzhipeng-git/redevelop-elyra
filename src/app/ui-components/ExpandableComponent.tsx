@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,15 +28,18 @@ import { FeedbackButton } from './FeedbackButton';
 /**
  * The CSS class for expandable containers.
  */
-const DETAILS_VISIBLE_CLASS = 'elyra-expandableContainer-details-visible';
-const DETAILS_HIDDEN_CLASS = 'elyra-expandableContainer-details-hidden';
-const DISPLAY_NAME_CLASS = 'elyra-expandableContainer-name';
-const ELYRA_BUTTON_CLASS = 'elyra-button';
-const BUTTON_CLASS = 'elyra-expandableContainer-button';
-const TITLE_CLASS = 'elyra-expandableContainer-title';
-const ACTION_BUTTONS_WRAPPER_CLASS = 'elyra-expandableContainer-action-buttons';
-const ACTION_BUTTON_CLASS = 'elyra-expandableContainer-actionButton';
-const DRAGGABLE_CLASS = 'elyra-expandableContainer-draggable';
+const DETAILS_VISIBLE_CLASS =
+  'redevelop-elyra-expandableContainer-details-visible';
+const DETAILS_HIDDEN_CLASS =
+  'redevelop-elyra-expandableContainer-details-hidden';
+const DISPLAY_NAME_CLASS = 'redevelop-elyra-expandableContainer-name';
+const ELYRA_BUTTON_CLASS = 'redevelop-elyra-button';
+const BUTTON_CLASS = 'redevelop-elyra-expandableContainer-button';
+const TITLE_CLASS = 'redevelop-elyra-expandableContainer-title';
+const ACTION_BUTTONS_WRAPPER_CLASS =
+  'redevelop-elyra-expandableContainer-action-buttons';
+const ACTION_BUTTON_CLASS = 'redevelop-elyra-expandableContainer-actionButton';
+const DRAGGABLE_CLASS = 'redevelop-elyra-expandableContainer-draggable';
 
 /**
  * Expandable container props.

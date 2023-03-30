@@ -12,15 +12,15 @@ import k8sSvg from './k8s.svg';
 import errorSvg from './error.svg';
 
 const enum SvgRequestUrl {
-  Kubeflow = '/static/elyra/kubeflow.svg',
-  Airflow = '/static/elyra/airflow.svg',
-  Pipeline = '/static/elyra/pipeline-flow.svg',
-  Notebook = '/static/elyra/notebook.svg',
-  Python = '/static/elyra/python.svg',
-  R = '/static/elyra/r-logo.svg',
-  K8s = '/static/elyra/k8s.svg',
-  Spark = '/static/elyra/spark.svg',
-  Error = '/static/elyra/error.svg'
+  Kubeflow = '/static/redevelop-elyra/kubeflow.svg',
+  Airflow = '/static/redevelop-elyra/airflow.svg',
+  Pipeline = '/static/redevelop-elyra/pipeline-flow.svg',
+  Notebook = '/static/redevelop-elyra/notebook.svg',
+  Python = '/static/redevelop-elyra/python.svg',
+  R = '/static/redevelop-elyra/r-logo.svg',
+  K8s = '/static/redevelop-elyra/k8s.svg',
+  Spark = '/static/redevelop-elyra/spark.svg',
+  Error = '/static/redevelop-elyra/error.svg'
 }
 
 const svgMap = new Map();

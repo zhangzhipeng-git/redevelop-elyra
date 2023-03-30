@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,14 +58,13 @@ export const CodeBlock: Field = props => {
 
   React.useEffect(() => {
     if (editorRef.current !== undefined) {
-      editorRef.current.model.mimeType = servicesRef.current.mimeTypeService.getMimeTypeByLanguage(
-        {
+      editorRef.current.model.mimeType =
+        servicesRef.current.mimeTypeService.getMimeTypeByLanguage({
           name: props.formContext.language,
           codemirror_mode: props.formContext.language
-        }
-      );
+        });
     }
   }, [props.formContext.language]);
 
-  return <div ref={codeBlockRef} className="elyra-form-code" />;
+  return <div ref={codeBlockRef} className="redevelop-elyra-form-code" />;
 };

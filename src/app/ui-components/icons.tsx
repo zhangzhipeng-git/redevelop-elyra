@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,85 +39,88 @@ import whatsNewSvg from './style/icons/whats-new.svg';
 import pauseSvg from './style/icons/pause.svg';
 
 export const pauseIcon = new LabIcon({
-  name: 'elyra:pause',
+  name: 'redevelop-elyra:pause',
   svgstr: pauseSvg
 });
 
 export const importIcon = new LabIcon({
-  name: 'elyra:import',
+  name: 'redevelop-elyra:import',
   svgstr: importSvg
 });
 export const codeSnippetIcon = new LabIcon({
-  name: 'elyra:code-snippet',
+  name: 'redevelop-elyra:code-snippet',
   svgstr: codeSnippetSvg
 });
 export const dragDropIcon = new LabIcon({
-  name: 'elyra:dragdrop',
+  name: 'redevelop-elyra:dragdrop',
   svgstr: dragDropSvg
 });
-export const elyraIcon = new LabIcon({ name: 'elyra:elyra', svgstr: elyraSvg });
+export const elyraIcon = new LabIcon({
+  name: 'redevelop-elyra:redevelop-elyra',
+  svgstr: elyraSvg
+});
 export const pipelineIcon = new LabIcon({
-  name: 'elyra:pipeline',
+  name: 'redevelop-elyra:pipeline',
   svgstr: pipelineSvg
 });
 export const componentCatalogIcon = new LabIcon({
-  name: 'elyra:pipeline-components',
+  name: 'redevelop-elyra:pipeline-components',
   svgstr: pipelineComponentSvg
 });
 export const errorIcon = new LabIcon({
-  name: 'elyra:errorIcon',
+  name: 'redevelop-elyra:errorIcon',
   svgstr: errorIconSvg
 });
 export const clearPipelineIcon = new LabIcon({
-  name: 'elyra:clear-pipeline',
+  name: 'redevelop-elyra:clear-pipeline',
   svgstr: clearPipelineSvg
 });
 export const exportPipelineIcon = new LabIcon({
-  name: 'elyra:export-pipeline',
+  name: 'redevelop-elyra:export-pipeline',
   svgstr: exportPipelineSvg
 });
 export const savePipelineIcon = new LabIcon({
-  name: 'elyra:save-pipeline',
+  name: 'redevelop-elyra:save-pipeline',
   svgstr: savePipelineSvg
 });
 export const runtimesIcon = new LabIcon({
-  name: 'elyra:runtimes',
+  name: 'redevelop-elyra:runtimes',
   svgstr: runtimesSvg
 });
 export const containerIcon = new LabIcon({
-  name: 'elyra:container',
+  name: 'redevelop-elyra:container',
   svgstr: containerSvg
 });
 export const trashIcon = new LabIcon({
-  name: 'elyra:trashIcon',
+  name: 'redevelop-elyra:trashIcon',
   svgstr: trashIconSvg
 });
 export const helpIcon = new LabIcon({
-  name: 'elyra:helpIcon',
+  name: 'redevelop-elyra:helpIcon',
   svgstr: helpIconSvg
 });
 export const tagIcon = new LabIcon({
-  name: 'elyra:tagIcon',
+  name: 'redevelop-elyra:tagIcon',
   svgstr: tagIconSvg
 });
 export const rIcon = new LabIcon({
-  name: 'elyra:rIcon',
+  name: 'redevelop-elyra:rIcon',
   svgstr: rIconSvg
 });
 export const scalaIcon = new LabIcon({
-  name: 'elyra:scalaIcon',
+  name: 'redevelop-elyra:scalaIcon',
   svgstr: scalaIconSvg
 });
 export const viewIcon = new LabIcon({
-  name: 'elyra:view',
+  name: 'redevelop-elyra:view',
   svgstr: viewIconSvg
 });
 export const viewOffIcon = new LabIcon({
-  name: 'elyra:viewOff',
+  name: 'redevelop-elyra:viewOff',
   svgstr: viewOffIconSvg
 });
 export const whatsNewIcon = new LabIcon({
-  name: 'elyra:whats-new',
+  name: 'redevelop-elyra:whats-new',
   svgstr: whatsNewSvg
 });
 

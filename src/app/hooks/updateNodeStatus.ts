@@ -13,11 +13,11 @@ const colorMap: any = {
   up_for_rescheduled: '#40E0D0',
   upstream_failed: '#FFA500',
   skipped: '#FFC0CB',
-  '': 'orange'
+  waiting: '#0066bb'
 };
 
 function getStateRichText(oldLabel: string, state: string) {
-  if (!state) return oldLabel;
+  if (!state) state = 'waiting';
   return (
     limitLength(oldLabel) +
     `<div style="display:inline-flex;align-items:center;float:right;" title="${state}"><span style="display:inline-block;height: 14px;width:14px;margin-right:4px;background:${colorMap[state]};border-radius:2px;"></span>${state}</div>`
@@ -56,6 +56,7 @@ async function getNodeStatus(
   });
 
   let { state, dagRunId } = res;
+
   state = state.toLocaleLowerCase();
   if (['success', 'failed'].includes(state)) {
     // 运行完毕
@@ -63,14 +64,14 @@ async function getNodeStatus(
     doneFn(state.indexOf('success') > -1);
   } else if (typeof scheduleFn === 'function') {
     // 其他运行中状态
-    scheduleFn(state);
+    scheduleFn(state === 'running' ? '运行中...' : state);
   }
 
   const showTask = res.showTask;
   if (!showTask) return;
-
   controller._payload = { dagRunId, showTask };
-  const pipelineId = dagId.split('-')[1];
+
+  const pipelineId = dagId.split('_')[1];
   const nodes = controller.getPipelineFlow()?.pipelines?.[0].nodes ?? [];
   showTask.forEach((t: any) => {
     const { taskId, state } = t;

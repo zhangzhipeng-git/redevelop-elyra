@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,21 +76,24 @@ import {
   validatePipeline
 } from '@src/app/hooks/handlePipeline';
 
-import Utils from '@src/app/util';
+import { StyleProvider } from '@ant-design/cssinjs';
 
-const PIPELINE_CLASS = 'elyra-PipelineEditor';
+import Utils from '@src/app/util';
+import { useMask } from '../ui-components/loading';
+
+const PIPELINE_CLASS = 'redevelop-elyra-PipelineEditor';
 
 export const commandIDs = {
-  openPipelineEditor: 'pipeline-editor:open',
-  openMetadata: 'elyra-metadata:open',
+  openPipelineEditor: 'redevelop-pipeline-editor:open',
+  openMetadata: 'redevelop-elyra-metadata:open',
   openDocManager: 'docmanager:open',
   newDocManager: 'docmanager:new-untitled',
   saveDocManager: 'docmanager:save',
   submitScript: 'script-editor:submit',
   submitNotebook: 'notebook:submit',
-  addFileToPipeline: 'pipeline-editor:add-node',
-  refreshPalette: 'pipeline-editor:refresh-palette',
-  openViewer: 'elyra-code-viewer:open'
+  addFileToPipeline: 'redevelop-pipeline-editor:add-node',
+  refreshPalette: 'redevelop-pipeline-editor:refresh-palette',
+  openViewer: 'redevelop-elyra-code-viewer:open'
 };
 
 const getAllPaletteNodes = (palette: any): any[] => {
@@ -130,16 +133,18 @@ class PipelineEditorWidget extends ReactWidget {
 
   render(): any {
     return (
-      <PipelineWrapper
-        context={this.context}
-        browserFactory={this.browserFactory}
-        shell={this.shell}
-        commands={this.commands}
-        addFileToPipelineSignal={this.addFileToPipelineSignal}
-        refreshPaletteSignal={this.refreshPaletteSignal}
-        widgetId={this.parent?.id}
-        settings={this.settings}
-      />
+      <StyleProvider hashPriority="high">
+        <PipelineWrapper
+          context={this.context}
+          browserFactory={this.browserFactory}
+          shell={this.shell}
+          commands={this.commands}
+          addFileToPipelineSignal={this.addFileToPipelineSignal}
+          refreshPaletteSignal={this.refreshPaletteSignal}
+          widgetId={this.parent?.id}
+          settings={this.settings}
+        />
+      </StyleProvider>
     );
   }
 }
@@ -176,8 +181,9 @@ const PipelineWrapper: React.FC<IProps> = ({
   const [pipeline, setPipeline] = useState<any>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [readOnly, setReadOnly] = useState<boolean>(false);
+  const { mask, unmask } = useMask();
 
-  const uuid = useRef(Utils.shortUUID());
+  const uuid = useRef(Utils.timeUUID());
   const type: string = 'APACHE_AIRFLOW';
   const doubleClickToOpenProperties =
     settings?.composite['doubleClickToOpenProperties'] ?? true;
@@ -372,18 +378,21 @@ const PipelineWrapper: React.FC<IProps> = ({
 
       const isRun = actionType === 'run';
       // 重复运行会有问题，需要修改uuid
-      if (isRun) pipelineJson.uuid = Utils.shortUUID();
+      if (isRun) pipelineJson.uuid = Utils.timeUUID();
       const newPipeline = onRunOrSubmit(pipelineJson, actionType);
       if (!newPipeline) return;
 
       const containerId = uuid.current;
-      const toastId = uuid.current + '-loading';
-      toast.loading(`开始${actionName}`, { containerId, toastId });
+      const runToastId = uuid.current + '_run';
+      const submitToastId = uuid.current + '_submit';
 
       // 单次提交
       if (!isRun) {
-        await PipelineService.operator(newPipeline);
-        return toast.update(toastId, {
+        toast.loading(`开始提交`, { containerId, toastId: submitToastId });
+        await PipelineService.operator(newPipeline).catch(() =>
+          toast.dismiss(submitToastId)
+        );
+        return toast.update(submitToastId, {
           containerId,
           render: '提交成功',
           isLoading: false,
@@ -393,10 +402,11 @@ const PipelineWrapper: React.FC<IProps> = ({
       }
 
       // 单次运行
+      toast.loading(`开始运行`, { containerId, toastId: runToastId });
       setReadOnly(true);
       const res = await PipelineService.operator(newPipeline).catch(() => {
         clearTimeout(ref.current?.controller?.current?.timer);
-        toast.dismiss(uuid.current + '-loading');
+        toast.dismiss(runToastId);
         setReadOnly(false);
       });
       if (!res) return;
@@ -410,7 +420,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           runId: res.dagRunId
         },
         (state: boolean) => {
-          toast.update(toastId, {
+          toast.update(runToastId, {
             containerId,
             type: state ? 'success' : 'error',
             render: `运行${state ? '成功' : '失败'}`,
@@ -422,7 +432,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           });
         },
         (data: any) => {
-          toast.update(toastId, { containerId, render: data });
+          toast.update(runToastId, { containerId, render: data });
         }
       );
     },
@@ -468,7 +478,7 @@ const PipelineWrapper: React.FC<IProps> = ({
     await PipelineService.cancel({ dagId, dagRunId });
     const controller = ref?.current?.controller?.current ?? {};
     clearTimeout(controller.timer);
-    toast.dismiss(uuid.current + '-loading');
+    toast.dismiss(uuid.current + '_run');
     setReadOnly(false);
   }
 
@@ -493,19 +503,27 @@ const PipelineWrapper: React.FC<IProps> = ({
           runRes.current.task.find(({ taskId }: any) => taskId === id) ?? {};
         const scheduleTask =
           showTask.find(({ taskId }: any) => taskId === id) ?? {};
-
         const { taskId, taskReturnId } = task;
         const { tryNumber } = scheduleTask;
+
+        mask({ selector: editorWrapRef.current });
         const res = await PipelineService.logs({
           dagId,
           dagRunId,
           taskId,
           taskReturnId,
           taskTryNumber: tryNumber
-        });
+        }).catch(unmask);
+        unmask();
+        if (!res) return;
+
         new Dialog({
           title: '日志',
-          body: res.replace(/\\n/g, '\r\n'),
+          body: (
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+              {res.replace(/\\n/g, '\r\n')}
+            </div>
+          ),
           buttons: [Dialog.okButton({ label: '确定' })]
         }).launch();
         break;
@@ -795,7 +813,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   }, [addFileToPipelineSignal]);
 
   if (loading || !palette.current) {
-    return <div className="elyra-loader"></div>;
+    return <div className="redevelop-elyra-loader"></div>;
   }
 
   const handleOpenSettings = (): void => {
@@ -805,7 +823,7 @@ const PipelineWrapper: React.FC<IProps> = ({
   return (
     <div
       ref={editorWrapRef}
-      id={`pipeline-eidtor-wrapper`}
+      className="redevelop-elyra-pipeline-editor"
       style={{ position: 'relative', height: '100%' }}
     >
       <ThemeProvider theme={theme}>
@@ -816,7 +834,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           autoClose={3000}
           hideProgressBar
           closeOnClick={false}
-          className="elyra-PipelineEditor-toast"
+          className="redevelop-elyra-PipelineEditor-toast"
           draggable={false}
           theme="colored"
         />

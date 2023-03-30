@@ -1,0 +1,57 @@
+
+
+## 前端
+# 进入项目目录
+cd D:\jupyterlab\redevelop_elyra
+
+# 激活环境
+conda activate dev
+
+# 构建项目
+jlpm run build
+
+# 建立软链接，不需要重新安装插件 pip install -e .
+jupyter labextension develop --overwrite .
+
+# 构建/热更新
+jlpm run build / jlpm run watch
+
+# 打开编辑器
+jupyter lab
+
+
+## 整个编辑器汉化
+# 安装简体中文语言包
+pip install jupyterlab-language-pack-zh-CN
+# 去编辑器的settings里设置language
+
+## 打包部署
+# 打包 & 安装
+pip install build
+python -m build
+pip install jupyterlab_apod/dist/jupyterlab_apod-0.1.0-py3-none-any.whl
+# 发布 npm 包 & 下载编译安装
+
+
+jupyterlab 插件示例：
+https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html#build-and-install-the-extension-for-development
+https://kgithub.com/jupyterlab/extension-examples
+api:
+https://jupyterlab.readthedocs.io/en/stable/api/modules.html
+https://lumino.readthedocs.io/en/latest/api/index.html
+
+
+## 后端
+jupyter server: https://jupyter-server.readthedocs.io/en/latest/developers/extensions.html
+jupyter server 示例1：https://github.com/jupyter-server/jupyter_server/tree/main/examples/simple
+jupyter server 示例2：https://github.com/jupyterlab/jupyterlab-latex
+
+
+## elyra
+elyra 开发工作流：https://elyra.readthedocs.io/en/latest/developer_guide/development-workflow.html
+elyra github: https://github.com/elyra-ai/elyra/releases/tag/v3.14.2
+
+
+## 其他
+Kubeflow: https://www.orchome.com/kubeflow/index;jsessionid=B78ABFCE610EF917E147F2DF0ED9487A
+Apache Airflow: https://apachecn.gitee.io/airflow-doc-zh/#/zh/tutorial

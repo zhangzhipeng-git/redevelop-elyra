@@ -78,7 +78,7 @@ function getPipelineEdges(pipelineObj: any) {
 
 /**
  * 根据elyra的id找出手动生成的节点id （taskId）
- * @param {string} id elyra 内部生成的节点 id
+ * @param {string} id redevelop-elyra 内部生成的节点 id
  * @param {any[]} nodes 节点
  */
 export function getTaskIdByElyraNodeId(id: string, nodes: any) {
@@ -115,9 +115,9 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
       ?.join(',') ?? '';
 
   newPipeline = {
-    dagFileUuid: `${pipeline.uuid}-${pipelineObj.id}`,
+    dagFileUuid: `${pipeline.uuid}_${pipelineObj.id}`,
     operator,
-    caller: 'elyra',
+    caller: 'redevelop-elyra',
     dag: {
       ...dag,
       isStream: +dag.isStream,

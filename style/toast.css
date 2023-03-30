@@ -1,3 +1,4 @@
-.elyra-PipelineEditor-toast {
-    position: absolute !important;
+/* stylelint-disable selector-class-pattern */
+.redevelop-elyra-PipelineEditor-toast {
+  position: absolute !important;
 }

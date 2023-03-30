@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 Elyra Authors
+ * Copyright 2018-2022 Redevelop-Elyra Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ const FileTypeSelect: React.FC<IFileTypeSelectProps> = ({ fileTypes }) => {
       <select
         id="pipeline_filetype"
         name="pipeline_filetype"
-        className="elyra-form-export-filetype"
+        className="redevelop-elyra-form-export-filetype"
         data-form-required
       >
         {fileTypes.map(f => (
@@ -62,7 +62,7 @@ export const PipelineExportDialog: React.FC<IProps> = ({
   parameters
 }) => {
   return (
-    <form className="elyra-dialog-form">
+    <form className="redevelop-elyra-dialog-form">
       <RuntimeConfigSelect
         runtimeData={runtimeData}
         pipelineType={pipelineType}
@@ -85,7 +85,7 @@ export const PipelineExportDialog: React.FC<IProps> = ({
       <br />
       <input
         type="checkbox"
-        className="elyra-Dialog-checkbox"
+        className="redevelop-elyra-Dialog-checkbox"
         id="overwrite"
         name="overwrite"
       />

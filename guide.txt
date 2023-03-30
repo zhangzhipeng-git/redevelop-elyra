@@ -10,7 +10,10 @@ conda activate dev
 # 构建项目
 jlpm run build
 
-# 建立软链接，不需要重新安装插件 pip install -e .
+# 安装插件
+pip install -e .
+
+# 建立软链接，这种不需要重新安装插件 
 jupyter labextension develop --overwrite .
 
 # 构建/热更新
