@@ -449,13 +449,7 @@ const PipelineEditor = forwardRef(
         let payload;
         let type = e.editType;
 
-        if (type === 'deleteSelectedObjects')
-          payload = e.selectedObjects
-            .filter(({ type }: any) => type === 'execution_node')
-            .map(
-              (a: any) => a?.app_data?.component_parameters?.mainApplicationFile
-            );
-        else if (type === 'openFile') {
+        if (type === 'openFile') {
           const filenameRef = controller.current.resolveParameterRef(
             e.targetObject.op,
             'filehandler'

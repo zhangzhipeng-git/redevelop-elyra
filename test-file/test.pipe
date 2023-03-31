@@ -10,79 +10,33 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "916f4e4c-0033-4313-9265-6c2043db06cd",
+          "id": "3ddb9bd8-71d4-463e-9191-2767962eb055",
           "type": "execution_node",
-          "op": "execute-SparkKubernetesOperator-node",
+          "op": "execute-KubernetesPodOperator-node",
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default_undefined",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "sparkConf": [
-                {
-                  "key": "a",
-                  "value": "b"
-                },
-                {
-                  "key": "c",
-                  "value": "d"
-                }
-              ],
-              "hadoopConf": [
-                {
-                  "key": "a",
-                  "value": "b"
-                },
-                {
-                  "key": "b",
-                  "value": "c"
-                },
-                {
-                  "key": "c",
-                  "value": "d"
-                }
-              ],
-              "pyPackages": [],
-              "dependencies": [
-                "aaa",
-                "bbb",
-                "ccc"
-              ],
-              "exDependencies": [
-                "ccc",
-                "ccc",
-                "ddd"
-              ],
-              "_jars": [
-                "js.jar",
-                "jsrun.jar"
-              ],
-              "_files": [
-                "RELEASE.md",
-                "setup.py"
-              ],
-              "taskId": "a0164709746",
-              "taskName": "任务3",
-              "mainClass": "org.apache.spark.examples.SparkPi",
-              "_mainApplicationFile": "spark-examples_2.12-3.1.1.jar",
-              "mainApplicationFile": "http://localhost:8881/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-03-29_18:10:51/spark-examples_2.12-3.1.1.jar",
-              "jars": [
-                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
-              ],
-              "files": [
-                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-                "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg"
-              ]
+              "_mainApplicationFile": "../js.jar",
+              "mainApplicationFile": "http://xxx.xxx:xxxx/measurementcenter/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
+              "taskId": "r43603"
             },
             "ui_data": {
-              "label": "spark-examples_2.12-3.1.1.jar",
-              "x_pos": 122,
-              "y_pos": 165,
-              "description": "Run SparkKubernetesOperator Node"
+              "label": "js.jar",
+              "x_pos": 39,
+              "y_pos": 113,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -127,7 +81,7 @@
           "whetherRetry": true,
           "retry": 1,
           "scheduleInterval": "",
-          "dagName": "工作流测试3",
+          "dagName": "工作流测试4",
           "dagDesc": "工作流测试",
           "startTime": "2023/03/28 13:57:36"
         }

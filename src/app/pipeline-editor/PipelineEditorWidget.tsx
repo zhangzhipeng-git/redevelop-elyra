@@ -389,15 +389,17 @@ const PipelineWrapper: React.FC<IProps> = ({
       // 单次提交
       if (!isRun) {
         toast.loading(`开始提交`, { containerId, toastId: submitToastId });
-        await PipelineService.operator(newPipeline).catch(() =>
+        const res = await PipelineService.operator(newPipeline).catch(() =>
           toast.dismiss(submitToastId)
         );
         return toast.update(submitToastId, {
           containerId,
-          render: '提交成功',
+          type: res ? 'success' : 'error',
+          render: `提交${res ? '成功' : '失败'}`,
           isLoading: false,
-          type: 'success',
-          autoClose: 1000
+          autoClose: 3000,
+          closeOnClick: true,
+          closeButton: true
         });
       }
 
@@ -424,10 +426,10 @@ const PipelineWrapper: React.FC<IProps> = ({
             containerId,
             type: state ? 'success' : 'error',
             render: `运行${state ? '成功' : '失败'}`,
-            closeOnClick: true,
-            autoClose: 30000,
             isLoading: false,
+            autoClose: 30000,
             closeButton: true,
+            closeOnClick: true,
             onClose: () => setReadOnly(false)
           });
         },
@@ -566,11 +568,7 @@ const PipelineWrapper: React.FC<IProps> = ({
               contextRef.current.path,
               payload
             )
-            // readOnly: true
           });
-          break;
-        case 'deleteSelectedObjects':
-          onRemoveFile(type, payload);
           break;
         case 'paste':
           onPasteValidateNodeProperties({
@@ -686,7 +684,8 @@ const PipelineWrapper: React.FC<IProps> = ({
         type as any,
         browserFactory.defaultBrowser,
         paths,
-        editorWrapRef.current
+        editorWrapRef.current,
+        contextRef.current.path
       ),
     []
   );

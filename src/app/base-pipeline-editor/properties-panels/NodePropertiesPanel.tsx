@@ -144,6 +144,7 @@ export function NodePropertiesPanel({
       delete nodeParams._mainApplicationFile;
       const schemas = uiSchema.component_parameters;
       if (['java', 'scala'].includes(type)) {
+        nodeParams.type = 'java';
         if (schemas._requestParameter)
           schemas._requestParameter['ui:field'] = 'hidden';
         if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';

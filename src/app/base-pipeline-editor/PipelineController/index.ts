@@ -778,7 +778,11 @@ class PipelineController extends CanvasController {
       for (const [key, val] of Object.entries(
         app_data.component_parameters ?? {}
       )) {
-        if (val === undefined || val === null) {
+        if (
+          val === undefined ||
+          (val === null &&
+            (app_data.component_parameters as object).hasOwnProperty(key))
+        ) {
           delete app_data.component_parameters[key];
         }
       }

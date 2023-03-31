@@ -16,24 +16,27 @@ export async function onUploadFile(
   type = PipelineEnum.APACHE_AIRFLOW as Types,
   fileBrowser: FileBrowser,
   paths: string[],
-  maskHost?: HTMLElement
+  maskHost: HTMLElement,
+  pipePath: string
 ) {
   const { mask, unmask } = useMask();
   let defaultPaths = { paths: [] };
   if (type !== PipelineEnum.APACHE_AIRFLOW) return defaultPaths;
   if (!paths || !paths[0]) return defaultPaths;
 
-  const filePromises = paths.map((p: string) =>
-    fileBrowser.model.manager.services.contents.get(p, {
+  const filePromises = paths.map((p: string) => {
+    const abPath = PipelineService.getWorkspaceRelativeNodePath(pipePath, p);
+    return fileBrowser.model.manager.services.contents.get(abPath, {
       type: 'file',
       content: true,
       format: 'base64'
-    })
-  );
+    });
+  });
 
   let uploadFiles: UploadFileResponse[] = [];
   mask({ selector: maskHost });
   try {
+    console.log('开始上传文件！');
     const files = await Promise.all(filePromises);
     const uploadPromises = files.map(f => {
       const { content, mimetype, name } = f;
@@ -45,7 +48,7 @@ export async function onUploadFile(
     });
     uploadFiles = await Promise.all(uploadPromises);
   } catch (e) {
-    console.warn('上传文件失败！');
+    console.log('上传文件失败！');
   }
   unmask();
 

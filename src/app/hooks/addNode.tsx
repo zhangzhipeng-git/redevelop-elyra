@@ -76,6 +76,9 @@ export function onPasteValidateNodeProperties(
     const connectionIds = nodeSchema?.connId?.connectionIdEnum ?? [];
     const namespaces = nodeSchema?.connId.namespaceEnum ?? [];
     const connIds = nodeSchema?.connId.enum ?? [];
+    const params = nodeData.app_data.component_parameters;
+
+    // 如果连接资源不匹配，则重新赋默认值
     if (
       !connectionIds.includes(connectionId) ||
       !namespaces.includes(namespace) ||
@@ -86,10 +89,9 @@ export function onPasteValidateNodeProperties(
       nodeParams.connId = connIds[0] ?? '';
       changeFlag = true;
     }
-    if (
-      payload?.includes(nodeData.id) &&
-      nodeData.app_data?.component_parameters
-    ) {
+
+    // 重新生成 taskId
+    if (payload?.includes(nodeData.id) && params) {
       nodeData.app_data.component_parameters.taskId = Utils.randomUUID();
       changeFlag = true;
     }

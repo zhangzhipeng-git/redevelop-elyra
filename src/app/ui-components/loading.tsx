@@ -1,5 +1,6 @@
 import Spin from 'antd/lib/spin';
 import ReactDOM from 'react-dom';
+import { StyleProvider } from '@ant-design/cssinjs';
 
 interface LoadingProps {
   selector?: string | Element;
@@ -24,7 +25,12 @@ export function useMask() {
       node.removeChild(wrap);
     }
 
-    ReactDOM.render(<Spin tip={tip} delay={delay} />, wrap);
+    ReactDOM.render(
+      <StyleProvider hashPriority="high">
+        <Spin tip={tip} delay={delay} />
+      </StyleProvider>,
+      wrap
+    );
     node.appendChild(wrap);
   }
 

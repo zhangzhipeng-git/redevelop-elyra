@@ -37,6 +37,7 @@ module.exports = {
   },
   '/measurementcenter/applicationOut/uploadFile': () => {
     return {
+      timeout: 5000,
       code: '0',
       msg: null,
       data: {

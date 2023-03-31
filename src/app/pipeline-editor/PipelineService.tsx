@@ -305,6 +305,11 @@ export class PipelineService {
     return !!PipelineService.getNodeType(file.path);
   }
 
+  /**
+   * 获取节点文件相对于pipeline路径的路径
+   * @param {string} pipelinePath pipeline 路径
+   * @param {string} nodePath 节点文件路径
+   */
   static getPipelineRelativeNodePath(
     pipelinePath: string,
     nodePath: string
@@ -316,6 +321,11 @@ export class PipelineService {
     return relativePath;
   }
 
+  /**
+   * 获取节点文件相对于pipeline路径的路径
+   * @param {string} pipelinePath pipeline 路径
+   * @param {string} nodePath 节点文件路径
+   */
   static getWorkspaceRelativeNodePath(
     pipelinePath: string,
     nodePath: string
