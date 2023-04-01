@@ -7,7 +7,7 @@
       "node_types": [
         {
           "runtime_type": "APACHE_AIRFLOW",
-          "op": "execute-KubernetesPodOperator-node",
+          "op": "KubernetesPodOperator",
           "description": "Run KubernetesPodOperator Node",
           "id": "KubernetesPodOperator",
           "image": "/static/redevelop-elyra/airflow.svg",
@@ -61,7 +61,7 @@
           }
         },
         {
-          "op": "execute-SparkKubernetesOperator-node",
+          "op": "SparkKubernetesOperator",
           "description": "Run SparkKubernetesOperator Node",
           "id": "SparkKubernetesOperator",
           "image": "/static/redevelop-elyra/airflow.svg",

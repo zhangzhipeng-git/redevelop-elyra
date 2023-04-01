@@ -35,14 +35,6 @@
             ]
           }
         },
-        "mainClass": {
-          "type": "string",
-          "title": "启动Pod的类名",
-          "description": "启动Pod的类名（只有Java、scala类型任务需要此项）",
-          "uihints": {
-            "ui:placeholder": "请填写启动Pod的类名"
-          }
-        },
         "connId": {
           "type": "string",
           "title": "k8s集群连接信息",

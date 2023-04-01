@@ -18,7 +18,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled, { useTheme } from 'styled-components';
 
-const DEFAULT_PANEL_WIDTH = 450;
+const DEFAULT_PANEL_WIDTH = 400;
 const MIN_PANEL_WIDTH = 300;
 
 interface Props {

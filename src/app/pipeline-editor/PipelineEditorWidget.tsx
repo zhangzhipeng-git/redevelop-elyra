@@ -81,7 +81,7 @@ import { StyleProvider } from '@ant-design/cssinjs';
 import Utils from '@src/app/util';
 import { useMask } from '../ui-components/loading';
 
-const PIPELINE_CLASS = 'redevelop-elyra-PipelineEditor';
+const PIPELINE_CLASS = 'redevelop-elyra-pipeline-editor';
 
 export const commandIDs = {
   openPipelineEditor: 'redevelop-pipeline-editor:open',
@@ -185,20 +185,11 @@ const PipelineWrapper: React.FC<IProps> = ({
 
   const uuid = useRef(Utils.timeUUID());
   const type: string = 'APACHE_AIRFLOW';
-  const doubleClickToOpenProperties =
-    settings?.composite['doubleClickToOpenProperties'] ?? true;
-  const runtimeDisplayName = type;
 
-  // 自动展开左侧面板节点目录
-  useEffect(() => {
-    if (!palette.current) return;
-    setTimeout(() => {
-      const btns = document.querySelectorAll(
-        '.bx--accordion__item > button[aria-expanded=false]'
-      );
-      btns.forEach((btn: any) => btn.click());
-    }, 2000);
-  }, []);
+  // 默认 false ，打开节点的任务文件
+  const doubleClickToOpenProperties =
+    settings?.composite['doubleClickToOpenProperties'] ?? false;
+  const runtimeDisplayName = type;
 
   useEffect((): any => {
     const handleMutateSignal = async () =>
@@ -302,34 +293,41 @@ const PipelineWrapper: React.FC<IProps> = ({
   /**
    * 未设置双击打开节点属性时，双击打开文件。
    */
-  const onDoubleClick = useCallback((data: any): void => {
-    for (let i = 0; i < data.selectedObjectIds.length; i++) {
-      const node = pipeline.pipelines[0].nodes.find(
-        (node: any) => node.id === data.selectedObjectIds[i]
-      );
-      const nodeDef = getAllPaletteNodes(palette.current).find(
-        n => n.op === node?.op
-      );
-      const filenameRef = nodeDef?.app_data?.parameter_refs?.['filehandler'];
-      if (!filenameRef) {
-        console.warn(
-          '该节点没有文件引用字段: parameter_refs.filehandler ，节点属性表单需要使用该字段！'
+  const onDoubleClick = useCallback(
+    (data: any): void => {
+      if (!pipeline) return;
+      for (let i = 0; i < data.selectedObjectIds.length; i++) {
+        const node = pipeline.pipelines[0].nodes.find(
+          (node: any) => node.id === data.selectedObjectIds[i]
         );
-        return;
+        const nodeDef = getAllPaletteNodes(palette.current).find(
+          n => n.op === node?.op
+        );
+        const filenameRef = nodeDef?.app_data?.parameter_refs?.['filehandler'];
+        if (!filenameRef) {
+          console.warn(
+            '该节点没有文件引用字段: parameter_refs.filehandler ，节点属性表单需要使用该字段！'
+          );
+          return;
+        }
+        if (!node?.app_data?.component_parameters?.[filenameRef]) {
+          console.warn('未设置文件路径，无法打开文件！');
+          ref.current?.controller?.current.editActionHandler({
+            editType: 'properties'
+          });
+          return;
+        }
+        // 打开文件
+        commands.execute(commandIDs.openDocManager, {
+          path: PipelineService.getWorkspaceRelativeNodePath(
+            contextRef.current.path,
+            node.app_data.component_parameters[filenameRef]
+          )
+        });
       }
-      if (!node?.app_data?.component_parameters?.[filenameRef]) {
-        console.warn('未设置文件路径，无法打开文件！');
-        return;
-      }
-      // 打开文件
-      commands.execute(commandIDs.openDocManager, {
-        path: PipelineService.getWorkspaceRelativeNodePath(
-          contextRef.current.path,
-          node.app_data.component_parameters[filenameRef]
-        )
-      });
-    }
-  }, []);
+    },
+    [pipeline]
+  );
 
   useEffect(() => {
     return () => {
@@ -786,9 +784,8 @@ const PipelineWrapper: React.FC<IProps> = ({
           addFile(item, op);
         });
       } else {
-        selectedItems.map((item: any): void => {
-          addFile(item, PipelineService.getNodeType(item.path));
-        });
+        // to-do
+        return;
       }
 
       // update position if the default coordinates were used
@@ -833,7 +830,7 @@ const PipelineWrapper: React.FC<IProps> = ({
           autoClose={3000}
           hideProgressBar
           closeOnClick={false}
-          className="redevelop-elyra-PipelineEditor-toast"
+          className="redevelop-elyra-pipeline-editor-toast"
           draggable={false}
           theme="colored"
         />

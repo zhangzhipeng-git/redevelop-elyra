@@ -47,6 +47,7 @@ const widgets: { [id: string]: Widget } = {
 };
 
 interface Props {
+  nodeOp: string;
   data: any;
   schema?: JSONSchema7 | any;
   onChange?: (data: any) => any;
@@ -64,6 +65,7 @@ interface Props {
  * @param {schema} 管道的属性表单配置
  */
 export function NodePropertiesPanel({
+  nodeOp,
   data,
   schema: _schema,
   onChange,
@@ -73,6 +75,7 @@ export function NodePropertiesPanel({
   handleAfterSelectFileUploadFile,
   handleAfterSelectFileRemoveOldFile
 }: Props) {
+  console.log(nodeOp, 'nodeOp');
   if (!_schema) return <Message>未定义属性。</Message>;
 
   const _uiSchema: UiSchema = {};
@@ -135,7 +138,7 @@ export function NodePropertiesPanel({
     const { type, connId } = nodeParams;
     const { type: oldType, connId: oldConnId } = oldNodeParams;
 
-    // 1. 任务类型更改后，置空文件路径和删除对应的文件 & 展示字段根据类型展示或隐藏
+    // 1. 任务类型更改后，置空文件路径和删除对应的文件 & 展示字段根据类型展示或隐 藏
     if (type !== oldType) {
       // 删除文件 & 重置字段
       const prePath = nodeParams.mainApplicationFile;
@@ -152,6 +155,7 @@ export function NodePropertiesPanel({
         if (schemas.dependencies) schemas.dependencies['ui:field'] = 'visible';
         if (schemas.exDependencies)
           schemas.exDependencies['ui:field'] = 'visible';
+        if (schemas.mainClass) schemas.mainClass['ui:field'] = 'visible';
       } else {
         if (schemas._requestParameter)
           schemas._requestParameter['ui:field'] = 'visible';
@@ -160,6 +164,7 @@ export function NodePropertiesPanel({
         if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
         if (schemas.exDependencies)
           schemas.exDependencies['ui:field'] = 'hidden';
+        if (schemas.mainClass) schemas.mainClass['ui:field'] = 'hidden';
       }
       setOptions({
         uiSchema,
@@ -167,7 +172,7 @@ export function NodePropertiesPanel({
       });
     }
 
-    // 2. 集群连接信息改变后，命名空间也要跟着改变
+    // 2. 集群连接信息改变后，命名空间也要跟着改 变
     if (connId !== oldConnId) {
       if (!connId) delete nodeParams.namespace;
       else {
@@ -212,7 +217,8 @@ export function NodePropertiesPanel({
       if (!values || !values[0]) return;
 
       // 单文件上传时移除之前的文件
-      if (!canSelectMany) handleAfterSelectFileRemoveOldFile?.(preS3Path);
+      if (!canSelectMany && preS3Path)
+        handleAfterSelectFileRemoveOldFile?.(preS3Path);
       let s3Paths: string[] = [];
       if (handleAfterSelectFileUploadFile)
         s3Paths = (await handleAfterSelectFileUploadFile(values)).paths;
@@ -222,8 +228,8 @@ export function NodePropertiesPanel({
         let path;
         if (canSelectMany) {
           // 多选文件
-          value = [...propValue, ...(values ?? [])];
-          path = [...preS3Path, ...(s3Paths ?? [])];
+          value = [...(propValue ?? []), ...(values ?? [])];
+          path = [...(preS3Path ?? []), ...(s3Paths ?? [])];
         } else {
           // 单选文件
           value = values?.[0];

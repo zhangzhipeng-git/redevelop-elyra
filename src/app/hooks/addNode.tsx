@@ -11,8 +11,8 @@ import Utils from '../util';
 /**
  * 在添加节点前，获取节点的 op ，如：
  * ```
- * execute-KubernetesPodOperator-node
- * execute-SparkKubernetesOperator-node
+ * KubernetesPodOperator
+ * SparkKubernetesOperator
  * ```
  * 用于查询对应的节点模板配置
  * @param type pipeline 类型

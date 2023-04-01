@@ -21,7 +21,7 @@ import { NodePropertiesPanel, Message } from './NodePropertiesPanel';
 
 interface Props {
   selectedNodes?: any[];
-  getNodes: () => NodeType[];
+  nodes: NodeType[];
   upstreamNodes?: any[];
   onFileRequested?: (options: any) => any;
   onChange?: (nodeID: string, data: any) => any;
@@ -52,15 +52,12 @@ const Heading = styled.div`
 
 function NodeProperties({
   selectedNodes,
-  getNodes,
-  upstreamNodes,
+  nodes,
   onFileRequested,
   onChange,
-  parameters,
   handleAfterSelectFileUploadFile,
   handleAfterSelectFileRemoveOldFile
 }: Props) {
-  const nodes = getNodes();
   if (selectedNodes === undefined || selectedNodes.length === 0) {
     return <Message>请选择节点编辑它的属性。</Message>;
   }
@@ -85,11 +82,7 @@ function NodeProperties({
     return <Message>该类型的节点没有可编辑的属性。</Message>;
   }
 
-  // returns the node properties for selectedNode with the most recent content
-  const getNodeProperties = (): any => {
-    /// 删除了代码
-    return nodePropertiesSchema?.app_data?.properties ?? {};
-  };
+  const schema = nodePropertiesSchema?.app_data?.properties ?? {};
 
   return (
     <div>
@@ -99,7 +92,8 @@ function NodeProperties({
       </span>
       <NodePropertiesPanel
         key={selectedNode.id}
-        schema={getNodeProperties()}
+        nodeOp={selectedNode.op}
+        schema={schema}
         data={selectedNode.app_data}
         onChange={(data: any) => {
           onChange?.(selectedNode.id, data);

@@ -185,7 +185,7 @@ body {
   height: 35px;
 }
 
-.redevelop-elyra-PipelineEditor .redevelop-elyra-stringArrayControl-input {
+.redevelop-elyra-pipeline-editor .redevelop-elyra-stringArrayControl-input {
   width: 100%;
   height: 100%;
   margin-bottom: 5px;
@@ -203,11 +203,11 @@ span.bx--list-box__label {
   box-shadow: none;
 }
 
-.redevelop-elyra-PipelineEditor .properties-wrapper .bx--list-box__field {
+.redevelop-elyra-pipeline-editor .properties-wrapper .bx--list-box__field {
   height: 100%;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .properties-wrapper
   input[type='text']:disabled {
   height: 39px;
@@ -336,8 +336,8 @@ span.bx--list-box__label {
   display: none;
 }
 
-.redevelop-elyra-PipelineEditor .palette-flyout-div,
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor .palette-flyout-div,
+.redevelop-elyra-pipeline-editor
   .palette-flyout-search-container
   .palette-flyout-search
   input {
@@ -345,31 +345,31 @@ span.bx--list-box__label {
   color: var(--jp-content-font-color1);
 }
 
-.redevelop-elyra-PipelineEditor .palette-flyout-div {
+.redevelop-elyra-pipeline-editor .palette-flyout-div {
   border-right: 1px solid var(--jp-layout-color3);
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .palette-flyout-content
   .palette-list-item:hover {
   background-color: var(--jp-border-color1);
 }
 
-.redevelop-elyra-PipelineEditor .bx--search-magnifier {
+.redevelop-elyra-pipeline-editor .bx--search-magnifier {
   stroke: var(--jp-inverse-layout-color1);
 }
 
-.redevelop-elyra-PipelineEditor svg.palette-flyout-category-caret,
-.redevelop-elyra-PipelineEditor .palette-flyout-category-item-icon {
+.redevelop-elyra-pipeline-editor svg.palette-flyout-category-caret,
+.redevelop-elyra-pipeline-editor .palette-flyout-category-item-icon {
   background: none;
   fill: var(--jp-inverse-layout-color1);
 }
 
-.redevelop-elyra-PipelineEditor span.palette-flyout-category-text {
+.redevelop-elyra-pipeline-editor span.palette-flyout-category-text {
   color: var(--jp-content-font-color0);
 }
 
-.redevelop-elyra-PipelineEditor .bx--accordion__item svg.bx--accordion__arrow,
+.redevelop-elyra-pipeline-editor .bx--accordion__item svg.bx--accordion__arrow,
 .arrangeHorizontally-action .toolbar-icon svg,
 .arrangeVertically-action .toolbar-icon svg {
   fill: var(--jp-inverse-layout-color1);
@@ -382,9 +382,9 @@ span.bx--list-box__label {
   color: var(--redevelop-elyra-color-tooltip-text) !important;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .palette-flyout-category
-  .redevelop-elyra-PipelineEditor
+  .redevelop-elyra-pipeline-editor
   .palette-content-list {
   border-bottom: 1px solid var(--jp-content-font-color0);
 }
@@ -461,12 +461,12 @@ span.bx--list-box__label {
   margin-right: 4px;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .redevelop-elyra-formEditor
   .field-object
   > fieldset
   > legend,
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .redevelop-elyra-formEditor:not(#pipeline-parameters)
   .form-group.field.field-oneOf
   .form-group.field-object
@@ -478,17 +478,17 @@ span.bx--list-box__label {
   display: none;
 }
 
-.redevelop-elyra-PipelineEditor .form-group.field.field-integer {
+.redevelop-elyra-pipeline-editor .form-group.field.field-integer {
   width: 100%;
 }
 
-.redevelop-elyra-PipelineEditor .array-pipelineDefaults.form-control {
+.redevelop-elyra-pipeline-editor .array-pipelineDefaults.form-control {
   display: flex;
   justify-content: space-between;
   background-color: var(--jp-border-color3);
 }
 
-.redevelop-elyra-PipelineEditor .nodeDescription {
+.redevelop-elyra-pipeline-editor .nodeDescription {
   display: block;
   margin: 10px 20px;
   font-size: var(--jp-content-font-size1);
@@ -503,18 +503,18 @@ span.bx--list-box__label {
   cursor: text;
 }
 
-.redevelop-elyra-PipelineEditor .array-item .errorIndicator {
+.redevelop-elyra-pipeline-editor .array-item .errorIndicator {
   left: -10px;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .redevelop-elyra-formEditor
   .label-header.category-header
   label {
   font-size: var(--jp-content-font-size2);
 }
 
-.redevelop-elyra-PipelineEditor .errorIndicator {
+.redevelop-elyra-pipeline-editor .errorIndicator {
   width: 2px;
   background: var(--jp-error-color0);
   height: 92%;
@@ -524,25 +524,25 @@ span.bx--list-box__label {
   top: 0px;
 }
 
-.redevelop-elyra-PipelineEditor .form-group.field {
+.redevelop-elyra-pipeline-editor .form-group.field {
   min-width: auto;
   width: 100%;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .redevelop-elyra-formEditor
   select.form-control {
   padding-right: 1.5em;
 }
 
-.redevelop-elyra-PipelineEditor #root > .form-group.field:not(.field-object) {
+.redevelop-elyra-pipeline-editor #root > .form-group.field:not(.field-object) {
   padding-left: 14px;
   padding-right: 14px;
   padding-top: 12px;
   padding-bottom: 18px;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   #root
   > .form-group.field
   > fieldset
@@ -550,16 +550,16 @@ span.bx--list-box__label {
   padding-left: 14px;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   #root
   > .form-group.field
   > fieldset
   > .form-group.field.field-null,
-.redevelop-elyra-PipelineEditor #root > .form-group.field.field-null {
+.redevelop-elyra-pipeline-editor #root > .form-group.field.field-null {
   padding-left: 0;
 }
 
-.redevelop-elyra-PipelineEditor .redevelop-elyra-formEditor {
+.redevelop-elyra-pipeline-editor .redevelop-elyra-formEditor {
   padding: 10px 20px;
 }
 
@@ -617,7 +617,7 @@ span.bx--list-box__label {
   margin: 5px 0;
 }
 
-.redevelop-elyra-PipelineEditor
+.redevelop-elyra-pipeline-editor
   .field-object
   > fieldset
   > .field-object
@@ -946,13 +946,16 @@ input#root_component_parameters_gpu_vendor {
   background: var(--jp-border-color2);
 }
 
-.redevelop-elyra-PipelineEditor .toolbar-item.default button:disabled:hover svg,
+.redevelop-elyra-pipeline-editor
+  .toolbar-item.default
+  button:disabled:hover
+  svg,
 .toolbar-item.ghost button:disabled:hover svg,
 .toolbar-overflow-menu-item button:disabled:hover svg {
   background-color: var(--jp-border-color2);
 }
 
-.redevelop-elyra-PipelineEditor .toolbar-item.default button:hover svg,
+.redevelop-elyra-pipeline-editor .toolbar-item.default button:hover svg,
 .toolbar-item.ghost button:hover svg,
 .toolbar-overflow-item button:hover svg,
 .toolbar-overflow-menu-item button:hover svg {
@@ -968,7 +971,7 @@ input#root_component_parameters_gpu_vendor {
   width: 33%;
 }
 
-.redevelop-elyra-PipelineEditor .toolbar-item.default button:hover,
+.redevelop-elyra-pipeline-editor .toolbar-item.default button:hover,
 .toolbar-item.ghost button:hover,
 .toolbar-overflow-item button:hover,
 .toolbar-overflow-menu-item button:hover {
@@ -1010,29 +1013,29 @@ input#root_component_parameters_gpu_vendor {
   margin-left: 5px;
 }
 
-.redevelop-elyra-PipelineEditor .toolbar-item.tertiary button:disabled,
-.redevelop-elyra-PipelineEditor .toolbar-item.tertiary button:disabled:hover {
+.redevelop-elyra-pipeline-editor .toolbar-item.tertiary button:disabled,
+.redevelop-elyra-pipeline-editor .toolbar-item.tertiary button:disabled:hover {
   background-color: var(--jp-border-color2);
   color: var(--jp-content-font-color1);
   border: none;
   cursor: initial;
 }
 
-.redevelop-elyra-PipelineEditor .elyra_categoryHeader {
+.redevelop-elyra-pipeline-editor .elyra_categoryHeader {
   padding-left: 33px;
   padding-right: 24px;
 }
 
-.redevelop-elyra-PipelineEditor .elyra_categoryHeader .panel-label {
+.redevelop-elyra-pipeline-editor .elyra_categoryHeader .panel-label {
   font-size: var(--jp-content-font-size2);
 }
 
-.Toastify .redevelop-elyra-PipelineEditor-toast {
+.Toastify .redevelop-elyra-pipeline-editor-toast {
   white-space: pre-line;
   width: auto;
 }
 
-.redevelop-elyra-PipelineEditor-toast .Toastify__toast {
+.redevelop-elyra-pipeline-editor-toast .Toastify__toast {
   cursor: auto;
 }
 

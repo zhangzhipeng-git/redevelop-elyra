@@ -638,7 +638,7 @@ const PipelineEditor = forwardRef(
         content: (
           <NodeProperties
             selectedNodes={selectedNodes}
-            getNodes={() => controller.current.getAllPaletteNodes()}
+            nodes={controller.current.getAllPaletteNodes()}
             upstreamNodes={upstreamNodes}
             onFileRequested={onFileRequested}
             onChange={handlePropertiesChange}

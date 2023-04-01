@@ -6,9 +6,9 @@
   "properties": {
     "doubleClickToOpenProperties": {
       "title": "双击管道节点打开属性。",
-      "description": "如果启用（默认值为 true），双击一个节点将打开该节点的属性。如果禁用，则打开节点的源文件。",
+      "description": "如果启用，双击一个节点将打开该节点的属性。如果禁用（默认值），则打开节点的任务文件。",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   },
   "additionalProperties": false,

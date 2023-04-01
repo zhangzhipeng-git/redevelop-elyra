@@ -1,24 +1,23 @@
 import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
+import { AirflowOperatorEnum } from '@src/app/enums';
+import Topology from '@src/app/util/topology';
 import Utils from '@src/app/util';
-import Topology from '../util/topology';
 
-enum NodeSvgKey {
-  SparkKubernetesOperator = 'execute-SparkKubernetesOperator-node',
-  KubernetesPodOperator = 'execute-KubernetesPodOperator-node',
-  Error = 'error'
+enum SvgKeyEnum {
+  ERROR = 'error'
 }
 
 const base64Map = new Map();
 base64Map.set(
-  NodeSvgKey.KubernetesPodOperator,
+  AirflowOperatorEnum.K8S,
   Utils.svgToBase64(svgMap.get(SvgRequestUrl.K8s))
 );
 base64Map.set(
-  NodeSvgKey.SparkKubernetesOperator,
+  AirflowOperatorEnum.SPARK,
   Utils.svgToBase64(svgMap.get(SvgRequestUrl.Spark))
 );
 base64Map.set(
-  NodeSvgKey.Error,
+  SvgKeyEnum.ERROR,
   Utils.svgToBase64(svgMap.get(SvgRequestUrl.Error))
 );
 /**
@@ -33,7 +32,7 @@ export function onRenderPipeline(pipeline: any) {
       ui_data.image = base64Map.get(n.op);
       ui_data.decorations?.forEach((d: any) => {
         if (!d || d.id !== 'error') return;
-        d.image = base64Map.get(NodeSvgKey.Error);
+        d.image = base64Map.get(SvgKeyEnum.ERROR);
       });
     });
   });
@@ -99,7 +98,7 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
   const dag = pipelineObj.app_data?.properties ?? {};
   const task: any[] = [];
   pipelineObj.nodes?.forEach((n: any) => {
-    const operatorType = n.op?.split('-')[1];
+    const operatorType = n.op;
     task.push({
       operatorType,
       ...n?.app_data?.component_parameters

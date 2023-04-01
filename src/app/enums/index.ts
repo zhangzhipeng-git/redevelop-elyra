@@ -10,9 +10,10 @@ export type Types =
   | PipelineEnum.KUBEFLOW_PIPELINES
   | PipelineEnum.Local;
 
-/** 错误提示枚举 */
-export enum ErrorEnum {
-  REQUIRED = '是必填属性'
+/** airflow operators */
+export enum AirflowOperatorEnum {
+  K8S = 'KubernetesPodOperator',
+  SPARK = 'SparkKubernetesOperator'
 }
 
 /** 动作映射 */

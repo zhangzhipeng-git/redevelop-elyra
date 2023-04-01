@@ -44,6 +44,7 @@ import {
   StatusResponse,
   UploadFileResponse
 } from '@src/app/model';
+import { AirflowOperatorEnum } from '../enums';
 
 export const KFP_SCHEMA = 'kfp';
 export const RUNTIMES_SCHEMASPACE = 'runtimes';
@@ -65,29 +66,12 @@ export interface ISchema {
   runtime_type: string;
 }
 
-enum ContentType {
-  notebook = 'execute-notebook-node',
-  python = 'execute-python-node',
-  r = 'execute-r-node',
-  other = 'other'
-}
-
-enum AirflowContentType {
-  kpo = 'execute-KubernetesPodOperator-node',
-  sko = 'execute-SparkKubernetesOperator-node'
-}
-
-const CONTENT_TYPE_MAPPER: Map<string, ContentType> = new Map([
-  ['.py', ContentType.python],
-  ['.ipynb', ContentType.notebook],
-  ['.r', ContentType.r]
-]);
-
-const AIRFLOW_CONTENT_TYPE_MAPPER: Map<string, AirflowContentType[]> = new Map([
-  ['.jar', [AirflowContentType.kpo, AirflowContentType.sko]],
-  ['.py', [AirflowContentType.kpo, AirflowContentType.sko]],
-  ['.scala', [AirflowContentType.kpo, AirflowContentType.sko]]
-]);
+const AIRFLOW_CONTENT_TYPE_MAPPER: Map<string, AirflowOperatorEnum[]> = new Map(
+  [
+    ['.jar', [AirflowOperatorEnum.K8S, AirflowOperatorEnum.SPARK]],
+    ['.py', [AirflowOperatorEnum.K8S, AirflowOperatorEnum.SPARK]]
+  ]
+);
 
 export interface IRuntimeType {
   id: string;
@@ -262,14 +246,6 @@ export class PipelineService {
     });
   }
 
-  static getNodeType(filepath: string): string {
-    const extension: string = PathExt.extname(filepath);
-    const type: string = CONTENT_TYPE_MAPPER.get(extension)!;
-
-    // TODO: throw error when file extension is not supported?
-    return type;
-  }
-
   /** 获取 Airflow Pipeline 的所有 Operator */
   static getAirflowAllOperators(): Operator[] {
     let operators = [] as Operator[];
@@ -297,12 +273,10 @@ export class PipelineService {
    */
   static isSupportedNode(file: any, type = 'local'): boolean {
     // APACHE_AIRFLOW | KUBEFLOW_PIPELINES | local
-
     if (type === 'APACHE_AIRFLOW') {
       return !!PipelineService.getAirflowNodeTypes(file.path);
     }
-
-    return !!PipelineService.getNodeType(file.path);
+    return false;
   }
 
   /**

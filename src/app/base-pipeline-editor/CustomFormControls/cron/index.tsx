@@ -5,7 +5,8 @@ import Input from 'antd/lib/input';
 import dayjs from 'dayjs';
 
 const Option = Select.Option;
-const mwidth90 = { minWidth: 90, marginRight: 6 };
+const mwidth90 = { minWidth: 90, marginRight: 5 };
+const mwidth60 = { minWidth: 60, marginRight: 5 };
 const width100 = { width: 100 };
 const width150 = { width: 150 };
 const eachNum = (start: number, end: number, str: string) => {
@@ -150,7 +151,7 @@ export default function CronForm({
         ...oldObj,
         freq,
         week: freq === 'week' ? ['1'] : [],
-        dd: freq === 'month' ? ['1'] : [],
+        dd: ['month', 'year'].includes(freq) ? ['1'] : [],
         mm: Array.isArray(oldObj.mm) ? 0 : oldObj.mm,
         ...(freq === 'everyHours' && multiple
           ? {
@@ -295,13 +296,13 @@ export default function CronForm({
           </Option>
         ))}
       </Select>
-
+      {/* 月份 */}
       {isYear && (
         <Select
           value={MM}
           onChange={onMonthOfYearChanged}
           mode={mode}
-          style={mwidth90}
+          style={mwidth60}
           placeholder="月份"
           disabled={disabled}
         >
@@ -312,13 +313,13 @@ export default function CronForm({
           ))}
         </Select>
       )}
-
+      {/* 日期 */}
       {(isYear || isMonth) && (
         <Select
           value={dd}
           onChange={onDayOfMonthChanged}
           mode={mode}
-          style={mwidth90}
+          style={mwidth60}
           placeholder="日期"
           allowClear={isYear}
           disabled={disabled}
@@ -336,14 +337,14 @@ export default function CronForm({
           ))}
         </Select>
       )}
-
+      {/* 星期 */}
       {isWeek && (
         <Select
           value={week}
           onChange={onDayOfWeekChanged}
           mode={mode}
-          style={mwidth90}
-          placeholder="日期"
+          style={mwidth60}
+          placeholder="星期"
           disabled={disabled}
         >
           {dayOfWeekList.map(({ value, label }) => (
@@ -353,7 +354,7 @@ export default function CronForm({
           ))}
         </Select>
       )}
-
+      {/* 分钟 */}
       {isHours && (
         <Select
           value={mm}
@@ -371,6 +372,7 @@ export default function CronForm({
         </Select>
       )}
 
+      {/* 时间选择 */}
       {!isHours && !isCustom && (
         <TimePicker
           value={dayjs(`1970/1/1 ${HH}:${mm}:${ss}`)}
@@ -379,13 +381,14 @@ export default function CronForm({
           disabled={disabled}
         />
       )}
-
+      {/* 用户输入 */}
       {isCustom && (
         <Input
           style={width150}
           value={stringValue}
           onChange={onStringValueChanged}
           disabled={disabled}
+          placeholder="请填写corn表达式"
         />
       )}
     </Fragment>

@@ -40,13 +40,14 @@ export const MyDateTime: Widget = props => {
         locale={zhCH}
         format={format}
         style={{ width: '100%' }}
-        value={dayjs(props.value || Date.now())}
+        value={props.value ? dayjs(props.value) : undefined}
+        placeholder={`请选择${props.label}`}
         showTime
         onChange={(value: any) => {
-          handleBackfillTime(value.format(format));
+          handleBackfillTime(value?.format(format));
         }}
         onOk={(value: any) => {
-          handleBackfillTime(value.format(format));
+          handleBackfillTime(value?.format(format));
         }}
       />
     </div>

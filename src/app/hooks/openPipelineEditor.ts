@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
-
-import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
-import Utils from '@src/app/util';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
+
+import { PipelineService } from '@src/app/pipeline-editor/PipelineService';
+import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
+import { AirflowOperatorEnum } from '@src/app/enums';
+import Utils from '@src/app/util';
 
 export const GENERIC_CATEGORY_ID = 'Redevelop-Elyra';
 
@@ -68,8 +69,8 @@ interface IComponentPropertiesResponse {
 
 // TODO: This should be enabled through `extensions`
 const NodeIcons: Map<string, string> = new Map([
-  ['execute-KubernetesPodOperator-node', '/static/redevelop-elyra/k8s.svg'],
-  ['execute-SparkKubernetesOperator-node', '/static/redevelop-elyra/spark.svg']
+  [AirflowOperatorEnum.K8S, '/static/redevelop-elyra/k8s.svg'],
+  [AirflowOperatorEnum.SPARK, '/static/redevelop-elyra/spark.svg']
 ]);
 
 // TODO: We should decouple components and properties to support lazy loading.
