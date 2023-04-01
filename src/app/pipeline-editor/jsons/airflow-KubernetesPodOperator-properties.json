@@ -35,6 +35,14 @@
             ]
           }
         },
+        "mainClass": {
+          "type": "string",
+          "title": "Spark应用程序主类",
+          "description": "Spark应用程序主类(限定：Java/Scala)",
+          "uihints": {
+            "ui:placeholder": "请填写Spark应用程序主类"
+          }
+        },
         "connId": {
           "type": "string",
           "title": "k8s集群连接信息",
