@@ -1255,9 +1255,9 @@
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
 "@elyra/pipeline-schemas@^3.0.63":
-  version "3.0.66"
-  resolved "https://registry.npmjs.org/@elyra/pipeline-schemas/-/pipeline-schemas-3.0.66.tgz#4a9518641a892026b640f3deaee566460e9f9587"
-  integrity sha512-kdYuLN9cDstS4jNdvm6G4UYaKSRvnbhFOZLzv8WME8X+EU9yZ33ZJ2w+V85Zxd7tBY5XAg/1ySCS7mI6RC5QCQ==
+  version "3.0.67"
+  resolved "https://registry.npmjs.org/@elyra/pipeline-schemas/-/pipeline-schemas-3.0.67.tgz#97f300c49a7b8ce2626a759a6d093e456b98a1a9"
+  integrity sha512-Lh1fUYtVgbIF7AG9270KjEi0TOI3EiekbabH1xrt+2ZImQ73O4WJymFY2K3RNgcEC3td79ukibuUSDVpfmurBw==
 
 "@elyra/pipeline-services@1.12.1":
   version "1.12.1"
@@ -5815,9 +5815,9 @@ d3-contour@4:
     d3-array "^3.2.0"
 
 d3-delaunay@6:
-  version "6.0.3"
-  resolved "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.3.tgz#d0824ba2012a5f6cd17d035653d0515d1c098257"
-  integrity sha512-1gPbiMuikAgU/rFcT6WMu17zx0aelw9Hh80go7/TwZQ+/uq8DqqmiNYy+EqPEvTSp/BkJFIpQxjac4Gk/w0zOg==
+  version "6.0.4"
+  resolved "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.4.tgz#98169038733a0a5babbeda55054f795bb9e4a58b"
+  integrity sha512-mdjtIZ1XLAM8bm/hx3WwjfHt6Sggek7qH043O8KEjDXN40xi3vx/6pYSVTwLjEgiXQTbvaouWKynLBiUZ6SK6A==
   dependencies:
     delaunator "5"
 
@@ -5981,9 +5981,9 @@ d3-zoom@3:
     d3-transition "2 - 3"
 
 d3@^7.1.1:
-  version "7.8.3"
-  resolved "https://registry.npmjs.org/d3/-/d3-7.8.3.tgz#b6c862d16368e15bf764c89e248a300a56f2ab40"
-  integrity sha512-cAa866AkPXtt4IzRx6nzGf50uerq6VYks7p/tTH94be4QfhUkyTfJfaxXGPOB5ZRVUZmUV1wcM1dism/Ua0lCw==
+  version "7.8.4"
+  resolved "https://registry.npmjs.org/d3/-/d3-7.8.4.tgz#e35d45800e4068cab07e59e5d883a4bb42ab217f"
+  integrity sha512-q2WHStdhiBtD8DMmhDPyJmXUxr6VWRngKyiJ5EfXMxPw+tqT6BhNjhJZ4w3BHsNm3QoVfZLY8Orq/qPFczwKRA==
   dependencies:
     d3-array "3"
     d3-axis "3"
@@ -6546,10 +6546,10 @@ elliptic@^6.5.3:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-elyra-canvas-fix@^12.26.1:
-  version "12.26.1"
-  resolved "https://registry.npmjs.org/elyra-canvas-fix/-/elyra-canvas-fix-12.26.1.tgz#cebe8ba179e730c9e39410dacd9a45e9635279bb"
-  integrity sha512-NThLkTBQ/AsJUj/BrvkF4bcjb1+Ge7FJ3O1VtYKIMJvXJxS9NLn5UMvmW4jNy/mxTclSRpaI9w9BcSd989wXdQ==
+elyra-canvas-fix@^12.26.3:
+  version "12.26.3"
+  resolved "https://registry.npmjs.org/elyra-canvas-fix/-/elyra-canvas-fix-12.26.3.tgz#38cabfb8f782d09a0ba297965dc824d22dc3f026"
+  integrity sha512-AMjjsPo90QICMTJJOL0qR5TKEGVZ/xSVRPZOjLTaD0qs+5DmJFyIIxgALcqnGT/xnSGyvVjDY/E0WMA7O3FROQ==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@elyra/pipeline-schemas" "^3.0.63"

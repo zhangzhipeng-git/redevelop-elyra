@@ -318,10 +318,18 @@ const PipelineWrapper: React.FC<IProps> = ({
           return;
         }
         // 打开文件
+        const filename = node.app_data.component_parameters[filenameRef];
+        if (/\.jar/.test(filename)) {
+          new Dialog({
+            body: '此文件是二进制文件或使用了不受支持的文本编码，无法在编辑器中显示。',
+            buttons: [Dialog.okButton({ label: '确定' })]
+          }).launch();
+          return;
+        }
         commands.execute(commandIDs.openDocManager, {
           path: PipelineService.getWorkspaceRelativeNodePath(
             contextRef.current.path,
-            node.app_data.component_parameters[filenameRef]
+            filename
           )
         });
       }
@@ -375,8 +383,8 @@ const PipelineWrapper: React.FC<IProps> = ({
       if (!result.button.accept) return;
 
       const isRun = actionType === 'run';
-      // 重复运行会有问题，需要修改uuid
-      if (isRun) pipelineJson.uuid = Utils.timeUUID();
+      // 重复运行/提交会有问题，需要修改uuid
+      pipelineJson.uuid = Utils.timeUUID();
       const newPipeline = onRunOrSubmit(pipelineJson, actionType);
       if (!newPipeline) return;
 
@@ -453,7 +461,7 @@ const PipelineWrapper: React.FC<IProps> = ({
         if (newPipeline?.pipelines?.[0]?.nodes?.length > 0) {
           newPipeline.pipelines[0].nodes = [];
         }
-        // remove supernode pipelines
+
         newPipeline.pipelines = [newPipeline.pipelines[0]];
         // only clear pipeline properties when "Clear All" is selected
         if (result.button.label === 'Clear All') {

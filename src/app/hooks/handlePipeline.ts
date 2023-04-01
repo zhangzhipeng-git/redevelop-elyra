@@ -1,5 +1,6 @@
 import { SvgRequestUrl, svgMap } from '@src/assets/svgs';
 import { AirflowOperatorEnum } from '@src/app/enums';
+import { UPLOAD_VIEW_FIELD_PREFIX } from '@src/app/const';
 import Topology from '@src/app/util/topology';
 import Utils from '@src/app/util';
 
@@ -99,9 +100,15 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
   const task: any[] = [];
   pipelineObj.nodes?.forEach((n: any) => {
     const operatorType = n.op;
+    const nodeParams = n?.app_data?.component_parameters ?? {};
+    // 删除只用于前端展示文件路径的字段，因为后端用不到这些字段
+    Object.keys(nodeParams).forEach((k: string) => {
+      if (k[0] !== UPLOAD_VIEW_FIELD_PREFIX) return;
+      delete nodeParams[k];
+    });
     task.push({
       operatorType,
-      ...n?.app_data?.component_parameters
+      ...nodeParams
     });
   });
   const taskDependency = getPipelineEdges(pipelineObj);
@@ -183,6 +190,7 @@ export function validatePipeline(pipeline: any, palette: any) {
     // 动态字段校验(schema目前是写死的，暂时没有找到依赖校验的写法，这里手动判断。)
     if (
       nodeProperties?.type?.match(/java|scala/) &&
+      n.op === AirflowOperatorEnum.SPARK &&
       !nodeProperties?.['mainClass']
     ) {
       errors.push({

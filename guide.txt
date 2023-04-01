@@ -31,6 +31,7 @@ pip install jupyterlab-language-pack-zh-CN
 ## 打包部署
 # 打包 & 安装
 pip install build
+jlpm run clean:all
 python -m build
 pip install jupyterlab_apod/dist/jupyterlab_apod-0.1.0-py3-none-any.whl
 # 发布 npm 包 & 下载编译安装

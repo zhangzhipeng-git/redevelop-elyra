@@ -1,4 +1,15 @@
 import { AjvError, UiSchema } from '@rjsf/core';
+import styled from 'styled-components';
+
+export const Message = styled.div`
+  margin-top: 14px;
+  padding: 0 22px;
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.fontWeight};
+  font-size: ${({ theme }) => theme.typography.fontSize};
+  color: ${({ theme }) => theme.palette.text.primary};
+  opacity: 0.5;
+`;
 
 /**
  * 根据表单规范的uihints生成ui配置，因为elyra的表单配置中，

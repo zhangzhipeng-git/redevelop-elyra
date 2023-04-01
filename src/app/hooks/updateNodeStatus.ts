@@ -19,7 +19,7 @@ const colorMap: any = {
 function getStateRichText(oldLabel: string, state: string) {
   if (!state) state = 'waiting';
   return (
-    limitLength(oldLabel) +
+    limitLength(oldLabel, 25 - state.length) +
     `<div style="display:inline-flex;align-items:center;float:right;" title="${state}"><span style="display:inline-block;height: 14px;width:14px;margin-right:4px;background:${colorMap[state]};border-radius:2px;"></span>${state}</div>`
   );
 }

@@ -133,19 +133,25 @@
         "dependencies": {
           "type": "array",
           "title": "依赖项",
-          "description": "依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "description": "依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)，格式: groupId:artifactId:version",
           "default": [],
           "items": {
             "type": "string"
+          },
+          "uihints": {
+            "ui:placeholder": "groupId:artifactId:version"
           }
         },
         "exDependencies": {
           "type": "array",
           "title": "排除依赖项",
-          "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)",
+          "description": "排除依赖项(只有当任务类型为Java时才需要选填，其他类型不需要填)，格式: groupId:artifactId",
           "default": [],
           "items": {
             "type": "string"
+          },
+          "uihints": {
+            "ui:placeholder": "groupId:artifactId"
           }
         },
         "_tarPath": {

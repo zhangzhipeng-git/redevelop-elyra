@@ -17,7 +17,11 @@
 import { NodeType } from 'elyra-canvas-fix';
 import styled from 'styled-components';
 
-import { NodePropertiesPanel, Message } from './NodePropertiesPanel';
+import { AirflowOperatorEnum } from '@src/app/enums';
+
+import { Message } from './util';
+import { AirflowK8sNodePanel } from './AirflowK8sNodePanel';
+import { AirflowSparkNodePanel } from './AirflowSparkNodePanel';
 
 interface Props {
   selectedNodes?: any[];
@@ -83,6 +87,45 @@ function NodeProperties({
   }
 
   const schema = nodePropertiesSchema?.app_data?.properties ?? {};
+  const { id, op, app_data } = selectedNode;
+
+  let nodePropertiesPanel = <>{/**/}</>;
+  switch (op) {
+    case AirflowOperatorEnum.K8S:
+      nodePropertiesPanel = (
+        <AirflowK8sNodePanel
+          key={id}
+          nodeOp={op}
+          schema={schema}
+          data={app_data}
+          onChange={(data: any) => {
+            onChange?.(id, data);
+          }}
+          onFileRequested={onFileRequested}
+          handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+          handleAfterSelectFileRemoveOldFile={
+            handleAfterSelectFileRemoveOldFile
+          }
+        />
+      );
+    case AirflowOperatorEnum.SPARK:
+      nodePropertiesPanel = (
+        <AirflowSparkNodePanel
+          key={id}
+          nodeOp={op}
+          schema={schema}
+          data={app_data}
+          onChange={(data: any) => {
+            onChange?.(id, data);
+          }}
+          onFileRequested={onFileRequested}
+          handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
+          handleAfterSelectFileRemoveOldFile={
+            handleAfterSelectFileRemoveOldFile
+          }
+        />
+      );
+  }
 
   return (
     <div>
@@ -90,18 +133,7 @@ function NodeProperties({
       <span className="nodeDescription">
         {nodePropertiesSchema.description}
       </span>
-      <NodePropertiesPanel
-        key={selectedNode.id}
-        nodeOp={selectedNode.op}
-        schema={schema}
-        data={selectedNode.app_data}
-        onChange={(data: any) => {
-          onChange?.(selectedNode.id, data);
-        }}
-        onFileRequested={onFileRequested}
-        handleAfterSelectFileUploadFile={handleAfterSelectFileUploadFile}
-        handleAfterSelectFileRemoveOldFile={handleAfterSelectFileRemoveOldFile}
-      />
+      {nodePropertiesPanel}
     </div>
   );
 }

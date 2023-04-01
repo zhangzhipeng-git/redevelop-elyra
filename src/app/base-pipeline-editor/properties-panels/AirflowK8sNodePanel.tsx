@@ -16,7 +16,6 @@
 
 import Form, { UiSchema, Widget, FormValidation } from '@rjsf/core';
 import { produce } from 'immer';
-import styled from 'styled-components';
 
 import {
   FileWidget,
@@ -29,18 +28,13 @@ import { JSONSchema7 } from 'json-schema';
 import { PathExt } from '@jupyterlab/coreutils';
 
 import { TYPE_MAP } from '@src/app/const';
-import { ERROR_TYPE_MAP, genUISchemaFromSchema, transformErrors } from './util';
+import {
+  ERROR_TYPE_MAP,
+  genUISchemaFromSchema,
+  transformErrors,
+  Message
+} from './util';
 import { useState } from 'react';
-
-export const Message = styled.div`
-  margin-top: 14px;
-  padding: 0 22px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-weight: ${({ theme }) => theme.typography.fontWeight};
-  font-size: ${({ theme }) => theme.typography.fontSize};
-  color: ${({ theme }) => theme.palette.text.primary};
-  opacity: 0.5;
-`;
 
 const widgets: { [id: string]: Widget } = {
   file: FileWidget
@@ -64,8 +58,7 @@ interface Props {
  * @param {object} 管道的属性对象，可应用于管道中的所有节点
  * @param {schema} 管道的属性表单配置
  */
-export function NodePropertiesPanel({
-  nodeOp,
+export function AirflowK8sNodePanel({
   data,
   schema: _schema,
   onChange,
@@ -75,7 +68,6 @@ export function NodePropertiesPanel({
   handleAfterSelectFileUploadFile,
   handleAfterSelectFileRemoveOldFile
 }: Props) {
-  console.log(nodeOp, 'nodeOp');
   if (!_schema) return <Message>未定义属性。</Message>;
 
   const _uiSchema: UiSchema = {};
@@ -89,13 +81,9 @@ export function NodePropertiesPanel({
   if (['java', 'scala'].includes(data?.component_parameters?.type)) {
     if (schemas._requestParameter)
       schemas._requestParameter['ui:field'] = 'hidden';
-    if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';
-    if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'hidden';
   } else {
     if (schemas._requestParameter)
       schemas._requestParameter['ui:field'] = 'visible';
-    if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
-    if (schemas.exDependencies) schemas.exDependencies['ui:field'] = 'hidden';
   }
 
   /**
@@ -107,15 +95,9 @@ export function NodePropertiesPanel({
     const { schema } = options;
     const nodeSchema =
       schema.properties?.component_parameters?.properties ?? {};
-    const data = formData.component_parameters;
     const error: any = errors.component_parameters;
 
-    // 1.任务类型级联启动主类校验
-    const field = 'mainClass';
-    if (['java', 'scala'].includes(data.type) && !data[field])
-      error?.[field]?.addError(ERROR_TYPE_MAP.required);
-
-    // 2.连接信息数据项校验（接口查回来的可能为空集合）
+    // 连接信息数据项校验（接口查回来的可能为空集合）
     if (!nodeSchema.connId?.enum[0])
       error?.connId?.addError(ERROR_TYPE_MAP.enumRequired);
 
@@ -138,41 +120,33 @@ export function NodePropertiesPanel({
     const { type, connId } = nodeParams;
     const { type: oldType, connId: oldConnId } = oldNodeParams;
 
-    // 1. 任务类型更改后，置空文件路径和删除对应的文件 & 展示字段根据类型展示或隐 藏
+    // 任务类型更改后，置空文件路径和删除对应的文件 & 展示字段根据类型展示或隐藏
     if (type !== oldType) {
       // 删除文件 & 重置字段
       const prePath = nodeParams.mainApplicationFile;
       handleAfterSelectFileRemoveOldFile?.(prePath);
       delete nodeParams.mainApplicationFile;
       delete nodeParams._mainApplicationFile;
+
       const schemas = uiSchema.component_parameters;
       if (['java', 'scala'].includes(type)) {
         nodeParams.type = 'java';
         if (schemas._requestParameter)
           schemas._requestParameter['ui:field'] = 'hidden';
-        if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';
-        if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'hidden';
-        if (schemas.dependencies) schemas.dependencies['ui:field'] = 'visible';
-        if (schemas.exDependencies)
-          schemas.exDependencies['ui:field'] = 'visible';
         if (schemas.mainClass) schemas.mainClass['ui:field'] = 'visible';
       } else {
         if (schemas._requestParameter)
           schemas._requestParameter['ui:field'] = 'visible';
-        if (schemas._tarPath) schemas._tarPath['ui:field'] = 'visible';
-        if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'visible';
-        if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
-        if (schemas.exDependencies)
-          schemas.exDependencies['ui:field'] = 'hidden';
         if (schemas.mainClass) schemas.mainClass['ui:field'] = 'hidden';
       }
+
       setOptions({
         uiSchema,
         schema
       });
     }
 
-    // 2. 集群连接信息改变后，命名空间也要跟着改 变
+    // 集群连接信息改变后，命名空间也要跟着改 变
     if (connId !== oldConnId) {
       if (!connId) delete nodeParams.namespace;
       else {

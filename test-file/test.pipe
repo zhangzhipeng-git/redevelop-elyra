@@ -1,0 +1,192 @@
+{
+  "doc_type": "pipe",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "auto-generated-pipeline",
+  "uuid": "t1680329924793",
+  "primary_pipeline": "primary",
+  "pipelines": [
+    {
+      "id": "primary",
+      "nodes": [
+        {
+          "id": "452fe979-d5ce-404e-8f10-47754db00264",
+          "type": "execution_node",
+          "op": "SparkKubernetesOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "java",
+              "connId": "kubernetes_default",
+              "connectionId": 50,
+              "namespace": "airflow",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "sparkConf": [
+                {
+                  "key": "aaa"
+                }
+              ],
+              "hadoopConf": [
+                {
+                  "key": "aaa",
+                  "value": "bbbb"
+                },
+                {
+                  "key": "cccc",
+                  "value": "eeee"
+                }
+              ],
+              "pyPackages": [],
+              "dependencies": [
+                "mysql:mysql-con-java:3.2.1",
+                "mysql2:mysql-con-java:3.2.2",
+                "mysql3:mysql-con-java:3.2.3"
+              ],
+              "exDependencies": [
+                "mysql3:mysql-con-java",
+                "mysql3:mysql-con-java"
+              ],
+              "_jars": [
+                "../js.jar",
+                "../jsrun.jar"
+              ],
+              "_files": [
+                "../README.md",
+                "../RELEASE.md"
+              ],
+              "taskId": "r77317",
+              "taskName": "spark_test_task",
+              "mainClass": "org.apache.spark.examples.SparkPi",
+              "jars": [
+                "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:54:03/js.jar",
+                "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:54:00/jsrun.jar"
+              ],
+              "files": [
+                "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:54:12/README.md",
+                "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:54:13/RELEASE.md"
+              ],
+              "_mainApplicationFile": "spark-examples_2.12-3.1.1.jar",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:02:40/spark-examples_2.12-3.1.1.jar"
+            },
+            "ui_data": {
+              "label": "spark-examples_2.12-3.1.1.jar",
+              "x_pos": 31,
+              "y_pos": 84,
+              "description": "Run SparkKubernetesOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "972a3a3b-b704-4b10-9efb-ce490a522d58",
+          "type": "execution_node",
+          "op": "KubernetesPodOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default",
+              "connectionId": 50,
+              "namespace": "airflow",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "taskId": "r02739",
+              "taskName": "任务1",
+              "_mainApplicationFile": "test.py",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:08:25/test.py"
+            },
+            "ui_data": {
+              "label": "test.py",
+              "x_pos": 43,
+              "y_pos": 209,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "12c46a5f-0812-4c3f-8e46-ea89a082db21",
+                  "node_id_ref": "452fe979-d5ce-404e-8f10-47754db00264",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": []
+        },
+        "version": 8,
+        "runtime_type": "APACHE_AIRFLOW",
+        "properties": {
+          "applicationId": "1",
+          "applicationCode": "SYS_FBSGFKGKC",
+          "email": "airflow@example.com",
+          "isStream": false,
+          "whetherRetry": true,
+          "retry": 1,
+          "scheduleInterval": "0 0 0 * * ? *",
+          "dagDesc": "任务描述",
+          "dagName": "工作流测试13"
+        }
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}

@@ -35,9 +35,8 @@ import {
 import { getFileName, prefixedToNested } from './utils';
 
 import Utils from '@src/app/util';
-
-import { PipelineEnum } from '@src/app/enums';
 import { TYPE_MAP } from '@src/app/const';
+import { AirflowOperatorEnum, PipelineEnum } from '@src/app/enums';
 
 export const PIPELINE_CURRENT_VERSION = 8;
 
@@ -562,10 +561,11 @@ class PipelineController extends CanvasController {
   pathValidateError(problems: any, type = PipelineEnum.APACHE_AIRFLOW) {
     if (type !== PipelineEnum.APACHE_AIRFLOW) return;
     const pipelineObj = this.getPipelineFlow()?.pipelines?.[0];
-    pipelineObj?.nodes?.forEach(n => {
+    pipelineObj?.nodes?.forEach((n: any) => {
       const nodeParams: any = n?.app_data?.component_parameters ?? {};
       if (
         !['java', 'scala'].includes(nodeParams.type) ||
+        ![AirflowOperatorEnum.SPARK].includes(n.op) ||
         !!nodeParams.mainClass
       )
         return;

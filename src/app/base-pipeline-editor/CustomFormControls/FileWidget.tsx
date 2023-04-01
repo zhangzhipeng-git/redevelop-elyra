@@ -22,14 +22,13 @@ import { EXT_MAP } from '@src/app/const';
 // TODO: Make the file clearable
 // 单文件上传组件
 export const FileWidget: Widget = props => {
-  const propsValue = props.value;
   const handleChooseFile = useCallback(async () => {
     const propertyID = props.id.replace('root_component_parameters_', '');
     const { extensions, parentID } = props.uiSchema;
 
     const options = {
       canSelectMany: false,
-      defaultUri: propsValue,
+      defaultUri: props.value,
       filters: { File: [] },
       propertyID,
       parentID
@@ -53,7 +52,7 @@ export const FileWidget: Widget = props => {
         type="text"
         className="form-control"
         style={{ flex: 1 }}
-        value={propsValue}
+        value={props.value || ''}
         placeholder={props.uiSchema?.['ui:placeholder']}
         onChange={e => {}}
         disabled

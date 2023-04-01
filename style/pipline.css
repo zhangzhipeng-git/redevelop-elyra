@@ -1109,8 +1109,8 @@ h4.empty-pipeline-header {
   font-size: 16px !important;
 }
 
-/* 节点目录图标 */
+/* 节点目录图标 to-do */
 .redevelop-elyra-pipeline-editor .palette-list-item-icon-and-text {
-  display: block !important;
   margin-left: unset !important;
+  min-height: unset !important;
 }

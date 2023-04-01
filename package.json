@@ -91,7 +91,7 @@
     "carbon-icons": "7.0.7",
     "core-js": "3",
     "downshift": "^6.1.2",
-    "elyra-canvas-fix": "^12.26.1",
+    "elyra-canvas-fix": "^12.26.3",
     "immer": "^9.0.7",
     "nanoid": "^3.1.20",
     "react": "^17.0.1",
