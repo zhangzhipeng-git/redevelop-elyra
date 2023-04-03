@@ -38,7 +38,7 @@
         "mainClass": {
           "type": "string",
           "title": "k8sPod应用程序主类",
-          "description": "Spark应用程序主类(限定：Java/Scala)",
+          "description": "k8sPod应用程序主类(限定：Java/Scala)",
           "uihints": {
             "ui:placeholder": "请填写k8sPod应用程序主类"
           }
