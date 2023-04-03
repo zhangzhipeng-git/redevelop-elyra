@@ -24,7 +24,8 @@
               "num_executors": 1,
               "sparkConf": [
                 {
-                  "key": "aaa"
+                  "key": "aaa",
+                  "value": "vvvv"
                 }
               ],
               "hadoopConf": [
@@ -71,8 +72,8 @@
             },
             "ui_data": {
               "label": "spark-examples_2.12-3.1.1.jar",
-              "x_pos": 31,
-              "y_pos": 84,
+              "x_pos": 23,
+              "y_pos": 63,
               "description": "Run SparkKubernetesOperator Node"
             }
           },
@@ -119,15 +120,22 @@
               "taskMemory": 2,
               "num_executors": 1,
               "taskId": "r02739",
-              "taskName": "任务1",
-              "_mainApplicationFile": "test.py",
-              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-04-01_17:08:25/test.py"
+              "taskName": "任务1"
             },
             "ui_data": {
-              "label": "test.py",
-              "x_pos": 43,
-              "y_pos": 209,
-              "description": "Run KubernetesPodOperator Node"
+              "label": "KubernetesPodOperator",
+              "x_pos": 65,
+              "y_pos": 230,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -180,9 +188,9 @@
           "isStream": false,
           "whetherRetry": true,
           "retry": 1,
-          "scheduleInterval": "0 0 0 * * ? *",
+          "scheduleInterval": "0 0 0 1 1 ? *",
           "dagDesc": "任务描述",
-          "dagName": "工作流测试13"
+          "dagName": "工作流测试14"
         }
       },
       "runtime_ref": ""
