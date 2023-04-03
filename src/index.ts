@@ -16,6 +16,7 @@ import userIdentify from '@src/app/user';
 import activatePipeline from '@src/app/pipeline-editor';
 
 userIdentify.then((identify: any) => {
+  console.log(identify, 'identify');
   console.log(identify?.username, 'username');
 });
 

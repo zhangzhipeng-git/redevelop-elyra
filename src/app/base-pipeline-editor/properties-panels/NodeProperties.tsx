@@ -108,6 +108,7 @@ function NodeProperties({
           }
         />
       );
+      break;
     case AirflowOperatorEnum.SPARK:
       nodePropertiesPanel = (
         <AirflowSparkNodePanel

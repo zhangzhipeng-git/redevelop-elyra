@@ -146,7 +146,7 @@ export function AirflowK8sNodePanel({
       });
     }
 
-    // 集群连接信息改变后，命名空间也要跟着改 变
+    // 集群连接信息改变后，命名空间也要跟着改变
     if (connId !== oldConnId) {
       if (!connId) delete nodeParams.namespace;
       else {
