@@ -1,4 +1,4 @@
-import './base.css';
-import './pipline.css';
-import './toast.css';
-import './form-widget.css';
+require('./base.scss');
+require('./pipline.scss');
+require('./toast.scss');
+require('./form-widget.scss');

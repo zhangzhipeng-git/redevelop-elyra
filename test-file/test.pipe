@@ -16,9 +16,8 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default",
+              "connId": "kubernetes_default_022",
               "connectionId": 50,
-              "namespace": "airflow",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -113,9 +112,8 @@
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default",
+              "connId": "kubernetes_default_022",
               "connectionId": 50,
-              "namespace": "airflow",
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -182,7 +180,7 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "1",
+          "applicationId": "022",
           "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,

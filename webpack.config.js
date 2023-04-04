@@ -1,16 +1,32 @@
 const path = require('path');
+const MineCssExtractPlugin = require('mini-css-extract-plugin');
 const resolve = dir => path.resolve(__dirname, dir);
-const options = {
-  resolve: { alias: {} },
-  ignoreWarnings: [/Failed to parse source map/]
-};
 
 const ENV = process.env.ENV;
-if (ENV) options.mode = ENV;
-options.resolve.alias['@src/config'] =
-  ENV !== 'production'
-    ? resolve('lib/config.dev.js')
-    : resolve('lib/config.pro.js');
-options.resolve.alias['@src'] = resolve('lib');
-
-module.exports = options;
+module.exports = {
+  ...(ENV ? { mode: ENV } : {}),
+  resolve: {
+    alias: {
+      '@src/config':
+        ENV !== 'production'
+          ? resolve('lib/config.dev.js')
+          : resolve('lib/config.pro.js'),
+      '@src': resolve('lib')
+    }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        exclude: /node_modules|bower_components/,
+        use: [MineCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+      }
+    ]
+  },
+  plugins: [
+    new MineCssExtractPlugin({
+      filename: '[name].css'
+    })
+  ],
+  ignoreWarnings: [/Failed to parse source map/]
+};
