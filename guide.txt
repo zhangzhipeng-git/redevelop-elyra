@@ -28,13 +28,65 @@ jupyter lab
 pip install jupyterlab-language-pack-zh-CN
 # 去编辑器的settings里设置language
 
-## 打包部署
+
+
+## 打包
 # 打包 & 安装
 pip install build
 jlpm run clean:all
 python -m build
-pip install jupyterlab_apod/dist/jupyterlab_apod-0.1.0-py3-none-any.whl
-# 发布 npm 包 & 下载编译安装
+
+
+
+## 本地安装
+pip install ./dist/jupyterlab_apod-0.1.0-py3-none-any.whl
+
+
+
+## 发布 npm 包到 Pypi & 安装
+# 如果没有安装 twine ，需要安装 twine
+pip install twine
+# 发布whl包
+python -m twine upload ./dist/redevelop_elyra-0.1.1-py3-none-any.whl 
+# 从外网安装发布的 whl 包
+pip install redevelop-elyra
+
+
+## 发布docker镜像（待定）
+# 制作新的镜像
+docker build -t redevelop-elyra:vx
+# 登录 DockerHub
+docker login -u zhangzhipeng2
+# 标记镜像
+docker tag IMAGEID zhangzhipeng2/redevelop-elyra:vx
+# 查看镜像
+docker images
+# 发布镜像
+docker push zhangzhipeng2/redevelop-elyra:vx
+
+
+
+## 从镜像安装本地插件（前提需要安装jupyterlab），在 Dockerfile 文件中添加以下命令
+# 将本地 redevelop_elyra-0.1.0-py3-none-any.whl 拷贝到容器
+COPY redevelop_elyra-0.1.0-py3-none-any.whl redevelop_elyra-0.1.0-py3-none-any.whl
+# 卸载之前的插件并安装新的插件
+RUN pip uninstall redevelop-elyra \
+    && pip install redevelop_elyra-0.1.0-py3-none-any.whl
+
+
+
+## 从镜像安装发布到外网的插件（前提需要安装jupyterlab），在 Dockerfile 文件中添加以下命令
+# 卸载之前的插件并安装新的插件
+RUN pip uninstall redevelop-elyra \
+    && pip install -i https://pypi.python.org/simple redevelop-elyra
+
+
+
+## 从发布的镜像制作新镜像（待定）
+
+
+
+
 
 
 jupyterlab 插件示例：

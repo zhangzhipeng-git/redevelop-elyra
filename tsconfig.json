@@ -22,6 +22,9 @@
     "paths": {
       "@src/*": [
         "src/*"
+      ],
+      "@src/config": [
+        "src/config.dev"
       ]
     },
     "types": [
