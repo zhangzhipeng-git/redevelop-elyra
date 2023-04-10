@@ -42,7 +42,6 @@ python -m build
 pip install ./dist/jupyterlab_apod-0.1.0-py3-none-any.whl
 
 
-
 ## 发布 npm 包到 Pypi & 安装
 # 如果没有安装 twine ，需要安装 twine
 pip install twine
@@ -54,7 +53,7 @@ pip install redevelop-elyra
 
 ## 发布docker镜像（待定）
 # 制作新的镜像
-docker build -t redevelop-elyra:vx
+docker build -t redevelop-elyra:vx .
 # 登录 DockerHub
 docker login -u zhangzhipeng2
 # 标记镜像
