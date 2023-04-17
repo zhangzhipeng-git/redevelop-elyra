@@ -46,8 +46,8 @@ pip install jupyterlab-language-pack-zh-CN
 ```shell
 # 打包
 pip install build
-jlpm run clean:all
-python -m build
+# jlpm clean:all && python -m build
+jlpm run python-build
 ```
 
 # 安装打包出的 whl 文件

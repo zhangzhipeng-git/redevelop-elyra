@@ -209,7 +209,9 @@ export class RequestHandler {
       `${CONFIG.apiContext ?? ''}${requestPath}`
     );
     // credentials: "include"
-    const { type = 'json', ...requestInit } = options;
+    const { type = 'json', ...requestInit } = Object.assign(options, {
+      credentials: 'include'
+    });
 
     console.log(`Sending a ${requestInit.method} request to ${requestUrl}`);
 
@@ -250,7 +252,6 @@ export class RequestHandler {
         },
         // something unexpected went wrong with the request
         (reason: any) => {
-          console.error(reason);
           return reject(reason);
         }
       );
