@@ -52,6 +52,8 @@ export default async function activatePipeline(
   menu: IMainMenu,
   registry: ISettingRegistry
 ): Promise<void> {
+  console.log('[redevelop-elyra]: Pipeline Editor activated!');
+
   // Fetch the initial state of the settings.
   const settings = await registry
     .load(PLUGIN_ID)
@@ -77,6 +79,7 @@ export default async function activatePipeline(
       name: PIPELINE,
       displayName: 'Pipeline',
       extensions: ['.pipe'],
+      //@ts-ignore
       icon: pipelineIcon
     },
     ['JSON']
@@ -99,6 +102,7 @@ export default async function activatePipeline(
   });
 
   // Handle state restoration
+  // @ts-ignore
   void restorer.restore(tracker, {
     command: commandIDs.openDocManager,
     args: widget => ({

@@ -15,9 +15,8 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import userIdentify from '@src/app/user';
 import activatePipeline from '@src/app/pipeline-editor';
 
-userIdentify.then((identify: any) => {
-  console.log(identify, 'identify');
-  console.log(identify?.username, 'username');
+userIdentify.then((username: string) => {
+  console.log(`username: ${username}`);
 });
 
 /**
@@ -27,7 +26,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'redevelop-elyra:plugin',
   autoStart: true,
   requires: [
-    // pipeline-editor
     ICommandPalette,
     ILauncher,
     IFileBrowserFactory,
