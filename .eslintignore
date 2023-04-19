@@ -11,3 +11,5 @@ style/index.js
 .*.js
 webpack.config.js
 birdmock
+**/*.pipe
+**/*.pipeline
