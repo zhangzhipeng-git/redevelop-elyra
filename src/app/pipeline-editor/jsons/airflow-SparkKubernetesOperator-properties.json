@@ -123,8 +123,8 @@
         },
         "pyPackages": {
           "type": "array",
-          "title": "pyPackages",
-          "description": "pyPackages(只有任务类型为python时才需要填写)",
+          "title": "packages",
+          "description": "packages(只有任务类型为python时才需要填写)",
           "default": [],
           "items": {
             "type": "string"
