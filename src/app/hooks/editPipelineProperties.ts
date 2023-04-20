@@ -7,7 +7,7 @@ export async function onAfterSelectApp(
   controller: PipelineController
 ) {
   const { type, applicationId } = params as any;
-  // 1. 重新设置节点的k8s集群连接信息选项
+  // 1. 重新设置节点的连接信息选项
   const palette = controller.getPalette();
   if (!palette) return;
   const clonePalette = Utils.clone(palette);
@@ -32,7 +32,7 @@ export async function onAfterSelectApp(
   });
   controller.setPalette(clonePalette);
 
-  // 2. 重置节点的k8s集群连接信息
+  // 2. 重置节点的连接信息为查出来的连接信息集合的第一个连接信息
   const pipelineFlow = controller.getPipelineFlow();
   if (!pipelineFlow) return;
   const clonePipelineFlow = Utils.clone(pipelineFlow);

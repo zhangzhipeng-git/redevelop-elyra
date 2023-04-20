@@ -152,21 +152,23 @@ export async function onReadyOrRefresh(
   const pipelineJson = currentContext.model.toJSON() as any;
   const palette = Utils.clone(getPalette(type)); // 有read-only问题，这里克隆一下
 
-  // 表单数据-pipeline
+  // 工作流表单数据
   const pipeline = pipelineJson?.pipelines?.[0] ?? {};
   const pipelineProperties = pipeline.app_data?.properties ?? {};
-  // 表单数据-nodes
+  // 节点表单数据
   const nodes = pipeline.nodes ?? [];
 
-  // 表单配置-pipeline
+  // 工作流表单配置
   const pipelineSchema = palette.properties?.properties ?? {};
-  // 表单配置-nodes
+  // 节点表单配置
   const nodeSchemas = palette.categories?.[0].node_types?.map((nt: any) => {
     return (
       nt?.app_data?.properties?.properties?.component_parameters?.properties ??
       {}
     );
   });
+
+  // 打开/创建工作流文件的时候查询归属应用
   const {
     applicationId: applicationIdSchema,
     applicationCode: applicationCodeSchema
@@ -178,10 +180,12 @@ export async function onReadyOrRefresh(
   applicationIdSchema.enum = ids;
   applicationIdSchema.enumNames = names;
   applicationCodeSchema.enum = codes;
-
+  // 设置默认的工作流归属应用
   applicationIdSchema.default = ids[0];
   applicationCodeSchema.default = codes[0];
 
+  // 校验先前工作流的归属应用是否被包含于实时查出来的归属应用集合
+  // 如果没通过校验，则将工作流的归属应用设置为实时查出来的归属应用集合的第一个
   let changeFlag;
   let id = ids[0];
   let { applicationId, applicationCode } = pipelineProperties;
@@ -193,6 +197,7 @@ export async function onReadyOrRefresh(
     id = applicationId;
   }
 
+  // 根据归属应用id查询连接信息
   const conn = await PipelineService.conn({
     type: 'kubernetes',
     applicationId: id
@@ -210,6 +215,8 @@ export async function onReadyOrRefresh(
     ns.connId.default = connIds[0];
   });
 
+  // 校验先前的工作流节点属性的连接信息是否被包含于实时查出来的连接信息集合
+  // 如果没通过校验，则将节点的连接信息设置为实时查出来的连接信息集合的第一个
   nodes?.forEach((n: any) => {
     const { connId, connectionId, namespace } =
       n?.app_data?.component_parameters ?? {};
@@ -233,7 +240,9 @@ export async function onReadyOrRefresh(
     changeFlag = true;
   }
 
-  if (changeFlag)
+  if (changeFlag) {
     currentContext.model.fromString(JSON.stringify(pipelineJson, null, 2));
+    currentContext.save();
+  }
   return palette;
 }

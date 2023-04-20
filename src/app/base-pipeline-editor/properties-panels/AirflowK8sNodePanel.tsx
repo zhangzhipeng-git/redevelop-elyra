@@ -78,12 +78,12 @@ export function AirflowK8sNodePanel({
   });
 
   const schemas = _uiSchema.component_parameters;
+  // 根据k8s任务节点属性设置隐藏不需要展示的字段
   if (['java', 'scala'].includes(data?.component_parameters?.type)) {
     if (schemas._requestParameter)
       schemas._requestParameter['ui:field'] = 'hidden';
   } else {
-    if (schemas._requestParameter)
-      schemas._requestParameter['ui:field'] = 'visible';
+    if (schemas.mainClass) schemas.mainClass['ui:field'] = 'hidden';
   }
 
   /**

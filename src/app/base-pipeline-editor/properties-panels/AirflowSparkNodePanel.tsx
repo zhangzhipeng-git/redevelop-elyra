@@ -78,10 +78,12 @@ export function AirflowSparkNodePanel({
   });
 
   const schemas = _uiSchema.component_parameters;
+  // 根据spark任务节点属性设置隐藏不需要展示的字段
   if (['java', 'scala'].includes(data?.component_parameters?.type)) {
     if (schemas._tarPath) schemas._tarPath['ui:field'] = 'hidden';
     if (schemas.pyPackages) schemas.pyPackages['ui:field'] = 'hidden';
   } else {
+    if (schemas.mainClass) schemas.mainClass['ui:field'] = 'hidden';
     if (schemas.dependencies) schemas.dependencies['ui:field'] = 'hidden';
     if (schemas.exDependencies) schemas.exDependencies['ui:field'] = 'hidden';
   }
