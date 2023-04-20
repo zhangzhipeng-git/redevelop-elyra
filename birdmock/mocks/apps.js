@@ -134,30 +134,18 @@ module.exports = {
         data: {
           dagId: `${params.dagId}`,
           dagRunId: 'string',
-          task: [
+          showTask: [
             {
-              taskId: 'a5755818317',
+              taskId: 'r42971',
               taskName: 'string',
               start_date: 'string',
               state: 'success'
             },
             {
-              taskId: 'a5483801655',
+              taskId: 'r55868',
               taskName: 'string1',
               start_date: 'string1',
               state: 'running'
-            },
-            {
-              taskId: 'a9790434353',
-              taskName: 'string1',
-              start_date: 'string1',
-              state: ''
-            },
-            {
-              taskId: 'b0115ed6-dc34-4d6a-b3f7-0f2a216cbf81',
-              taskName: 'string1',
-              start_date: 'string1',
-              state: ''
             }
           ],
           state: '运行中...'
@@ -171,24 +159,18 @@ module.exports = {
       data: {
         dagId: `${params.dagId}`,
         dagRunId: 'string',
-        task: [
+        showTask: [
           {
-            taskId: 'a5755818317',
+            taskId: 'r42971',
             taskName: 'string',
             start_date: 'string',
             state: 'success'
           },
           {
-            taskId: 'a5483801655',
+            taskId: 'r55868',
             taskName: 'string1',
             start_date: 'string1',
-            state: 'success'
-          },
-          {
-            taskId: 'a9790434353',
-            taskName: 'string1',
-            start_date: 'string1',
-            state: 'success'
+            state: 'running'
           }
         ],
         state: 'success'
@@ -229,7 +211,7 @@ module.exports = {
       ]
     }
   }),
-  '/datalake/applicationOut/queryRecentTaskLog': () => ({
+  '/datalake/applicationOut/taskInstances': () => ({
     code: '0',
     msg: null,
     data: "[('airflow-cluster-worker-0.airflow-cluster-worker.airflow.svc.cluster.local', '*** Falling back to local log\\n*** Log file does not exist: /opt/airflow/logs/SYS_FBSGFKGKC_CSSJ_746823/task1.task1_1/2023-03-10T06:54:02.830071+00:00/1.log\\n*** Fetching from: http://airflow-cluster-worker-0.airflow-cluster-worker.airflow.svc.cluster.local:8793/log/SYS_FBSGFKGKC_CSSJ_746823/task1.task1_1/2023-03-10T06:54:02.830071+00:00/1.log\\n[2023-03-10 06:54:11,209] {dagrun.py:590} INFO - DagRun Finished: dag_id=SYS_FBSGFKGKC_CSSJ_746823, execution_date=2023-03-10 06:54:02.830071+00:00, run_id=manual__2023-03-10T06:54:02.830071+00:00, run_start_date=2023-03-10 06:54:03.282258+00:00, run_end_date=2023-03-10 06:54:11.209391+00:00, run_duration=7.927133, state=failed, external_trigger=True, run_type=manual, data_interval_start=2023-03-10 06:40:00+00:00, data_interval_end=2023-03-10 06:50:00+00:00, dag_hash=cc21d228edc0b8d0617b7fd27a553931\\n')]"

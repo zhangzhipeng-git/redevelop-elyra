@@ -57,6 +57,7 @@ async function getNodeStatus(
 
   let { state, dagRunId } = res;
 
+  // 工作流整体运行状态
   state = state.toLocaleLowerCase();
   if (['success', 'failed'].includes(state)) {
     // 运行完毕
@@ -73,6 +74,7 @@ async function getNodeStatus(
 
   const pipelineId = dagId.split('_')[1];
   const nodes = controller.getPipelineFlow()?.pipelines?.[0].nodes ?? [];
+  // 工作流节点运行状态
   showTask.forEach((t: any) => {
     const { taskId, state } = t;
     const id = getElyraNodeIdByTaskId(taskId, nodes);
