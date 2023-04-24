@@ -190,7 +190,7 @@ export function AirflowK8sNodePanel({
       });
       if (!values || !values[0]) return;
 
-      // 单文件上传时移除之前的文件
+      // 文件上传时移除之前的文件
       if (!canSelectMany && preS3Path)
         handleAfterSelectFileRemoveOldFile?.(preS3Path);
       let s3Paths: string[] = [];

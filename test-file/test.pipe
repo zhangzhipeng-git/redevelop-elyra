@@ -122,8 +122,8 @@
             },
             "ui_data": {
               "label": "KubernetesPodOperator",
-              "x_pos": 65,
-              "y_pos": 230,
+              "x_pos": 46,
+              "y_pos": 194,
               "description": "Run KubernetesPodOperator Node",
               "decorations": [
                 {

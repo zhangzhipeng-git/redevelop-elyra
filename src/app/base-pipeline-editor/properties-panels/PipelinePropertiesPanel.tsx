@@ -23,23 +23,21 @@ import { MyReactCron } from '../CustomFormControls/ReactCron';
 import { MyDateTime } from '../CustomFormControls/DateTime';
 import { JSONSchema7 } from 'json-schema';
 
-import { ERROR_TYPE_MAP, genUISchemaFromSchema, transformErrors } from './util';
+import {
+  ERROR_TYPE_MAP,
+  Message,
+  genUISchemaFromSchema,
+  transformErrors
+} from './util';
+
 import { useState } from 'react';
+
 const Heading = styled.div`
   margin-top: 14px;
   padding: 0 20px;
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-weight: ${({ theme }) => theme.typography.fontWeight};
   font-size: 16px;
-  color: ${({ theme }) => theme.palette.text.primary};
-  opacity: 0.5;
-`;
-export const Message = styled.div`
-  margin-top: 14px;
-  padding: 0 22px;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-weight: ${({ theme }) => theme.typography.fontWeight};
-  font-size: ${({ theme }) => theme.typography.fontSize};
   color: ${({ theme }) => theme.palette.text.primary};
   opacity: 0.5;
 `;
@@ -153,6 +151,7 @@ export default function PipelinePropertiesPanel({
   const formContext = {
     /**
      * 自定义组件更改pipeline属性，重新加载 pipeline 数据
+     * P.s. 这里的pipeline的属性字段本身不能包含'_'，否则会出问题！
      * @param param0 属性字段名称拼接字符串，如 root_a_b_c
      */
     onPipelinePropertyChange: ({ propertyID, v }: any) => {

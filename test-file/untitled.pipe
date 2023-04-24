@@ -135,8 +135,6 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,
           "whetherRetry": true,
@@ -144,7 +142,9 @@
           "scheduleInterval": "",
           "dagName": "test_flow",
           "dagDesc": "任务描述",
-          "startTime": "2023/04/20 10:43:39"
+          "startTime": "2023/04/20 10:43:39",
+          "applicationId": "022",
+          "applicationCode": "SYS_FBSGFKGKC"
         }
       },
       "runtime_ref": ""
