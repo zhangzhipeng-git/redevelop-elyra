@@ -79,6 +79,7 @@ export default function PipelinePropertiesPanel({
   const _uiSchema: UiSchema = {};
   genUISchemaFromSchema(_schema, _uiSchema);
 
+  // 每次都生成了新的 _uiSchema ，故对源数据无影响
   // 没有是否重试，则不需要展示重试次数和校验重试次数
   if (!data?.whetherRetry) {
     _uiSchema.retry['ui:field'] = 'hidden';

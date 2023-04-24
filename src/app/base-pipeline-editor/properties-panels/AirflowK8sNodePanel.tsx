@@ -78,6 +78,7 @@ export function AirflowK8sNodePanel({
   });
 
   const schemas = _uiSchema.component_parameters;
+  // 每次都生成了新的 _uiSchema ，故对源数据无影响
   // 根据k8s任务节点属性设置隐藏不需要展示的字段
   if (['java', 'scala'].includes(data?.component_parameters?.type)) {
     if (schemas._requestParameter)
