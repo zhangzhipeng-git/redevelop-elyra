@@ -507,10 +507,14 @@ const PipelineWrapper: React.FC<IProps> = ({
         const nodes =
           controller.getPipelineFlow?.()?.pipelines?.[0].nodes ?? [];
         const id = getTaskIdByElyraNodeId(payload, nodes);
+
+        // 运行返回的节点任务
         const task =
           runRes.current.task.find(({ taskId }: any) => taskId === id) ?? {};
+        // 轮询返回的的节点任务
         const scheduleTask =
           showTask.find(({ taskId }: any) => taskId === id) ?? {};
+
         const { taskId, taskReturnId } = task;
         const { tryNumber } = scheduleTask;
 
