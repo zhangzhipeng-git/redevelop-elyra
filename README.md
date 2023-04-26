@@ -30,7 +30,7 @@ jlpm run build
 # 安装插件
 pip install -e .
 
-# 建立软链接，这种不需要重新安装插件
+# 建立软链接，这种不需要重新安装插件（jupyterlab==3.2.5 不支持该操作，这意味着每次更改都需要重新执行 pip install -e .）
 jupyter labextension develop --overwrite .
 
 # 构建/热更新
