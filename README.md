@@ -1,96 +1,126 @@
-# redevelop_elyra
+# redevelop-elyra
 
-[![Github Actions Status](https://github.com/zzp-dog/redevelop-elyra.git/workflows/Build/badge.svg)](https://github.com/zzp-dog/redevelop-elyra.git/actions/workflows/build.yml)
-A JupyterLab extension.
+根据 `elyra` 插件的 `Pipeline Editor` 二次开发的数据湖前端 jupyterlab 插件，用于运行/提交 k8s 和 Spark 任务节点组成的工作流，并实时获取工作流的运行状态。
 
-## Requirements
+- [需求](%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%88%9B%E5%BB%BA%E5%8F%8A%E8%BF%90%E8%A1%8C.docx)
 
-- JupyterLab >= 3.0
+- [操作手册](%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C.docx)
 
-## Install
+# 环境搭建
 
-To install the extension, execute:
+```shell
+# 初始化虚拟环境（PS. jupyterlab 安装版本指定为 jupyterlab==x.x.x ，nodejs 和 git 如果机器上已经安装了则不用再次安装）
+conda create -n jupyterlab-ext --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab==3 cookiecutter nodejs jupyter-packaging git
 
-```bash
-pip install redevelop_elyra
-```
+# 示例（该项目的初始化虚拟环境命令）
+conda create -n dev --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab==3.2.5 cookiecutter jupyter-packaging
 
-## Uninstall
+# 使用 cookiecutter 构建项目结构
+cookiecutter https://github.com/jupyterlab/extension-cookiecutter-ts
 
-To remove the extension, execute:
+# 进入项目目录
+cd D:\jupyterlab\redevelop_elyra
 
-```bash
-pip uninstall redevelop_elyra
-```
+# 激活环境
+conda activate dev
 
-## Contributing
+# 构建项目
+jlpm run build
 
-### Development install
+# 安装插件
+pip install -e .
 
-Note: You will need NodeJS to build the extension package.
+# 建立软链接，这种不需要重新安装插件
+jupyter labextension develop --overwrite .
 
-The `jlpm` command is JupyterLab's pinned version of
-[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
-`yarn` or `npm` in lieu of `jlpm` below.
+# 构建/热更新
+jlpm run build / jlpm run watch
 
-```bash
-# Clone the repo to your local environment
-# Change directory to the redevelop_elyra directory
-# Install package in development mode
-pip install -e "."
-# Link your development version of the extension with JupyterLab
-jupyter labextension develop . --overwrite
-# Rebuild extension Typescript source after making changes
-jlpm build
-```
-
-You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
-
-```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm watch
-# Run JupyterLab in another terminal
+# 打开编辑器
 jupyter lab
 ```
 
-With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
+# 编辑器汉化（可选）
 
-By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
-
-```bash
-jupyter lab build --minimize=False
+```shell
+# 安装简体中文语言包
+pip install jupyterlab-language-pack-zh-CN
 ```
 
-### Development uninstall
+去编辑器的 settings 里设置 language
 
-```bash
-pip uninstall redevelop_elyra
+# 打包
+
+```shell
+# 打包
+pip install build
+# jlpm clean:all && python -m build
+jlpm run python-build
 ```
 
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `redevelop-elyra` within that folder.
+# 安装打包出的 whl 文件
 
-### Testing the extension
+## 本地安装
 
-#### Frontend tests
-
-This extension is using [Jest](https://jestjs.io/) for JavaScript code testing.
-
-To execute them, execute:
-
-```sh
-jlpm
-jlpm test
+```shell
+pip install ./dist/jupyterlab_apod-0.1.0-py3-none-any.whl
 ```
 
-#### Integration tests
+## 外网安装
 
-This extension uses [Playwright](https://playwright.dev/docs/intro/) for the integration tests (aka user level tests).
-More precisely, the JupyterLab helper [Galata](https://github.com/jupyterlab/jupyterlab/tree/master/galata) is used to handle testing the extension in JupyterLab.
+```shell
+# 如果没有安装 twine ，需要安装 twine
+pip install twine
 
-More information are provided within the [ui-tests](./ui-tests/README.md) README.
+# 发布 whl 包
+python -m twine upload ./dist/redevelop_elyra-0.1.1-py3-none-any.whl
 
-### Packaging the extension
+# 从外网安装发布的 whl 包
+pip install redevelop-elyra
+```
 
-See [RELEASE](RELEASE.md)
+## 从镜像安装本地插件（前提需要安装 jupyterlab），在 Dockerfile 文件中添加以下命令
+
+```shell
+# 将本地 redevelop_elyra-0.1.0-py3-none-any.whl 拷贝到容器
+COPY redevelop_elyra-0.1.0-py3-none-any.whl redevelop_elyra-0.1.0-py3-none-any.whl
+
+# 卸载之前的插件并安装新的插件
+RUN pip uninstall redevelop-elyra \
+ && pip install redevelop_elyra-0.1.0-py3-none-any.whl
+
+```
+
+## 从镜像安装发布到外网的插件（前提需要安装 jupyterlab），在 Dockerfile 文件中添加以下命令
+
+```shell
+# 卸载之前的插件并安装新的插件
+RUN pip uninstall redevelop-elyra \
+ && pip install -i https://pypi.python.org/simple redevelop-elyra
+```
+
+# jupyterlab 插件相关
+
+https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html#build-and-install-the-extension-for-development  
+https://kgithub.com/jupyterlab/extension-examples
+
+## api
+
+https://jupyterlab.readthedocs.io/en/stable/api/modules.html  
+https://lumino.readthedocs.io/en/latest/api/index.html
+
+## 后端
+
+jupyter server: https://jupyter-server.readthedocs.io/en/latest/developers/extensions.html  
+jupyter server 示例 1：https://github.com/jupyter-server/jupyter_server/tree/main/examples/simple  
+jupyter server 示例 2：https://github.com/jupyterlab/jupyterlab-latex
+
+## elyra
+
+elyra 开发工作流：https://elyra.readthedocs.io/en/latest/developer_guide/development-workflow.html  
+elyra github: https://github.com/elyra-ai/elyra/releases/tag/v3.14.2
+
+## 其他
+
+Kubeflow: https://www.orchome.com/kubeflow/index;jsessionid=B78ABFCE610EF917E147F2DF0ED9487A  
+Apache Airflow: https://apachecn.gitee.io/airflow-doc-zh/#/zh/tutorial
