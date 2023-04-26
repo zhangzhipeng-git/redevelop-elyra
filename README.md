@@ -2,6 +2,12 @@
 
 根据 `elyra` 插件的 `Pipeline Editor` 二次开发的数据湖前端 jupyterlab 插件，用于运行/提交 k8s 和 Spark 任务节点组成的工作流，并实时获取工作流的运行状态。
 
+<div align="left">
+    <img src="example.png" alt="工作流示例"/>
+</div>
+
+# 相关文档
+
 - [需求](%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%88%9B%E5%BB%BA%E5%8F%8A%E8%BF%90%E8%A1%8C.docx)
 
 - [操作手册](%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C.docx)
