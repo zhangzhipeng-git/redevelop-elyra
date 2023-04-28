@@ -16,8 +16,6 @@
           "app_data": {
             "component_parameters": {
               "type": "java",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -112,8 +110,6 @@
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -180,15 +176,15 @@
         "version": 8,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
-          "applicationId": "022",
-          "applicationCode": "SYS_FBSGFKGKC",
           "email": "airflow@example.com",
           "isStream": false,
           "whetherRetry": true,
           "retry": 1,
           "scheduleInterval": "0 0 0 1 1 ? *",
           "dagDesc": "任务描述",
-          "dagName": "工作流测试14"
+          "dagName": "工作流测试14",
+          "applicationId": "022",
+          "applicationCode": "SYS_FBSGFKGKC"
         }
       },
       "runtime_ref": ""

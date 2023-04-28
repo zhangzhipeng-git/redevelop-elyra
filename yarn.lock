@@ -1144,13 +1144,12 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bigbigbird/mock@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@bigbigbird/mock/-/mock-3.0.1.tgz#566c4708ecbadde7f2128476cedb006976672cdf"
-  integrity sha512-uT6fsWm+XzMuPJJbW5aXUH812NgaOIFBK0nqCv5UCK0tIeLE5Lm5vy0EUSepi1roSg1Q7HzfenmEGWiCSZiYPw==
+"@bigbigbird/mock@^5.0.9":
+  version "5.0.9"
+  resolved "https://registry.npmjs.org/@bigbigbird/mock/-/mock-5.0.9.tgz#be577ab6e2a01cb574ab2669cd3bc4ceb4b1ea38"
+  integrity sha512-6Haz/5mn4pNiFt9IL03oeC3qvTvtCYaR68gf2eVtYkrywDkBBK/qCx9U9XqHDbWAKQbi2AjulKIouQrwdH3/3g==
   dependencies:
     colors "^1.4.0"
-    cross-env "^6.0.3"
     log4js "^5.3.0"
     mockjs "^1.1.0"
     multiparty "^4.2.3"
@@ -5678,13 +5677,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
-
-cross-env@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npmjs.org/cross-env/-/cross-env-6.0.3.tgz#4256b71e49b3a40637a0ce70768a6ef5c72ae941"
-  integrity sha512-+KqxF6LCvfhWvADcDPqo64yVIB31gv/jQulX2NGzKS/g3GEVz6/pt4wjHFtFWsHMddebWD/sDthJemzM4MaAag==
-  dependencies:
-    cross-spawn "^7.0.0"
 
 cross-env@^7.0.3:
   version "7.0.3"
