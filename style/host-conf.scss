@@ -1,0 +1,44 @@
+.nets {
+  .net {
+    display: flex;
+    align-items: flex-start;
+    padding: 0 10px 10px 10px;
+    margin-bottom: 15px;
+    border: 1px dashed gray;
+    .ip-domain {
+      display: flex;
+      align-items: flex-start;
+    }
+    button {
+      margin-left: auto;
+      margin-top: 10px;
+    }
+    .ip,
+    .domain-wrap {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .ip {
+      width: 120px;
+    }
+    .domain-wrap {
+      width: 180px;
+    }
+    .domain {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-left: 10px;
+      a {
+        margin-left: 5px;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      .form-control {
+        width: 120px !important;
+      }
+    }
+  }
+}

@@ -143,7 +143,8 @@ export default function CronForm({
   const changeValue = useCallback(newObj => {
     const cronString = cornStringify(newObj);
     thisCron.current = cronString;
-    onChange && onChange(cronString);
+    onChange &&
+      onChange(`${cronString}${newObj.freq === 'custom' ? 'custom' : ''}`); // 自定义输入的 cron 表达式要用自定义输入框回显，不然会有问题
   }, []);
   const onFreqChanged = useCallback(freq => {
     setObjValue((oldObj: any) => {
@@ -234,35 +235,57 @@ export default function CronForm({
       return newObj;
     });
   }, []);
+  const defRest = {
+    ss: '0',
+    mm: '0',
+    HH: '0',
+    dd: '*',
+    MM: '*',
+    week: '?',
+    yyyy: '*'
+  };
   useEffect(() => {
     thisCron.current = value;
-    const initValue = value || defaultValue;
+    let initValue = value || defaultValue;
+    // 没有值
     if (!initValue) {
       // 0 0 0 * * ? *
       setObjValue({
         freq: 'custom',
         stringValue: '',
-        ss: '0',
-        mm: '0',
-        HH: '0',
-        dd: '*',
-        MM: '*',
-        week: '?',
-        yyyy: '*'
+        ...defRest
       });
       return;
     }
-    const objValue = cornFormat(initValue, multiple);
-    setObjValue(objValue);
-    // 默认按天调度
-    if (!initValue) {
-      changeValue(objValue);
+
+    // 用户手动输入的值
+    if (initValue.indexOf('custom') > -1) {
+      initValue = initValue.replace(/custom/g, '');
+      setObjValue({
+        freq: 'custom',
+        stringValue: initValue,
+        ...defRest
+      });
+      return;
+    } else {
+      const objValue = cornFormat(initValue, multiple);
+      setObjValue(objValue);
     }
   }, []);
   useEffect(() => {
     if (thisCron.current !== value) {
       thisCron.current = value;
-      setObjValue(cornFormat(value, multiple));
+      if (value.indexOf('custom') > -1) {
+        value = value.replace(/custom/g, '');
+        setObjValue({
+          freq: 'custom',
+          stringValue: value,
+          ...defRest
+        });
+        return;
+      } else {
+        setObjValue(cornFormat(value, multiple));
+      }
     }
   }, [value]);
   const {

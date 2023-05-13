@@ -1,8 +1,10 @@
-#!/usr/bin/python
 # -*- coding: UTF-8 -*-
  
-for i in range(1,5):
-    for j in range(1,5):
-        for k in range(1,5):
-            if( i != k ) and (i != j) and (j != k):
-                print (i,j,k)
+# Filename : test.py
+# author by : www.runoob.com
+ 
+# 九九乘法表
+for i in range(1, 10):
+    for j in range(1, i+1):
+        print('{}x{}={}\t'.format(j, i, i*j), end='')
+    print()

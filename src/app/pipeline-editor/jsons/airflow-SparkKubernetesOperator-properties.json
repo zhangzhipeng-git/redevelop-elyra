@@ -83,6 +83,15 @@
           "default": 1,
           "minimum": 1
         },
+        "hostConf": {
+          "title": "主机配置",
+          "description": "主机配置",
+          "type": "string",
+          "default": "[{\"ip\":\"\",\"hostName\":[\"\"]}]",
+          "uihints": {
+            "ui:widget": "myHostConf"
+          }
+        },
         "sparkConf": {
           "type": "array",
           "title": "spark配置参数",

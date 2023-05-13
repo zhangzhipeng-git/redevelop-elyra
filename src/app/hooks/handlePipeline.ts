@@ -113,6 +113,11 @@ export function onRunOrSubmit(pipeline: any, operator = 'run') {
   });
   const taskDependency = getPipelineEdges(pipelineObj);
 
+  // 调度周期清除用户自定义输入标志
+  if (dag.scheduleInterval?.indexOf('custom') > -1)
+    dag.scheduleInterval = dag.scheduleInterval.replace(/custom/g, '');
+
+  // 回填时间按照后端格式进行格式化处理
   let startTime = dag.startTime?.replace(/\/|:| /g, ',');
   startTime =
     startTime

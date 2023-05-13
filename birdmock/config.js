@@ -8,16 +8,13 @@ module.exports = {
   server: 'localhost:4201',
   // 可选代理服务（可通过server服务代理到目标服务）
   // proxy: {
-  //     '/datalake': {
-  //         target: 'http://127.0.0.1:4201',
-  //         changeOrigin: true,
-  //         rewrite: function (url) { return url; },
-  //     },
-  //     '/ipa': {
-  //         target: 'http://127.0.0.1:4202',
-  //         changeOrigin: true,
-  //         rewrite: function (url) { return url; },
-  //     },
+  //   '/datalake|/measurementcenter': {
+  //     target: 'http://172.100.1.104:8881',
+  //     changeOrigin: true,
+  //     rewrite: function (url) {
+  //       return url;
+  //     }
+  //   }
   // },
   // 可选跨域配置
   cors: {
@@ -26,7 +23,7 @@ module.exports = {
     // 允许的请求头字段，默认值：'*'
     headers: 'authorization,content-type,x-xsrftoken',
     // 允许的请求方法，默认值：'*'
-    methods: 'GET,POST',
+    methods: 'GET,POST,OPTIONS',
     // 是否允许跨域携带 cookie
     // 如果需要跨域携带 cookie ，则上述默认值不能设置为'*'
     credentials: 'true'

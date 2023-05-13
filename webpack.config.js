@@ -2,15 +2,24 @@ const path = require('path');
 const MineCssExtractPlugin = require('mini-css-extract-plugin');
 const resolve = dir => path.resolve(__dirname, dir);
 
-const ENV = process.env.ENV;
+let mode;
+const ENV = process.env.ENV || 'dev';
+
+switch (ENV) {
+  case 'zk': // 内网
+  case 'pro': // 外网
+    mode = 'production';
+    break;
+  default: // 本地
+    mode = 'development';
+    break;
+}
+
 module.exports = {
-  ...(ENV ? { mode: ENV } : {}),
+  mode,
   resolve: {
     alias: {
-      '@src/config':
-        ENV !== 'production'
-          ? resolve('lib/config.dev.js')
-          : resolve('lib/config.pro.js'),
+      '@src/config': resolve(`lib/config.${ENV}.js`),
       '@src': resolve('lib')
     }
   },

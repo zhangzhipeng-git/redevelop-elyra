@@ -79,6 +79,11 @@
             "uihints": {
                 "ui:widget": "myDateTime"
             }
+        },
+        "externalArguments": {
+            "title": "额外参数",
+            "description": "里面是一组用\";\"分隔的数据，如：aaa;bbb;ccc",
+            "type": "string"
         }
     },
     "required": [

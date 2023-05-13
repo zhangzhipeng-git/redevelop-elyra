@@ -164,6 +164,14 @@ export function AirflowK8sNodePanel({
   }
 
   const formContext = {
+    /** hostConf */
+    onHandleHostConf: ({ propertyID, v }: any) => {
+      console.log(propertyID, v, 'onHandelHostConf');
+      const newFormData = produce(data, (draft: any) => {
+        draft.component_parameters[propertyID] = v;
+      });
+      onChange?.(newFormData ?? data);
+    },
     /** 多文件上传中的文件删除 */
     onFileRemove: async (args: any) => {
       const { propertyID, index } = args;

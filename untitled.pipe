@@ -1,0 +1,156 @@
+{
+  "doc_type": "pipe",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "auto-generated-pipeline",
+  "uuid": "t1683768540073",
+  "primary_pipeline": "primary",
+  "pipelines": [
+    {
+      "id": "primary",
+      "nodes": [
+        {
+          "id": "ee4e1b74-b796-4846-a816-e93d9cc7db76",
+          "type": "execution_node",
+          "op": "SparkKubernetesOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "hostConf": "[{\"ip\":\"192.168.0.1\",\"hostName\":[\"www.baidu.com\",\"www.sina.com\"]}]",
+              "sparkConf": [],
+              "hadoopConf": [],
+              "pyPackages": [],
+              "dependencies": [],
+              "exDependencies": [],
+              "_mainApplicationFile": "test-file/node2.py",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_13:44:29/node2.py",
+              "taskId": "r72574",
+              "taskName": "打印数字2"
+            },
+            "ui_data": {
+              "label": "node2.py",
+              "x_pos": 121,
+              "y_pos": 78,
+              "description": "Run SparkKubernetesOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "4b7dfeda-5c37-46dd-a5e5-5740fec3f7bd",
+          "type": "execution_node",
+          "op": "KubernetesPodOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "_mainApplicationFile": "test-file/node3.py",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_13:47:05/node3.py",
+              "taskId": "r11026",
+              "taskName": "打印数字3"
+            },
+            "ui_data": {
+              "label": "node3.py",
+              "x_pos": 121,
+              "y_pos": 166,
+              "description": "Run KubernetesPodOperator Node"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "e5356be0-66c4-429d-b050-e2d07b871357",
+                  "node_id_ref": "ee4e1b74-b796-4846-a816-e93d9cc7db76",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": []
+        },
+        "version": 8,
+        "runtime_type": "APACHE_AIRFLOW",
+        "properties": {
+          "email": "airflow@example.com",
+          "isStream": false,
+          "whetherRetry": true,
+          "retry": 1,
+          "scheduleInterval": "0 0 0 * * ? *",
+          "dagName": "工作流测试",
+          "dagDesc": "测试任务（新增hostConf）",
+          "startTime": "2023/05/12 13:44:03",
+          "externalArguments": "aaa;bbb;ccc",
+          "applicationId": "022",
+          "applicationCode": "SYS_FBSGFKGKC"
+        }
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}

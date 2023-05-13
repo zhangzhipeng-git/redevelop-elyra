@@ -35,9 +35,11 @@ import {
   transformErrors
 } from './util';
 import { useState } from 'react';
+import { HostConfWidget } from '../CustomFormControls/HostConfWidget';
 
 const widgets: { [id: string]: Widget } = {
-  file: FileWidget
+  file: FileWidget,
+  myHostConf: HostConfWidget
 };
 
 interface Props {
@@ -177,6 +179,13 @@ export function AirflowSparkNodePanel({
   }
 
   const formContext = {
+    /** hostConf */
+    onHandleHostConf: ({ propertyID, v }: any) => {
+      const newFormData = produce(data, (draft: any) => {
+        draft.component_parameters[propertyID] = JSON.stringify(v);
+      });
+      onChange?.(newFormData ?? data);
+    },
     /** 多文件上传中的文件删除 */
     onFileRemove: async (args: any) => {
       const { propertyID, index } = args;

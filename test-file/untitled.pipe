@@ -10,26 +10,24 @@
       "id": "primary",
       "nodes": [
         {
-          "id": "54a861f9-a460-44fd-a74b-bae4c276116d",
+          "id": "4529ffdf-c5c9-4952-80fc-bd2820507672",
           "type": "execution_node",
           "op": "KubernetesPodOperator",
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "_mainApplicationFile": "node2.py",
-              "mainApplicationFile": "http://xxx.xxx:xxxx/datalake/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-              "taskId": "r42971",
-              "taskName": "test_task"
+              "_mainApplicationFile": "test.py",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_16:26:47/test.py",
+              "taskId": "r09864",
+              "taskName": "测试任务"
             },
             "ui_data": {
-              "label": "node2.py",
-              "x_pos": 83,
-              "y_pos": 68,
+              "label": "test.py",
+              "x_pos": 295,
+              "y_pos": 167,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -61,71 +59,6 @@
               }
             }
           ]
-        },
-        {
-          "id": "3e5e98d1-00b4-4e90-a058-f0806a1c1c97",
-          "type": "execution_node",
-          "op": "SparkKubernetesOperator",
-          "app_data": {
-            "component_parameters": {
-              "type": "Python",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
-              "taskCpu": 1,
-              "taskMemory": 2,
-              "num_executors": 1,
-              "sparkConf": [],
-              "hadoopConf": [],
-              "pyPackages": [],
-              "dependencies": [],
-              "exDependencies": [],
-              "_mainApplicationFile": "node3.py",
-              "mainApplicationFile": "http://xxx.xxx:xxxx/datalake/task/downloadFile?path=%2Ftmp%2Fb3f4c3aa14f87978bab81c20ad7bbc62.jpg",
-              "taskId": "r55868",
-              "taskName": "task2"
-            },
-            "ui_data": {
-              "label": "node3.py",
-              "x_pos": 79,
-              "y_pos": 182,
-              "description": "Run SparkKubernetesOperator Node"
-            }
-          },
-          "inputs": [
-            {
-              "id": "inPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Input Port"
-                }
-              },
-              "links": [
-                {
-                  "id": "372a608a-4c66-4bfb-9440-eacb8248d636",
-                  "node_id_ref": "54a861f9-a460-44fd-a74b-bae4c276116d",
-                  "port_id_ref": "outPort"
-                }
-              ]
-            }
-          ],
-          "outputs": [
-            {
-              "id": "outPort",
-              "app_data": {
-                "ui_data": {
-                  "cardinality": {
-                    "min": 0,
-                    "max": -1
-                  },
-                  "label": "Output Port"
-                }
-              }
-            }
-          ]
         }
       ],
       "app_data": {
@@ -139,7 +72,7 @@
           "isStream": false,
           "whetherRetry": true,
           "retry": 1,
-          "scheduleInterval": "",
+          "scheduleInterval": "custom",
           "dagName": "test_flow",
           "dagDesc": "任务描述",
           "startTime": "2023/04/20 10:43:39",
