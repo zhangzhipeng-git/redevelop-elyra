@@ -74,16 +74,11 @@
         },
         "startTime": {
             "title": "回填时间",
-            "description": "回填时间",
+            "description": "基于调度周期补齐回填时间至当前时间的任务",
             "type": "string",
             "uihints": {
                 "ui:widget": "myDateTime"
             }
-        },
-        "externalArguments": {
-            "title": "额外参数",
-            "description": "里面是一组用\";\"分隔的数据，如：aaa;bbb;ccc",
-            "type": "string"
         }
     },
     "required": [

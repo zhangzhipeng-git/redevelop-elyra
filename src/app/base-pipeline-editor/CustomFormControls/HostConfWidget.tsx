@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 // ip 主机名映射
 import { Widget } from '@rjsf/core';
 import { useState } from 'react';
@@ -90,8 +88,7 @@ export const HostConfWidget: Widget = props => {
                         />
                         <a className="add" onClick={() => addDomain(index)}>
                           <svg
-                            t="1683877496147"
-                            class="icon"
+                            className="icon"
                             viewBox="0 0 1024 1024"
                             version="1.1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -112,8 +109,7 @@ export const HostConfWidget: Widget = props => {
                             onClick={() => deleteDomain(index, idx)}
                           >
                             <svg
-                              t="1683877527041"
-                              class="icon"
+                              className="icon"
                               viewBox="0 0 1024 1024"
                               version="1.1"
                               xmlns="http://www.w3.org/2000/svg"

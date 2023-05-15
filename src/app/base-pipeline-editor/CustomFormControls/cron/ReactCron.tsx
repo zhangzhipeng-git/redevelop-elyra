@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { useCallback } from 'react';
-
 import { Widget } from '@rjsf/core';
-
-import Corn from './cron';
+import { useCallback } from 'react';
+import { Cron } from 'react-js-cron';
+import CN_MY from './CN';
 
 /**
  * cron 表达式组件，使用网上的插件
@@ -33,12 +32,16 @@ export const MyReactCron: Widget = props => {
   );
 
   return (
-    <div id={props.id} className={'my-widget-wrapper'}>
-      <Corn
+    <div id={props.id} style={{ marginTop: '10px' }}>
+      <Cron
         value={props.value}
-        onChange={(value: any) => {
+        locale={CN_MY}
+        setValue={(value: any) => {
           handleScheduleCycle(value);
         }}
+        allowEmpty={'never'}
+        clearButton={false}
+        displayError={false}
       />
     </div>
   );

@@ -22,7 +22,6 @@ import { EXT_MAP } from '@src/app/const';
 // TODO: Make the file clearable
 // 单文件上传组件
 export const FileWidget: Widget = props => {
-  console.log(props, 'file-props');
   const handleChooseFile = useCallback(async () => {
     const propertyID = props.id.replace('root_component_parameters_', '');
     const { extensions, parentID } = props.uiSchema;

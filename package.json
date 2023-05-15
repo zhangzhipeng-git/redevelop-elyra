@@ -97,6 +97,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-intl": "^5.10.15",
+    "react-js-cron": "^3.2.0",
     "react-json-tree": "^0.11.2",
     "react-redux": "^7.2.0",
     "react-scripts": "4.0.3",

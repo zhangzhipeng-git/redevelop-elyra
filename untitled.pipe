@@ -30,7 +30,8 @@
               "_mainApplicationFile": "test-file/node2.py",
               "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_13:44:29/node2.py",
               "taskId": "r72574",
-              "taskName": "打印数字2"
+              "taskName": "打印数字2",
+              "externalArguments": "aaa;bbb;ccc"
             },
             "ui_data": {
               "label": "node2.py",
@@ -83,12 +84,13 @@
               "_mainApplicationFile": "test-file/node3.py",
               "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_13:47:05/node3.py",
               "taskId": "r11026",
-              "taskName": "打印数字3"
+              "taskName": "打印数字3",
+              "externalArguments": "aaa;bbb;ccc"
             },
             "ui_data": {
               "label": "node3.py",
-              "x_pos": 121,
-              "y_pos": 166,
+              "x_pos": 120,
+              "y_pos": 169,
               "description": "Run KubernetesPodOperator Node"
             }
           },
@@ -140,7 +142,7 @@
           "isStream": false,
           "whetherRetry": true,
           "retry": 1,
-          "scheduleInterval": "0 0 0 * * ? *",
+          "scheduleInterval": "* * * * *",
           "dagName": "工作流测试",
           "dagDesc": "测试任务（新增hostConf）",
           "startTime": "2023/05/12 13:44:03",

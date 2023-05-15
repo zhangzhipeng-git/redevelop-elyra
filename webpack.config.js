@@ -34,7 +34,7 @@ module.exports = {
   },
   plugins: [
     new MineCssExtractPlugin({
-      filename: '[name].css'
+      filename: '[name].[contenthash].css'
     })
   ],
   ignoreWarnings: [/Failed to parse source map/]

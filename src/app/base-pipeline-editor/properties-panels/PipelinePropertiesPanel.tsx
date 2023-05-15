@@ -19,7 +19,7 @@ import { produce } from 'immer';
 import styled from 'styled-components';
 
 import { CustomFieldTemplate } from '../CustomFormControls';
-import { MyReactCron } from '../CustomFormControls/ReactCron';
+import { MyReactCron } from '../CustomFormControls/cron/ReactCron';
 import { MyDateTime } from '../CustomFormControls/DateTime';
 import { JSONSchema7 } from 'json-schema';
 

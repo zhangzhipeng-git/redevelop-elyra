@@ -22,8 +22,8 @@
         },
         "_mainApplicationFile": {
           "type": "string",
-          "title": "任务文件",
-          "description": "任务文件",
+          "title": "算法文件",
+          "description": "需要执行调度的算法文件",
           "uihints": {
             "ui:widget": "file",
             "extensions": [
@@ -65,27 +65,32 @@
         "taskCpu": {
           "type": "integer",
           "title": "CPU(个)",
-          "description": "对于CPU密集型工作负载，您可以选择多个CPU",
+          "description": "spark任务driver和executor的CPU数量",
           "default": 1,
           "minimum": 1
         },
         "taskMemory": {
           "type": "integer",
           "title": "内存(GB)",
-          "description": "指定的RAM大小",
+          "description": "spark任务driver和executor的内存大小",
           "default": 2,
           "minimum": 1
         },
         "num_executors": {
           "type": "integer",
           "title": "executor数量(个)",
-          "description": "executor数量",
+          "description": "spark任务executor的数量",
           "default": 1,
           "minimum": 1
         },
+        "externalArguments": {
+          "title": "运行参数",
+          "description": "任务中需要传入的参数，里面是一组用\";\"分隔的数据，如：aaa;bbb;ccc",
+          "type": "string"
+        },
         "hostConf": {
-          "title": "主机配置",
-          "description": "主机配置",
+          "title": "映射配置",
+          "description": "spark任务hosts映射配置",
           "type": "string",
           "default": "[{\"ip\":\"\",\"hostName\":[\"\"]}]",
           "uihints": {
