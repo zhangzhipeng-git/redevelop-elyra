@@ -60,8 +60,8 @@ pip install jupyterlab-language-pack-zh-CN
 打包命令是执行 python -m build ， 它其实又执行了 package.json 里面的 build:prod ， 这里需要根据不同环境来设置 webpack 打包的环境变量，来加载和打包对应的配置文件。
 
 先根据环境修改 package.json 中 ENV 的字段
-内网：cross-env=zk
-外网：cross-env=pro
+内网：cross-env ENV=zk
+外网：cross-env ENV=pro
 
 ```json
 "scripts": {
