@@ -32,7 +32,7 @@ export const MyReactCron: Widget = props => {
   );
 
   return (
-    <div id={props.id} style={{ marginTop: '10px' }}>
+    <div id={props.id} style={{ marginTop: '6px' }}>
       <Cron
         value={props.value}
         locale={CN_MY}

@@ -1,4 +1,5 @@
-.nets {
+.my-host-conf {
+  margin-top: 6px;
   .net {
     display: flex;
     align-items: flex-start;
@@ -6,6 +7,7 @@
     overflow: hidden;
     margin-bottom: 15px;
     border: 1px dashed gray;
+    overflow-x: auto;
     .ip-domain {
       display: flex;
       align-items: flex-start;
@@ -13,6 +15,7 @@
     button {
       margin-left: auto;
       margin-top: 10px;
+      white-space: nowrap;
     }
     .ip,
     .domain-wrap {

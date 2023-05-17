@@ -16,12 +16,10 @@
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "hostConf": "[{\"ip\":\"192.168.0.1\",\"hostName\":[\"www.baidu.com\",\"www.sina.com\"]}]",
+              "hostConf": "[{\"ip\":\"192.168.0.1\",\"hostName\":[\"www.baidu.com\"]},{\"ip\":\"192.168.0.2\",\"hostName\":[\"www.bilibili.com\",\"\"]},{\"ip\":\"\",\"hostName\":[\"\",\"\"]}]",
               "sparkConf": [],
               "hadoopConf": [],
               "pyPackages": [],
@@ -35,9 +33,18 @@
             },
             "ui_data": {
               "label": "node2.py",
-              "x_pos": 121,
-              "y_pos": 78,
-              "description": "Run SparkKubernetesOperator Node"
+              "x_pos": 69,
+              "y_pos": 55,
+              "description": "Run SparkKubernetesOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -76,8 +83,6 @@
           "app_data": {
             "component_parameters": {
               "type": "Python",
-              "connId": "kubernetes_default_022",
-              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
@@ -89,9 +94,18 @@
             },
             "ui_data": {
               "label": "node3.py",
-              "x_pos": 120,
-              "y_pos": 169,
-              "description": "Run KubernetesPodOperator Node"
+              "x_pos": 50,
+              "y_pos": 170,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [
@@ -129,6 +143,123 @@
               }
             }
           ]
+        },
+        {
+          "id": "bdfe2e06-9a97-4586-8e39-669d855cf44e",
+          "type": "execution_node",
+          "op": "KubernetesPodOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "_mainApplicationFile": "test-file/test.py",
+              "taskId": "r48034"
+            },
+            "ui_data": {
+              "label": "test.py",
+              "x_pos": 380,
+              "y_pos": 50,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "2b22fd17-56c8-448e-ad4d-3e321c193a68",
+          "type": "execution_node",
+          "op": "KubernetesPodOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "_mainApplicationFile": "test-file/test.py",
+              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-16_20:20:40/test.py",
+              "taskId": "r24966"
+            },
+            "ui_data": {
+              "label": "test.py",
+              "x_pos": 710,
+              "y_pos": 50,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
         }
       ],
       "app_data": {
@@ -142,11 +273,10 @@
           "isStream": false,
           "whetherRetry": true,
           "retry": 1,
-          "scheduleInterval": "* * * * *",
-          "dagName": "工作流测试",
+          "scheduleInterval": "30 12 * * *",
           "dagDesc": "测试任务（新增hostConf）",
           "startTime": "2023/05/12 13:44:03",
-          "externalArguments": "aaa;bbb;ccc",
+          "dagName": "打印数字2",
           "applicationId": "022",
           "applicationCode": "SYS_FBSGFKGKC"
         }

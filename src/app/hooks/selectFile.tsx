@@ -41,7 +41,9 @@ export async function onUploadFile(
     const uploadPromises = files.map(f => {
       const { content, mimetype, name } = f;
       const blob = Utils.base64toBlob(content, mimetype);
-      const file = new File([blob], name, { type: mimetype });
+      const file = new File([blob], name, {
+        type: mimetype || 'application/octet-stream'
+      });
       const formData = new FormData();
       formData.append('file', file);
       return PipelineService.uploadFile(formData);

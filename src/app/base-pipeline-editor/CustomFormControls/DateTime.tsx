@@ -35,7 +35,7 @@ export const MyDateTime: Widget = props => {
   );
   const format = 'YYYY/MM/DD HH:mm:ss';
   return (
-    <div id={props.id} className={'my-widget-wrapper'}>
+    <div id={props.id} className={'my-date-time'}>
       <DatePicker
         locale={zhCH}
         format={format}

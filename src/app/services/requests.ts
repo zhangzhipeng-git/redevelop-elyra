@@ -208,10 +208,14 @@ export class RequestHandler {
       settings.baseUrl,
       `${CONFIG.apiContext ?? ''}${requestPath}`
     );
-    // credentials: "include"
-    const { type = 'json', ...requestInit } = Object.assign(options, {
-      credentials: 'include'
-    });
+
+    const extOptions = { mode: 'cors' };
+    // credentials: "include" - 允许跨域携带 cookie
+    if (CONFIG.cookie) Object.assign(extOptions, { credentials: 'include' });
+    const { type = 'json', ...requestInit } = Object.assign(
+      options,
+      extOptions
+    );
 
     console.log(`Sending a ${requestInit.method} request to ${requestUrl}`);
 

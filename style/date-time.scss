@@ -1,0 +1,24 @@
+.my-date-time {
+  margin-top: 6px;
+}
+
+.my-date-time .ant-select-selector,
+.my-date-time .ant-picker,
+.my-date-time .ant-input,
+.my-date-time .ant-input:hover {
+  border: 1px solid #bdbdbd !important;
+  box-shadow: none !important;
+}
+
+.my-date-time input {
+  background-color: white !important;
+}
+
+.my-date-time .ant-select {
+  position: relative !important;
+}
+
+.my-date-time .ant-select-arrow {
+  position: absolute !important;
+  right: 5px !important;
+}

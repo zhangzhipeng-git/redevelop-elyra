@@ -1,6 +1,6 @@
-// 中堃开发环境
+// 内网测试环境
 export default {
-  baseUrl: 'https://datalake.keycloak.dev.com',
+  baseUrl: 'https://datalake-test.js.sgcc.com.cn',
   apiContext: '/datalake/applicationOut',
   cookie: true
 };

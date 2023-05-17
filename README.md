@@ -19,7 +19,7 @@
 conda create -n jupyterlab-ext --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab==3 cookiecutter nodejs jupyter-packaging git
 
 # 示例（该项目的初始化虚拟环境命令）
-conda create -n dev --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab==3.2.5 cookiecutter jupyter-packaging
+conda create -n dev --override-channels --strict-channel-priority -c conda-forge -c nodefaults jupyterlab==3.2.5 jupyter-packaging
 
 # 使用 cookiecutter 构建项目结构
 cookiecutter https://github.com/jupyterlab/extension-cookiecutter-ts
@@ -60,8 +60,9 @@ pip install jupyterlab-language-pack-zh-CN
 打包命令是执行 python -m build ， 它其实又执行了 package.json 里面的 build:prod ， 这里需要根据不同环境来设置 webpack 打包的环境变量，来加载和打包对应的配置文件。
 
 先根据环境修改 package.json 中 ENV 的字段
-内网：cross-env ENV=zk
-外网：cross-env ENV=pro
+中堃开发环境：cross-env ENV=zk
+数据胡生产：cross-env ENV=pro
+数据胡测试：cross-env ENV=test
 
 ```json
 "scripts": {
@@ -72,6 +73,12 @@ pip install jupyterlab-language-pack-zh-CN
 ```json
 "scripts": {
     "build:prod": "jlpm clean && jlpm build:lib:prod && cross-env ENV=pro jlpm build:labextension",
+}
+```
+
+```json
+"scripts": {
+    "build:prod": "jlpm clean && jlpm build:lib:prod && cross-env ENV=test jlpm build:labextension",
 }
 ```
 

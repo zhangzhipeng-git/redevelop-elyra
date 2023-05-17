@@ -1095,26 +1095,9 @@ h4.empty-pipeline-header {
 .redevelop-elyra-pipeline-editor .djPtXV .esYRxa:hover {
   background-color: rgb(117, 117, 117) !important;
 }
-/* 表单新增项 */
-.redevelop-elyra-pipeline-editor .array-item .field {
-  flex: 1;
-}
-/* 表单移除和添加按钮 */
-.redevelop-elyra-pipeline-editor .jp-mod-warn,
-.redevelop-elyra-pipeline-editor .jp-mod-reject {
-  width: 60px;
-}
-/* pipeline编辑器右侧面板tab标题 */
-.redevelop-elyra-pipeline-editor .pipeline-right-panel {
-  font-size: 16px !important;
-}
 
 /* 节点目录图标 to-do */
 .redevelop-elyra-pipeline-editor .palette-list-item-icon-and-text {
   margin-left: unset !important;
   min-height: unset !important;
-}
-
-.redevelop-elyra-formEditor .form-group {
-  padding-top: 0 !important;
 }

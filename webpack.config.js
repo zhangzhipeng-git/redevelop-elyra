@@ -6,8 +6,9 @@ let mode;
 const ENV = process.env.ENV || 'dev';
 
 switch (ENV) {
-  case 'zk': // 内网
-  case 'pro': // 外网
+  case 'zk': // 中堃开发环境
+  case 'pro': // 数据胡生产
+  case 'test': // 内网测试环境
     mode = 'production';
     break;
   default: // 本地

@@ -86,6 +86,11 @@
           "default": 1,
           "minimum": 1
         },
+        "externalArguments": {
+          "title": "运行参数",
+          "description": "任务中需要传入的参数，里面是一组用\";\"分隔的数据，如：aaa;bbb;ccc",
+          "type": "string"
+        },
         "k8spodConf": {
           "type": "string",
           "title": "k8sPod配置参数",
@@ -99,11 +104,6 @@
             "ui:widget": "file",
             "extensions": ".txt"
           }
-        },
-        "externalArguments": {
-          "title": "运行参数",
-          "description": "任务中需要传入的参数，里面是一组用\";\"分隔的数据，如：aaa;bbb;ccc",
-          "type": "string"
         }
       },
       "required": [

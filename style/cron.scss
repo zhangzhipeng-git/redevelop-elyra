@@ -32,7 +32,8 @@ div.react-js-cron-custom-select {
 div.react-js-cron-error div.react-js-cron-custom-select {
   background: #fff6f6;
 }
-div.react-js-cron-select.react-js-cron-custom-select.ant-select div.ant-select-selector {
+div.react-js-cron-select.react-js-cron-custom-select.ant-select
+  div.ant-select-selector {
   padding-right: 30px;
   padding-left: 11px;
   background: transparent;
@@ -56,7 +57,9 @@ div.react-js-cron-custom-select .ant-select-selection-placeholder {
   opacity: 1;
   transition: none;
 }
-.react-js-cron-week-days-placeholder .react-js-cron-custom-select .ant-select-selection-placeholder,
+.react-js-cron-week-days-placeholder
+  .react-js-cron-custom-select
+  .ant-select-selection-placeholder,
 .react-js-cron-month-days-placeholder
   .react-js-cron-custom-select
   .ant-select-selection-placeholder {
@@ -84,13 +87,15 @@ div.react-js-cron-custom-select .ant-select-selection-placeholder {
 .react-js-cron-custom-select-dropdown-minutes-large {
   width: 300px !important;
 }
-.react-js-cron-custom-select-dropdown-minutes-large .rc-virtual-list-holder-inner {
+.react-js-cron-custom-select-dropdown-minutes-large
+  .rc-virtual-list-holder-inner {
   grid-template-columns: repeat(7, 1fr);
 }
 .react-js-cron-custom-select-dropdown-minutes-medium {
   width: 215px !important;
 }
-.react-js-cron-custom-select-dropdown-minutes-medium .rc-virtual-list-holder-inner {
+.react-js-cron-custom-select-dropdown-minutes-medium
+  .rc-virtual-list-holder-inner {
   grid-template-columns: repeat(5, 1fr);
 }
 .react-js-cron-period > span:first-child {
@@ -118,7 +123,9 @@ div.react-js-cron-select.react-js-cron-custom-select.ant-select
   flex: initial;
   align-items: center;
 }
-div.react-js-cron-select:not(.ant-select-disabled).react-js-cron-custom-select.ant-select
+div.react-js-cron-select:not(
+    .ant-select-disabled
+  ).react-js-cron-custom-select.ant-select
   div.ant-select-selector
   > .ant-select-selection-overflow
   > .ant-select-selection-overflow-item:first-child {
@@ -137,4 +144,18 @@ div.react-js-cron-select.react-js-cron-custom-select.ant-select
   > span:first-child
   > div {
   z-index: 2;
+}
+
+div.react-js-cron-select.react-js-cron-custom-select.ant-select
+  div.ant-select-selector {
+  min-width: 124px;
+}
+
+.react-js-cron-field {
+  margin-right: 5px;
+}
+
+.react-js-cron-field > span {
+  margin-left: 0;
+  margin-right: 5px;
 }

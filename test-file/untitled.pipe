@@ -15,20 +15,96 @@
           "op": "KubernetesPodOperator",
           "app_data": {
             "component_parameters": {
-              "type": "Python",
+              "type": "java",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
               "taskCpu": 1,
               "taskMemory": 2,
               "num_executors": 1,
-              "_mainApplicationFile": "test.py",
-              "mainApplicationFile": "http://192.168.18.208:8005/measurementcenter/task/downloadFile?path=airflow/uploadFileOut/2023-05-12_16:26:47/test.py",
               "taskId": "r09864",
               "taskName": "测试任务"
             },
             "ui_data": {
-              "label": "test.py",
-              "x_pos": 295,
-              "y_pos": 167,
-              "description": "Run KubernetesPodOperator Node"
+              "label": "KubernetesPodOperator",
+              "x_pos": 95,
+              "y_pos": 67,
+              "description": "Run KubernetesPodOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "cd04307f-af73-4352-a073-bfc58c34c5af",
+          "type": "execution_node",
+          "op": "SparkKubernetesOperator",
+          "app_data": {
+            "component_parameters": {
+              "type": "Python",
+              "connId": "kubernetes_default_022",
+              "connectionId": 50,
+              "taskCpu": 1,
+              "taskMemory": 2,
+              "num_executors": 1,
+              "hostConf": "[{\"ip\":\"\",\"hostName\":[\"\"]}]",
+              "sparkConf": [],
+              "hadoopConf": [
+                {}
+              ],
+              "pyPackages": [],
+              "dependencies": [],
+              "exDependencies": [],
+              "taskId": "r61133"
+            },
+            "ui_data": {
+              "label": "SparkKubernetesOperator",
+              "x_pos": 75,
+              "y_pos": 157,
+              "description": "Run SparkKubernetesOperator Node",
+              "decorations": [
+                {
+                  "id": "error",
+                  "outline": false,
+                  "position": "topRight",
+                  "x_pos": -24,
+                  "y_pos": -8
+                }
+              ]
             }
           },
           "inputs": [

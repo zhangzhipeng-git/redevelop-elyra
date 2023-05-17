@@ -58,7 +58,7 @@ export const HostConfWidget: Widget = props => {
   }
 
   return (
-    <div id={props.id} className={'my-widget-wrapper nets'}>
+    <div id={props.id} className={'my-host-conf'}>
       {hostConf &&
         hostConf.map((item, index) => {
           return (

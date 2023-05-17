@@ -1,24 +1,28 @@
-.my-widget-wrapper {
-  margin-top: 10px;
+.redevelop-elyra-formEditor .form-group.field-array .label-header {
+  margin-bottom: 8px !important;
 }
-
-.my-widget-wrapper .ant-select-selector,
-.my-widget-wrapper .ant-picker,
-.my-widget-wrapper .ant-input,
-.my-widget-wrapper .ant-input:hover {
-  border: 1px solid #bdbdbd !important;
-  box-shadow: none !important;
+.redevelop-elyra-formEditor .form-group {
+  padding-top: 0 !important;
+  .ant-select-arrow {
+    right: 10px;
+  }
 }
-
-.my-widget-wrapper input {
-  background-color: white !important;
+.redevelop-elyra-formEditor .form-control {
+  margin-top: 6px !important;
 }
-
-.my-widget-wrapper .ant-select {
-  position: relative !important;
+/* 表单新增项 */
+.redevelop-elyra-pipeline-editor .array-item .field {
+  flex: 1;
 }
-
-.my-widget-wrapper .ant-select-arrow {
-  position: absolute !important;
-  right: 5px !important;
+/* 表单移除和添加按钮 */
+.redevelop-elyra-pipeline-editor .jp-mod-warn,
+.redevelop-elyra-pipeline-editor .jp-mod-reject {
+  width: 60px;
+}
+.redevelop-elyra-pipeline-editor .jp-mod-warn {
+  margin-top: 8px !important;
+}
+/* pipeline编辑器右侧面板tab标题 */
+.redevelop-elyra-pipeline-editor .pipeline-right-panel {
+  font-size: 16px !important;
 }
